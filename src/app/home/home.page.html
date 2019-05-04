@@ -1,19 +1,20 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title text-right>
-            תקווה בחושך
-        </ion-title>
+        <ion-thumbnail slot="start">
+            <img style="display:inline-block" src="../assets/logo/association_logo.jpg" />
+        </ion-thumbnail>
+        <ion-title text-right>תקווה בחושך</ion-title>
     </ion-toolbar>
 
     <ion-toolbar>
         <ion-segment>
             <ion-segment-button value="chat" routerLink='/chat'>
-                צ'אט
+                צ'אט עם נציג
             </ion-segment-button>
-            <ion-segment-button value="stories">
+            <ion-segment-button value="stories" routerLink='/story'>
                 סיפורים
             </ion-segment-button>
-            <ion-segment-button value="home" checked>
+            <ion-segment-button value="home" checked routerLink='/home'>
                 אודות
             </ion-segment-button>
         </ion-segment>
@@ -23,8 +24,34 @@
 
 <ion-content>
 
-    <app-calender></app-calender>
-    <app-gallery></app-gallery>
-    <app-donate></app-donate>
+    <ion-grid>
+        <ion-row>
+            <ion-col size='4'>
+                <ion-card text-right>
+                    <app-donate></app-donate>
+                </ion-card>
+            </ion-col>
+            <ion-col size='8'>
+                <ion-card text-right>
+                    <p text-center>כאן יהיה אודות העמותה</p>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size='12'>
+                <ion-card text-right>
+                    <app-gallery></app-gallery>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size='12'>
+                <ion-card text-right>
+                    <app-calender></app-calender>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
 
 </ion-content>
