@@ -1,14 +1,9 @@
-ion-grid {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    // background-repeat: no-repeat;
-    // background-size: 100% 100%;
-    // background-position: 0% 0%;
+ion-card {
+    height: 300px;
+    box-shadow: none !important;
 }
 
-ion-button {
-    width: 120px;
-    font-size: 20px;
+ion-grid {
+    margin-left: 100px;
+    margin-right: 100px;
 }
