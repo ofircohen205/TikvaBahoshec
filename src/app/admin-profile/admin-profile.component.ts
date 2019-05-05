@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-admin-profile',
@@ -7,8 +8,46 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminProfileComponent implements OnInit {
 
-  constructor() { }
+  constructor(private alertController:AlertController) { }
 
   ngOnInit() {}
+
+  async logout(){
+    let alert = await this.alertController.create({
+      header: 'התנתק',
+      message: 'אתה עומד להתנתק עכשיו',
+      buttons: ['סלמתאק','לא לא']
+      
+    });
+    alert.present();
+
+
+
+  }
+  async readyForChat(){
+    let alert = await this.alertController.create({
+      header: 'מוכן לשיחה',
+      message: "עכשיו אתה מוכן ויכול לקבל פניות",
+      buttons: ['אוקיי']
+      
+    });
+    alert.present();
+
+
+
+  }
+
+
+  ManageSupportRep(){
+    
+
+
+  }
+
+
+  Manage_SupportRep(){
+    
+
+  }  
 
 }
