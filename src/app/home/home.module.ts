@@ -5,6 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
+import { StoryComponent } from '../story/story.component';
+import { CalenderComponent } from '../calender/calender.component';
+import { GalleryComponent } from '../gallery/gallery.component';
+import { DonateComponent } from '../donate/donate.component';
 
 @NgModule({
   imports: [
@@ -18,6 +22,12 @@ import { HomePage } from './home.page';
       }
     ])
   ],
-  declarations: [HomePage]
+  declarations: [
+    HomePage,
+    StoryComponent,
+    CalenderComponent,
+    GalleryComponent,
+    DonateComponent
+  ]
 })
 export class HomePageModule {}

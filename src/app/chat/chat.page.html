@@ -1,9 +1,25 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title text-right>
-      צ'אט
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-thumbnail slot="start">
+            <img style="display:inline-block" src="../assets/logo/association_logo.jpg" />
+        </ion-thumbnail>
+        <ion-title text-right>תקווה בחושך</ion-title>
+    </ion-toolbar>
+
+    <ion-toolbar>
+        <ion-segment>
+            <ion-segment-button value="chat" checked routerLink='/chat'>
+                צ'אט עם נציג
+            </ion-segment-button>
+            <ion-segment-button value="stories" routerLink='/story'>
+                סיפורים
+            </ion-segment-button>
+            <ion-segment-button value="home" routerLink='/home'>
+                אודות
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
