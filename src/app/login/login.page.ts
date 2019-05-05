@@ -19,16 +19,16 @@ export class LoginPage {
     private loadingController: LoadingController,
     private router: Router
   ) { }
-  
+
   // This function logs the support rep into the system
   login() {
     const email = this.emailField.value;
     const password = this.passField.value;
-    this.presentLoading()
+    this.presentLoading();
     this.userAuth.auth.signInWithEmailAndPassword(email, password)
     .then(result => {
       this.dismissLoading();
-      this.router.navigateByUrl('/profile/' + result.user.uid);
+      this.router.navigateByUrl('/profile');
     })
     .catch(() => {
       this.dismissLoading();
