@@ -12,8 +12,8 @@ export class SupportRepProfileComponent implements OnInit {
 
   ngOnInit() {
      this.firestore.getOpenChatRooms().subscribe(result => {
-      console.log(result)
-    })
+      console.log(result);
+    });
   }
 
 

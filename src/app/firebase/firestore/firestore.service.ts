@@ -8,6 +8,7 @@ export class FirestoreService {
   constructor(private firestore: AngularFirestore) { }
 
   readonly CHAT_ROOMS_COLLECTION = 'ChatRooms';
+  readonly METADATA_COLLECTION = 'Metadata';
 
   public createChatRoom(username): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
@@ -21,9 +22,13 @@ export class FirestoreService {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true)).valueChanges();
   }
 
-  public getOwnChats(id) {
+  public getOwnChats(id): Observable<any> {
     // return Promise.resolve({})
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('SupportRepID', '==', id)).get();
+  }
+
+  public getAnonNumber() {
+    return this.firestore.collection(this.METADATA_COLLECTION).valueChanges();
   }
 
 }
