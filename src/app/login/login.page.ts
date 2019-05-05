@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, AlertController } from '@ionic/angular';
+import { FirestoreService } from '../firebase/firestore/firestore.service';
 
 @Component({
   selector: 'app-login',
@@ -15,9 +16,12 @@ export class LoginPage {
   loadingRef = null;
 
   constructor(
+    // firebase.auth() in Firebase documentation is userAuth
     private userAuth: AngularFireAuth,
     private loadingController: LoadingController,
-    private router: Router
+    private router: Router,
+    public alertController: AlertController,
+    private firestore: FirestoreService
   ) { }
 
   // This function logs the support rep into the system
@@ -36,7 +40,7 @@ export class LoginPage {
   }
 
   forgotPassword() {
-    console.log('will send email message');
+    this.presentAlert();
   }
 
   async presentLoading() {
@@ -46,6 +50,29 @@ export class LoginPage {
 
   dismissLoading() {
     this.loadingRef.dismiss();
+  }
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'איפוס סיסמה',
+      message: 'הזן דוא"ל לקבלת הודעה על שינוי סיסמה',
+      inputs: [{
+        name: 'email',
+        placeholder: 'email'
+      }],
+      buttons: [{
+        text: 'שלח',
+        handler: data => {
+          console.log(data);
+          this.userAuth.auth.sendPasswordResetEmail(data.email).then(() => {
+          }).catch((error) => {
+            console.log(error);
+          });
+        }
+      }]
+    });
+
+    await alert.present();
   }
 
 }
