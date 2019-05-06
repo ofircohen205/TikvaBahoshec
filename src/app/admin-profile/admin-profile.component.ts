@@ -2,14 +2,22 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
+import {Ng2PageScrollModule} from 'ng2-page-scroll';
+import { element } from '@angular/core/src/render3';
+
+
+
 
 @Component({
   selector: 'app-admin-profile',
   templateUrl: './admin-profile.component.html',
   styleUrls: ['./admin-profile.component.scss'],
 })
-export class AdminProfileComponent implements OnInit {
 
+
+export class AdminProfileComponent implements OnInit {
+    divToShow =""
+    
 
   constructor(
     private alertController: AlertController,
@@ -37,14 +45,13 @@ export class AdminProfileComponent implements OnInit {
     alert.present();
   }
 
-
-  ManageSupportRep() {
-
+  scrollToElement(e): void {
+    var x = e.target.value
+    var element = document.getElementById(x);
+    element.scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
+   
   }
 
-
-  Manage_SupportRep() {
-
-  }
+ 
 
 }
