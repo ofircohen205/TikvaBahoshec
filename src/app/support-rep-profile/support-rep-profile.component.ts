@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FirestoreService } from '../firebase/firestore/firestore.service';
 
 @Component({
   selector: 'app-support-rep-profile',
@@ -7,8 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SupportRepProfileComponent implements OnInit {
 
-  constructor() { }
+  constructor(private firestore: FirestoreService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+     this.firestore.getOpenChatRooms().subscribe(result => {
+      console.log(result);
+    });
+  }
+
+
 
 }

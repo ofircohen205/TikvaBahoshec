@@ -5,23 +5,25 @@
         </ion-thumbnail>
         <ion-title text-right>תקווה בחושך</ion-title>
     </ion-toolbar>
-
-    <ion-toolbar>
-        <ion-segment>
-            <ion-segment-button value="chat" checked routerLink='/chat'>
-                צ'אט עם נציג
-            </ion-segment-button>
-            <ion-segment-button value="stories" routerLink='/story'>
-                סיפורים
-            </ion-segment-button>
-            <ion-segment-button value="home" routerLink='/home'>
-                אודות
-            </ion-segment-button>
-        </ion-segment>
-    </ion-toolbar>
-
 </ion-header>
 
-<ion-content>
+<ion-content #mainContent>
+
+    <ion-grid>
+        <ion-row *ngFor='let m of messages'>
+            <ion-col>
+                <app-chat-bubble [fullName]='fullName' [data]='m'></app-chat-bubble>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
 </ion-content>
+
+
+<ion-footer>
+    <ion-toolbar>
+        <h6 slot='end'>:הודעה</h6>
+        <ion-input (keyup)='onKeyUp($event)' #messageField></ion-input>
+        <ion-button [disabled]='isMessageInvalid()' slot='start' (click)='sendMessage()'>שלח</ion-button>
+    </ion-toolbar>
+</ion-footer>
