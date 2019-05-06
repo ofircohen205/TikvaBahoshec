@@ -7,6 +7,23 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content #mainContent>
+
+    <ion-grid>
+        <ion-row *ngFor='let m of messages'>
+            <ion-col>
+                <app-chat-bubble [fullName]='fullName' [data]='m'></app-chat-bubble>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
 </ion-content>
+
+
+<ion-footer>
+    <ion-toolbar>
+        <h6 slot='end'>:הודעה</h6>
+        <ion-input (keyup)='onKeyUp($event)' #messageField></ion-input>
+        <ion-button [disabled]='isMessageInvalid()' slot='start' (click)='sendMessage()'>שלח</ion-button>
+    </ion-toolbar>
+</ion-footer>

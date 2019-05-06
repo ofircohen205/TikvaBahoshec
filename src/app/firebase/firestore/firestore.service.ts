@@ -9,6 +9,7 @@ export class FirestoreService {
 
   readonly CHAT_ROOMS_COLLECTION = 'ChatRooms';
   readonly METADATA_COLLECTION = 'Metadata';
+  readonly MESSAGES_COLLECTION = 'Messages';
 
   public createChatRoom(username): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
@@ -29,6 +30,10 @@ export class FirestoreService {
 
   public getAnonNumber() {
     return this.firestore.collection(this.METADATA_COLLECTION).valueChanges();
+  }
+
+  public getChatMessages(id) {
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(id).collection(this.MESSAGES_COLLECTION).valueChanges();
   }
 
 }
