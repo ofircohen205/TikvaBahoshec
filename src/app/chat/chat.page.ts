@@ -26,7 +26,7 @@ export class ChatPage {
   fullName = '';
 
   constructor(
-    private uAuth: AngularFireAuth,
+    private userAuth: AngularFireAuth,
     private db: AngularFirestore,
     private firestore: FirestoreService) {}
 
@@ -46,9 +46,9 @@ export class ChatPage {
         this.messages.push(result[result.length - 1]);
       }
     });
-    // this.uAuth.user.subscribe(() => {
-    //   this.afterUserInside();
-    // });
+    this.userAuth.user.subscribe(() => {
+      this.afterUserInside();
+    });
 
     // this.db.collection('messages').valueChanges().subscribe(
     //  result => {
@@ -69,7 +69,7 @@ export class ChatPage {
   }
 
   afterUserInside() {
-    this.db.collection('users').doc(this.uAuth.auth.currentUser.uid)
+    this.db.collection('users').doc(this.userAuth.auth.currentUser.uid)
       .get().subscribe(result => {
         this.fullName = result.data().fullName;
       });

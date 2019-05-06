@@ -11,8 +11,8 @@ export class GalleryComponent implements OnInit {
   slides: any;
 
   constructor() {
-    for(let i = 1 , j = 0 ; i <= this.imagesLength && j < this.imagesLength ; i++, j++) {
-      var picIndex = i.toString();
+    for (let i = 1 , j = 0 ; i <= this.imagesLength && j < this.imagesLength ; i++, j++) {
+      const picIndex = i.toString();
       this.images[j] = picIndex.concat('.JPG');
     }
 
@@ -24,12 +24,12 @@ export class GalleryComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
 
     setTimeout(() => {
-      if(this.images && this.images.length > 0){
+      if (this.images && this.images.length > 0) {
         this.slides.freeMode = true;
         this.slides.autoplay = 2000;
         this.slides.speed = 500;
         this.slides.loop = true;
-        this.slides.startAutoplay()
+        this.slides.startAutoplay();
       }
 
     }, 1000);
