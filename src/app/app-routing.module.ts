@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'landing', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', loadChildren: './home/home.module#HomePageModule' },
   { path: 'chat', loadChildren: './chat/chat.module#ChatPageModule' },
   { path: 'landing', loadChildren: './landing/landing.module#LandingPageModule' },
-  { path: 'login', loadChildren: './login/login.module#LoginPageModule' },  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
+  { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
+  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
 
 ];
 
