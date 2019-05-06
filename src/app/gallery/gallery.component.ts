@@ -1,8 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import firebase from 'firebase';
-
-
-
 
 @Component({
   selector: 'app-gallery',
@@ -10,7 +6,7 @@ import firebase from 'firebase';
   styleUrls: ['./gallery.component.scss'],
 })
 export class GalleryComponent implements OnInit {
-  private images: any[] = [];
+  images = ['1.JPG', '2.JPG', '3.JPG', '4.JPG', '5.JPG', '6.JPG', '7.JPG'];
 
   constructor() {  }
 

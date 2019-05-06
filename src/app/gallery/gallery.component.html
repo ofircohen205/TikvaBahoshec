@@ -1,3 +1,7 @@
 <p text-center>
-    כאן תהיה מצגת תמונות
+    <ion-slides class="image-slider">
+        <ion-slide *ngFor="let img of images">
+            <img src="assets/images/{{img}}" class="thumb-img">
+        </ion-slide>
+  </ion-slides>
 </p>
