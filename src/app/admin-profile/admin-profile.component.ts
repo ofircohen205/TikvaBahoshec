@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-admin-profile',
@@ -8,46 +10,41 @@ import { AlertController } from '@ionic/angular';
 })
 export class AdminProfileComponent implements OnInit {
 
-  constructor(private alertController:AlertController) { }
+
+  constructor(
+    private alertController: AlertController,
+    private router: Router,
+    private userAuth: AngularFireAuth
+    ) { }
 
   ngOnInit() {}
 
-  async logout(){
-    let alert = await this.alertController.create({
+  async logout() {
+    const alert = await this.alertController.create({
       header: 'התנתק',
       message: 'אתה עומד להתנתק עכשיו',
-      buttons: ['סלמתאק','לא לא']
-      
+      buttons: ['סלמתאק', 'לא לא']
     });
     alert.present();
-
-
-
   }
-  async readyForChat(){
-    let alert = await this.alertController.create({
+
+  async readyForChat() {
+    const alert = await this.alertController.create({
       header: 'מוכן לשיחה',
-      message: "עכשיו אתה מוכן ויכול לקבל פניות",
+      message: 'עכשיו אתה מוכן ויכול לקבל פניות',
       buttons: ['אוקיי']
-      
     });
     alert.present();
+  }
 
 
+  ManageSupportRep() {
 
   }
 
 
-  ManageSupportRep(){
-    
-
+  Manage_SupportRep() {
 
   }
-
-
-  Manage_SupportRep(){
-    
-
-  }  
 
 }

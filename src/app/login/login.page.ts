@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { LoadingController, AlertController } from '@ionic/angular';
-import { FirestoreService } from '../firebase/firestore/firestore.service';
 
 @Component({
   selector: 'app-login',
@@ -20,8 +19,7 @@ export class LoginPage {
     private userAuth: AngularFireAuth,
     private loadingController: LoadingController,
     private router: Router,
-    public alertController: AlertController,
-    private firestore: FirestoreService
+    private alertController: AlertController,
   ) { }
 
   // This function logs the support rep into the system
@@ -34,7 +32,7 @@ export class LoginPage {
       this.dismissLoading();
       this.router.navigateByUrl('/profile');
     })
-    .catch(() => {
+    .catch((error) => {
       this.dismissLoading();
     });
   }
@@ -44,7 +42,7 @@ export class LoginPage {
   }
 
   async presentLoading() {
-    this.loadingRef = await this.loadingController.create({ message: 'Please wait...', });
+    this.loadingRef = await this.loadingController.create({ message: '...אנא המתן', });
     await this.loadingRef.present();
   }
 
