@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import {Ng2PageScrollModule} from 'ng2-page-scroll';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +21,6 @@ import {Ng2PageScrollModule} from 'ng2-page-scroll';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    Ng2PageScrollModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule
