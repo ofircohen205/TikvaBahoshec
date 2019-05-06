@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-import {Ng2PageScrollModule} from 'ng2-page-scroll';
 import { element } from '@angular/core/src/render3';
 
 
