@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ChatPage } from './chat.page';
+import { ChatBubbleComponent } from '../chat-bubble/chat-bubble.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,9 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ChatPage]
+  declarations: [
+    ChatPage,
+    ChatBubbleComponent
+  ]
 })
 export class ChatPageModule {}
