@@ -10,6 +10,7 @@ import { CalenderComponent } from '../calender/calender.component';
 import { GalleryComponent } from '../gallery/gallery.component';
 import { DonateComponent } from '../donate/donate.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
