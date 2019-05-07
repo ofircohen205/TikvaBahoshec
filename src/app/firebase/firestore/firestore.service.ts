@@ -57,8 +57,10 @@ export class FirestoreService {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
       email: email,
       name: name,
-
+      
     })
+
+    
   }
 
   public checkIfAdmin(supportRepId) {
