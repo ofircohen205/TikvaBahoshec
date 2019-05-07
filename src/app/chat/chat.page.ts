@@ -58,7 +58,7 @@ export class ChatPage {
   }
 
   afterUserInside(type) {
-    if(type === 'username') {
+    if (type === 'username') {
       this.firestore.getUserName(this.chatId).subscribe(result => this.fullName = result[type]);
     } else if (type === 'SupportRepID') {
       this.firestore.getSupportRepName('kvTVBN4aD8OW66wZErgc').subscribe(result => this.fullName = result['name']);

@@ -33,7 +33,7 @@ export class HomePage implements OnInit {
       buttons: [{
         text: 'המשך',
         handler: data => {
-          if(data.name === '') {
+          if (data.name === '') {
             let num = 1;
             this.firestore.getAnonNumber().subscribe(result => num = result[0]['nextAnonymous']);
             data.name = 'אנונימי' + num;
