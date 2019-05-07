@@ -20,23 +20,4 @@ export class GalleryComponent implements OnInit {
     }
 
   ngOnInit() {}
-
-<<<<<<< HEAD
-=======
-// tslint:disable-next-line: use-life-cycle-interface
-  ngOnChanges(changes: SimpleChanges) {
-
-    setTimeout(() => {
-      if (this.images && this.images.length > 0) {
-        this.slides.freeMode = true;
-        this.slides.autoplay = 2000;
-        this.slides.speed = 500;
-        this.slides.loop = true;
-        this.slides.startAutoplay();
-      }
-
-    }, 1000);
-  }
-
->>>>>>> 0dc7122fbb40a7b232d9f25b9f8b9b6c87df8f32
 }
