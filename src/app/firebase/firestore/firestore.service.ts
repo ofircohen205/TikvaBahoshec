@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { Key } from 'protractor';
 
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
@@ -50,6 +51,14 @@ export class FirestoreService {
 
   public getSupportRepName(supportRepId) {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
+  }
+
+  public addSupportRep(name,email){
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
+      email: email,
+      name: name,
+
+    })
   }
 
   public checkIfAdmin(supportRepId) {

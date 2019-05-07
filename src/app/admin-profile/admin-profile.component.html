@@ -37,7 +37,7 @@
   <ion-grid>
     <ion-row>
       <ion-col size='12'>
-        <ion-card style="height: 300px;" id="Manage SupportRep" text-center>
+        <ion-card style="height: 500px;" id="Manage SupportRep" text-center>
           <p text-center>רשימת נציגים </p>
           <ion-toolbar>
 
@@ -45,7 +45,7 @@
             <ion-button>חיפוש</ion-button>
 
           </ion-toolbar>
-          <ion-button>הוסף</ion-button>
+          <ion-button (click)="addSupport()">הוסף</ion-button>
 
           <table id="tables" text-right>
             <tr>
@@ -92,7 +92,7 @@
           </table>
         </ion-card>
 
-        <ion-card text-center style="height:300px" id="Manage Client Stories">
+        <ion-card text-center style="height: 500px" id="Manage Client Stories">
           <p text-center>רשימת סיפורים </p>
           <ion-button>הוסף</ion-button>
 
@@ -143,19 +143,19 @@
         </ion-card>
 
 
-        <ion-card text-center style="height:300px" id="Manage Gallery">
+        <ion-card text-center style="height: 500px" id="Manage Gallery">
           <p text-center>גלריה </p>
           <ion-button>הוסף</ion-button>
           <ion-button>מחק</ion-button>
         </ion-card>
 
-        <ion-card text-center style="height:300px" id="Edit Association Info ">
+        <ion-card text-center style="height: 500px" id="Edit Association Info ">
           <p text-center>עריכת מידע </p>
           <ion-button>הוסף</ion-button>
           <ion-button>מחק</ion-button>
         </ion-card>
 
-        <ion-card text-center style="height:300px" id="View History Chat">
+        <ion-card text-center style="height: 500px" id="View History Chat">
           <p text-center> היסטוריית שיחות </p>
           <ion-toolbar>
             <ion-button style=" display: inline-block;" style="height: 25px;">חיפוש</ion-button>
@@ -168,12 +168,12 @@
           <input type="radio">שם
         </ion-card>
 
-        <ion-card text-center style="height:300px" id="Edit client profile">
+        <ion-card text-center style="height: 500px" id="Edit client profile">
           <p text-center> עריכת פרופיל לקוח </p>
           <ion-button>חיפוש</ion-button>
         </ion-card>
 
-        <ion-card text-center style="height:300px" id="SupportRep Logins">
+        <ion-card text-center style="height: 500px" id="SupportRep Logins">
           <p text-center>התחברות נציגים </p>
           <ion-button> חיפוש נציג</ion-button>
         </ion-card>
