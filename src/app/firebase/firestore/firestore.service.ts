@@ -52,4 +52,8 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
 
+  public checkIfAdmin(supportRepId) {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
 }
