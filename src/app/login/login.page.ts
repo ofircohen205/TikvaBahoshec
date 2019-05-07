@@ -37,20 +37,7 @@ export class LoginPage {
     });
   }
 
-  forgotPassword() {
-    this.presentAlert();
-  }
-
-  async presentLoading() {
-    this.loadingRef = await this.loadingController.create({ message: '...אנא המתן', });
-    await this.loadingRef.present();
-  }
-
-  dismissLoading() {
-    this.loadingRef.dismiss();
-  }
-
-  async presentAlert() {
+  async forgotPassword() {
     const alert = await this.alertController.create({
       header: 'איפוס סיסמה',
       message: 'הזן דוא"ל לקבלת הודעה על שינוי סיסמה',
@@ -72,5 +59,15 @@ export class LoginPage {
 
     await alert.present();
   }
+
+  async presentLoading() {
+    this.loadingRef = await this.loadingController.create({ message: '...אנא המתן', });
+    await this.loadingRef.present();
+  }
+
+  dismissLoading() {
+    this.loadingRef.dismiss();
+  }
+
 
 }

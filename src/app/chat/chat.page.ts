@@ -12,6 +12,7 @@ import {
 import {
   FirestoreService
 } from '../firebase/firestore/firestore.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -24,14 +25,19 @@ export class ChatPage {
   @ViewChild('mainContent') mainContent;
   messages = [];
   fullName = '';
+  chatId = '';
 
   constructor(
-    private uAuth: AngularFireAuth,
+    private userAuth: AngularFireAuth,
     private db: AngularFirestore,
-    private firestore: FirestoreService) {}
+    private firestore: FirestoreService,
+    private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.firestore.getChatMessages('EYriSNCYjTlQAVD9VXCZ').subscribe(result => {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.chatId = params.id;
+    });
+    this.firestore.getChatMessages(this.chatId).subscribe(result => {
       result.sort((m1, m2) => {
         if (m1['timestamp'] > m2['timestamp']) {
           return 1;
@@ -46,44 +52,24 @@ export class ChatPage {
         this.messages.push(result[result.length - 1]);
       }
     });
-    // this.uAuth.user.subscribe(() => {
-    //   this.afterUserInside();
-    // });
-
-    // this.db.collection('messages').valueChanges().subscribe(
-    //  result => {
-    //    result.sort((m1, m2) => {
-    //       if (m1['timestamp'] > m2['timestamp']) {
-    //         return 1;
-    //       } else {
-    //         return -1;
-    //       }
-    //    });
-    //    if (this.messages.length <= 0) {
-    //      this.messages = result;
-    //      this.scrollToBottom();
-    //    } else {
-    //     this.messages.push(result[result.length - 1]);
-    //    }
-    //  });
+    this.userAuth.user.subscribe(() => {
+      this.afterUserInside('username');
+    });
   }
 
-  afterUserInside() {
-    this.db.collection('users').doc(this.uAuth.auth.currentUser.uid)
-      .get().subscribe(result => {
-        this.fullName = result.data().fullName;
-      });
+  afterUserInside(type) {
+    if(type === 'username') {
+      this.firestore.getUserName(this.chatId).subscribe(result => this.fullName = result[type]);
+    } else if (type === 'SupportRepID') {
+      this.firestore.getSupportRepName('kvTVBN4aD8OW66wZErgc').subscribe(result => this.fullName = result['name']);
+    }
   }
 
   sendMessage() {
     if (this.isMessageInvalid()) {
       return;
     }
-    this.db.collection('messages').add({
-      from: this.fullName,
-      content: this.messageField.value,
-      timestamp: new Date().getTime()
-    });
+    this.firestore.addChatMessage(this.chatId, this.fullName, this.messageField.value, new Date().getTime());
     this.messageField.value = '';
     this.scrollToBottom();
   }
