@@ -1,183 +1,183 @@
-
 <ion-header>
-<ion-toolbar>
-  <ion-segment>
-      <ion-segment-button value="Logout"  (click)="logout()">
-       התנתק
+  <ion-toolbar>
+    <ion-segment>
+      <ion-segment-button value="Logout" (click)="logout()">
+        התנתק
       </ion-segment-button>
-      <ion-segment-button value="Manage SupportRep" (click)="scrollToElement($event)"  >
-          רשימת נציגים
+      <ion-segment-button value="Manage SupportRep" (click)="scrollToElement($event)">
+        רשימת נציגים
       </ion-segment-button>
-      <ion-segment-button value="Manage Client Stories" (click)="scrollToElement($event)" >
-          עריכת סיפורים
+      <ion-segment-button value="Manage Client Stories" (click)="scrollToElement($event)">
+        עריכת סיפורים
       </ion-segment-button>
       <ion-segment-button value="Manage Gallery" (click)="scrollToElement($event)">
-          עריכת גלריה
+        עריכת גלריה
       </ion-segment-button>
-      <ion-segment-button value="Edit Association Info " (click)="scrollToElement($event)" >
+      <ion-segment-button value="Edit Association Info " (click)="scrollToElement($event)">
         עריכת מידע
-    </ion-segment-button>
-    <ion-segment-button value="View History Chat" (click)="scrollToElement($event)" >
-      היסטורית צ'אט
-  </ion-segment-button>
-  <ion-segment-button value="Edit client profile" (click)="scrollToElement($event)" >
-    עריכת פרופיל לקוח
-</ion-segment-button>
-<ion-segment-button value="SupportRep Logins" (click)="scrollToElement($event)">
-  התחברות נציגים
-</ion-segment-button>
-<ion-segment-button value="Ready for chat"  style=color:red (click)="readyForChat()"  >
-"מוכן לשיחה"
-</ion-segment-button>
+      </ion-segment-button>
+      <ion-segment-button value="View History Chat" (click)="scrollToElement($event)">
+        היסטורית צ'אט
+      </ion-segment-button>
+      <ion-segment-button value="Edit client profile" (click)="scrollToElement($event)">
+        עריכת פרופיל לקוח
+      </ion-segment-button>
+      <ion-segment-button value="SupportRep Logins" (click)="scrollToElement($event)">
+        התחברות נציגים
+      </ion-segment-button>
+      <ion-segment-button value="Ready for chat" style=color:red (click)="readyForChat()">
+        "מוכן לשיחה"
+      </ion-segment-button>
 
-  </ion-segment>
-</ion-toolbar>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid >
-      <ion-row >
-          <ion-col size='12'>
-              <ion-card style="height:50%" id="Manage SupportRep" text-center>
-                    <p text-center >רשימת נציגים </p>
-                    <ion-toolbar>
-                        
-                        <ion-searchbar class= "search"></ion-searchbar>
-                        <ion-button>חיפוש</ion-button>
-                                             
-                          </ion-toolbar>
-                          <ion-button>הוסף</ion-button>
-                       
-                        <table id="tables" text-right>
-                            <tr>
-                                <th text-center></th>
-                              <th text-center>התחבר לאחרונה</th>
-                              <th text-center>id</th>
-                              <th text-center>שם נציג</th>
-                              
-                            </tr>
-                            <tr>
-                              <td><ion-button>מחק</ion-button></td>
-                              <td>12.4.19 7:45</td>
-                              <td>123456</td>
-                              <td>שלמה כהן</td>
-                              
-                            </tr>
-                            <tr>
-                              <td><ion-button>מחק</ion-button></td>
-                              <td>13.4.19 8:21</td>
-                              <td>000000</td>
-                              <td>תום נגר לוי</td>
-                            </tr>
-                            <tr>
-                              <td><ion-button>מחק</ion-button></td>
-                              <td>16.5.19 7:34</td>
-                              <td>12212112</td>
-                              <td>אבי הרשקו</td>
-                            </tr>
-                            <tr>
-                                <td><ion-button>מחק</ion-button></td>
-                                <td>16.5.19 7:38</td>
-                                <td>12256712</td>
-                                <td> יוסי כהן</td>
-                              </tr>
-                           
-                          </table>
-              </ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-col size='12'>
+        <ion-card style="height: 300px;" id="Manage SupportRep" text-center>
+          <p text-center>רשימת נציגים </p>
+          <ion-toolbar>
 
-              <ion-card text-center style="height:70%" id="Manage Client Stories" >
-                     <p text-center >רשימת סיפורים </p>
-                     <ion-button>הוסף</ion-button>
-                     
+            <ion-searchbar class="search"></ion-searchbar>
+            <ion-button>חיפוש</ion-button>
 
-                     <table id="tables" text-right>
-                        <tr>
-                            <th text-center></th>
-                            <th text-center>אושר\לא אושר</th>
-                            <th text-center>תארריך העלאה</th>
-                          <th text-center>נכתב על ידי</th>
-                          <th text-center>id</th>
-                          
-                          
-                        </tr>
-                        <tr>
-                          <td><ion-button color="danger">הורד</ion-button><ion-button>מחק</ion-button></td>
-                          <td>אושר</td>
-                          <td>12.4.19 7:45</td>
-                          <td>אנונימי1</td>
-                          <td> 111111</td>
-                          
-                        </tr>
-                        <tr>
-                            <td><ion-button color="success">אשר</ion-button><ion-button>מחק</ion-button></td>
-                            <td>לא אושר</td>
-                            <td>10.2.19 14:45</td>
-                            <td>אנונימי2</td>
-                            <td> 111333</td>
-                            
-                          </tr>
+          </ion-toolbar>
+          <ion-button>הוסף</ion-button>
 
-                          <tr>
-                              <td><ion-button color="success">אשר</ion-button><ion-button>מחק</ion-button></td>
-                              <td>לא אושר</td>
-                              <td>10.5.19 13:00</td>
-                              <td>אנונימי3</td>
-                              <td>993222</td>
-                              
-                            </tr>
-                      </table>
-                   
-               </ion-card>
+          <table id="tables" text-right>
+            <tr>
+              <th text-center></th>
+              <th text-center>התחבר לאחרונה</th>
+              <th text-center>id</th>
+              <th text-center>שם נציג</th>
 
-               
-              <ion-card text-center style="height:70%"  id="Manage Gallery" >
-                  <p text-center >גלריה </p>
-                  <ion-button>הוסף</ion-button>
-                  <ion-button>מחק</ion-button>
-                
-            </ion-card>
-
-            <ion-card text-center style="height:70%"  id="Edit Association Info " >
-                <p text-center >עריכת מידע </p>
-                <ion-button>הוסף</ion-button>
+            </tr>
+            <tr>
+              <td>
                 <ion-button>מחק</ion-button>
-              
-          </ion-card>
+              </td>
+              <td>12.4.19 7:45</td>
+              <td>123456</td>
+              <td>שלמה כהן</td>
 
-          <ion-card text-center style="height:70%"  id="View History Chat"  >
-              <p text-center > היסטוריית שיחות </p>
-              <ion-toolbar>
-              <ion-button style=" display: inline-block;" style="height: 25px;" >חיפוש</ion-button>
-                  <input> שם: 
-                  <input> תאריך: 
-                  <input> אזור: 
-                </ion-toolbar> 
-                <p text-center > מיין לפי: </p>
-                <input type="radio">תאריך
-                <input type="radio">שם
-        
-                
-                         
+            </tr>
+            <tr>
+              <td>
+                <ion-button>מחק</ion-button>
+              </td>
+              <td>13.4.19 8:21</td>
+              <td>000000</td>
+              <td>תום נגר לוי</td>
+            </tr>
+            <tr>
+              <td>
+                <ion-button>מחק</ion-button>
+              </td>
+              <td>16.5.19 7:34</td>
+              <td>12212112</td>
+              <td>אבי הרשקו</td>
+            </tr>
+            <tr>
+              <td>
+                <ion-button>מחק</ion-button>
+              </td>
+              <td>16.5.19 7:38</td>
+              <td>12256712</td>
+              <td> יוסי כהן</td>
+            </tr>
+
+          </table>
         </ion-card>
 
-        <ion-card text-center style="height:70%" id="Edit client profile" >
-            <p text-center > עריכת פרופיל לקוח  </p>
-            <ion-button>חיפוש</ion-button>
-                     
-      </ion-card>
+        <ion-card text-center style="height:300px" id="Manage Client Stories">
+          <p text-center>רשימת סיפורים </p>
+          <ion-button>הוסף</ion-button>
 
-    
-    <ion-card text-center style="height:70%" id="SupportRep Logins" >
-        <p text-center  >התחברות נציגים  </p>
-        <ion-button> חיפוש נציג</ion-button>
-                 
-  </ion-card>
-          </ion-col>
-      </ion-row>
+
+          <table id="tables" text-right>
+            <tr>
+              <th text-center></th>
+              <th text-center>אושר\לא אושר</th>
+              <th text-center>תארריך העלאה</th>
+              <th text-center>נכתב על ידי</th>
+              <th text-center>id</th>
+
+
+            </tr>
+            <tr>
+              <td>
+                <ion-button color="danger">הורד</ion-button>
+                <ion-button>מחק</ion-button>
+              </td>
+              <td>אושר</td>
+              <td>12.4.19 7:45</td>
+              <td>אנונימי1</td>
+              <td> 111111</td>
+
+            </tr>
+            <tr>
+              <td>
+                <ion-button color="success">אשר</ion-button>
+                <ion-button>מחק</ion-button>
+              </td>
+              <td>לא אושר</td>
+              <td>10.2.19 14:45</td>
+              <td>אנונימי2</td>
+              <td> 111333</td>
+            </tr>
+
+            <tr>
+              <td>
+                <ion-button color="success">אשר</ion-button>
+                <ion-button>מחק</ion-button>
+              </td>
+              <td>לא אושר</td>
+              <td>10.5.19 13:00</td>
+              <td>אנונימי3</td>
+              <td>993222</td>
+            </tr>
+          </table>
+        </ion-card>
+
+
+        <ion-card text-center style="height:300px" id="Manage Gallery">
+          <p text-center>גלריה </p>
+          <ion-button>הוסף</ion-button>
+          <ion-button>מחק</ion-button>
+        </ion-card>
+
+        <ion-card text-center style="height:300px" id="Edit Association Info ">
+          <p text-center>עריכת מידע </p>
+          <ion-button>הוסף</ion-button>
+          <ion-button>מחק</ion-button>
+        </ion-card>
+
+        <ion-card text-center style="height:300px" id="View History Chat">
+          <p text-center> היסטוריית שיחות </p>
+          <ion-toolbar>
+            <ion-button style=" display: inline-block;" style="height: 25px;">חיפוש</ion-button>
+            <input> שם:
+            <input> תאריך:
+            <input> אזור:
+          </ion-toolbar>
+          <p text-center> מיין לפי: </p>
+          <input type="radio">תאריך
+          <input type="radio">שם
+        </ion-card>
+
+        <ion-card text-center style="height:300px" id="Edit client profile">
+          <p text-center> עריכת פרופיל לקוח </p>
+          <ion-button>חיפוש</ion-button>
+        </ion-card>
+
+        <ion-card text-center style="height:300px" id="SupportRep Logins">
+          <p text-center>התחברות נציגים </p>
+          <ion-button> חיפוש נציג</ion-button>
+        </ion-card>
+      </ion-col>
+    </ion-row>
   </ion-grid>
-
-
-
 </ion-content>
-
-
