@@ -8,6 +8,19 @@
 </ion-header>
 
 <ion-content>
-  <app-admin-profile></app-admin-profile>
-  <app-support-rep-profile></app-support-rep-profile>
+    <ion-header>
+        <ion-toolbar>
+            <ion-segment>
+                <ion-segment-button value="supportRep" (click)=(onclick($event)) >
+                    supportRep
+                </ion-segment-button>
+                <ion-segment-button value="admin" (click)=(onclick($event)) >
+                      Admin
+                </ion-segment-button>
+
+            </ion-segment>
+        </ion-toolbar>
+    </ion-header>
+  <app-admin-profile id = "admin" [hidden]= false></app-admin-profile>
+  <app-support-rep-profile id = "supportRep" [hidden]= true ></app-support-rep-profile>
 </ion-content>
