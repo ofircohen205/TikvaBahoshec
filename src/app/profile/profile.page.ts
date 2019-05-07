@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { timeout } from 'q';
 
 @Component({
   selector: 'app-profile',
