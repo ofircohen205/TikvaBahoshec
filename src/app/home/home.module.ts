@@ -9,7 +9,6 @@ import { StoryComponent } from '../story/story.component';
 import { CalenderComponent } from '../calender/calender.component';
 import { GalleryComponent } from '../gallery/gallery.component';
 import { DonateComponent } from '../donate/donate.component';
-import {SlideshowModule} from 'ng-simple-slideshow';
 
 
 @NgModule({
@@ -17,7 +16,6 @@ import {SlideshowModule} from 'ng-simple-slideshow';
     CommonModule,
     FormsModule,
     IonicModule,
-    SlideshowModule,
     RouterModule.forChild([
       {
         path: '',
