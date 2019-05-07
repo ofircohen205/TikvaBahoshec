@@ -8,7 +8,7 @@
 
     <ion-toolbar>
         <ion-segment>
-            <ion-segment-button value="chat" routerLink='/chat'>
+            <ion-segment-button value="chat" (click)="userDetails()">
                 צ'אט עם נציג
             </ion-segment-button>
             <ion-segment-button value="stories">
@@ -30,7 +30,7 @@
                 <ion-card text-center class='toChat'>
                     <h1>?איך אנחנו יכולים לעזור</h1>
                     <p>חשוב לנו לשמוע אותך</p>
-                    <ion-button routerLink='/chat'>צ'אט עם נציג אונליין</ion-button>
+                    <ion-button (click)='userDetails()'>צ'אט עם נציג אונליין</ion-button>
                 </ion-card>
             </ion-col>
         </ion-row>
