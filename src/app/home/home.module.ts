@@ -9,7 +9,10 @@ import { StoryComponent } from '../story/story.component';
 import { CalenderComponent } from '../calender/calender.component';
 import { GalleryComponent } from '../gallery/gallery.component';
 import { DonateComponent } from '../donate/donate.component';
+<<<<<<< HEAD
 
+=======
+>>>>>>> d0b5a6776846d2aac35f74fbce4e066d59aaa4b1
 
 
 @NgModule({
