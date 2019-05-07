@@ -15,7 +15,7 @@ export class FirestoreService {
 
   public createChatRoom(username): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
-      username: username,
+      username,
       open: true,
       SupportRepID: null
     });
@@ -53,14 +53,8 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
 
-  public addSupportRep(name,email){
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
-      email: email,
-      name: name,
-      
-    })
-
-    
+  public addSupportRep(name, email) {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({ email, name });
   }
 
   public checkIfAdmin(supportRepId) {

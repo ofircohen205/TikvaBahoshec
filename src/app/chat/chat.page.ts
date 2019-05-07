@@ -1,17 +1,7 @@
-import {
-  Component,
-  OnInit,
-  ViewChild
-} from '@angular/core';
-import {
-  AngularFirestore
-} from '@angular/fire/firestore';
-import {
-  AngularFireAuth
-} from '@angular/fire/auth';
-import {
-  FirestoreService
-} from '../firebase/firestore/firestore.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
