@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
+import { GlobalService } from '../global/global.service';
 
 @Component({
   selector: 'app-home',
@@ -11,41 +12,40 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 })
 export class HomePage implements OnInit {
 
+  @ViewChild('story') story;
+  @ViewChild('main') main;
+  anonymousNumber = -1;
+
   constructor(
     private alertController: AlertController,
     private userAuth: AngularFireAuth,
     private router: Router,
-    private firestore: FirestoreService
-  ) { }
+    private firestore: FirestoreService,
+    private global: GlobalService
+  ) {  }
 
-  ngOnInit() {
-    // alert('Page started');
+  ngOnInit() { }
+
+  userDetails() {
+    this.global.userDetails();
   }
 
-  async userDetails() {
-    const alert = await this.alertController.create({
-      header: 'הכנס שם',
-      message: 'הזן את שמך. אם אינך מעוניין לחץ על כפתור המשך',
-      inputs: [{
-        name: 'name',
-        placeholder: 'שם'
-      }],
-      buttons: [{
-        text: 'המשך',
-        handler: data => {
-          if (data.name === '') {
-            let num = 1;
-            this.firestore.getAnonNumber().subscribe(result => num = result[0]['nextAnonymous']);
-            data.name = 'אנונימי' + num;
-          }
-          this.firestore.createChatRoom(data.name).then(result => {
-            this.router.navigateByUrl('/chat?id=' + result['id']);
-          }).catch((error) => console.log(error));
-        }
-      }]
-    });
-
-    await alert.present();
+  
+  onclick(e): void {
+    const tar = e.target.value;
+    const storyElement = document.getElementById('story');
+    const mainElement = document.getElementById('main');
+    if (tar === 'story') {
+      if (storyElement.hidden === true) {
+        storyElement.hidden = false;
+        mainElement.hidden = true;
+      }
+    } else if (tar === 'home') {
+      if (mainElement.hidden === true) {
+        storyElement.hidden = true;
+        mainElement.hidden = false;
+      }
+    }
   }
 
 }

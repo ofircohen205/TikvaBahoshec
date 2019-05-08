@@ -1,10 +1,12 @@
 <ion-header>
+
     <ion-toolbar>
         <ion-thumbnail slot="start">
             <img style="display:inline-block" src="../assets/logo/association_logo.jpg" />
         </ion-thumbnail>
         <ion-title text-right>תקווה בחושך</ion-title>
     </ion-toolbar>
+
 </ion-header>
 
 <ion-content #mainContent>
@@ -21,9 +23,11 @@
 
 
 <ion-footer>
+    
     <ion-toolbar>
         <h6 slot='end'>:הודעה</h6>
         <ion-input (keyup)='onKeyUp($event)' #messageField></ion-input>
         <ion-button [disabled]='isMessageInvalid()' slot='start' (click)='sendMessage()'>שלח</ion-button>
     </ion-toolbar>
+    
 </ion-footer>

@@ -29,7 +29,7 @@ export class ProfilePage implements OnInit {
           this.toolbarHeader.hidden = false;
           this.admin.hidden = true;
           this.supportRep.hidden = false;
-        } else{
+        } else {
           this.toolbarHeader.hidden = true;
           this.admin.hidden = true ;
           this.supportRep.hidden = false;
@@ -39,18 +39,18 @@ export class ProfilePage implements OnInit {
     }
 
   onclick(e): void {
-    const x = e.target.value;
-    // const adminElement = document.getElementById('admin');
-    // const supportRepElement = document.getElementById('supportRep');
-    if (x === 'admin') {
-      if (this.admin.hidden === true) {
-        this.admin.hidden = false;
-        this.supportRep.hidden = true;
+    const tar = e.target.value;
+    const adminElement = document.getElementById('admin');
+    const supportRepElement = document.getElementById('supportRep');
+    if (tar === 'admin') {
+      if (adminElement.hidden === true) {
+        adminElement.hidden = false;
+        supportRepElement.hidden = true;
       }
     } else {
-      if (this.supportRep.hidden === true) {
-        this.admin.hidden = true;
-        this.supportRep.hidden = false;
+      if (supportRepElement.hidden === true) {
+        adminElement.hidden = true;
+        supportRepElement.hidden = false;
       }
     }
   }

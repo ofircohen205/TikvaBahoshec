@@ -9,6 +9,7 @@ import { StoryComponent } from '../story/story.component';
 import { CalenderComponent } from '../calender/calender.component';
 import { GalleryComponent } from '../gallery/gallery.component';
 import { DonateComponent } from '../donate/donate.component';
+import { MainComponent } from '../main/main.component';
 
 
 @NgModule({
@@ -20,6 +21,10 @@ import { DonateComponent } from '../donate/donate.component';
       {
         path: '',
         component: HomePage
+      },
+      {
+        path: 'story',
+        component: StoryComponent
       }
     ])
   ],
@@ -28,7 +33,8 @@ import { DonateComponent } from '../donate/donate.component';
     StoryComponent,
     CalenderComponent,
     GalleryComponent,
-    DonateComponent
+    DonateComponent,
+    MainComponent
   ]
 })
 export class HomePageModule {}

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FirestoreService } from '../firebase/firestore/firestore.service';
 
 @Component({
   selector: 'app-story',
@@ -7,8 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StoryComponent implements OnInit {
 
-  constructor() { }
+  stories = [];
 
-  ngOnInit() {}
+  constructor(
+    private firestore: FirestoreService
+  ) { }
+
+  ngOnInit() {
+    this.firestore.getStories().subscribe(result => {
+      result.forEach(element => {
+        if (element['approved']) {
+          this.stories.push(element);
+         }
+      });
+    });
+  }
 
 }

@@ -11,10 +11,10 @@
             <ion-segment-button value="chat" (click)="userDetails()">
                 צ'אט עם נציג
             </ion-segment-button>
-            <ion-segment-button value="stories">
+            <ion-segment-button value="story" (click)=(onclick($event))>
                 סיפורים
             </ion-segment-button>
-            <ion-segment-button value="home" checked routerLink='/home'>
+            <ion-segment-button value="home" checked (click)=(onclick($event))>
                 אודות
             </ion-segment-button>
         </ion-segment>
@@ -24,57 +24,7 @@
 
 <ion-content>
 
-    <ion-grid>
-        <ion-row>
-            <ion-col>
-                <ion-card text-center class='toChat'>
-                    <h1>?איך אנחנו יכולים לעזור</h1>
-                    <p>חשוב לנו לשמוע אותך</p>
-                    <ion-button (click)='userDetails()'>צ'אט עם נציג אונליין</ion-button>
-                </ion-card>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col size='4'>
-                <ion-card text-right>
-                    <app-donate></app-donate>
-                </ion-card>
-            </ion-col>
-            <ion-col size='8'>
-                <ion-card text-right class="about">
-                    <h1>אודות העמותה</h1>
-                    <p text-center>
-                        עמותת תקווה בחושך נוסדה עבור מתן סיוע לנערות ונערים אשר עברו פגיעות פיזיות,
-                        רגשיות ומיניות.
-                        העמותה נוסדה לפני כשנה והושקה באירוע שצולם לטלוויזיה במסגרת העלאת
-                        סרט דוקומנטרי כחלק מהסדרה.
-                        מייסדת העמותה, מירי סער, אשת תקשורת, מרצה ומקדמת נושאי חברה בציבור.
-                    </p>
-                    <h1>פעילות העמותה</h1>
-                    <p text-center>
-                        הסברה ומודעות ציבורית – גב' סער עוברת בתיכונים, פורומים של בוגרים, פאנלים וכנסים על מנת לספר את
-                        סיפורה
-                        משאבים טיפוליים עבור הנפגעות – העמותה עומלת על המצאת משאבים כלכליים וטיפוליים
-                        בכדי לטפל בנערות שנמצאות במצוקה מתמדת, הן בזמן התעללות (באם מדווחות על כך) והן לאחר מכן.
-                        העמותה מקווה להצליח להקים בעזרת תרומות ותקציבים בית מחסה עבור הנפגעות.
-                        מענה ראשוני והפניה לגורמים מתאימים – העמותה מפעילה כיום דף פייסבוק בו ניתן לדבר עם נציג.
-                        כמו כן, לעמותה קיים מייל וטלפון שאפשר לפנות אליו בכל שעות היממה
-                    </p>
-                </ion-card>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col size='12'>
-                <app-gallery></app-gallery>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col size='12'>
-                <ion-card text-right>
-                    <app-calender></app-calender>
-                </ion-card>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <app-main #main id="main" [hidden]=false></app-main>
+    <app-story #story id="story" [hidden]=true></app-story>
 
 </ion-content>
