@@ -30,7 +30,7 @@ export class HomePage implements OnInit {
     this.global.userDetails();
   }
 
-  
+
   onclick(e): void {
     const tar = e.target.value;
     const storyElement = document.getElementById('story');

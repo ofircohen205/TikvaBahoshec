@@ -13,8 +13,8 @@ export class DonateComponent implements OnInit {
 
   }
 
-  moveToJgive(){
-    window.open("https://www.jgive.com/new/he/ils/donation-targets/3670?currency=ILS&utm_campaign=Leave_no_Child_in_the_Dark&utm_source=mail");
-    }
+  moveToJgive() {
+    window.open('https://www.jgive.com/new/he/ils/donation-targets/3670?currency=ILS&utm_campaign=Leave_no_Child_in_the_Dark&utm_source=mail');
+  }
 
 }
