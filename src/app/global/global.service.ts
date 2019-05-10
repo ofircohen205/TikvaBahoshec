@@ -9,7 +9,7 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 })
 export class GlobalService {
 
-  anonymousNumber = -1;
+  anonymousNumber = 0;
 
   constructor(
     private alertController: AlertController,
@@ -36,6 +36,7 @@ export class GlobalService {
         handler: data => {
           if (data.name === '') {
             data.name = 'אנונימי' + this.anonymousNumber;
+            this.firestore.updateAnonNumber(this.anonymousNumber + 1);
           }
           this.firestore.createChatRoom(data.name).then(result => {
             this.router.navigateByUrl('/chat?id=' + result['id']);

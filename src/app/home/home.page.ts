@@ -14,7 +14,6 @@ export class HomePage implements OnInit {
 
   @ViewChild('story') story;
   @ViewChild('main') main;
-  anonymousNumber = -1;
 
   constructor(
     private alertController: AlertController,
