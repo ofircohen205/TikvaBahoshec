@@ -16,15 +16,13 @@ import { element } from '@angular/core/src/render3';
 
 
 export class AdminProfileComponent implements OnInit {
-    divToShow =""
-    
+    divToShow = '';
 
   constructor(
     private alertController: AlertController,
     private router: Router,
     private userAuth: AngularFireAuth,
-    private firestore: FirestoreService,
-    
+    private firestore: FirestoreService
     ) { }
 
   ngOnInit() {}
@@ -33,7 +31,16 @@ export class AdminProfileComponent implements OnInit {
     const alert = await this.alertController.create({
       header: 'התנתק',
       message: 'אתה עומד להתנתק עכשיו',
-      buttons: ['סלמתאק', 'לא לא']
+      buttons: [{
+        text: 'המשך',
+        handler: () => {
+          this.userAuth.auth.signOut().then(() => {
+            this.router.navigateByUrl('/home');
+          }).catch((error) => console.log(error));
+        }
+      }, {
+        text: 'עדיין לא'
+      }]
     });
     alert.present();
   }
@@ -41,7 +48,7 @@ export class AdminProfileComponent implements OnInit {
   async addSupport() {
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',
-      inputs: [ 
+      inputs: [
         {
           name: 'username',
           placeholder: 'שם הנציג'
@@ -61,8 +68,8 @@ export class AdminProfileComponent implements OnInit {
       ],
       buttons: [{
         text: 'בטל'},
-         {text:'הוסף',
-          handler:data =>{ this.firestore.addSupportRep(data.username,data.email)}}]
+         {text: 'הוסף',
+          handler: data => { this.firestore.addSupportRep(data.username,data.email)}}]
     });
     alert.present();
   }
@@ -76,15 +83,13 @@ export class AdminProfileComponent implements OnInit {
       buttons: ['אוקיי']
     });
     alert.present();
+    document.getElementById('readyButton').style.color = 'green';
   }
 
   scrollToElement(e): void {
-    var x = e.target.value
-    var element = document.getElementById(x);
-    element.scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
-   
+    const x = e.target.value;
+    const element = document.getElementById(x);
+    element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'start'});
   }
-
- 
 
 }
