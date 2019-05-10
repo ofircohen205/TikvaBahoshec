@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { element } from '@angular/core/src/render3';
+import { GlobalService } from '../global/global.service';
 
 
 
@@ -16,15 +17,14 @@ import { element } from '@angular/core/src/render3';
 
 
 export class AdminProfileComponent implements OnInit {
-    divToShow =""
-    
+    divToShow = '';
 
   constructor(
     private alertController: AlertController,
     private router: Router,
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
-    
+    private global: GlobalService
     ) { }
 
   ngOnInit() {}
@@ -33,7 +33,16 @@ export class AdminProfileComponent implements OnInit {
     const alert = await this.alertController.create({
       header: 'התנתק',
       message: 'אתה עומד להתנתק עכשיו',
-      buttons: ['סלמתאק', 'לא לא']
+      buttons: [{
+        text: 'המשך',
+        handler: () => {
+          this.userAuth.auth.signOut().then(() => {
+            this.router.navigateByUrl('/home');
+          }).catch((error) => console.log(error));
+        }
+      }, {
+        text: 'עדיין לא'
+      }]
     });
     alert.present();
   }
@@ -41,7 +50,7 @@ export class AdminProfileComponent implements OnInit {
   async addSupport() {
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',
-      inputs: [ 
+      inputs: [
         {
           name: 'username',
           placeholder: 'שם הנציג'
@@ -61,30 +70,18 @@ export class AdminProfileComponent implements OnInit {
       ],
       buttons: [{
         text: 'בטל'},
-         {text:'הוסף',
-          handler:data =>{ this.firestore.addSupportRep(data.username,data.email)}}]
+         {text: 'הוסף',
+          handler: data => { this.firestore.addSupportRep(data.username, data.email); }}]
     });
     alert.present();
   }
 
-
-
-  async readyForChat() {
-    const alert = await this.alertController.create({
-      header: 'מוכן לשיחה',
-      message: 'עכשיו אתה מוכן ויכול לקבל פניות',
-      buttons: ['אוקיי']
-    });
-    alert.present();
+  readyForChat() {
+    this.global.readyForChat();
   }
 
   scrollToElement(e): void {
-    var x = e.target.value
-    var element = document.getElementById(x);
-    element.scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
-   
+    this.global.scrollToElement(e);
   }
-
- 
 
 }

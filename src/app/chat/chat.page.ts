@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { ActivatedRoute } from '@angular/router';
@@ -19,7 +18,6 @@ export class ChatPage {
 
   constructor(
     private userAuth: AngularFireAuth,
-    private db: AngularFirestore,
     private firestore: FirestoreService,
     private activatedRoute: ActivatedRoute) {}
 

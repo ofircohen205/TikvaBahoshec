@@ -1,26 +1,30 @@
 <ion-header>
-  <ion-toolbar>
-      <ion-thumbnail slot="start">
-          <img style="display:inline-block" src="../assets/logo/association_logo.jpg" />
-      </ion-thumbnail>
-      <ion-title text-right>תקווה בחושך</ion-title>
-  </ion-toolbar>
+    
+    <ion-toolbar color="primary">
+        <ion-thumbnail slot="start">
+            <img style="display:inline-block" src="../assets/logo/association_logo.jpg" />
+        </ion-thumbnail>
+        <a href='/home' style="color: white; text-decoration: none;">
+            <ion-title text-right>תקווה בחושך</ion-title>
+        </a>
+    </ion-toolbar>
+
+    <ion-toolbar id='toolbarHeader' #toolbarHeader>
+        <ion-segment>
+            <ion-segment-button value="supportRep" (click)=(onclick($event))>
+                supportRep
+            </ion-segment-button>
+            <ion-segment-button value="admin" (click)=(onclick($event))>
+                Admin
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+    
 </ion-header>
 
 <ion-content>
-    <ion-header id="toolbarHeader">
-        <ion-toolbar>
-            <ion-segment>
-                <ion-segment-button value="supportRep" (click)=(onclick($event)) >
-                    supportRep
-                </ion-segment-button>
-                <ion-segment-button value="admin" (click)=(onclick($event)) >
-                      Admin
-                </ion-segment-button>
 
-            </ion-segment>
-        </ion-toolbar>
-    </ion-header>
-  <app-admin-profile id = "admin" [hidden]= false></app-admin-profile>
-  <app-support-rep-profile id = "supportRep" [hidden]= true ></app-support-rep-profile>
+    <app-admin-profile #admin id="admin" [hidden]=false></app-admin-profile>
+    <app-support-rep-profile #supportRep id="supportRep" [hidden]=true></app-support-rep-profile>
+
 </ion-content>

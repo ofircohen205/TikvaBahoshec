@@ -1,3 +1,39 @@
-<p>
-  story works!
-</p>
+<ion-content #mainContent>
+
+  <ion-grid>
+    <ion-row *ngFor='let story of stories'>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title text-right>{{ story.title }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content text-right>
+            {{ story.description }}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title text-right>ספר את הסיפור שלך</ion-card-title>
+          </ion-card-header>
+          <ion-card-content text-right>
+            <ion-item>
+              <ion-label>נושא</ion-label>
+              <ion-input type="text"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>תיאור המקרה</ion-label>
+              <ion-input type="text"></ion-input>
+            </ion-item>
+            <ion-button>שלח</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
