@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { element } from '@angular/core/src/render3';
+import { GlobalService } from '../global/global.service';
 
 
 
@@ -22,7 +23,8 @@ export class AdminProfileComponent implements OnInit {
     private alertController: AlertController,
     private router: Router,
     private userAuth: AngularFireAuth,
-    private firestore: FirestoreService
+    private firestore: FirestoreService,
+    private global: GlobalService
     ) { }
 
   ngOnInit() {}
@@ -69,27 +71,17 @@ export class AdminProfileComponent implements OnInit {
       buttons: [{
         text: 'בטל'},
          {text: 'הוסף',
-          handler: data => { this.firestore.addSupportRep(data.username,data.email)}}]
+          handler: data => { this.firestore.addSupportRep(data.username, data.email); }}]
     });
     alert.present();
   }
 
-
-
-  async readyForChat() {
-    const alert = await this.alertController.create({
-      header: 'מוכן לשיחה',
-      message: 'עכשיו אתה מוכן ויכול לקבל פניות',
-      buttons: ['אוקיי']
-    });
-    alert.present();
-    document.getElementById('readyButton').style.color = 'green';
+  readyForChat() {
+    this.global.readyForChat();
   }
 
   scrollToElement(e): void {
-    const x = e.target.value;
-    const element = document.getElementById(x);
-    element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'start'});
+    this.global.scrollToElement(e);
   }
 
 }

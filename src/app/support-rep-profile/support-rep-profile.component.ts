@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { element } from '@angular/core/src/render3';
+import { GlobalService } from '../global/global.service';
 
 @Component({
   selector: 'app-support-rep-profile',
@@ -17,7 +18,7 @@ export class SupportRepProfileComponent implements OnInit {
     private router: Router,
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
-    
+    private global: GlobalService
     ) { }
 
   ngOnInit() {}
@@ -34,23 +35,11 @@ export class SupportRepProfileComponent implements OnInit {
 
 
 
-  async readyForChat() {
-    const alert = await this.alertController.create({
-      header: 'מוכן לשיחה',
-      message: 'עכשיו אתה מוכן ויכול לקבל פניות',
-      buttons: ['אוקיי']
-    });
-    alert.present();
+  readyForChat() {
+    this.global.readyForChat();
   }
 
   scrollToElement(e): void {
-    var x = e.target.value
-    var element = document.getElementById(x);
-    element.scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
-   
+    this.global.scrollToElement(e);
   }
-
- 
-
-
 }

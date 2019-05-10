@@ -46,4 +46,21 @@ export class GlobalService {
 
     await alert.present();
   }
+
+  async readyForChat() {
+    const alert = await this.alertController.create({
+      header: 'מוכן לשיחה',
+      message: 'עכשיו אתה מוכן ויכול לקבל פניות',
+      buttons: ['אוקיי']
+    });
+    alert.present();
+    document.getElementById('readyButton').style.color = 'green';
+  }
+
+  scrollToElement(e): void {
+    const x = e.target.value;
+    const element = document.getElementById(x);
+    element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'start'});
+  }
+
 }
