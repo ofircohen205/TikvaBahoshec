@@ -8,7 +8,8 @@ const routes: Routes = [
   { path: 'chat', loadChildren: './chat/chat.module#ChatPageModule' },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
-
+  { path: '404', loadChildren: './not-found/not-found.module#NotFoundPageModule' },
+  { path: '**', redirectTo: '404' }
 ];
 
 @NgModule({
