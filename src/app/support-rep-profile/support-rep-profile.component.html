@@ -1,3 +1,50 @@
-<p>
-  support-rep-profile works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-segment>
+      <ion-segment-button value="Logout" (click)="logout()">
+        התנתק
+      </ion-segment-button>
+     
+      <ion-segment-button value="View History Chat" (click)="scrollToElement($event)">
+        היסטורית צ'אט
+      </ion-segment-button>
+   
+      <ion-segment-button value="Ready for chat" style=color:red (click)="readyForChat()">
+        "מוכן לשיחה"
+      </ion-segment-button>
+
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size='12'>
+      
+        
+
+
+
+       
+
+        <ion-card text-center style="height: 500px" id="View History Chat">
+          <p text-center> היסטוריית שיחות </p>
+          <ion-toolbar>
+            <ion-button style=" display: inline-block;" style="height: 25px;">חיפוש</ion-button>
+            <input> שם:
+            <input> תאריך:
+            <input> אזור:
+          </ion-toolbar>
+          <p text-center> מיין לפי: </p>
+          <input type="radio">תאריך
+          <input type="radio">שם
+        </ion-card>
+
+        
+
+       
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
