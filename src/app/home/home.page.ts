@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,8 @@ export class HomePage implements OnInit {
     private userAuth: AngularFireAuth,
     private router: Router,
     private firestore: FirestoreService,
-    private global: GlobalService
+    private global: GlobalService,
+    private location: Location
   ) {  }
 
   ngOnInit() { }
@@ -38,11 +40,13 @@ export class HomePage implements OnInit {
       if (storyElement.hidden === true) {
         storyElement.hidden = false;
         mainElement.hidden = true;
+        this.location.go('/story');
       }
     } else if (tar === 'home') {
       if (mainElement.hidden === true) {
         storyElement.hidden = true;
         mainElement.hidden = false;
+        this.location.go('/home');
       }
     }
   }
