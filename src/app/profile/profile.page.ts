@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +16,8 @@ export class ProfilePage implements OnInit {
 
   constructor(
     private firestore: FirestoreService,
-    private userAuth: AngularFireAuth
+    private userAuth: AngularFireAuth,
+    private location: Location
     ) {}
 
   ngOnInit() {
@@ -46,11 +48,13 @@ export class ProfilePage implements OnInit {
       if (adminElement.hidden === true) {
         adminElement.hidden = false;
         supportRepElement.hidden = true;
+        this.location.go('/profile/admin');
       }
     } else {
       if (supportRepElement.hidden === true) {
         adminElement.hidden = true;
         supportRepElement.hidden = false;
+        this.location.go('/profile/support-rep');
       }
     }
   }
