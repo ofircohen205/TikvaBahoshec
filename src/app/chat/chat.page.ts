@@ -15,6 +15,7 @@ export class ChatPage {
   messages = [];
   fullName = '';
   chatId = '';
+  maxParticipants = 2;
 
   constructor(
     private userAuth: AngularFireAuth,
@@ -22,9 +23,7 @@ export class ChatPage {
     private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.chatId = params.id;
-    });
+    this.activatedRoute.params.subscribe(params => this.chatId = params.id);
     this.firestore.getChatMessages(this.chatId).subscribe(result => {
       result.sort((m1, m2) => {
         if (m1['timestamp'] > m2['timestamp']) {

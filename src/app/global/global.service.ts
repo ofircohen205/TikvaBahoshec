@@ -39,7 +39,7 @@ export class GlobalService {
             this.firestore.updateAnonNumber(this.anonymousNumber + 1);
           }
           this.firestore.createChatRoom(data.name).then(result => {
-            this.router.navigateByUrl('/chat?id=' + result['id']);
+            this.router.navigateByUrl('/chat/' + result['id']);
           }).catch((error) => console.log(error));
         }
       }]
