@@ -25,7 +25,7 @@
       <ion-segment-button value="SupportRep Logins" (click)="scrollToElement($event)">
         התחברות נציגים
       </ion-segment-button>
-      <ion-segment-button value="Ready for chat" style=color:red (click)="readyForChat()">
+      <ion-segment-button value="Ready for chat" id="readyButton" style=color:red (click)="readyForChat()">
         "מוכן לשיחה"
       </ion-segment-button>
 
@@ -46,48 +46,27 @@
 
           </ion-toolbar>
           <ion-button (click)="addSupport()">הוסף</ion-button>
-
           <table id="tables" text-right>
-            <tr>
-              <th text-center></th>
-              <th text-center>התחבר לאחרונה</th>
-              <th text-center>id</th>
-              <th text-center>שם נציג</th>
-
-            </tr>
-            <tr>
-              <td>
-                <ion-button>מחק</ion-button>
-              </td>
-              <td>12.4.19 7:45</td>
-              <td>123456</td>
-              <td>שלמה כהן</td>
-
-            </tr>
-            <tr>
-              <td>
-                <ion-button>מחק</ion-button>
-              </td>
-              <td>13.4.19 8:21</td>
-              <td>000000</td>
-              <td>תום נגר לוי</td>
-            </tr>
-            <tr>
-              <td>
-                <ion-button>מחק</ion-button>
-              </td>
-              <td>16.5.19 7:34</td>
-              <td>12212112</td>
-              <td>אבי הרשקו</td>
-            </tr>
-            <tr>
-              <td>
-                <ion-button>מחק</ion-button>
-              </td>
-              <td>16.5.19 7:38</td>
-              <td>12256712</td>
-              <td> יוסי כהן</td>
-            </tr>
+            <thead>
+                     <tr>
+                         <th text-center></th>
+                         <th text-center>התחבר לאחרונה</th>
+                         <th text-center>אימייל</th>
+                         <th text-center>שם נציג</th>
+          
+                       </tr>
+                     
+                       </thead>
+          
+                       <tbody text-right>
+                        <tr *ngFor="let x of list">
+                            <td ><ion-button color="danger" (click)="deleteSupportRep(x)">מחק</ion-button></td>
+                            <td></td>
+                            <td>{{x.email}}</td>
+                          <td >{{x.name}}</td>
+                                                    
+                        </tr>
+                        </tbody>             
 
           </table>
         </ion-card>

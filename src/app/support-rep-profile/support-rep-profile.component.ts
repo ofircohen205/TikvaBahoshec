@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
+import { element } from '@angular/core/src/render3';
+import { GlobalService } from '../global/global.service';
 
 @Component({
   selector: 'app-support-rep-profile',
@@ -8,14 +13,33 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 })
 export class SupportRepProfileComponent implements OnInit {
 
-  constructor(private firestore: FirestoreService) { }
+  constructor(
+    private alertController: AlertController,
+    private router: Router,
+    private userAuth: AngularFireAuth,
+    private firestore: FirestoreService,
+    private global: GlobalService
+    ) { }
 
-  ngOnInit() {
-     this.firestore.getOpenChatRooms().subscribe(result => {
-      console.log(result);
+  ngOnInit() {}
+
+  async logout() {
+    const alert = await this.alertController.create({
+      header: 'התנתק',
+      message: 'אתה עומד להתנתק עכשיו',
+      buttons: ['סלמתאק', 'לא לא']
     });
+    alert.present();
   }
 
 
 
+
+  readyForChat() {
+    this.global.readyForChat();
+  }
+
+  scrollToElement(e): void {
+    this.global.scrollToElement(e);
+  }
 }

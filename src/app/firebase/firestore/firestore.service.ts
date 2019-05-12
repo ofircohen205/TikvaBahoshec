@@ -15,6 +15,7 @@ export class FirestoreService {
 
   constructor(private firestore: AngularFirestore) { }
 
+
   /* CHAT COLLECTION FUNCTIONS */
   public createChatRoom(username): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
@@ -58,8 +59,23 @@ export class FirestoreService {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({ email, name });
   }
 
+  public getSupportRepList() {
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
+  }
+
 
   /* CALENDER COLLECTION FUNCTIONS */
+  public getEvents() {
+    return this.firestore.collection(this.CALENDER_COLLECTION).valueChanges();
+  }
+
+  public addEvent(title, date, description) {
+    this.firestore.collection(this.CALENDER_COLLECTION).add({ title, date, description });
+  }
+
+  public removeEvent(eventId) {
+    this.firestore.collection(this.CALENDER_COLLECTION).doc(eventId).delete();
+  }
 
 
   /* STORIES COLLECTION FUNCTIONS */
@@ -70,6 +86,11 @@ export class FirestoreService {
   public addStory(date, description) {
     this.firestore.collection(this.STORIES_COLLECTION).add({ date, description, approved: false });
   }
+
+  public removeStory(storyId) {
+    this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).delete();
+  }
+
 
   /* METADATA COLLECTION FUNCTIONS */
   public getAnonNumber(): Observable<any> {

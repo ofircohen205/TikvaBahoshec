@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +16,8 @@ export class ProfilePage implements OnInit {
 
   constructor(
     private firestore: FirestoreService,
-    private userAuth: AngularFireAuth
+    private userAuth: AngularFireAuth,
+    private location: Location
     ) {}
 
   ngOnInit() {
