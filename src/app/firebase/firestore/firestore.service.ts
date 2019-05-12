@@ -59,6 +59,12 @@ export class FirestoreService {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({ email, name });
   }
 
+  public getSupportRepList(){
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
+  }
+
+ 
+
 
   /* CALENDER COLLECTION FUNCTIONS */
   public getEvents() {
