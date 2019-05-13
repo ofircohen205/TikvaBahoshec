@@ -9,7 +9,6 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 export class ChatBubbleComponent implements OnInit {
 
   @Input() data;
-  @Input() fullName;
   messageTime;
 
   constructor(private firestore: FirestoreService) { }

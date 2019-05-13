@@ -28,6 +28,10 @@ export class FirestoreService {
     });
   }
 
+  public getChatRoom(chatId) {
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).valueChanges();
+  }
+
   public getOpenChatRooms(): Observable<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true)).valueChanges();
   }
@@ -48,8 +52,8 @@ export class FirestoreService {
     });
   }
 
-  public deleteChatRoom() {
-
+  public updateClientId(chatId, ClientID) {
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
   }
 
 
@@ -63,7 +67,7 @@ export class FirestoreService {
   }
 
   public getUserName(clientId): Observable<any> {
-    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(clientId).valueChanges();
+    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
   }
 
   public getClients() {

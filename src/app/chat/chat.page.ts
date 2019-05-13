@@ -16,9 +16,12 @@ export class ChatPage {
 
   clientName = '';
   supportRepName = '';
+
   chatId = '';
   supportRepId = '';
   clientId = '';
+
+  client_support_flag;
   maxParticipants = 2;
 
   constructor(
@@ -27,10 +30,12 @@ export class ChatPage {
     private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.firestore.getSupportRepList().subscribe(results => console.log(results));
     this.activatedRoute.params.subscribe(params => this.chatId = params.id);
-    this.firestore.getUserName(this.chatId).subscribe(result => this.clientName = result['username']);
-    this.firestore.createClient(this.clientName);
+    this.firestore.getChatRoom(this.chatId).subscribe(result => {
+      this.clientId = result['ClientID'];
+      this.firestore.getUserName(this.clientId).subscribe(item => this.clientName = item['username']);
+    });
+
     this.firestore.getChatMessages(this.chatId).subscribe(result => {
       result.sort((m1, m2) => {
         if (m1['timestamp'] > m2['timestamp']) {
@@ -46,18 +51,20 @@ export class ChatPage {
         this.messages.push(result[result.length - 1]);
       }
     });
-    // this.firestore.getSupportRepList().subscribe(results => {
-    //   results.forEach(result => console.log(result['name']));
-    // });
+
     this.userAuth.user.subscribe(result => {
-      console.log(result);
+      if (result !== undefined) {
+        this.client_support_flag = true;
+      } else {
+        this.client_support_flag = false;
+      }
     });
   }
 
   afterUserInside(type) {
-    if (type === 'username') {
-      this.firestore.getUserName(this.chatId).subscribe(result => this.clientName = result[type]);
-    } else if (type === 'SupportRepID') {
+    if (type === this.client_support_flag) {
+      this.firestore.getUserName(this.clientId).subscribe(result => this.clientName = result['username']);
+    } else {
       this.firestore.getSupportRepName(this.supportRepId).subscribe(result => this.supportRepName = result['name']);
     }
   }
@@ -88,9 +95,14 @@ export class ChatPage {
   }
 
   onKeyUp(data) {
+    this.afterUserInside(this.client_support_flag);
     const ENTER_KET_CODE = 13;
     if (data.keyCode === ENTER_KET_CODE) {
-      this.sendMessage();
+      if (!this.client_support_flag) {
+        this.sendMessage('username');
+      } else {
+        this.sendMessage('SupportRepID');
+      }
     }
   }
 
