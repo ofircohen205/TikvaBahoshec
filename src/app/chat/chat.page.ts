@@ -89,7 +89,7 @@ export class ChatPage {
   onKeyUp(data) {
     const ENTER_KET_CODE = 13;
     if (data.keyCode === ENTER_KET_CODE) {
-      this.sendMessage();
+      //this.sendMessage();
     }
   }
 

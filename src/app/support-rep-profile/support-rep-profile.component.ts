@@ -28,11 +28,9 @@ export class SupportRepProfileComponent implements OnInit {
   ngOnInit() {
     this.firestore.getOpenChatRooms().subscribe(result => {
       result.forEach(element => {
-        this.openChatList.push(element);
-         
+        this.openChatList.push(element); 
       });
     });
-    
 
   }
     
@@ -57,6 +55,21 @@ export class SupportRepProfileComponent implements OnInit {
   }
 
   readyForChatColor(e){
+    
+
+  }
+
+
+  supportId(id){
+      console.log(this.openChatList);
+     if(id==null){
+        return "NULL"
+     }
+     else{
+      let name = '';
+      this.firestore.getSupportRepName(id).subscribe(result => console.log(result));
+      return name;
+     }
     
 
   }
