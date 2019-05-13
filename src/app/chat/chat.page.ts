@@ -12,16 +12,17 @@ export class ChatPage {
 
   @ViewChild('messageField') messageField;
   @ViewChild('mainContent') mainContent;
-  messages = [];
 
+  messages = [];
+  chatId = '';
+
+  clientId = '';
   clientName = '';
+
+  supportRepId = '';
   supportRepName = '';
 
-  chatId = '';
-  supportRepId = '';
-  clientId = '';
-
-  client_support_flag;
+  client_support_flag: boolean;
   maxParticipants = 2;
 
   constructor(
@@ -34,6 +35,8 @@ export class ChatPage {
     this.firestore.getChatRoom(this.chatId).subscribe(result => {
       this.clientId = result['ClientID'];
       this.firestore.getUserName(this.clientId).subscribe(item => this.clientName = item['username']);
+      this.supportRepId = result['SupportRepID'];
+      this.firestore.getSupportRepName(this.supportRepId).subscribe(item => this.supportRepName = item['name']);
     });
 
     this.firestore.getChatMessages(this.chatId).subscribe(result => {
@@ -79,6 +82,7 @@ export class ChatPage {
     } else if (type === 'SupportRepID') {
       fullName = this.supportRepName;
     }
+    console.log(fullName);
     this.firestore.addChatMessage(this.chatId, fullName, this.messageField.value, new Date().getTime());
     this.messageField.value = '';
     this.scrollToBottom();
@@ -98,6 +102,7 @@ export class ChatPage {
     this.afterUserInside(this.client_support_flag);
     const ENTER_KET_CODE = 13;
     if (data.keyCode === ENTER_KET_CODE) {
+      setTimeout(() => console.log('testing'), 700);
       if (!this.client_support_flag) {
         this.sendMessage('username');
       } else {
