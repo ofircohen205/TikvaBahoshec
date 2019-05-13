@@ -27,6 +27,7 @@ export class ChatPage {
     private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.firestore.getSupportRepList().subscribe(results => console.log(results));
     this.activatedRoute.params.subscribe(params => this.chatId = params.id);
     this.firestore.getUserName(this.chatId).subscribe(result => this.clientName = result['username']);
     this.firestore.createClient(this.clientName);
@@ -68,7 +69,7 @@ export class ChatPage {
     let fullName = '';
     if (type === 'username') {
       fullName = this.clientName;
-    } else if(type === 'SupportRepID') {
+    } else if (type === 'SupportRepID') {
       fullName = this.supportRepName;
     }
     this.firestore.addChatMessage(this.chatId, fullName, this.messageField.value, new Date().getTime());

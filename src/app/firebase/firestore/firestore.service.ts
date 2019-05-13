@@ -92,8 +92,12 @@ export class FirestoreService {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({ email, name });
   }
 
-  public getSupportRepList() {
-    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).snapshotChanges();
+  public getSupportRepNameList() {
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
+  }
+
+  public getSupportRepIdList() {
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
 
 
