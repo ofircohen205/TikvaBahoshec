@@ -11,7 +11,10 @@ import { GlobalService } from '../global/global.service';
   templateUrl: './support-rep-profile.component.html',
   styleUrls: ['./support-rep-profile.component.scss'],
 })
+
 export class SupportRepProfileComponent implements OnInit {
+  chatReadyStatus=false;
+  openChatList : any =[];
 
   constructor(
     private alertController: AlertController,
@@ -19,10 +22,20 @@ export class SupportRepProfileComponent implements OnInit {
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
     private global: GlobalService
+    
     ) { }
+    
+  ngOnInit() {
+    this.firestore.getOpenChatRooms().subscribe(result => {
+      result.forEach(element => {
+        this.openChatList.push(element);
+         
+      });
+    });
+    
 
-  ngOnInit() {}
-
+  }
+    
   async logout() {
     const alert = await this.alertController.create({
       header: 'התנתק',
@@ -42,4 +55,11 @@ export class SupportRepProfileComponent implements OnInit {
   scrollToElement(e): void {
     this.global.scrollToElement(e);
   }
+
+  readyForChatColor(e){
+    
+
+  }
+
+  
 }
