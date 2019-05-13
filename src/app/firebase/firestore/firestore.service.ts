@@ -92,6 +92,7 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
 
+
   public addSupportRep(name, email): void {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({ email, name });
   }
