@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FirestoreService } from '../firebase/firestore/firestore.service';
 
 @Component({
   selector: 'app-chat-bubble',
@@ -9,15 +10,12 @@ export class ChatBubbleComponent implements OnInit {
 
   @Input() data;
   @Input() fullName;
+  messageTime;
 
-  constructor() { }
+  constructor(private firestore: FirestoreService) { }
 
-  ngOnInit() {}
-
-  getContentColor(m) {
-    if (this.fullName != null && m != null && this.fullName === m.from) {
-      return 'red';
-    }
+  ngOnInit() {
+    this.messageTime = new Date(this.data['timestamp']).toLocaleTimeString();
   }
 
 }
