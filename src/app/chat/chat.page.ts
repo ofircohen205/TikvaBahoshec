@@ -13,8 +13,13 @@ export class ChatPage {
   @ViewChild('messageField') messageField;
   @ViewChild('mainContent') mainContent;
   messages = [];
-  fullName = '';
+
+  clientName = '';
+  supportRepName = '';
   chatId = '';
+  supportRepId = '';
+  clientId = '';
+  maxParticipants = 2;
 
   constructor(
     private userAuth: AngularFireAuth,
@@ -22,9 +27,10 @@ export class ChatPage {
     private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.chatId = params.id;
-    });
+    this.firestore.getSupportRepList().subscribe(results => console.log(results));
+    this.activatedRoute.params.subscribe(params => this.chatId = params.id);
+    this.firestore.getUserName(this.chatId).subscribe(result => this.clientName = result['username']);
+    this.firestore.createClient(this.clientName);
     this.firestore.getChatMessages(this.chatId).subscribe(result => {
       result.sort((m1, m2) => {
         if (m1['timestamp'] > m2['timestamp']) {
@@ -40,24 +46,33 @@ export class ChatPage {
         this.messages.push(result[result.length - 1]);
       }
     });
-    this.userAuth.user.subscribe(() => {
-      this.afterUserInside('username');
+    // this.firestore.getSupportRepList().subscribe(results => {
+    //   results.forEach(result => console.log(result['name']));
+    // });
+    this.userAuth.user.subscribe(result => {
+      console.log(result);
     });
   }
 
   afterUserInside(type) {
     if (type === 'username') {
-      this.firestore.getUserName(this.chatId).subscribe(result => this.fullName = result[type]);
+      this.firestore.getUserName(this.chatId).subscribe(result => this.clientName = result[type]);
     } else if (type === 'SupportRepID') {
-      this.firestore.getSupportRepName('kvTVBN4aD8OW66wZErgc').subscribe(result => this.fullName = result['name']);
+      this.firestore.getSupportRepName(this.supportRepId).subscribe(result => this.supportRepName = result['name']);
     }
   }
 
-  sendMessage() {
+  sendMessage(type) {
     if (this.isMessageInvalid()) {
       return;
     }
-    this.firestore.addChatMessage(this.chatId, this.fullName, this.messageField.value, new Date().getTime());
+    let fullName = '';
+    if (type === 'username') {
+      fullName = this.clientName;
+    } else if (type === 'SupportRepID') {
+      fullName = this.supportRepName;
+    }
+    this.firestore.addChatMessage(this.chatId, fullName, this.messageField.value, new Date().getTime());
     this.messageField.value = '';
     this.scrollToBottom();
   }

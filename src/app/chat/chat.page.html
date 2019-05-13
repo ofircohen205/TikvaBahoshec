@@ -14,9 +14,9 @@
 <ion-content #mainContent>
 
     <ion-grid>
-        <ion-row *ngFor='let m of messages'>
+        <ion-row *ngFor='let msg of messages'>
             <ion-col>
-                <app-chat-bubble [fullName]='fullName' [data]='m'></app-chat-bubble>
+                <app-chat-bubble [fullName]='fullName' [data]='msg'></app-chat-bubble>
             </ion-col>
         </ion-row>
     </ion-grid>

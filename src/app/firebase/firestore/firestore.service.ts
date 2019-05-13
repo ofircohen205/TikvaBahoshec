@@ -8,6 +8,7 @@ export class FirestoreService {
 
   readonly CHAT_ROOMS_COLLECTION = 'ChatRooms';
   readonly CALENDER_COLLECTION = 'Calender';
+  readonly CLIENT_COLLECTION = 'Clients';
   readonly METADATA_COLLECTION = 'Metadata';
   readonly MESSAGES_COLLECTION = 'Messages';
   readonly STORIES_COLLECTION = 'Stories';
@@ -19,9 +20,11 @@ export class FirestoreService {
   /* CHAT COLLECTION FUNCTIONS */
   public createChatRoom(username): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
-      username,
       open: true,
-      SupportRepID: null
+      occupied: false,
+      SupportRepID: null,
+      ClientID: null,
+      timestamp: new Date().getTime()
     });
   }
 
@@ -45,8 +48,38 @@ export class FirestoreService {
     });
   }
 
-  public getUserName(chatId): Observable<any> {
-    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).valueChanges();
+  public deleteChatRoom() {
+
+  }
+
+
+  /* CLIENT COLLECTION FUNCTIONS */
+  public createClient(username): Promise<any> {
+    return this.firestore.collection(this.CLIENT_COLLECTION).add({
+      username,
+      location: null,
+      description: null
+    });
+  }
+
+  public getUserName(clientId): Observable<any> {
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(clientId).valueChanges();
+  }
+
+  public getClients() {
+    return this.firestore.collection(this.CLIENT_COLLECTION).valueChanges();
+  }
+
+  public updateClientName(chatId, username) {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ username });
+  }
+
+  public updateClientLocation(chatId, location) {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ location });
+  }
+
+  public updateClientDescription(chatId, description) {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ description });
   }
 
 
@@ -59,8 +92,12 @@ export class FirestoreService {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({ email, name });
   }
 
-  public getSupportRepList() {
+  public getSupportRepNameList() {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
+  }
+
+  public getSupportRepIdList() {
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
 
 
