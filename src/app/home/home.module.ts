@@ -26,7 +26,7 @@ import { MainComponent } from '../main/main.component';
         path: 'story',
         component: StoryComponent
       }
-    ])
+    ]),
   ],
   declarations: [
     HomePage,
