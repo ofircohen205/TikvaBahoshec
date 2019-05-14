@@ -88,13 +88,16 @@ export class FirestoreService {
 
 
   /* SUPPORT REP COLLECTION FUNCTIONS */
-  public getSupportRepName(supportRepId): Observable<any> {
-    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
+  public createSupportRep(name, email): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
+      email,
+      name,
+      connectionTime: null
+    });
   }
 
-
-  public addSupportRep(name, email): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({ email, name });
+  public getSupportRepName(supportRepId): Observable<any> {
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
 
   public getSupportRepNameList() {
@@ -104,7 +107,6 @@ export class FirestoreService {
   public getSupportRepIdList() {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
-
 
   /* CALENDER COLLECTION FUNCTIONS */
   public getEvents() {

@@ -18,7 +18,7 @@ import { GlobalService } from '../global/global.service';
 
 export class AdminProfileComponent implements OnInit {
     divToShow = '';
-    list= [];
+    list = [];
 
   constructor(
     private alertController: AlertController,
@@ -31,8 +31,8 @@ export class AdminProfileComponent implements OnInit {
   ngOnInit() {
 
    this.firestore.getSupportRepNameList().subscribe(result => {
-      result.forEach(element => {
-        this.list.push(element);
+      result.forEach(ele => {
+        this.list.push(ele);
       });
     });
   }
@@ -79,7 +79,7 @@ export class AdminProfileComponent implements OnInit {
       buttons: [{
         text: 'בטל'},
          {text: 'הוסף',
-          handler: data => { this.firestore.addSupportRep(data.username, data.email); }}]
+          handler: data => { this.firestore.createSupportRep(data.username, data.email); }}]
     });
     alert.present();
   }
