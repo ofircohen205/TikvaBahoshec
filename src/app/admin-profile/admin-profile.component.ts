@@ -3,7 +3,6 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
-import { element } from '@angular/core/src/render3';
 import { GlobalService } from '../global/global.service';
 
 
@@ -33,8 +32,8 @@ export class AdminProfileComponent implements OnInit {
 
 
     this.firestore.getSupportRepNameList().subscribe(result => {
-      result.forEach(element => {
-        this.list.push(element);
+      result.forEach(elem => {
+        this.list.push(elem);
       });
     });
   }
