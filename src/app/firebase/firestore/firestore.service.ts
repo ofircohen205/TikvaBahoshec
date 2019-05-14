@@ -16,6 +16,7 @@ export class FirestoreService {
 
   constructor(private firestore: AngularFirestore) { }
 
+  // ! CRUD ON EACH COLLECTION - CREATE READ(GET) UPDATE DELETE
 
   /* CHAT COLLECTION FUNCTIONS */
   public createChatRoom(username): Promise<any> {
@@ -56,6 +57,10 @@ export class FirestoreService {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
   }
 
+  public updateSupportRepId(chatId, SupportRepID) {
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ SupportRepID });
+  }
+
 
   /* CLIENT COLLECTION FUNCTIONS */
   public createClient(username): Promise<any> {
@@ -88,13 +93,16 @@ export class FirestoreService {
 
 
   /* SUPPORT REP COLLECTION FUNCTIONS */
-  public getSupportRepName(supportRepId): Observable<any> {
-    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
+  public createSupportRep(name, email): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
+      email,
+      name,
+      connectionTime: null
+    });
   }
 
-
-  public addSupportRep(name, email): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({ email, name });
+  public getSupportRepName(supportRepId): Observable<any> {
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
 
   public getSupportRepNameList() {
@@ -105,14 +113,13 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
 
-
   /* CALENDER COLLECTION FUNCTIONS */
-  public getEvents() {
-    return this.firestore.collection(this.CALENDER_COLLECTION).valueChanges();
+  public createEvent(title, date, description) {
+    this.firestore.collection(this.CALENDER_COLLECTION).add({ title, date, description });
   }
 
-  public addEvent(title, date, description) {
-    this.firestore.collection(this.CALENDER_COLLECTION).add({ title, date, description });
+  public getEvents() {
+    return this.firestore.collection(this.CALENDER_COLLECTION).valueChanges();
   }
 
   public removeEvent(eventId) {
@@ -121,12 +128,12 @@ export class FirestoreService {
 
 
   /* STORIES COLLECTION FUNCTIONS */
-  public getStories() {
-    return this.firestore.collection(this.STORIES_COLLECTION).valueChanges();
+  public createStory(date, description) {
+    this.firestore.collection(this.STORIES_COLLECTION).add({ date, description, approved: false });
   }
 
-  public addStory(date, description) {
-    this.firestore.collection(this.STORIES_COLLECTION).add({ date, description, approved: false });
+  public getStories() {
+    return this.firestore.collection(this.STORIES_COLLECTION).valueChanges();
   }
 
   public removeStory(storyId) {
