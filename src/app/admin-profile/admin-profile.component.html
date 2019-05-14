@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar text-center>
+<!-- <ion-header>
+  <ion-toolbar text-center> -->
     <!-- <ion-segment>
       <ion-segment-button value="Logout" (click)="logout()">
         התנתק
@@ -31,9 +31,9 @@
 
     </ion-segment> -->
 
-    <ion-button value="Logout" (click)="logout()">התנתק</ion-button>
+    <!-- <ion-button value="Logout" (click)="logout()">התנתק</ion-button> -->
     <!-- <ion-button value="Manage SupportRep" (click)="scrollToElement($event)">רשימת נציגים</ion-button> -->
-    <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
+    <!-- <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
     <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
     <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
     <ion-button id="ViewHistoryChat" (click)="onClick($event)">הסטוריית צ'אט</ion-button>
@@ -41,13 +41,24 @@
     <ion-button id="ShowClient" (click)="onClick($event)">הצג לקוחות</ion-button>
     <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content>
   <ion-grid>
     <ion-row>
+      <ion-col size='12' text-center>
+          <ion-button value="Logout" (click)="logout()">התנתק</ion-button>
+          <!-- <ion-button value="Manage SupportRep" (click)="scrollToElement($event)">רשימת נציגים</ion-button> -->
+          <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
+          <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
+          <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
+          <ion-button id="ViewHistoryChat" (click)="onClick($event)">הסטוריית צ'אט</ion-button>
+          <ion-button id="EditEvents" (click)="onClick($event)">עריכת ארועים</ion-button>
+          <ion-button id="ShowClient" (click)="onClick($event)">הצג לקוחות</ion-button>
+          <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
+      </ion-col>
       <ion-col size='12'>
-        <ion-card id="Manage-SupportReps" text-center  [hidden] = "true">
+        <ion-card id="Manage-SupportReps" text-center [hidden]="true">
           <p text-center>רשימת נציגים </p>
           <ion-toolbar>
 
@@ -84,7 +95,7 @@
         </ion-card>
 
 
-        <ion-card text-center style="height: 500px" id="Manage-Client-Stories"  [hidden] = "true">
+        <ion-card text-center style="height: 500px" id="Manage-Client-Stories" [hidden]="true">
           <p text-center>רשימת סיפורים </p>
           <ion-button>הוסף</ion-button>
 
@@ -135,19 +146,19 @@
         </ion-card>
 
 
-        <ion-card text-center id="Manage-Gallery" [hidden] = "true">
+        <ion-card text-center id="Manage-Gallery" [hidden]="true">
           <p text-center>גלריה </p>
           <ion-button>הוסף</ion-button>
           <ion-button>מחק</ion-button>
-        </ion-card> 
+        </ion-card>
 
-        <ion-card text- center id="Edit-Association-Info" [hidden] = "true">
+        <ion-card text- center id="Edit-Association-Info" [hidden]="true">
           <p text-center>עריכת מידע </p>
           <ion-button>הוסף</ion-button>
           <ion-button>מחק</ion-button>
         </ion-card>
 
-        <ion-card text-center id="View-History-Chat" [hidden] = "true">
+        <ion-card text-center id="View-History-Chat" [hidden]="true">
           <p text-center> היסטוריית שיחות </p>
           <ion-toolbar>
             <ion-button style=" display: inline-block;" style="height: 25px;">חיפוש</ion-button>
@@ -160,12 +171,12 @@
           <input type="radio">שם
         </ion-card>
 
-        <ion-card text-center id="Manage-Clients" [hidden] = "true">
+        <ion-card text-center id="Manage-Clients" [hidden]="true">
           <p text-center> כאן ניצור טבלה של הלקוחות </p>
           <ion-button>חיפוש</ion-button>
         </ion-card>
 
-        <ion-card text-center id="Edit-Events" [hidden] = "true">
+        <ion-card text-center id="Edit-Events" [hidden]="true">
           <p text-center>עריכת ארועים </p>
           <ion-button> חיפוש ארוע</ion-button>
           <ion-button> הוספת ארוע </ion-button>

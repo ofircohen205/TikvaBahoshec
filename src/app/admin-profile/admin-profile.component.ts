@@ -3,7 +3,6 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
-import { element } from '@angular/core/src/render3';
 import { GlobalService } from '../global/global.service';
 
 
@@ -101,12 +100,12 @@ export class AdminProfileComponent implements OnInit {
     const manageSupportReps = document.getElementById('Manage-SupportReps');
     const manageClientStories = document.getElementById('Manage-Client-Stories');
     const manageGallery = document.getElementById('Manage-Gallery');
-    const editAssociationInfo = document.getElementById('Edit-Association-Info')
-    const viewHistoryChat = document.getElementById('View-History-Chat')
-    const manageClients = document.getElementById('Manage-Clients')
-    const editEvents = document.getElementById('Edit-Events')
+    const editAssociationInfo = document.getElementById('Edit-Association-Info');
+    const viewHistoryChat = document.getElementById('View-History-Chat');
+    const manageClients = document.getElementById('Manage-Clients');
+    const editEvents = document.getElementById('Edit-Events');
 
-    //const calenderElement = document.getElementById('calender');
+    // const calenderElement = document.getElementById('calender');
     if (targetId === 'ShowSupportRep') {
       manageSupportReps.hidden = false;
       manageClientStories.hidden = true;
