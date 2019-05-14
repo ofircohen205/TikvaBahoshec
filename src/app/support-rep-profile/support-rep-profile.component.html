@@ -9,7 +9,7 @@
         </ion-button>
 
         <ion-card>
-          <table id="tables" text-right>
+          <table id="supReptable1" text-right>
             <thead>
               <tr>
                 <th text-center></th>
@@ -23,7 +23,7 @@
 
             </thead>
 
-            <tbody text-right>
+            <!-- <tbody text-right id="table1">
               <tr *ngFor="let x of openChatList ; index as i">
                 <td>
                   <ion-button color="success" disabled={{x.occupied}}>
@@ -31,13 +31,13 @@
                   </ion-button>
                 </td>
                 <td>{{x.occupied ? 'תפוס' : 'לא תפוס' }}</td>
-                <!-- <td>{{ supportId(x.SupportRepID) }}</td> -->
+                <td>{{ supportId(x.SupportRepID) }}</td>
                 <td>{{x.timestamp | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
                 <td></td>
                 <td>{{i+1}}</td>
 
               </tr>
-            </tbody>
+            </tbody> -->
 
           </table>
         </ion-card>
