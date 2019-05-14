@@ -16,7 +16,7 @@
     <ion-grid>
         <ion-row *ngFor='let msg of messages'>
             <ion-col>
-                <app-chat-bubble [data]='msg' [fromClient]='this.clientName' [fromSupportRep]='this.supportRepName'></app-chat-bubble>
+                <app-chat-bubble [data]='msg' bind-clientName='clientName' bind-supportRepName='supportRepName'></app-chat-bubble>
             </ion-col>
         </ion-row>
     </ion-grid>
