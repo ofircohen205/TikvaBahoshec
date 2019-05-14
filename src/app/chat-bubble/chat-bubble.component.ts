@@ -9,12 +9,18 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 export class ChatBubbleComponent implements OnInit {
 
   @Input() data;
+  @Input() fromClient;
+  @Input() fromSupportRep;
   messageTime;
+  flag = true;
 
   constructor(private firestore: FirestoreService) { }
 
   ngOnInit() {
     this.messageTime = new Date(this.data['timestamp']).toLocaleTimeString();
+    console.log(this.data);
+    console.log(this.fromClient);
+    console.log(this.fromSupportRep);
   }
 
 }

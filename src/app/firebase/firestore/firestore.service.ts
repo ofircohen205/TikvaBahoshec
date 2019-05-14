@@ -154,4 +154,12 @@ export class FirestoreService {
   public checkIfAdmin(supportRepId): Observable<any> {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
   }
+
+  public getAboutAssociation() {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public updateAboutAssociation(aboutAssociation) {
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ aboutAssociation });
+  }
 }

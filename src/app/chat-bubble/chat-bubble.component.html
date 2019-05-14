@@ -1,8 +1,21 @@
-<ion-card>
-  <ion-card-header>
-    <ion-card-title text-right>{{data.content}}</ion-card-title>
-  </ion-card-header>
-  <ion-card-content text-right>
-    {{ messageTime }}
-  </ion-card-content>
-</ion-card>
+<div *ngIf='flag; then clientName else supportRepName'></div>
+<ng-template #clientName>
+  <ion-card style="margin-left: 50%">
+    <ion-card-header>
+      <ion-card-title text-right>{{data.content}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content text-right>
+      {{ messageTime }}
+    </ion-card-content>
+  </ion-card>
+</ng-template>
+<ng-template #supportRepName>
+  <ion-card style="margin-right: 50%">
+    <ion-card-header>
+      <ion-card-title text-right>{{data.content}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content text-right>
+      {{ messageTime }}
+    </ion-card-content>
+  </ion-card>
+</ng-template>
