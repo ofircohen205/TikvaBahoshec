@@ -1,32 +1,49 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-segment>
-      <ion-segment-button value="Logout" (click)="logout()">
-        התנתק
-      </ion-segment-button>
-     
-      <ion-segment-button value="View History Chat" (click)="scrollToElement($event)">
-        היסטורית צ'אט
-      </ion-segment-button>
-   
-      <ion-segment-button value="Ready for chat" id="readyButton" style=color:red (click)="readyForChat()">
-        "מוכן לשיחה"
-      </ion-segment-button>
 
-    </ion-segment>
-  </ion-toolbar>
-</ion-header>
+
 
 <ion-content>
   <ion-grid>
     <ion-row>
       <ion-col size='12'>
       
-        
+         
+          <ion-button style="text-align: center;" style="margin-left:20%" size='large'  >התנתק</ion-button>
+          <ion-button  size='large' color="danger" style="margin-left:40%" (click)="readyForChatColor(this)">"מוכן לשיחה"</ion-button>
+          
+          <ion-card>
+              <table id="tables" text-right>
+                  <thead>
+                           <tr>
+                              <th text-center></th>
+                              <th text-center> סטטוס</th>
+                              <!-- <th text-center> שם הנציג בשיחה</th> -->
+                              <th text-center>שעת פתיחת חדר </th>
+                              <th text-center>שם הלקוח</th>
+                              <th text-center>מספר </th>
+                             
+                             </tr>
+                           
+                             </thead>
+                
+                             <tbody text-right>
+                              <tr *ngFor="let x of openChatList ; index as i" >
+                                  <td >
+                                    <ion-button color="success" disabled={{x.occupied}}>
+                                      כנס
+                                    </ion-button>
+                                  </td>
+                                  <td>{{x.occupied ? 'תפוס' : 'לא תפוס' }}</td>
+                                  <!-- <td>{{ supportId(x.SupportRepID) }}</td> -->
+                                  <td>{{x.timestamp | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
+                                  <td></td>
+                                <td >{{i+1}}</td>
+                                                      
+                              </tr>
+                              </tbody>             
+      
+                </table>
+              </ion-card>
 
-
-
-       
 
         <ion-card text-center style="height: 500px" id="View History Chat">
           <p text-center> היסטוריית שיחות </p>
@@ -40,7 +57,6 @@
           <input type="radio">תאריך
           <input type="radio">שם
         </ion-card>
-
         
 
        

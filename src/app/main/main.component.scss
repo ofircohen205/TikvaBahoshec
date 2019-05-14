@@ -1,12 +1,13 @@
 ion-card {
-    // height: 300px;
+    height: fit-content;
     box-shadow: none !important;
 }
 
 .toChat {
     color: white;
     background-color: #111111;
-    padding-top: 5em;
+    padding-top: 2%;
+    padding-bottom: 2%;
 }
 
 .about{

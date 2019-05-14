@@ -29,14 +29,12 @@ export class AdminProfileComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-     
-   this.firestore.getSupportRepList().subscribe(result => {
+
+   this.firestore.getSupportRepNameList().subscribe(result => {
       result.forEach(element => {
         this.list.push(element);
-         
       });
     });
-    
   }
 
   async logout() {
