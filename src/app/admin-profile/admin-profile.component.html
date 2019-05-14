@@ -37,7 +37,7 @@
   <ion-grid>
     <ion-row>
       <ion-col size='12'>
-        <ion-card style="height: 500px;" id="Manage SupportRep" text-center>
+        <ion-card id="Manage SupportRep" text-center>
           <p text-center>רשימת נציגים </p>
           <ion-toolbar>
 
@@ -48,25 +48,27 @@
           <ion-button (click)="addSupport()">הוסף</ion-button>
           <table id="tables" text-right>
             <thead>
-                     <tr>
-                         <th text-center></th>
-                         <th text-center>התחבר לאחרונה</th>
-                         <th text-center>אימייל</th>
-                         <th text-center>שם נציג</th>
-          
-                       </tr>
-                     
-                       </thead>
-          
-                       <tbody text-right>
-                        <tr *ngFor="let x of list">
-                            <td ><ion-button color="danger" (click)="deleteSupportRep(x)">מחק</ion-button></td>
-                            <td></td>
-                            <td>{{x.email}}</td>
-                          <td >{{x.name}}</td>
-                                                    
-                        </tr>
-                        </tbody>             
+              <tr>
+                <th text-center></th>
+                <th text-center>התחבר לאחרונה</th>
+                <th text-center>אימייל</th>
+                <th text-center>שם נציג</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody text-right>
+              <tr *ngFor="let x of list">
+                <td>
+                  <ion-button color="danger" (click)="deleteSupportRep(x)">מחק</ion-button>
+                </td>
+                <td></td>
+                <td>{{x.email}}</td>
+                <td>{{x.name}}</td>
+
+              </tr>
+            </tbody>
 
           </table>
         </ion-card>
@@ -122,19 +124,19 @@
         </ion-card>
 
 
-        <ion-card text-center style="height: 500px" id="Manage Gallery">
+        <ion-card text-center id="Manage Gallery">
           <p text-center>גלריה </p>
           <ion-button>הוסף</ion-button>
           <ion-button>מחק</ion-button>
         </ion-card>
 
-        <ion-card text-center style="height: 500px" id="Edit Association Info ">
+        <ion-card text-center id="Edit Association Info ">
           <p text-center>עריכת מידע </p>
           <ion-button>הוסף</ion-button>
           <ion-button>מחק</ion-button>
         </ion-card>
 
-        <ion-card text-center style="height: 500px" id="View History Chat">
+        <ion-card text-center id="View History Chat">
           <p text-center> היסטוריית שיחות </p>
           <ion-toolbar>
             <ion-button style=" display: inline-block;" style="height: 25px;">חיפוש</ion-button>
@@ -147,12 +149,12 @@
           <input type="radio">שם
         </ion-card>
 
-        <ion-card text-center style="height: 500px" id="Edit client profile">
+        <ion-card text-center id="Edit client profile">
           <p text-center> עריכת פרופיל לקוח </p>
           <ion-button>חיפוש</ion-button>
         </ion-card>
 
-        <ion-card text-center style="height: 500px" id="SupportRep Logins">
+        <ion-card text-center id="SupportRep Logins">
           <p text-center>התחברות נציגים </p>
           <ion-button> חיפוש נציג</ion-button>
         </ion-card>

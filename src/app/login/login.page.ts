@@ -30,6 +30,7 @@ export class LoginPage {
     this.presentLoading();
     this.userAuth.auth.signInWithEmailAndPassword(email, password)
     .then(result => {
+      console.log(result);
       this.dismissLoading();
       this.router.navigateByUrl('/profile');
     })
