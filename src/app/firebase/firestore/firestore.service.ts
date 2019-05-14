@@ -113,6 +113,7 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
 
+
   /* CALENDER COLLECTION FUNCTIONS */
   public createEvent(title, date, description) {
     this.firestore.collection(this.CALENDER_COLLECTION).add({ title, date, description });
