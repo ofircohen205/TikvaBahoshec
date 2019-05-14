@@ -56,7 +56,7 @@ export class ChatPage {
     });
 
     this.userAuth.user.subscribe(result => {
-      if (result !== undefined) {
+      if (result === null) {
         this.client_support_flag = true;
       } else {
         this.client_support_flag = false;
@@ -82,7 +82,6 @@ export class ChatPage {
     } else if (type === 'SupportRepID') {
       fullName = this.supportRepName;
     }
-    console.log(fullName);
     this.firestore.addChatMessage(this.chatId, fullName, this.messageField.value, new Date().getTime());
     this.messageField.value = '';
     this.scrollToBottom();
@@ -102,8 +101,8 @@ export class ChatPage {
     this.afterUserInside(this.client_support_flag);
     const ENTER_KET_CODE = 13;
     if (data.keyCode === ENTER_KET_CODE) {
-      setTimeout(() => console.log('testing'), 700);
-      if (!this.client_support_flag) {
+      setTimeout(() => console.log('sending message'), 700);
+      if (this.client_support_flag) {
         this.sendMessage('username');
       } else {
         this.sendMessage('SupportRepID');
