@@ -13,6 +13,9 @@
             <ion-segment-button value="chat" (click)="userDetails()">
                 צ'אט עם נציג
             </ion-segment-button>
+            <ion-segment-button value="calender" (click)=(onclick($event))>
+                אירועים
+            </ion-segment-button>
             <ion-segment-button value="story" (click)=(onclick($event))>
                 סיפורים
             </ion-segment-button>
@@ -28,5 +31,5 @@
 
     <app-main #main id="main" [hidden]=false></app-main>
     <app-story #story id="story" [hidden]=true></app-story>
-
+    <app-calender #calender id="calender" [hidden]=true></app-calender>
 </ion-content>
