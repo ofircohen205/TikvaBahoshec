@@ -17,14 +17,8 @@ import { GlobalService } from '../global/global.service';
 
 
 export class AdminProfileComponent implements OnInit {
-<<<<<<< HEAD
-  divToShow = '';
-  list = [];
-  location: any;
-=======
     divToShow = '';
     list = [];
->>>>>>> 9cfbee562dc37d500bd7c2e08e9ea289d82a67e0
 
   constructor(
     private alertController: AlertController,
@@ -33,19 +27,12 @@ export class AdminProfileComponent implements OnInit {
     private firestore: FirestoreService,
     private global: GlobalService
   ) { }
-
+    
   ngOnInit() {
 
-<<<<<<< HEAD
-
-    this.firestore.getSupportRepNameList().subscribe(result => {
-      result.forEach(element => {
-        this.list.push(element);
-=======
    this.firestore.getSupportRepNameList().subscribe(result => {
       result.forEach(ele => {
         this.list.push(ele);
->>>>>>> 9cfbee562dc37d500bd7c2e08e9ea289d82a67e0
       });
     });
   }
@@ -90,18 +77,12 @@ export class AdminProfileComponent implements OnInit {
         },
       ],
       buttons: [{
-<<<<<<< HEAD
         text: 'בטל'
       },
       {
         text: 'הוסף',
-        handler: data => { this.firestore.addSupportRep(data.username, data.email); }
+        handler: data => { this.firestore.createSupportRep(data.username, data.email); }
       }]
-=======
-        text: 'בטל'},
-         {text: 'הוסף',
-          handler: data => { this.firestore.createSupportRep(data.username, data.email); }}]
->>>>>>> 9cfbee562dc37d500bd7c2e08e9ea289d82a67e0
     });
     alert.present();
   }
