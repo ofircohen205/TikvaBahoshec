@@ -51,7 +51,7 @@ export class HomePage implements OnInit {
         mainElement.hidden = false;
         this.location.go('/home');
       }
-    } else if(tar === 'calender') {
+    } else if (tar === 'calender') {
         storyElement.hidden = true;
         calenderElement.hidden = false;
         mainElement.hidden = true;
