@@ -48,7 +48,6 @@
     <ion-row>
       <ion-col size='12' text-center>
           <ion-button value="Logout" (click)="logout()">התנתק</ion-button>
-          <!-- <ion-button value="Manage SupportRep" (click)="scrollToElement($event)">רשימת נציגים</ion-button> -->
           <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
           <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
           <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
@@ -95,7 +94,7 @@
         </ion-card>
 
 
-        <ion-card text-center style="height: 500px" id="Manage-Client-Stories" [hidden]="true">
+        <ion-card text-center id="Manage-Client-Stories" [hidden]="true">
           <p text-center>רשימת סיפורים </p>
           <ion-button>הוסף</ion-button>
 
@@ -103,12 +102,10 @@
           <table id="tables" text-right>
             <tr>
               <th text-center></th>
-              <th text-center>אושר\לא אושר</th>
-              <th text-center>תארריך העלאה</th>
+              <th text-center>אושר/לא אושר</th>
+              <th text-center>תאריך העלאה</th>
               <th text-center>נכתב על ידי</th>
               <th text-center>id</th>
-
-
             </tr>
             <tr>
               <td>
