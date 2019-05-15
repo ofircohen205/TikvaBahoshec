@@ -129,8 +129,13 @@ export class FirestoreService {
 
 
   /* STORIES COLLECTION FUNCTIONS */
-  public createStory(date, description) {
-    this.firestore.collection(this.STORIES_COLLECTION).add({ date, description, approved: false });
+  public createStory(title, description) {
+    this.firestore.collection(this.STORIES_COLLECTION).add({
+      title,
+      description,
+      timestamp: new Date().getTime(),
+      approved: false
+    });
   }
 
   public getStories() {
@@ -144,11 +149,11 @@ export class FirestoreService {
 
   /* METADATA COLLECTION FUNCTIONS */
   public getAnonNumber(): Observable<any> {
-    return this.firestore.collection(this.METADATA_COLLECTION).valueChanges();
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
   }
 
-  public updateAnonNumber(number) {
-
+  public updateAnonNumber(nextAnonymous) {
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ nextAnonymous });
   }
 
   public checkIfAdmin(supportRepId): Observable<any> {
