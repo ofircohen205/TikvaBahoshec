@@ -40,7 +40,7 @@ export class FirestoreService {
   }
 
   public getOwnChats(supportRepId): Observable<any> {
-    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('SupportRepID', '==', supportRepId)).get();
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('SupportRepID', '==', supportRepId)).valueChanges();
   }
 
   public getChatMessages(chatId): Observable<any> {

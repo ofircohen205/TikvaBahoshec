@@ -18,6 +18,11 @@ export class SupportRepProfileComponent implements OnInit {
   openChatListInitialize: any = [];
   rooms: any[] = []
   myChats : any []
+<<<<<<< HEAD
+  nameStatus = true;
+  dateStatus = true;
+=======
+>>>>>>> 88abdb286b1249126c8eb9b84646dd280fb3ea6c
 
   constructor(
     private alertController: AlertController,
@@ -42,7 +47,11 @@ export class SupportRepProfileComponent implements OnInit {
 
     });
 
+<<<<<<< HEAD
+    this.firestore.getOwnChats("ira0qPmuP7PM6A4eexSrLOWyNNX2").subscribe(result => {
+=======
     this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
+>>>>>>> 88abdb286b1249126c8eb9b84646dd280fb3ea6c
       this.myChats = result;
    console.log(result);
 
@@ -179,4 +188,31 @@ export class SupportRepProfileComponent implements OnInit {
      console.log(document.getElementById('supRepTBody1'));
     }
 
+
+    sortByDate(dateStatus){
+    if(dateStatus==true){
+      this.myChats.sort((a,b)=> (a.timestamp>=b.timestamp)? 1:-1)
+      this.dateStatus=false
+    }
+    else{
+      this.myChats.sort((a,b)=> (a.timestamp<=b.timestamp)? 1:-1)
+    this.dateStatus=true;
+    }
 }
+
+
+sortByName(nameStatus){
+    if(nameStatus==true){
+      this.myChats.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1)
+      this.nameStatus=false
+    }
+    else{
+      this.myChats.sort((a,b)=> (a.ClientName<=b.ClientName)? 1:-1)
+    this.nameStatus=true;
+
+ }
+
+}
+
+}
+
