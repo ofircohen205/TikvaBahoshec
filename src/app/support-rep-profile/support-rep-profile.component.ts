@@ -4,15 +4,12 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
-
-
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 
 @Component({
   selector: 'app-support-rep-profile',
   templateUrl: './support-rep-profile.component.html',
   styleUrls: ['./support-rep-profile.component.scss'],
-  
 })
 
 export class SupportRepProfileComponent implements OnInit {
@@ -38,26 +35,11 @@ export class SupportRepProfileComponent implements OnInit {
 
     this.firestore.getOpenChatRooms().subscribe(result => {
         this.openChatList = result;
-      // result.forEach(element => {
-      //   console.log(element);
-        
-      //     this.openChatList.push(element);
-      // });
       console.log(this.openChatList.length);
       console.log(this.rooms);
       this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
-
-   
-    this.firestore.getOwnChats("ira0qPmuP7PM6A4eexSrLOWyNNX2").subscribe(result => {
-      result.forEach(element => {
-        this.myChats.push(element.data());
-      });
-      // this.createTable2(document.getElementById("supRepTBody2"), this.myChats,'supRepTableTr2_'); 
-    });
-    
-  
 
   }
 
