@@ -9,12 +9,12 @@
         </a>
     </ion-toolbar>
 
-    <ion-toolbar id='toolbarHeader' #toolbarHeader>
+    <ion-toolbar id='toolbarHeader' #toolbarHeader >
         <ion-segment>
-            <ion-segment-button value="supportRep" (click)=(onclick($event))>
+            <ion-segment-button value="supportRep" checked (click)=(onclick($event))>
                 supportRep
             </ion-segment-button>
-            <ion-segment-button value="admin" checked (click)=(onclick($event))>
+            <ion-segment-button value="admin" (click)=(onclick($event))>
                 Admin
             </ion-segment-button>
         </ion-segment>
@@ -23,8 +23,8 @@
 </ion-header>
 
 <ion-content>
-
-    <app-admin-profile #admin id="admin" [hidden]=false></app-admin-profile>
-    <app-support-rep-profile #supportRep id="supportRep" [hidden]=true></app-support-rep-profile>
+    <app-support-rep-profile #supportRep id="supportRep" [hidden]=false></app-support-rep-profile>
+    <app-admin-profile #admin id="admin" [hidden]=true></app-admin-profile>
+    
 
 </ion-content>

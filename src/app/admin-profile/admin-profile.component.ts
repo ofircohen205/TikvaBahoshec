@@ -26,15 +26,15 @@ export class AdminProfileComponent implements OnInit {
     private firestore: FirestoreService,
     private global: GlobalService
   ) { }
- 
+
   ngOnInit() {
     this.list = [];
-    this.firestore.getSupportRepIdList().subscribe(result => { 
+    this.firestore.getSupportRepIdList().subscribe(result => {
       result.forEach(ele => {
       const data = ele.payload.doc.data();
       const id = ele.payload.doc.id;
       if(ele.payload.type === 'added'){
-      this.list.push({id, ...data}) ;   
+      this.list.push({id, ...data}) ;
       }
       else if(ele.payload.type === 'modified'){
         var index = this.list.findIndex(item => item.id === id)
@@ -48,7 +48,7 @@ export class AdminProfileComponent implements OnInit {
        })
 
     });
-  
+
    }
 
   async logout() {
@@ -100,7 +100,7 @@ export class AdminProfileComponent implements OnInit {
     });
     alert.present();
   }
-  
+
   async editSupport(x) {
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',
@@ -129,7 +129,7 @@ export class AdminProfileComponent implements OnInit {
     });
     alert.present();
   }
- 
+
   async deleteSupport(x) {
     const alert = await this.alertController.create({
       header: 'אישור מחיקה',
@@ -138,7 +138,7 @@ export class AdminProfileComponent implements OnInit {
         { text: 'חזור'},
         {
            text: 'מחק',
-         handler: () => { 
+         handler: () => {
            this.firestore.removeSupportRep(x.id);
            this.list.splice(this.list.indexOf(x), 1); }
         }]
