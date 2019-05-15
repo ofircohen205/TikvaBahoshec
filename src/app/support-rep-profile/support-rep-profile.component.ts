@@ -17,6 +17,7 @@ export class SupportRepProfileComponent implements OnInit {
   openChatList: any = [];
   openChatListInitialize: any = [];
   rooms: any[] = []
+  myChats : any []
 
   constructor(
     private alertController: AlertController,
@@ -40,6 +41,12 @@ export class SupportRepProfileComponent implements OnInit {
       this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
+
+    this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
+      this.myChats = result;
+   console.log(result);
+
+  });
 
   }
 
@@ -76,14 +83,15 @@ export class SupportRepProfileComponent implements OnInit {
     for (let v of list) {
       var tr = document.createElement('tr');
 
-      var td1 = document.createElement('BUTTON');
+      var button = document.createElement('ion-button');
+      var td1 = document.createElement('td');
+      td1.appendChild(button);
       td1.id = 'supRepbutton_' + index;
-      td1.innerHTML = 'כנס';
-      td1.style.background = '#00cf00';
+      button.innerHTML = 'כנס לחדר';
+      button.color = "success"
 
       if(v.occupied === true) {
-        td1.style.background = '#ff0000';
-        td1.innerHTML = 'סגור שיחה';
+        button.setAttribute('disabled','true');
       }
       td1.style.color = 'white';
       td1.style.border = ' 1px solid #ddd';
