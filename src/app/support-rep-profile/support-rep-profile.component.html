@@ -70,16 +70,16 @@
               </thead>
   
                <tbody text-right id="supRepTBody2">
-                 <!-- <tr *ngFor ="let i of myChats ; index as j">
+                 <tr *ngFor ="let i of myChats ; index as j">
                  <td><ion-button color="success" disabled={{i.open}}>הורד שיחה</ion-button></td>
                  <td><ion-button color="success" disabled={{!i.open}}>כנס לחדר</ion-button></td>
                  <td>{{i.open? 'פתוח':'סגור'}}</td>
-                 <td >{{(userNameById(i.ClientID))}}</td>
+                 
+                 <td>{{i.ClientName}}</td>
                  <td>{{i.timestamp | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
-                 <td></td>
                  <td>{{j+1}}</td>
                 </tr>
-                </tbody> -->
+                </tbody>
                 </table>
 
         </ion-card>
