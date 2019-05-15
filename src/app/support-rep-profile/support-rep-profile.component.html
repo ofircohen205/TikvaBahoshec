@@ -50,10 +50,11 @@
             <input> שם:
             <input> תאריך:
           </ion-toolbar>
-          <p text-center> מיין לפי: </p>
-          <input type="radio">תאריך
-          <input type="radio">שם
-          <!----the id is just for the header of the table!-->
+          <p text-center> :מיין לפי </p>
+          שם<input type="radio" name="radio" value="byDate" (click)="sortByName(this.nameStatus)">
+          <br>
+          תאריך<input type="radio" name="radio" value="byName" (click)="sortByDate(this.dateStatus)" >
+         <br>
           <table id="supReptable1" text-right>  
               <thead>
                 <tr>
@@ -74,8 +75,7 @@
                  <td><ion-button color="success" disabled={{i.open}}>הורד שיחה</ion-button></td>
                  <td><ion-button color="success" disabled={{!i.open}}>כנס לחדר</ion-button></td>
                  <td>{{i.open? 'פתוח':'סגור'}}</td>
-                 
-                 <td>{{i.ClientName}}</td>
+                 <td>{{!i.ClientName? 'לא הוכנס שם': i.ClientName}}</td>
                  <td>{{i.timestamp | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
                  <td>{{j+1}}</td>
                 </tr>
