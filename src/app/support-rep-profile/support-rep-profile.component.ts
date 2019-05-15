@@ -18,8 +18,11 @@ export class SupportRepProfileComponent implements OnInit {
   openChatListInitialize: any = [];
   rooms: any[] = []
   myChats : any []
+<<<<<<< HEAD
   nameStatus = true;
   dateStatus = true;
+=======
+>>>>>>> 88abdb286b1249126c8eb9b84646dd280fb3ea6c
 
   constructor(
     private alertController: AlertController,
@@ -44,7 +47,11 @@ export class SupportRepProfileComponent implements OnInit {
 
     });
 
+<<<<<<< HEAD
     this.firestore.getOwnChats("ira0qPmuP7PM6A4eexSrLOWyNNX2").subscribe(result => {
+=======
+    this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
+>>>>>>> 88abdb286b1249126c8eb9b84646dd280fb3ea6c
       this.myChats = result;
    console.log(result);
 

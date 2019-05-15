@@ -4,9 +4,6 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
-import { firestore } from 'firebase';
-
-
 
 
 @Component({
@@ -19,8 +16,6 @@ import { firestore } from 'firebase';
 export class AdminProfileComponent implements OnInit {
   list = [];
   storiesArray: any = [];
-
-
 
   constructor(
     private alertController: AlertController,
