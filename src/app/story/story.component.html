@@ -3,7 +3,7 @@
   <ion-grid>
     <ion-row *ngFor='let story of stories'>
       <ion-col>
-        <ion-card>
+        <ion-card *ngIf='story.approved'>
           <ion-card-header>
             <ion-card-title text-right>{{ story.title }}</ion-card-title>
           </ion-card-header>
