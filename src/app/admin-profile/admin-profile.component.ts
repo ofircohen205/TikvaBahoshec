@@ -17,7 +17,7 @@ import { GlobalService } from '../global/global.service';
 
 export class AdminProfileComponent implements OnInit {
     divToShow = '';
-    list = [];
+    list: any[] = [];
 
   constructor(
     private alertController: AlertController,
@@ -26,15 +26,30 @@ export class AdminProfileComponent implements OnInit {
     private firestore: FirestoreService,
     private global: GlobalService
   ) { }
-    
+ 
   ngOnInit() {
-
-   this.firestore.getSupportRepNameList().subscribe(result => {
+    this.list = [];
+    this.firestore.getSupportRepIdList().subscribe(result => { 
       result.forEach(ele => {
-        this.list.push(ele);
-      });
+      const data = ele.payload.doc.data();
+      const id = ele.payload.doc.id;
+      if(ele.payload.type === 'added'){
+      this.list.push({id, ...data}) ;   
+      }
+      else if(ele.payload.type === 'modified'){
+        var index = this.list.findIndex(item => item.id === id)
+
+        // Replace the item by index.
+        this.list.splice(index, 1, {id, ...data});
+      }
+      else{
+        this.list.slice(this.list.indexOf(id), 1);
+      }
+       })
+
     });
-  }
+  
+   }
 
   async logout() {
     const alert = await this.alertController.create({
@@ -76,12 +91,57 @@ export class AdminProfileComponent implements OnInit {
         },
       ],
       buttons: [{
-        text: 'בטל'
+        text: 'חזור'
       },
       {
         text: 'הוסף',
-        handler: data => { this.firestore.createSupportRep(data.username, data.email); }
+        handler: data => { this.firestore.createSupportRep(data.username, data.email, data.phone); }
       }]
+    });
+    alert.present();
+  }
+  
+  async editSupport(x) {
+    const alert = await this.alertController.create({
+      header: 'הוספת נציג חדש',
+      inputs: [
+        {
+          name: 'username',
+          placeholder: x.name
+        },
+        {
+          name: 'email',
+          placeholder: x.email
+        },
+
+        {
+          name: 'phone',
+          placeholder: x.phone
+        },
+      ],
+      buttons: [{
+        text: 'חזור'
+      },
+      {
+        text: 'שמור שינויים',
+        handler: data => { this.firestore.updateSupportRep(x.id, data.username, data.email, data.phone); }
+      }]
+    });
+    alert.present();
+  }
+ 
+  async deleteSupport(x) {
+    const alert = await this.alertController.create({
+      header: 'אישור מחיקה',
+      message: `האם את/ה בטוח/ה שברצונך למחוק את הנציג/ה?`,
+      buttons: [
+        { text: 'חזור'},
+        {
+           text: 'מחק',
+         handler: () => { 
+           this.firestore.removeSupportRep(x.id);
+           this.list.splice(this.list.indexOf(x), 1); }
+        }]
     });
     alert.present();
   }

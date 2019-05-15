@@ -93,20 +93,33 @@ export class FirestoreService {
 
 
   /* SUPPORT REP COLLECTION FUNCTIONS */
-  public createSupportRep(name, email): void {
+  public createSupportRep(name, email, phone): void {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
       email,
       name,
+      phone,
       connectionTime: null
     });
+  }
+
+  public updateSupportRep(SupportRepId, name, email, phone) {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepId).update({
+      email ,
+      name,
+      phone
+    });
+  }
+
+  public removeSupportRep(supportRepId) {
+     this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).delete();
   }
 
   public getSupportRepName(supportRepId): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
-
+ 
   public getSupportRepNameList() {
-    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges().subscribe;
   }
 
   public getSupportRepIdList() {
