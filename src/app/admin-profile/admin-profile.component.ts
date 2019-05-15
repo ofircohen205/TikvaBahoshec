@@ -17,8 +17,10 @@ import { firestore } from 'firebase';
 
 
 export class AdminProfileComponent implements OnInit {
-  divToShow = '';
   list = [];
+  storiesArray: any = [];
+
+
 
   constructor(
     private alertController: AlertController,
@@ -91,6 +93,8 @@ export class AdminProfileComponent implements OnInit {
     this.global.readyForChat();
   }
 
+
+  //shows the component of the selected button
   onClick(e): void {
     const targetId = e.target.id;
     console.log(targetId);
@@ -136,8 +140,48 @@ export class AdminProfileComponent implements OnInit {
       manageSupportReps.hidden = true; manageClientStories.hidden = false; manageGallery.hidden = true;
       editAssociationInfo.hidden = true; viewHistoryChat.hidden = true; manageClients.hidden = true;
       editEvents.hidden = true;
+      this.manageStories();
     }
   }
+
+
+manageStories(){
+    this.firestore.getStoriesId().subscribe(results => {
+        results.forEach(result => {
+          const id = result.payload.doc.id;
+          const data = result.payload.doc.data();
+          const timestampDate = data['date']['seconds'];   //save the date as timestamp
+          const stringDate = new Date(timestampDate * 1000).toDateString();  //save the date as a regular date form
+          const approval = data['approved'];
+          console.log(approval);
+
+          this.storiesArray.push({approval,stringDate,id, ...data});
+        });
+
+        this.storiesArray.sort((s1, s2) => { 
+          if (s1['date']['seconds'] > s2['date']['seconds']) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
+    });
+  //   this.firestore.getStories().subscribe(result => {
+  //   result.sort((s1, s2) => {
+    //   if (s1['timestamp'] > s2['timestamp']) {
+    //     return 1;
+    //   } else {
+    //     return -1;
+    //   }
+    // });
+
+  // if (this.storiesArray.length <= 0) {
+  //   this.storiesArray = result;
+  // } else {
+  //   this.storiesArray.push(result[result.length - 1]);
+  // }
+}
+
 
 }
 

@@ -1,6 +1,6 @@
 <!-- <ion-header>
   <ion-toolbar text-center> -->
-    <!-- <ion-segment>
+<!-- <ion-segment>
       <ion-segment-button value="Logout" (click)="logout()">
         התנתק
       </ion-segment-button>
@@ -31,9 +31,9 @@
 
     </ion-segment> -->
 
-    <!-- <ion-button value="Logout" (click)="logout()">התנתק</ion-button> -->
-    <!-- <ion-button value="Manage SupportRep" (click)="scrollToElement($event)">רשימת נציגים</ion-button> -->
-    <!-- <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
+<!-- <ion-button value="Logout" (click)="logout()">התנתק</ion-button> -->
+<!-- <ion-button value="Manage SupportRep" (click)="scrollToElement($event)">רשימת נציגים</ion-button> -->
+<!-- <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
     <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
     <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
     <ion-button id="ViewHistoryChat" (click)="onClick($event)">הסטוריית צ'אט</ion-button>
@@ -47,14 +47,14 @@
   <ion-grid>
     <ion-row>
       <ion-col size='12' text-center>
-          <ion-button value="Logout" (click)="logout()">התנתק</ion-button>
-          <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
-          <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
-          <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
-          <ion-button id="ViewHistoryChat" (click)="onClick($event)">הסטוריית צ'אט</ion-button>
-          <ion-button id="EditEvents" (click)="onClick($event)">עריכת ארועים</ion-button>
-          <ion-button id="ShowClient" (click)="onClick($event)">הצג לקוחות</ion-button>
-          <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
+        <ion-button value="Logout" (click)="logout()">התנתק</ion-button>
+        <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
+        <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
+        <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
+        <ion-button id="ViewHistoryChat" (click)="onClick($event)">הסטוריית צ'אט</ion-button>
+        <ion-button id="EditEvents" (click)="onClick($event)">עריכת ארועים</ion-button>
+        <ion-button id="ShowClient" (click)="onClick($event)">הצג לקוחות</ion-button>
+        <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
       </ion-col>
       <ion-col size='12'>
         <ion-card id="Manage-SupportReps" text-center [hidden]="true">
@@ -99,46 +99,46 @@
           <ion-button>הוסף</ion-button>
 
 
-          <table id="tables" text-right>
-            <tr>
-              <th text-center></th>
-              <th text-center>אושר/לא אושר</th>
-              <th text-center>תאריך העלאה</th>
-              <th text-center>נכתב על ידי</th>
-              <th text-center>id</th>
-            </tr>
-            <tr>
-              <td>
-                <ion-button color="danger">הורד</ion-button>
-                <ion-button>מחק</ion-button>
-              </td>
-              <td>אושר</td>
-              <td>12.4.19 7:45</td>
-              <td>אנונימי1</td>
-              <td> 111111</td>
+          <table id="tables" text-center>
+            <thead>
+              <tr>
+                <th text-center></th>
+                <th text-center>אושר/לא אושר</th>
+                <th text-center>תאריך העלאה</th>
+                <th text-center>מספר מזהה</th>
+              </tr>
+            </thead>
 
-            </tr>
-            <tr>
-              <td>
-                <ion-button color="success">אשר</ion-button>
-                <ion-button>מחק</ion-button>
-              </td>
-              <td>לא אושר</td>
-              <td>10.2.19 14:45</td>
-              <td>אנונימי2</td>
-              <td> 111333</td>
-            </tr>
+            <tbody>
+              <tr *ngFor='let story of storiesArray'>
+                <td></td>
+                <td *ngIf='story.approval'> אושר</td>
+                <td *ngIf='!story.approval'> לא אושר</td>
+                <td>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
+                <td>{{story.id}}</td>
+              </tr>
 
-            <tr>
-              <td>
-                <ion-button color="success">אשר</ion-button>
-                <ion-button>מחק</ion-button>
-              </td>
-              <td>לא אושר</td>
-              <td>10.5.19 13:00</td>
-              <td>אנונימי3</td>
-              <td>993222</td>
-            </tr>
+
+              <tr>
+                <td>
+                  <ion-button color="danger">הורד</ion-button>
+                  <ion-button>מחק</ion-button>
+                </td>
+                <td>אושר</td>
+                <td>12.4.19 7:45</td>
+                <td> 111111</td>
+
+              </tr>
+              <tr>
+                <td>
+                  <ion-button color="success">אשר</ion-button>
+                  <ion-button>מחק</ion-button>
+                </td>
+                <td>לא אושר</td>
+                <td>10.2.19 14:45</td>
+                <td> 111333</td>
+              </tr>
+            </tbody>
           </table>
         </ion-card>
 

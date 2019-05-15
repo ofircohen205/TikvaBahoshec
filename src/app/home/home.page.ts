@@ -1,7 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AlertController } from '@ionic/angular';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
 import { Location } from '@angular/common';
@@ -13,13 +10,7 @@ import { Location } from '@angular/common';
 })
 export class HomePage implements OnInit {
 
-  @ViewChild('story') story;
-  @ViewChild('main') main;
-
   constructor(
-    private alertController: AlertController,
-    private userAuth: AngularFireAuth,
-    private router: Router,
     private firestore: FirestoreService,
     private global: GlobalService,
     private location: Location
@@ -51,7 +42,7 @@ export class HomePage implements OnInit {
         mainElement.hidden = false;
         this.location.go('/home');
       }
-    } else if(tar === 'calender') {
+    } else if (tar === 'calender') {
         storyElement.hidden = true;
         calenderElement.hidden = false;
         mainElement.hidden = true;

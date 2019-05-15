@@ -20,7 +20,7 @@ export class GlobalService {
 
 // tslint:disable-next-line: use-life-cycle-interface
   ngOnInit() {
-    this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result[0]['nextAnonymous']);
+    this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result['nextAnonymous']);
   }
 
   async userDetails() {
