@@ -38,13 +38,12 @@ export class GlobalService {
             data.name = 'אנונימי' + this.anonymousNumber;
             this.firestore.updateAnonNumber(this.anonymousNumber + 1);
           }
-          let clientId;
+          let clientId = '';
           this.firestore.createClient(data.name).then(result => {
             clientId = result.id;
           });
-          this.firestore.createChatRoom().then(result => {
+          this.firestore.createChatRoom(data.name).then(result => {
             this.firestore.updateClientId(result.id, clientId);
-            debugger;
             this.router.navigateByUrl('/chat/' + result.id);
           }).catch((error) => console.log(error));
         }
