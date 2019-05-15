@@ -135,7 +135,7 @@ export class FirestoreService {
     this.firestore.collection(this.STORIES_COLLECTION).add({
       title,
       description,
-      timestamp: new Date().getTime(),
+      date: new Date(),
       approved: false
     });
   }
