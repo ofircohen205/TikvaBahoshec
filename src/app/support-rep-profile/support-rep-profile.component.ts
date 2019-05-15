@@ -81,7 +81,12 @@ export class SupportRepProfileComponent implements OnInit {
       td2.style.border = ' 1px solid #ddd'
       td2.style.padding = '8px';
       td2.style.borderCollapse = 'collapse';
-      td2.textContent = v.occupied;
+      if(v.occupied==true){
+        td2.textContent = 'תפוס';
+      }
+      else{
+        td2.textContent = 'לא תפוס';
+      }
 
       var td3 = document.createElement('td');
       td3.style.border = ' 1px solid #ddd'
