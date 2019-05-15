@@ -3,7 +3,6 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
-import { element } from '@angular/core/src/render3';
 import { GlobalService } from '../global/global.service';
 
 
@@ -26,18 +25,15 @@ export class AdminProfileComponent implements OnInit {
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
     private global: GlobalService
-    ) { }
-
+  ) { }
+    
   ngOnInit() {
 
-   this.firestore.getSupportRepList().subscribe(result => {
-// tslint:disable-next-line: no-shadowed-variable
-      result.forEach(element => {
-        this.list.push(element);
-
+   this.firestore.getSupportRepNameList().subscribe(result => {
+      result.forEach(ele => {
+        this.list.push(ele);
       });
     });
-
   }
 
   async logout() {
@@ -80,9 +76,12 @@ export class AdminProfileComponent implements OnInit {
         },
       ],
       buttons: [{
-        text: 'בטל'},
-         {text: 'הוסף',
-          handler: data => { this.firestore.addSupportRep(data.username, data.email); }}]
+        text: 'בטל'
+      },
+      {
+        text: 'הוסף',
+        handler: data => { this.firestore.createSupportRep(data.username, data.email); }
+      }]
     });
     alert.present();
   }
@@ -92,10 +91,85 @@ export class AdminProfileComponent implements OnInit {
   }
 
   scrollToElement(e): void {
-    this.global.scrollToElement(e);
+    this.global.scrollToElement(e.target.value);
   }
 
+  onClick(e): void {
+    const targetId = e.target.id;
+    console.log(targetId);
+    const manageSupportReps = document.getElementById('Manage-SupportReps');
+    const manageClientStories = document.getElementById('Manage-Client-Stories');
+    const manageGallery = document.getElementById('Manage-Gallery');
+    const editAssociationInfo = document.getElementById('Edit-Association-Info');
+    const viewHistoryChat = document.getElementById('View-History-Chat');
+    const manageClients = document.getElementById('Manage-Clients');
+    const editEvents = document.getElementById('Edit-Events');
 
+    // const calenderElement = document.getElementById('calender');
+    if (targetId === 'ShowSupportRep') {
+      manageSupportReps.hidden = false;
+      manageClientStories.hidden = true;
+      manageGallery.hidden = true;
+      editAssociationInfo.hidden = true;
+      viewHistoryChat.hidden = true;
+      manageClients.hidden = true;
+      editEvents.hidden = true;
+    }
+    else if (targetId === 'ShowClient') {
+      manageSupportReps.hidden = true;
+      manageClientStories.hidden = true;
+      manageGallery.hidden = true;
+      editAssociationInfo.hidden = true;
+      viewHistoryChat.hidden = true;
+      manageClients.hidden = false;
+      editEvents.hidden = true;
+    }
+    else if (targetId === 'EditEvents') {
+      manageSupportReps.hidden = true;
+      manageClientStories.hidden = true;
+      manageGallery.hidden = true;
+      editAssociationInfo.hidden = true;
+      viewHistoryChat.hidden = true;
+      manageClients.hidden = true;
+      editEvents.hidden = false;
+    }
+    else if (targetId === 'ViewHistoryChat') {
+      manageSupportReps.hidden = true;
+      manageClientStories.hidden = true;
+      manageGallery.hidden = true;
+      editAssociationInfo.hidden = true;
+      viewHistoryChat.hidden = false;
+      manageClients.hidden = true;
+      editEvents.hidden = true;
+    }
+    else if (targetId === 'EditAssociationInfo') {
+      manageSupportReps.hidden = true;
+      manageClientStories.hidden = true;
+      manageGallery.hidden = true;
+      editAssociationInfo.hidden = false;
+      viewHistoryChat.hidden = true;
+      manageClients.hidden = true;
+      editEvents.hidden = true;
+    }
+    else if (targetId === 'ManageGallery') {
+      manageSupportReps.hidden = true;
+      manageClientStories.hidden = true;
+      manageGallery.hidden = false;
+      editAssociationInfo.hidden = true;
+      viewHistoryChat.hidden = true;
+      manageClients.hidden = true;
+      editEvents.hidden = true;
+    }
+    else {    //targetId === ManageClientStories
+      manageSupportReps.hidden = true;
+      manageClientStories.hidden = false;
+      manageGallery.hidden = true;
+      editAssociationInfo.hidden = true;
+      viewHistoryChat.hidden = true;
+      manageClients.hidden = true;
+      editEvents.hidden = true;
+    }
+  }
 
 }
 

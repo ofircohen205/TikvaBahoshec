@@ -8,6 +8,7 @@ export class FirestoreService {
 
   readonly CHAT_ROOMS_COLLECTION = 'ChatRooms';
   readonly CALENDER_COLLECTION = 'Calender';
+  readonly CLIENT_COLLECTION = 'Clients';
   readonly METADATA_COLLECTION = 'Metadata';
   readonly MESSAGES_COLLECTION = 'Messages';
   readonly STORIES_COLLECTION = 'Stories';
@@ -15,14 +16,21 @@ export class FirestoreService {
 
   constructor(private firestore: AngularFirestore) { }
 
+  // ! CRUD ON EACH COLLECTION - CREATE READ(GET) UPDATE DELETE
 
   /* CHAT COLLECTION FUNCTIONS */
   public createChatRoom(username): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
-      username,
       open: true,
-      SupportRepID: null
+      occupied: false,
+      SupportRepID: null,
+      ClientID: null,
+      timestamp: new Date().getTime()
     });
+  }
+
+  public getChatRoom(chatId) {
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).valueChanges();
   }
 
   public getOpenChatRooms(): Observable<any> {
@@ -45,32 +53,74 @@ export class FirestoreService {
     });
   }
 
-  public getUserName(chatId): Observable<any> {
-    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).valueChanges();
+  public updateClientId(chatId, ClientID) {
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
+  }
+
+  public updateSupportRepId(chatId, SupportRepID) {
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ SupportRepID });
+  }
+
+
+  /* CLIENT COLLECTION FUNCTIONS */
+  public createClient(username): Promise<any> {
+    return this.firestore.collection(this.CLIENT_COLLECTION).add({
+      username,
+      location: null,
+      description: null
+    });
+  }
+
+  public getUserName(clientId): Observable<any> {
+    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
+  }
+
+  public getClients() {
+    return this.firestore.collection(this.CLIENT_COLLECTION).valueChanges();
+  }
+
+  public updateClientName(chatId, username) {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ username });
+  }
+
+  public updateClientLocation(chatId, location) {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ location });
+  }
+
+  public updateClientDescription(chatId, description) {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ description });
   }
 
 
   /* SUPPORT REP COLLECTION FUNCTIONS */
+  public createSupportRep(name, email): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
+      email,
+      name,
+      connectionTime: null
+    });
+  }
+
   public getSupportRepName(supportRepId): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
 
-  public addSupportRep(name, email): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({ email, name });
+  public getSupportRepNameList() {
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
   }
 
-  public getSupportRepList() {
-    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
+  public getSupportRepIdList() {
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
 
 
   /* CALENDER COLLECTION FUNCTIONS */
-  public getEvents() {
-    return this.firestore.collection(this.CALENDER_COLLECTION).valueChanges();
+  public createEvent(title, date, description) {
+    this.firestore.collection(this.CALENDER_COLLECTION).add({ title, date, description });
   }
 
-  public addEvent(title, date, description) {
-    this.firestore.collection(this.CALENDER_COLLECTION).add({ title, date, description });
+  public getEvents() {
+    return this.firestore.collection(this.CALENDER_COLLECTION).valueChanges();
   }
 
   public removeEvent(eventId) {
@@ -79,12 +129,12 @@ export class FirestoreService {
 
 
   /* STORIES COLLECTION FUNCTIONS */
-  public getStories() {
-    return this.firestore.collection(this.STORIES_COLLECTION).valueChanges();
+  public createStory(date, description) {
+    this.firestore.collection(this.STORIES_COLLECTION).add({ date, description, approved: false });
   }
 
-  public addStory(date, description) {
-    this.firestore.collection(this.STORIES_COLLECTION).add({ date, description, approved: false });
+  public getStories() {
+    return this.firestore.collection(this.STORIES_COLLECTION).valueChanges();
   }
 
   public removeStory(storyId) {
@@ -103,5 +153,13 @@ export class FirestoreService {
 
   public checkIfAdmin(supportRepId): Observable<any> {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public getAboutAssociation() {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public updateAboutAssociation(aboutAssociation) {
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ aboutAssociation });
   }
 }

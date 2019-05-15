@@ -12,6 +12,7 @@ import { GlobalService } from '../global/global.service';
 })
 export class MainComponent implements OnInit {
 
+  aboutAssociation = '';
   anonymousNumber = -1;
 
   constructor(
@@ -23,7 +24,8 @@ export class MainComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result[0]['nextAnonymous']);
+    this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result['nextAnonymous']);
+    this.firestore.getAboutAssociation().subscribe(result => this.aboutAssociation = result['aboutAssociation']);
   }
 
   userDetails() {

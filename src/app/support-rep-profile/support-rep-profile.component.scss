@@ -5,26 +5,32 @@
     display: inline-block;
 
 }
-#tables {
+
+
+
+#supReptable1 {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
   }
   
-  #tables td, #tables th {
+  #supReptable1 td, #supReptable1 th {
     border: 1px solid #ddd;
     padding: 8px;
+    border-collapse: collapse;
   }
   
-  #tablees tr:nth-child(even){background-color: #f2f2f2;}
+  #supReptable1 tr:nth-child(even){background-color: #f2f2f2;};
   
-  #tables tr:hover {background-color: #ddd;}
   
-  #tables th {
+  //#supRepTBody1 tr:hover {background-color: #ddd;};
+  
+  #supReptable1 th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
     background-color: #4CAF50;
     color: white;
+    
   }
 
