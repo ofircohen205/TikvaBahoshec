@@ -144,6 +144,10 @@ export class FirestoreService {
     return this.firestore.collection(this.STORIES_COLLECTION).valueChanges();
   }
 
+  public getStoriesId() {
+    return this.firestore.collection(this.STORIES_COLLECTION).stateChanges();
+  }
+
   public removeStory(storyId) {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).delete();
   }
