@@ -5,15 +5,12 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { element } from '@angular/core/src/render3';
 import { GlobalService } from '../global/global.service';
-
-
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 
 @Component({
   selector: 'app-support-rep-profile',
   templateUrl: './support-rep-profile.component.html',
   styleUrls: ['./support-rep-profile.component.scss'],
-  
 })
 
 export class SupportRepProfileComponent implements OnInit {
@@ -37,6 +34,7 @@ export class SupportRepProfileComponent implements OnInit {
 
   ngOnInit() {
     this.firestore.getOpenChatRooms().subscribe(result => {
+<<<<<<< HEAD
       result.forEach(element => {
         this.openChatList.push(element);
       });
@@ -54,6 +52,15 @@ export class SupportRepProfileComponent implements OnInit {
     
   
 
+=======
+        this.openChatList = result;
+      console.log(this.openChatList.length);
+      console.log(this.rooms);
+      this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
+
+    });
+
+>>>>>>> f9433c2a66faeb6fb90eb9913567ced5ebace6fe
   }
 
   async logout() {
