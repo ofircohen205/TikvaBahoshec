@@ -42,8 +42,9 @@ export class GlobalService {
           this.firestore.createClient(data.name).then(result => {
             clientId = result.id;
           });
-          this.firestore.createChatRoom(data.name).then(result => {
+          this.firestore.createChatRoom().then(result => {
             this.firestore.updateClientId(result.id, clientId);
+            debugger;
             this.router.navigateByUrl('/chat/' + result.id);
           }).catch((error) => console.log(error));
         }

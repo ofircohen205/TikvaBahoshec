@@ -19,7 +19,7 @@ export class FirestoreService {
   // ! CRUD ON EACH COLLECTION - CREATE READ(GET) UPDATE DELETE
 
   /* CHAT COLLECTION FUNCTIONS */
-  public createChatRoom(username): Promise<any> {
+  public createChatRoom(): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
       open: true,
       occupied: false,
