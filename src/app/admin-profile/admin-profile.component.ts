@@ -18,7 +18,7 @@ import { GlobalService } from '../global/global.service';
 
 export class AdminProfileComponent implements OnInit {
     divToShow = '';
-    list= [];
+    list = [];
 
   constructor(
     private alertController: AlertController,
@@ -29,14 +29,15 @@ export class AdminProfileComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-     
+
    this.firestore.getSupportRepList().subscribe(result => {
+// tslint:disable-next-line: no-shadowed-variable
       result.forEach(element => {
         this.list.push(element);
-         
+
       });
     });
-    
+
   }
 
   async logout() {
