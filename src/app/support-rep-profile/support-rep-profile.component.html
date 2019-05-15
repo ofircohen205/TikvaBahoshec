@@ -14,7 +14,7 @@
               <tr>
                 <th text-center></th>
                 <th text-center> סטטוס</th>
-                <!-- <th text-center> שם הנציג בשיחה</th> -->
+                <th text-center> שם הנציג בשיחה</th>
                 <th text-center>שעת פתיחת חדר </th>
                 <th text-center>שם הלקוח</th>
                 <th text-center>מספר </th>
@@ -43,17 +43,45 @@
         </ion-card>
 
 
-        <ion-card text-center style="height: 500px" id="View History Chat">
+        <ion-card text-center  id="View History Chat">
           <p text-center> היסטוריית שיחות </p>
           <ion-toolbar>
             <ion-button style=" display: inline-block;" style="height: 25px;">חיפוש</ion-button>
             <input> שם:
             <input> תאריך:
-            <input> אזור:
           </ion-toolbar>
           <p text-center> מיין לפי: </p>
           <input type="radio">תאריך
           <input type="radio">שם
+          <!----the id is just for the header of the table!-->
+          <table id="supReptable1" text-right>  
+              <thead>
+                <tr>
+                  <th text-center></th>
+                  <th text-center></th>
+                  <th text-center> מצב החדר</th>
+                  <th text-center> שם הלקוח</th>
+                  <th text-center>שעה ותאריך פתיחת החדר </th>
+                  
+                  <th text-center> מספר </th>
+  
+                </tr>
+  
+              </thead>
+  
+               <tbody text-right id="supRepTBody2">
+                 <tr *ngFor ="let i of myChats ; index as j">
+                 <td><ion-button color="success" disabled={{i.open}}>הורד שיחה</ion-button></td>
+                 <td><ion-button color="success" disabled={{!i.open}}>כנס לחדר</ion-button></td>
+                 <td>{{i.open? 'פתוח':'סגור'}}</td>
+                 
+                 <td>{{i.ClientName}}</td>
+                 <td>{{i.timestamp | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
+                 <td>{{j+1}}</td>
+                </tr>
+                </tbody>
+                </table>
+
         </ion-card>
 
 

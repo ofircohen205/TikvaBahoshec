@@ -24,7 +24,9 @@ export class FirestoreService {
       open: true,
       occupied: false,
       SupportRepID: null,
+      SupportRepName: null,
       ClientID: null,
+      ClientName: username,
       timestamp: new Date().getTime()
     });
   }
@@ -133,7 +135,7 @@ export class FirestoreService {
     this.firestore.collection(this.STORIES_COLLECTION).add({
       title,
       description,
-      timestamp: new Date().getTime(),
+      date: new Date(),
       approved: false
     });
   }

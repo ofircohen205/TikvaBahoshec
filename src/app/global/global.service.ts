@@ -38,7 +38,7 @@ export class GlobalService {
             data.name = 'אנונימי' + this.anonymousNumber;
             this.firestore.updateAnonNumber(this.anonymousNumber + 1);
           }
-          let clientId;
+          let clientId = '';
           this.firestore.createClient(data.name).then(result => {
             clientId = result.id;
           });

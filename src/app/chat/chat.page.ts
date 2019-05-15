@@ -34,9 +34,9 @@ export class ChatPage {
     this.activatedRoute.params.subscribe(params => this.chatId = params.id);
     this.firestore.getChatRoom(this.chatId).subscribe(result => {
       this.clientId = result['ClientID'];
-      this.firestore.getUserName(this.clientId).subscribe(item => this.clientName = item['username']);
+      this.clientName = result['ClientName'];
       this.supportRepId = result['SupportRepID'];
-      this.firestore.getSupportRepName(this.supportRepId).subscribe(item => this.supportRepName = item['name']);
+      this.supportRepName = result['SupportRepName'];
     });
 
     this.firestore.getChatMessages(this.chatId).subscribe(result => {
@@ -64,8 +64,8 @@ export class ChatPage {
     });
   }
 
-  afterUserInside(type) {
-    if (type === this.client_support_flag) {
+  getName() {
+    if (this.client_support_flag) {
       this.firestore.getUserName(this.clientId).subscribe(result => this.clientName = result['username']);
     } else {
       this.firestore.getSupportRepName(this.supportRepId).subscribe(result => this.supportRepName = result['name']);
@@ -98,7 +98,7 @@ export class ChatPage {
   }
 
   onKeyUp(data) {
-    this.afterUserInside(this.client_support_flag);
+    this.getName();
     const ENTER_KET_CODE = 13;
     if (data.keyCode === ENTER_KET_CODE) {
       setTimeout(() => console.log('sending message'), 700);
