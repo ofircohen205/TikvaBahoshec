@@ -20,8 +20,8 @@ export class SupportRepProfileComponent implements OnInit {
   chatReadyStatus = false;
   openChatList: any = [];
   openChatListInitialize: any = [];
-  myChats:any =[];
-  
+  rooms: any[] = [];
+  myChats: any [] =[];
 
   constructor(
     private alertController: AlertController,
@@ -148,86 +148,23 @@ export class SupportRepProfileComponent implements OnInit {
     e.style.background = 'white';
   }
 
-  
-  // createTable2(tbody,list,idName){
-  //   var index =1
-  //     for(let v of list){
-  //       var tr = document.createElement('tr');
-  //       var td1 = document.createElement('td');
-  //       td1.style.border = ' 1px solid #ddd'
-  //       td1.style.padding = '8px';
-  //       td1.style.borderCollapse = 'collapse';
-  //       var buttonDownload = document.createElement('ion-button');
-  //       buttonDownload.innerHTML = "הורד שיחה"
-  //       if(v.open ==true)
-  //          buttonDownload.disabled = true;
-  //       td1.appendChild ( buttonDownload)
-        
-  
-  //       var td2 = document.createElement('td');
-  //       td2.style.border = ' 1px solid #ddd'
-  //       td2.style.padding = '8px';
-  //       td2.style.borderCollapse = 'collapse';
-  //       var buttonCloseChat = document.createElement('ion-button');
-  //       buttonCloseChat.innerHTML =  "כנס לחדר"
-  //       if(v.open==false)
-  //         buttonCloseChat.disabled = true;
-  //       td2.appendChild ( buttonCloseChat)
-  
-  //       var td3 = document.createElement('td');
-  //       td3.style.border = ' 1px solid #ddd'
-  //       td3.style.padding = '8px';
-  //       td3.style.borderCollapse = 'collapse';
-  //       td3.textContent = v.open? 'פתוח' : 'סגור';
-  
-  //       var td4 = document.createElement('td');
-  //       td4.style.border = ' 1px solid #ddd'
-  //       td4.style.padding = '8px';
-  //       td4.style.borderCollapse = 'collapse';
-  //       if(v.ClientID==null)
-  //       td4.textContent="לא הוכנס שם"
-  //       else{
-  //        this.firestore.getUserName(v.ClientID).subscribe(result => {
-  //         td4.textContent = result['username']
-  //       })
-                  
-  //       }
+  onclickTable1(e) {
+    var child = e.childNodes;
+     if(child[0].textContent.localeCompare('כנס')==0){
+       console.log('kaka1');
+     }else {console.log('kaka2')}
+   }
 
-  //       var td5 = document.createElement('td');
-  //       td5.style.border = ' 1px solid #ddd'
-  //       td5.style.padding = '8px';
-  //       td5.style.borderCollapse = 'collapse';
-  //       td5.textContent = new Date(v.timestamp).toLocaleString();
-
-  //       var td6 = document.createElement('td');
-  //       td6.style.border = ' 1px solid #ddd'
-  //       td6.style.padding = '8px';
-  //       td6.style.borderCollapse = 'collapse';
-  //       td6.textContent = index.toString();
-        
-  
-  //       tr.appendChild(td1);
-  //       tr.appendChild(td2);
-  //       tr.appendChild(td3);
-  //       tr.appendChild(td4);
-  //       tr.appendChild(td5);
-  //       tr.appendChild(td6);
-        
-  
-  //       tr.id = idName + index;
-  //       index++;
-  //       tbody.appendChild(tr);
-
-
-  //     }
-
-
-
-
-  // }
-   
-  
-
-
+   async removeChildren(tbody,list){
+     var size = tbody.childNodes.length;
+     var tbody1 = document.getElementById('supRepTBody1');
+     console.log(list.length);
+     console.log("start remove");
+     while (tbody1.firstChild) {
+      tbody1.removeChild(tbody1.firstChild);
+   }
+     console.log(tbody1.childNodes.length);
+     console.log(document.getElementById('supRepTBody1'));
+    }
 
 }
