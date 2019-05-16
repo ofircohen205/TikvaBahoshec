@@ -18,6 +18,8 @@ export class SupportRepProfileComponent implements OnInit {
   openChatListInitialize: any = [];
   rooms: any[] = []
   myChats : any []
+  dateStatus = true;
+  nameStatus = true;
 
   constructor(
     private alertController: AlertController,
