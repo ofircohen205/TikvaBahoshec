@@ -17,6 +17,7 @@ export class SupportRepProfileComponent implements OnInit {
   openChatList: any = [];
   openChatListInitialize: any = [];
   rooms: any[] = []
+  myChats : any []
 
   constructor(
     private alertController: AlertController,
@@ -31,20 +32,15 @@ export class SupportRepProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.openChatList);
-
     this.firestore.getOpenChatRooms().subscribe(result => {
         this.openChatList = result;
-      // result.forEach(element => {
-      //   console.log(element);
-        
-      //     this.openChatList.push(element);
-      // });
-      console.log(this.openChatList.length);
-      console.log(this.rooms);
       this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
+
+    this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
+      this.myChats = result;
+  });
 
   }
 
@@ -76,19 +72,19 @@ export class SupportRepProfileComponent implements OnInit {
   createTable1(tbody, list: any[]) {
     var tbodyChildrens = tbody.childNodes;
     this.removeChildren(tbody,tbodyChildrens);
-    console.log("end remove");
     var index = 1;
     for (let v of list) {
       var tr = document.createElement('tr');
 
-      var td1 = document.createElement('BUTTON');
+      var button = document.createElement('ion-button');
+      var td1 = document.createElement('td');
+      td1.appendChild(button);
       td1.id = 'supRepbutton_' + index;
-      td1.innerHTML = 'כנס';
-      td1.style.background = '#00cf00';
+      button.innerHTML = 'כנס לחדר';
+      button.color = "success"
 
       if(v.occupied === true) {
-        td1.style.background = '#ff0000';
-        td1.innerHTML = 'סגור שיחה';
+        button.setAttribute('disabled','true');
       }
       td1.style.color = 'white';
       td1.style.border = ' 1px solid #ddd';
@@ -106,11 +102,16 @@ export class SupportRepProfileComponent implements OnInit {
       }
 
       var td3 = document.createElement('td');
+      var name = '';
       td3.style.border = ' 1px solid #ddd';
       td3.style.padding = '8px';
       td3.style.borderCollapse = 'collapse';
-      td3.textContent = 'Support Rep ID';
-
+      if(v.SupportRepName !== '' && v.SupportRepName !=null){
+        td3.textContent = v.SupportRepName;
+      } else {
+        console.log('kaka2');
+        td3.textContent = 'no support name';
+      }
       var td4 = document.createElement('td');
       td4.style.border = ' 1px solid #ddd';
       td4.style.padding = '8px';
@@ -122,7 +123,7 @@ export class SupportRepProfileComponent implements OnInit {
       td5.style.padding = '8px';
       td5.style.borderCollapse = 'collapse';
       // this.firestore.getSupportRepName(v.SupportRepID)
-      td5.textContent = 'Client ID';
+      td5.textContent = v.ClientName;
 
       var td6 = document.createElement('td');
       td6.style.border = ' 1px solid #ddd';
@@ -131,6 +132,7 @@ export class SupportRepProfileComponent implements OnInit {
       td6.textContent = index.toString();
       tr.appendChild(td1);
       tr.appendChild(td2);
+      console.log(td3);
       tr.appendChild(td3);
       tr.appendChild(td4);
       tr.appendChild(td5);
@@ -145,7 +147,7 @@ export class SupportRepProfileComponent implements OnInit {
       tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
       tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
       var trChildren = tbodyChildrens[i].childNodes;
-      trChildren[0].addEventListener('click', () => this.onclickTable1(tbodyChildrens[i]));
+      trChildren[0].addEventListener('click', () => this.onclickTable1(tbodyChildrens[i],list,i));
     }
 
   }
@@ -157,23 +159,26 @@ export class SupportRepProfileComponent implements OnInit {
     e.style.background = 'white';
   }
 
-  onclickTable1(e) {
-    var child = e.childNodes;
-     if(child[0].textContent.localeCompare('כנס')==0){
-       console.log('kaka1');
-     }else {console.log('kaka2')}
+  onclickTable1(e,list,index) {
+    console.log(this.userAuth.auth.currentUser.uid);
+    this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
+      console.log(result);
+      this.firestore.updateChatRooms(list[index]['ChatRoomID'],result['name'], this.userAuth.auth.currentUser.uid);
+    })
+   // this.firestore.updateChatRooms(list[index]['ChatRoomID'],list[index]['SupportRepName'], list[index]['SupportRepID']);
+    // console.log(e);
+    // console.log(list);
+    // console.log(index);
+
+     
    }
 
    async removeChildren(tbody,list){
      var size = tbody.childNodes.length;
      var tbody1 = document.getElementById('supRepTBody1');
-     console.log(list.length);
-     console.log("start remove");
      while (tbody1.firstChild) {
       tbody1.removeChild(tbody1.firstChild);
    }
-     console.log(tbody1.childNodes.length);
-     console.log(document.getElementById('supRepTBody1'));
     }
 
 }

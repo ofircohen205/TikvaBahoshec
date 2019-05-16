@@ -40,7 +40,7 @@ export class FirestoreService {
   }
 
   public getOwnChats(supportRepId): Observable<any> {
-    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('SupportRepID', '==', supportRepId)).get();
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('SupportRepID', '==', supportRepId)).valueChanges();
   }
 
   public getChatMessages(chatId): Observable<any> {
@@ -107,12 +107,17 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
 
+
   public getSupportRepNameList() {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
   }
 
   public getSupportRepIdList() {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
+  }
+
+  public getClientName(clientId): Observable<any> {
+    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
   }
 
 
@@ -148,6 +153,14 @@ export class FirestoreService {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).delete();
   }
 
+  public updateChatRooms(chatRoomId, supportRepName,supportRepId) {
+    var chatRoomData = {
+      occupied : true,
+      SupportRepName : supportRepName,
+      SupportRepID : supportRepId
+    };
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
+  }
 
   /* METADATA COLLECTION FUNCTIONS */
   public getAnonNumber(): Observable<any> {
