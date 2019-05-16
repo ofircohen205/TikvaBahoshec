@@ -74,7 +74,8 @@ export class FirestoreService {
     return this.firestore.collection(this.CLIENT_COLLECTION).add({
       username,
       location: null,
-      description: null
+      description: null,
+      ClientID: null
     });
   }
 
@@ -105,6 +106,7 @@ export class FirestoreService {
       email,
       name,
       phone,
+      SupportRepID: null,
       connectionTime: null
     });
   }
