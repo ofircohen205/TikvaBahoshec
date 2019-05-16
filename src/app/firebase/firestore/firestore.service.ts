@@ -27,6 +27,7 @@ export class FirestoreService {
       SupportRepName: null,
       ClientID: null,
       ClientName: username,
+      ChatRoomId: null,
       timestamp: new Date().getTime()
     });
   }
@@ -63,6 +64,10 @@ export class FirestoreService {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
   }
 
+  public updateChatRoomId(chatId) {
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ChatRoomId: chatId });
+  }
+
   public updateSupportRepId(chatId, SupportRepID) {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ SupportRepID });
   }
@@ -73,7 +78,8 @@ export class FirestoreService {
     return this.firestore.collection(this.CLIENT_COLLECTION).add({
       username,
       location: null,
-      description: null
+      description: null,
+      ClientID: null
     });
   }
 
@@ -104,6 +110,7 @@ export class FirestoreService {
       email,
       name,
       phone,
+      SupportRepID: null,
       connectionTime: null
     });
   }
