@@ -43,6 +43,7 @@ export class GlobalService {
             clientId = result.id;
           });
           this.firestore.createChatRoom(data.name).then(result => {
+            this.firestore.updateChatRoomId(result.id);
             this.firestore.updateClientId(result.id, clientId);
             this.router.navigateByUrl('/chat/' + result.id);
           }).catch((error) => console.log(error));

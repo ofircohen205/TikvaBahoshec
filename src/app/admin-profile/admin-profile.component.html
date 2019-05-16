@@ -69,8 +69,9 @@
           <table id="tables" text-right>
             <thead>
               <tr>
-                <th text-center></th>
-                <th text-center>התחבר לאחרונה</th>
+                <th text-center>פעולות</th>
+                <th text-center>התחבר לאחרונה</th>               
+                <th text-center>טלפון</th>
                 <th text-center>אימייל</th>
                 <th text-center>שם נציג</th>
 
@@ -81,9 +82,14 @@
             <tbody text-right>
               <tr *ngFor="let x of list">
                 <td>
-                  <ion-button color="danger" (click)="deleteSupportRep(x)">מחק</ion-button>
+                  <ion-button color="danger" (click)="deleteSupport(x)">מחק</ion-button>
+                  <ion-button  (click)="editSupport(x)"> ערוך</ion-button>
+                  <ion-button  (click)="seeChatHistory(x)">הסטוריית שיחות</ion-button>
+                 
+                 
                 </td>
-                <td></td>
+                <td>{{x.currentTime}}</td>
+                <td>{{x.phone}}</td>
                 <td>{{x.email}}</td>
                 <td>{{x.name}}</td>
 
