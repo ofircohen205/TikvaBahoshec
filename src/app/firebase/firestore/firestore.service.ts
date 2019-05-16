@@ -27,6 +27,7 @@ export class FirestoreService {
       SupportRepName: null,
       ClientID: null,
       ClientName: username,
+      ChatRoomId: null,
       timestamp: new Date().getTime()
     });
   }
@@ -57,6 +58,10 @@ export class FirestoreService {
 
   public updateClientId(chatId, ClientID) {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
+  }
+
+  public updateChatRoomId(chatId) {
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ChatRoomId: chatId });
   }
 
   public updateSupportRepId(chatId, SupportRepID) {
