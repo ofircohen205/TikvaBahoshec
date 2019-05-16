@@ -34,9 +34,9 @@ export class ChatPage {
     this.activatedRoute.params.subscribe(params => this.chatId = params.id);
     this.firestore.getChatRoom(this.chatId).subscribe(result => {
       this.clientId = result['ClientID'];
-      this.firestore.getUserName(this.clientId).subscribe(item => this.clientName = item['username']);
+      this.clientName = result['ClientName'];
       this.supportRepId = result['SupportRepID'];
-      this.firestore.getSupportRepName(this.supportRepId).subscribe(item => this.supportRepName = item['name']);
+      this.supportRepName = result['SupportRepName'];
     });
 
     this.firestore.getChatMessages(this.chatId).subscribe(result => {

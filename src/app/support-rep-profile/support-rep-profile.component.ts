@@ -18,6 +18,11 @@ export class SupportRepProfileComponent implements OnInit {
   openChatListInitialize: any = [];
   rooms: any[] = []
   myChats : any []
+<<<<<<< HEAD
+=======
+  dateStatus = true;
+  nameStatus = true;
+>>>>>>> 9148ca5b434e8d2d32646be8f3292570bec0ddad
 
   constructor(
     private alertController: AlertController,
@@ -34,12 +39,22 @@ export class SupportRepProfileComponent implements OnInit {
   ngOnInit() {
     this.firestore.getOpenChatRooms().subscribe(result => {
         this.openChatList = result;
+<<<<<<< HEAD
+=======
+      console.log(this.openChatList.length);
+      console.log(this.rooms);
+>>>>>>> 9148ca5b434e8d2d32646be8f3292570bec0ddad
       this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
 
     this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.myChats = result;
+<<<<<<< HEAD
+=======
+   console.log(result);
+
+>>>>>>> 9148ca5b434e8d2d32646be8f3292570bec0ddad
   });
 
   }
@@ -181,4 +196,35 @@ export class SupportRepProfileComponent implements OnInit {
    }
     }
 
+<<<<<<< HEAD
 }
+=======
+
+    sortByDate(dateStatus){
+    if(dateStatus==true){
+      this.myChats.sort((a,b)=> (a.timestamp>=b.timestamp)? 1:-1)
+      this.dateStatus=false
+    }
+    else{
+      this.myChats.sort((a,b)=> (a.timestamp<=b.timestamp)? 1:-1)
+    this.dateStatus=true;
+    }
+}
+
+
+sortByName(nameStatus){
+    if(nameStatus==true){
+      this.myChats.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1)
+      this.nameStatus=false
+    }
+    else{
+      this.myChats.sort((a,b)=> (a.ClientName<=b.ClientName)? 1:-1)
+    this.nameStatus=true;
+
+ }
+
+}
+
+}
+
+>>>>>>> 9148ca5b434e8d2d32646be8f3292570bec0ddad
