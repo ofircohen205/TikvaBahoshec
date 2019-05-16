@@ -41,7 +41,8 @@ export class FirestoreService {
   }
 
   public getSupportRepOpenChatRooms(supportRepId): Observable<any> {
-    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true).where('SupportRepID','==',supportRepId)).valueChanges();
+// tslint:disable-next-line: max-line-length
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true).where('SupportRepID', '==', supportRepId)).valueChanges();
   }
 
   public getOwnChats(supportRepId): Observable<any> {
@@ -181,8 +182,8 @@ export class FirestoreService {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).delete();
   }
 
-  public updateChatRooms(chatRoomId, supportRepName,supportRepId) {
-    var chatRoomData = {
+  public updateChatRooms(chatRoomId, supportRepName, supportRepId) {
+    const chatRoomData = {
       occupied : true,
       SupportRepName : supportRepName,
       SupportRepID : supportRepId
