@@ -10,6 +10,7 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
   selector: 'app-support-rep-profile',
   templateUrl: './support-rep-profile.component.html',
   styleUrls: ['./support-rep-profile.component.scss'],
+  
 })
 
 export class SupportRepProfileComponent implements OnInit {
@@ -20,6 +21,8 @@ export class SupportRepProfileComponent implements OnInit {
   myChats : any []
   dateStatus = true;
   nameStatus = true;
+  myChatsCopy =[]
+  
 
   constructor(
     private alertController: AlertController,
@@ -42,13 +45,14 @@ export class SupportRepProfileComponent implements OnInit {
     });
     console.log(this.userAuth.auth.currentUser.uid)
     this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result =>{
-      console.log(result);
+      
       this.supportRepOpenChatList = result;
       this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList); 
     });
 
     this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.myChats = result;
+      this.myChatsCopy = result;
   });
 
   }
@@ -317,5 +321,59 @@ sortByName(nameStatus){
 
 }
 
+
+wakeUpDate(e){
+  var dateTo = document.getElementById("Cdate2");
+  dateTo.hidden=false;
+   dateTo.setAttribute("min",e);
+
+
+
 }
+searchCaht(name,date1,date2,reaset){
+  document.getElementById("reset").hidden=false;
+  this.myChats = Object.assign([], this.myChatsCopy);
+  if(reaset==true){
+     var dateToPicker = document.getElementById("Cdate2")
+     dateToPicker.hidden=true;
+     document.getElementById("reset").hidden=true;
+    
+     return
+  }
+      
+      if(date1!=undefined && date1!="")
+         var dateFrom = new Date(date1)
+      else
+         var dateFrom = new Date('1/1/2018')
+      if(date2!=undefined && date2!="")
+         var dateTo = new Date(date2)
+      else
+         var dateTo = new Date()
+
+         dateTo.setHours(dateTo.getHours()-3)
+         dateFrom.setHours(dateFrom.getHours()-3)
+
+         if(date1==date2)
+         dateTo.setDate(dateTo.getDate() + 1);
+          
+         
+         console.log(dateFrom)
+         console.log(dateTo)
+
+    this.myChats =[]
+      this.myChatsCopy.forEach(a=>{
+      if(a.ClientName.search(name)!=-1){
+        var clientDate = new Date(a.timestamp);
+        if(clientDate>=dateFrom && clientDate<=dateTo){
+          
+           this.myChats.push(a)
+        }
+      }
+    }) 
+
+  } 
+
+}
+
+
 

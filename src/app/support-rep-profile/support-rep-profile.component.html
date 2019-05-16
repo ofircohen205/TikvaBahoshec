@@ -58,15 +58,23 @@
         <ion-card text-center  id="View History Chat">
           <p text-center> היסטוריית שיחות </p>
           <ion-toolbar>
-            <ion-button style=" display: inline-block;" style="height: 25px;">חיפוש</ion-button>
-            <input> שם:
-            <input> תאריך:
+              
+            <ion-button id="reset" hidden (click)="searchCaht(Name,dateFrom,dateTo,true)">חזור לטבלה המלאה</ion-button>
+            <ion-button (click)="searchCaht(Name,dateFrom,dateTo,false)" >חיפוש</ion-button>
+            
+            <input type="text" style="margin:10px" id="Cname"   [(ngModel)]="Name" placeholder="שם הלקוח" text-right>
+
+            <input type="date" id="Cdate2" style="margin:10px" hidden [(ngModel)]="dateTo" text-right>
+
+            <input type="date" id="Cdate1" style="margin:10px" (change)="wakeUpDate(dateFrom)" [(ngModel)]="dateFrom"  text-right>
+          
+            
           </ion-toolbar>
           <p text-center> :מיין לפי </p>
-          שם<input type="radio" name="radio" value="byDate" (click)="sortByName(this.nameStatus)">
-          <br>
-          תאריך<input type="radio" name="radio" value="byName" (click)="sortByDate(this.dateStatus)" >
-         <br>
+          <ion-button size="small" color="success" (click)="sortByName(this.nameStatus)">שם </ion-button>
+          
+         <ion-button size="small" color="success" (click)="sortByDate(this.dateStatus)" >תאריך</ion-button>
+         
           <table id="supReptable3" text-right>  
               <thead>
                 <tr>
@@ -102,3 +110,6 @@
     </ion-row>
   </ion-grid>
 </ion-content>
+
+
+
