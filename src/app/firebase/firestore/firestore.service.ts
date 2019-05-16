@@ -119,7 +119,7 @@ export class FirestoreService {
   public getSupportRepName(supportRepId): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
- 
+
   public getSupportRepNameList() {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges().subscribe;
   }
