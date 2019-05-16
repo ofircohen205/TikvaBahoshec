@@ -39,6 +39,10 @@ export class FirestoreService {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true)).valueChanges();
   }
 
+  public getSupportRepOpenChatRooms(supportRepId): Observable<any> {
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true).where('SupportRepID','==',supportRepId)).valueChanges();
+  }
+
   public getOwnChats(supportRepId): Observable<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('SupportRepID', '==', supportRepId)).valueChanges();
   }
