@@ -18,13 +18,8 @@ export class SupportRepProfileComponent implements OnInit {
   supportRepOpenChatList: any = [];
   rooms: any[] = []
   myChats : any []
-<<<<<<< HEAD
-  nameStatus = true;
-  dateStatus = true;
-=======
   dateStatus = true;
   nameStatus = true;
->>>>>>> d5a8398f002d72a42d105c9f91d4e00398144b52
 
   constructor(
     private alertController: AlertController,
@@ -45,16 +40,13 @@ export class SupportRepProfileComponent implements OnInit {
       this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
-
-<<<<<<< HEAD
-=======
+    console.log(this.userAuth.auth.currentUser.uid)
     this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result =>{
       console.log(result);
       this.supportRepOpenChatList = result;
       this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList); 
     });
 
->>>>>>> d5a8398f002d72a42d105c9f91d4e00398144b52
     this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.myChats = result;
   });
