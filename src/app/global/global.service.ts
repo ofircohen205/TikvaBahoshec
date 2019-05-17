@@ -61,7 +61,7 @@ export class GlobalService {
       buttons: ['אוקיי']
     });
     alert.present();
-    document.getElementById('readyButton').style.color = 'green';
+    document.getElementById('readyButton').style.color = 'success';
   }
 
   scrollToElement(e): void {

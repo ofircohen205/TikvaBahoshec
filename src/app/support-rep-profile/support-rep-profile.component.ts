@@ -57,6 +57,16 @@ export class SupportRepProfileComponent implements OnInit {
       this.myChatsCopy = result;
   });
 
+  this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
+      if(result['inShift']){
+        document.getElementById('supportRepreadyButton').textContent = 'במשמרת';
+        document.getElementById('supportRepreadyButton').setAttribute('color' , 'success');
+      } else {
+        document.getElementById('supportRepreadyButton').textContent = 'לא במשמרת';
+        document.getElementById('supportRepreadyButton').setAttribute('color' , 'danger');
+      }
+  });
+
   }
 
   async logout() {
@@ -72,8 +82,39 @@ export class SupportRepProfileComponent implements OnInit {
 
 
 
-  readyForChat() {
-    this.global.readyForChat();
+  async inShift() {
+    var readyButton = document.getElementById('supportRepreadyButton');
+    if(readyButton.getAttribute('color') === 'danger'){
+      if(confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')){
+      readyButton.setAttribute('color', 'success');
+      readyButton.textContent = 'במשמרת';
+      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, true)
+      }
+    } else {
+      if(confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')){
+      readyButton.setAttribute('color', 'danger');
+      readyButton.textContent = 'לא במשמרת';
+      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, false)
+
+      }
+    }
+  //   if(document.getElementById('supportRepreadyButton').getAttribute('color') === 'danger'){
+  //   const alert = await this.alertController.create({
+  //     header: 'כניסה למשמרת',
+  //     message: 'עכשיו אתה מוכן ויכול לקבל פניות',
+  //     buttons: ['כנס']
+  //   });
+  //   alert.present();
+  //   document.getElementById('supportRepreadyButton').setAttribute('color', 'success');
+  // } else {
+  //   const alert = await this.alertController.create({
+  //     header: 'יציאה ממשמרת',
+  //     message: 'אם תצא ממשמרת לא תוכל לקבל שיחות',
+  //     buttons: ['צא']
+  //   });
+  //   alert.present();
+  //   document.getElementById('supportRepreadyButton').setAttribute('color', 'danger');
+ // }
   }
 
   scrollToElement(e): void {
@@ -255,10 +296,10 @@ export class SupportRepProfileComponent implements OnInit {
       tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
       tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
       var trChildren = tbodyChildrens[i].childNodes;
-      trChildren[0].addEventListener('click', () => this.onclickTable2(trChildren[0],list,i));
-      trChildren[1].addEventListener('click', () => this.onclickTable2(trChildren[1],list,i));
-      console.log(trChildren[0]);
-      console.log(trChildren[1]);
+      trChildren[0].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[0],list,i));
+      trChildren[1].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[1],list,i));
+      // console.log(trChildren[0]);
+      // console.log(trChildren[1]);
     }
 
   }
@@ -278,9 +319,13 @@ export class SupportRepProfileComponent implements OnInit {
    }
 
    onclickTable2(e,list,index) {
+<<<<<<< HEAD
     // console.log(e['id']);
      console.log('supRepTable2button2_' + (index+1));
     if(e['id'] === 'supRepTable2button2_' + (index+1)){
+=======
+    if(e['id'] === 'supRepTable2button2_' + (index + 1)){
+>>>>>>> cdae8b1727fce909a75e834d2e18f57d7672fea8
       window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     } else{
       console.log('open client profile page');
