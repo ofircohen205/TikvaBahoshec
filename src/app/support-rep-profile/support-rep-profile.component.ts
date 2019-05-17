@@ -96,23 +96,6 @@ export class SupportRepProfileComponent implements OnInit {
 
       }
     }
-  //   if(document.getElementById('supportRepreadyButton').getAttribute('color') === 'danger'){
-  //   const alert = await this.alertController.create({
-  //     header: 'כניסה למשמרת',
-  //     message: 'עכשיו אתה מוכן ויכול לקבל פניות',
-  //     buttons: ['כנס']
-  //   });
-  //   alert.present();
-  //   document.getElementById('supportRepreadyButton').setAttribute('color', 'success');
-  // } else {
-  //   const alert = await this.alertController.create({
-  //     header: 'יציאה ממשמרת',
-  //     message: 'אם תצא ממשמרת לא תוכל לקבל שיחות',
-  //     buttons: ['צא']
-  //   });
-  //   alert.present();
-  //   document.getElementById('supportRepreadyButton').setAttribute('color', 'danger');
- // }
   }
 
   scrollToElement(e): void {
@@ -296,8 +279,6 @@ export class SupportRepProfileComponent implements OnInit {
       var trChildren = tbodyChildrens[i].childNodes;
       trChildren[0].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[0],list,i));
       trChildren[1].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[1],list,i));
-      // console.log(trChildren[0]);
-      // console.log(trChildren[1]);
     }
 
   }
