@@ -30,6 +30,7 @@ export class ChatPage {
     private firestore: FirestoreService,
     private activatedRoute: ActivatedRoute) {}
 
+// tslint:disable-next-line: use-life-cycle-interface
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => this.chatId = params.id);
     this.firestore.getChatRoom(this.chatId).subscribe(result => {

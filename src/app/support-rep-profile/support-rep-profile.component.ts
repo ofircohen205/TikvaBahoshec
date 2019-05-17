@@ -10,6 +10,7 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
   selector: 'app-support-rep-profile',
   templateUrl: './support-rep-profile.component.html',
   styleUrls: ['./support-rep-profile.component.scss'],
+  
 })
 
 export class SupportRepProfileComponent implements OnInit {
@@ -20,6 +21,8 @@ export class SupportRepProfileComponent implements OnInit {
   myChats : any []
   dateStatus = true;
   nameStatus = true;
+  myChatsCopy =[]
+  
 
   constructor(
     private alertController: AlertController,
@@ -40,15 +43,16 @@ export class SupportRepProfileComponent implements OnInit {
       this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
-
+    console.log(this.userAuth.auth.currentUser.uid)
     this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result =>{
-      console.log(result);
+      
       this.supportRepOpenChatList = result;
       this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList); 
     });
 
     this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.myChats = result;
+      this.myChatsCopy = result;
   });
 
   }
@@ -320,5 +324,77 @@ sortByName(nameStatus){
 
 }
 
+
+wakeUpDate(){
+  var dateFrom =  (<HTMLInputElement>document.getElementById('Cdate1')).value;
+  var dateTo = document.getElementById("Cdate2");
+  (<HTMLInputElement>(dateTo)).value="";
+
+  dateTo.hidden=false;
+   dateTo.setAttribute("min",dateFrom);
+
 }
+
+
+clearFields(){
+  var name = (<HTMLInputElement>document.getElementById('Cname'));
+  var dateFrom =  (<HTMLInputElement>document.getElementById('Cdate1'));
+  var dateTo =  (<HTMLInputElement>document.getElementById('Cdate2'));
+
+  name.value =""
+  dateFrom.value=""
+  dateTo.value =""
+  this.myChats = Object.assign([], this.myChatsCopy);
+  dateTo.hidden=true;
+ 
+  }
+
+
+searchChat(){
+  this.myChats = Object.assign([], this.myChatsCopy);
+  var name = (<HTMLInputElement>document.getElementById('Cname')).value;
+  var date1 =  (<HTMLInputElement>document.getElementById('Cdate1')).value;
+  var date2 =  (<HTMLInputElement>document.getElementById('Cdate2')).value;
+
+  if(date1=="")
+    date1="1/1/2018"
+
+  if(date2=="")
+    date2 = Date().toString()  
+
+
+  var dateFrom =new Date(date1)
+  var dateTo =new Date(date2)
+
+  dateTo.setHours(dateTo.getHours()+21)
+  dateFrom.setHours(dateFrom.getHours()-3)
+ 
+
+
+
+  this.myChats =[]
+        this.myChatsCopy.forEach(a=>{
+        if(a.ClientName.search(name)!=-1){
+          var clientDate = new Date(a.timestamp);
+          if(clientDate>=dateFrom && clientDate<=dateTo){
+            
+             this.myChats.push(a)
+          }
+        }
+      }) 
+  
+
+
+
+}
+
+
+
+
+
+ 
+
+}
+
+
 
