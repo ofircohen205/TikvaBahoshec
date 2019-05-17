@@ -57,6 +57,16 @@ export class SupportRepProfileComponent implements OnInit {
       this.myChatsCopy = result;
   });
 
+  this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
+    if(result['inShift']){
+      document.getElementById('supportRepreadyButton').textContent = 'במשמרת';
+      document.getElementById('supportRepreadyButton').setAttribute('color' , 'success');
+    } else {
+      document.getElementById('supportRepreadyButton').textContent = 'לא במשמרת';
+      document.getElementById('supportRepreadyButton').setAttribute('color' , 'danger');
+    }
+});
+
   }
 
   async logout() {
@@ -68,12 +78,22 @@ export class SupportRepProfileComponent implements OnInit {
     alert.present();
   }
 
+  async inShift() {
+    var readyButton = document.getElementById('supportRepreadyButton');
+    if(readyButton.getAttribute('color') === 'danger'){
+      if(confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')){
+      readyButton.setAttribute('color', 'success');
+      readyButton.textContent = 'במשמרת';
+      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, true)
+      }
+    } else {
+      if(confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')){
+      readyButton.setAttribute('color', 'danger');
+      readyButton.textContent = 'לא במשמרת';
+      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, false)
 
-
-
-
-  readyForChat() {
-    this.global.readyForChat();
+      }
+    }
   }
 
   scrollToElement(e): void {
