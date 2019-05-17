@@ -249,10 +249,10 @@ export class SupportRepProfileComponent implements OnInit {
       tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
       tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
       var trChildren = tbodyChildrens[i].childNodes;
-      trChildren[0].addEventListener('click', () => this.onclickTable2(trChildren[0],list,i));
-      trChildren[1].addEventListener('click', () => this.onclickTable2(trChildren[1],list,i));
-      console.log(trChildren[0]);
-      console.log(trChildren[1]);
+      trChildren[0].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[0],list,i));
+      trChildren[1].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[1],list,i));
+      // console.log(trChildren[0]);
+      // console.log(trChildren[1]);
     }
 
   }
@@ -272,8 +272,11 @@ export class SupportRepProfileComponent implements OnInit {
    }
 
    onclickTable2(e,list,index) {
-     console.log(e['id']);
+     console.log('kaka1');
+     console.log(e);
+     console.log(index);
      console.log('supRepTable2button2_' + (index+1));
+     console.log('kaka2');
     if(e['id'] === 'supRepTable2button2_' + (index+1)){
       window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     } else{
