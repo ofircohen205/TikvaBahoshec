@@ -322,56 +322,74 @@ sortByName(nameStatus){
 }
 
 
-wakeUpDate(e){
+wakeUpDate(){
+  var dateFrom =  (<HTMLInputElement>document.getElementById('Cdate1')).value;
   var dateTo = document.getElementById("Cdate2");
+  (<HTMLInputElement>(dateTo)).value="";
+
   dateTo.hidden=false;
-   dateTo.setAttribute("min",e);
+   dateTo.setAttribute("min",dateFrom);
+
+}
+
+
+clearFields(){
+  var name = (<HTMLInputElement>document.getElementById('Cname'));
+  var dateFrom =  (<HTMLInputElement>document.getElementById('Cdate1'));
+  var dateTo =  (<HTMLInputElement>document.getElementById('Cdate2'));
+
+  name.value =""
+  dateFrom.value=""
+  dateTo.value =""
+  this.myChats = Object.assign([], this.myChatsCopy);
+  dateTo.hidden=true;
+ 
+  }
+
+
+searchChat(){
+  this.myChats = Object.assign([], this.myChatsCopy);
+  var name = (<HTMLInputElement>document.getElementById('Cname')).value;
+  var date1 =  (<HTMLInputElement>document.getElementById('Cdate1')).value;
+  var date2 =  (<HTMLInputElement>document.getElementById('Cdate2')).value;
+
+  if(date1=="")
+    date1="1/1/2018"
+
+  if(date2=="")
+    date2 = Date().toString()  
+
+
+  var dateFrom =new Date(date1)
+  var dateTo =new Date(date2)
+
+  dateTo.setHours(dateTo.getHours()+21)
+  dateFrom.setHours(dateFrom.getHours()-3)
+ 
+
+
+
+  this.myChats =[]
+        this.myChatsCopy.forEach(a=>{
+        if(a.ClientName.search(name)!=-1){
+          var clientDate = new Date(a.timestamp);
+          if(clientDate>=dateFrom && clientDate<=dateTo){
+            
+             this.myChats.push(a)
+          }
+        }
+      }) 
+  
 
 
 
 }
-searchCaht(name,date1,date2,reaset){
-  document.getElementById("reset").hidden=false;
-  this.myChats = Object.assign([], this.myChatsCopy);
-  if(reaset==true){
-     var dateToPicker = document.getElementById("Cdate2")
-     dateToPicker.hidden=true;
-     document.getElementById("reset").hidden=true;
-    
-     return
-  }
-      
-      if(date1!=undefined && date1!="")
-         var dateFrom = new Date(date1)
-      else
-         var dateFrom = new Date('1/1/2018')
-      if(date2!=undefined && date2!="")
-         var dateTo = new Date(date2)
-      else
-         var dateTo = new Date()
 
-         dateTo.setHours(dateTo.getHours()-3)
-         dateFrom.setHours(dateFrom.getHours()-3)
 
-         if(date1==date2)
-         dateTo.setDate(dateTo.getDate() + 1);
-          
-         
-         console.log(dateFrom)
-         console.log(dateTo)
 
-    this.myChats =[]
-      this.myChatsCopy.forEach(a=>{
-      if(a.ClientName.search(name)!=-1){
-        var clientDate = new Date(a.timestamp);
-        if(clientDate>=dateFrom && clientDate<=dateTo){
-          
-           this.myChats.push(a)
-        }
-      }
-    }) 
 
-  } 
+
+ 
 
 }
 

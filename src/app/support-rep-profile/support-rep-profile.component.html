@@ -59,14 +59,14 @@
           <p text-center> היסטוריית שיחות </p>
           <ion-toolbar>
               
-            <ion-button id="reset" hidden (click)="searchCaht(Name,dateFrom,dateTo,true)">חזור לטבלה המלאה</ion-button>
-            <ion-button (click)="searchCaht(Name,dateFrom,dateTo,false)" >חיפוש</ion-button>
+            <ion-button id="reset" (click)="clearFields()">נקה שדות</ion-button>
+            <ion-button (click)=searchChat()>חיפוש</ion-button>
             
-            <input type="text" style="margin:10px" id="Cname"   [(ngModel)]="Name" placeholder="שם הלקוח" text-right>
+            <input type="text" style="margin:10px" id="Cname"   placeholder="שם הלקוח" text-right>
 
-            <input type="date" id="Cdate2" style="margin:10px" hidden [(ngModel)]="dateTo" text-right>
+            <input type="date" id="Cdate2" style="margin:10px" hidden  text-right>
 
-            <input type="date" id="Cdate1" style="margin:10px" (change)="wakeUpDate(dateFrom)" [(ngModel)]="dateFrom"  text-right>
+            <input type="date" id="Cdate1" style="margin:10px" (change)="wakeUpDate()" text-right>
           
             
           </ion-toolbar>
