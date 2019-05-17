@@ -275,10 +275,8 @@ export class SupportRepProfileComponent implements OnInit {
       tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
       tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
       var trChildren = tbodyChildrens[i].childNodes;
-      trChildren[0].addEventListener('click', () => this.onclickTable2(trChildren[0],list,i));
-      trChildren[1].addEventListener('click', () => this.onclickTable2(trChildren[1],list,i));
-      console.log(trChildren[0]);
-      console.log(trChildren[1]);
+      trChildren[0].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[0],list,i));
+      trChildren[1].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[1],list,i));
     }
 
   }
