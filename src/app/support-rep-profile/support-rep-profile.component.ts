@@ -6,6 +6,7 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 
+
 @Component({
   selector: 'app-support-rep-profile',
   templateUrl: './support-rep-profile.component.html',
@@ -22,6 +23,7 @@ export class SupportRepProfileComponent implements OnInit {
   dateStatus = true;
   nameStatus = true;
   myChatsCopy =[]
+  txtMsg =""
   
 
   constructor(
@@ -276,7 +278,7 @@ export class SupportRepProfileComponent implements OnInit {
    }
 
    onclickTable2(e,list,index) {
-     console.log(e['id']);
+    // console.log(e['id']);
      console.log('supRepTable2button2_' + (index+1));
     if(e['id'] === 'supRepTable2button2_' + (index+1)){
       window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
@@ -297,26 +299,33 @@ export class SupportRepProfileComponent implements OnInit {
 
 
     sortByDate(dateStatus){
+    var nameBtn =(<HTMLButtonElement>document.getElementById("dateBtn"))
     if(dateStatus==true){
       this.myChats.sort((a,b)=> (a.timestamp>=b.timestamp)? 1:-1)
       this.dateStatus=false
+      nameBtn.innerHTML ='&#8657;תאריך'
     }
     else{
       this.myChats.sort((a,b)=> (a.timestamp<=b.timestamp)? 1:-1)
     this.dateStatus=true;
+    nameBtn.innerHTML ='&#8659;תאריך'
+    
     }
 }
 
 
 sortByName(nameStatus){
+  var nameBtn =(<HTMLButtonElement>document.getElementById("nameBtn"))
+  console.log (nameBtn)
     if(nameStatus==true){
       this.myChats.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1)
       this.nameStatus=false
+      nameBtn.innerHTML ='&#8657;שם'
     }
     else{
       this.myChats.sort((a,b)=> (a.ClientName<=b.ClientName)? 1:-1)
     this.nameStatus=true;
-
+    nameBtn.innerHTML ='&#8659;שם'
  }
 
 }
@@ -387,7 +396,31 @@ searchChat(){
 
 
 
+openRoom(roomId){
+window.open('/chat/' +roomId, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
 
+}
+
+downloadChatMsg(roomId){
+  
+this.firestore.getChatMessages(roomId).subscribe(result =>{
+  
+result.forEach(msg=>{
+  
+  this.txtMsg+="From:"+msg.from +" Time:" +new Date(msg.timestamp)
+  this.txtMsg+="\n<"+msg.content +">\n\n"
+  
+})
+console.log("startDownload")
+var link = document.createElement('a');
+link.download = 'Chat:'+roomId+'.txt';
+var blob = new Blob([this.txtMsg], {type: 'text/plain'});
+link.href = window.URL.createObjectURL(blob);
+link.click();
+})
+
+
+}
 
  
 
