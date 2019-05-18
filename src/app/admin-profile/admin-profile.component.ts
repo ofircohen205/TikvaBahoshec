@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
-import { firestore } from 'firebase';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
@@ -254,7 +253,7 @@ export class AdminProfileComponent implements OnInit {
 
   //variables for the text editor
   public value: string =
-    `<br/> 
+  `<br/>
   כתוב על המקרה שלך כאן`
 
   public tools: object = {

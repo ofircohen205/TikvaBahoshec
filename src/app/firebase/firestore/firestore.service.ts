@@ -216,12 +216,12 @@ export class FirestoreService {
   public removeStory(storyId): void {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).delete();
   }
-  
-  public editStory(storyId,description){
+
+  public editStory(storyId, description) {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({description});
   }
 
-  public confirmStory(storyId, approved){
+  public confirmStory(storyId, approved) {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({approved});
   }
 
