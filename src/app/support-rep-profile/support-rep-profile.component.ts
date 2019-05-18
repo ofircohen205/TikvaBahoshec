@@ -84,23 +84,13 @@ export class SupportRepProfileComponent implements OnInit {
       if(confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')){
       readyButton.setAttribute('color', 'success');
       readyButton.textContent = 'במשמרת';
-<<<<<<< HEAD
       this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, true);
-=======
-      console.log(this.userAuth.auth.currentUser.uid);
-      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, true)
->>>>>>> 08add70dfff30c2598cda514e54356e147ca8fa6
       }
     } else {
       if(confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')){
       readyButton.setAttribute('color', 'danger');
       readyButton.textContent = 'לא במשמרת';
-<<<<<<< HEAD
       this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, false);
-=======
-      console.log(this.userAuth.auth.currentUser.uid);
-      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, false)
->>>>>>> 08add70dfff30c2598cda514e54356e147ca8fa6
 
       }
     }
@@ -334,20 +324,12 @@ export class SupportRepProfileComponent implements OnInit {
    }
 
    onclickTable2(e,list,index) {
-<<<<<<< HEAD
     if(e['id'] === 'supRepTable2button1_' + (index + 1)){
       if(confirm('האם את/ה בטוח/ה רוצה לסגור את השיחה')){
         this.firestore.updateChatRoomOpenField( list[index]['ChatRoomId'], false);
       }
     }
     if(e['id'] === 'supRepTable2button2_' + (index + 1)){
-=======
-    // console.log(e['id']);
-     console.log('supRepTable2button2_' + (index+1));
-    if(e['id'] === 'supRepTable2button2_' + (index+1)){
-      window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
-    } else{
->>>>>>> 08add70dfff30c2598cda514e54356e147ca8fa6
       console.log('open client profile page');
     }
     if(e['id'] === 'supRepTable2button3_' + (index + 1)){
