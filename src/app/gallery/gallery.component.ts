@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgImageSliderModule, NgImageSliderComponent } from 'ng-image-slider';
+
 
 
 @Component({
@@ -6,18 +8,67 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
 })
-export class GalleryComponent implements OnInit {
-  imagesLength = 7;
-  images: any = [];
+export class GalleryComponent {
 
-  constructor() {
-    for (let i = 1 , j = 0 ; i <= this.imagesLength && j < this.imagesLength ; i++, j++) {
-      const picIndex = i.toString();
-      this.images[j] = picIndex.concat('.JPG');
+  @ViewChild('nav') ds: NgImageSliderComponent;
+    showSlider = true;
+
+    sliderWidth: Number = 940;
+    sliderImageWidth: Number = 300;
+    sliderImageHeight: Number = 225;
+    sliderArrowShow: Boolean = true;
+    sliderInfinite: Boolean = false;
+    sliderImagePopup: Boolean = true;
+    sliderAutoSlide: Boolean = false;
+    sliderSlideImage: Number = 1;
+    sliderAnimationSpeed: any = 1;
+    imageObject: Array<object> = [];
+
+    constructor() {
+        this.setImageObject();
     }
 
-
+    onChangeHandler() {
+        this.setImageObject();
+        this.showSlider = false;
+        setTimeout(() => {
+            this.showSlider = true;
+        }, 10);
     }
 
-  ngOnInit() {}
+    setImageObject() {
+        this.imageObject = [{
+            image: 'assets/img/slider/4.jpg',
+            thumbImage: 'assets/img/slider/4_min.jpeg',
+        }, {
+            image: 'assets/img/slider/5.jpg',
+            thumbImage: 'assets/img/slider/5_min.jpeg'
+        }, {
+            image: 'assets/img/slider/6.jpg',
+            thumbImage: 'assets/img/slider/6_min.jpeg'
+        }, {
+            image: 'assets/img/slider/7.jpg',
+            thumbImage: 'assets/img/slider/7_min.jpeg'
+        }, {
+            image: 'assets/img/slider/8.jpg',
+            thumbImage: 'assets/img/slider/8_min.jpeg'
+        }, {
+            image: 'assets/img/slider/9.jpg',
+            thumbImage: 'assets/img/slider/9_min.jpeg'
+        }];
+    }
+
+    imageOnClick(index) { }
+
+    arrowOnClick(event) { }
+
+    lightboxArrowClick(event) { }
+
+    prevImageClick() {
+      this.ds.prev();
+    }
+
+    nextImageClick() {
+      this.ds.next();
+    }
 }

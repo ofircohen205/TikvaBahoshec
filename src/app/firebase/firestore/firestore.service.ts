@@ -118,7 +118,7 @@ export class FirestoreService {
 
   public updateSupportRep(SupportRepId, name, email, phone) {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepId).update({
-      email ,
+      email,
       name,
       phone
     });
@@ -191,11 +191,11 @@ export class FirestoreService {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
   }
 
-  public updateSupportRepInShif(supportRepId,inShift){
+  public updateSupportRepInShif(supportRepId, inShift) {
     const supportRepData = {
       inShift : inShift
     };
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).update(supportRepData)
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).update(supportRepData);
   }
 
   /* METADATA COLLECTION FUNCTIONS */
