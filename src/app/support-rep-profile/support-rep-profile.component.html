@@ -10,7 +10,8 @@
 
         <ion-card>
             <p text-center> כל השיחות הפתוחות </p>
-          <table id="supReptable1" text-right>
+            <div id="scrollbar1" class="my-custom-scrollbar">
+          <table id="supReptable1" text-right class="table table-bordered table-striped mb-0">
             <thead>
               <tr>
                 <th text-center></th>
@@ -28,14 +29,17 @@
             </tbody> 
 
           </table>
+          </div>
         </ion-card>
 
 
         <ion-card>
             <p text-center>  כל השיחות הפתוחות שלי </p>
+            <div id="scrollbar2" class="my-custom-scrollbar">
           <table id="supReptable2" text-right>
             <thead>
               <tr>
+                <th text-center></th>
                 <th text-center></th>
                 <th text-center></th>
                 <th text-center> סטטוס</th>
@@ -52,6 +56,7 @@
             </tbody> 
 
           </table>
+        </div>
         </ion-card>
 
 
@@ -74,7 +79,7 @@
           <ion-button size="small" color="success" (click)="sortByName(this.nameStatus)">שם </ion-button>
           
          <ion-button size="small" color="success" (click)="sortByDate(this.dateStatus)" >תאריך</ion-button>
-         
+         <div id="scrollbar3" class="my-custom-scrollbar">
           <table id="supReptable3" text-right>  
               <thead>
                 <tr>
@@ -101,7 +106,7 @@
                 </tr>
                 </tbody>
                 </table>
-
+              </div>
         </ion-card>
 
 

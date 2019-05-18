@@ -191,6 +191,13 @@ export class FirestoreService {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
   }
 
+  public updateChatRoomOpenField(chatRoomId,openStatus){
+    const chatRoomData = {
+      open : openStatus
+    };
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
+  }
+
   public updateSupportRepInShif(supportRepId,inShift){
     const supportRepData = {
       inShift : inShift
