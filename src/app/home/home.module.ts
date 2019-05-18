@@ -10,6 +10,8 @@ import { CalenderComponent } from '../calender/calender.component';
 import { GalleryComponent } from '../gallery/gallery.component';
 import { DonateComponent } from '../donate/donate.component';
 import { MainComponent } from '../main/main.component';
+import { NgImageSliderModule } from 'ng-image-slider';
+
 
 
 @NgModule({
@@ -25,8 +27,13 @@ import { MainComponent } from '../main/main.component';
       {
         path: 'story',
         component: StoryComponent
+      },
+      {
+        path: 'calender',
+        component: CalenderComponent
       }
     ]),
+    NgImageSliderModule
   ],
   declarations: [
     HomePage,
