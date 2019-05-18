@@ -151,7 +151,7 @@ export class SupportRepProfileComponent implements OnInit {
         td3.textContent = v.SupportRepName;
       } else {
        // console.log('kaka2');
-        td3.textContent = 'no support name';
+        td3.textContent = '';
       }
       var td4 = document.createElement('td');
       td4.style.border = ' 1px solid #ddd';
@@ -310,11 +310,12 @@ export class SupportRepProfileComponent implements OnInit {
   }
 
   onclickTable1(e,list,index) {
-    var button1 = document.getElementById('supRepTable1button_' + (index+1));
+    if(e.childNodes[1].textContent === 'לא בטיפול'){
     this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
       this.firestore.updateChatRooms(list[index]['ChatRoomId'],result['name'], this.userAuth.auth.currentUser.uid);
       window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     });
+  }
    }
 
    onclickTable2(e,list,index) {
