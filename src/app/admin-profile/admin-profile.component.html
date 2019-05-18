@@ -1,48 +1,3 @@
-<!-- <ion-header>
-  <ion-toolbar text-center> -->
-<!-- <ion-segment>
-      <ion-segment-button value="Logout" (click)="logout()">
-        התנתק
-      </ion-segment-button>
-      <ion-segment-button value="Manage SupportRep" (click)="scrollToElement($event)">
-        רשימת נציגים
-      </ion-segment-button>
-      <ion-segment-button value="Manage Client Stories" (click)="scrollToElement($event)">
-        עריכת סיפורים
-      </ion-segment-button>
-      <ion-segment-button value="Manage Gallery" (click)="scrollToElement($event)">
-        עריכת גלריה
-      </ion-segment-button>
-      <ion-segment-button value="Edit Association Info " (click)="scrollToElement($event)">
-        עריכת מידע
-      </ion-segment-button>
-      <ion-segment-button value="View History Chat" (click)="scrollToElement($event)">
-        היסטורית צ'אט
-      </ion-segment-button>
-      <ion-segment-button value="Edit client profile" (click)="scrollToElement($event)">
-        עריכת פרופיל לקוח
-      </ion-segment-button>
-      <ion-segment-button value="SupportRep Logins" (click)="scrollToElement($event)">
-        התחברות נציגים
-      </ion-segment-button>
-      <ion-segment-button value="Ready for chat" id="readyButton" style=color:red (click)="readyForChat()">
-        "מוכן לשיחה"
-      </ion-segment-button>
-
-    </ion-segment> -->
-
-<!-- <ion-button value="Logout" (click)="logout()">התנתק</ion-button> -->
-<!-- <ion-button value="Manage SupportRep" (click)="scrollToElement($event)">רשימת נציגים</ion-button> -->
-<!-- <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
-    <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
-    <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
-    <ion-button id="ViewHistoryChat" (click)="onClick($event)">הסטוריית צ'אט</ion-button>
-    <ion-button id="EditEvents" (click)="onClick($event)">עריכת ארועים</ion-button>
-    <ion-button id="ShowClient" (click)="onClick($event)">הצג לקוחות</ion-button>
-    <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
-  </ion-toolbar>
-</ion-header> -->
-
 <ion-content>
   <ion-grid>
     <ion-row>
@@ -102,7 +57,7 @@
           <table id="tables" text-center>
             <thead>
               <tr>
-                <th text-center></th>
+                <th text-center>עריכת עדות</th>
                 <th text-center>אושר/לא אושר</th>
                 <th text-center>תאריך העלאה</th>
                 <th text-center>מספר מזהה</th>
@@ -111,37 +66,27 @@
 
             <tbody>
               <tr *ngFor='let story of storiesArray'>
-                <td></td>
-                <td *ngIf='story.approval'> אושר</td>
-                <td *ngIf='!story.approval'> לא אושר</td>
+                <td> <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button><ion-button (click)="editStory(story)">עריכה</ion-button>
+                  <ion-button *ngIf='!story.approved' color="success" (click) = "confirmStory(story)">אשר</ion-button>
+                </td>
+                <td *ngIf='story.approved'> אושר</td>
+                <td *ngIf='!story.approved'> לא אושר</td>
                 <td>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
                 <td>{{story.id}}</td>
               </tr>
 
-
-              <tr>
-                <td>
-                  <ion-button color="danger">הורד</ion-button>
-                  <ion-button>מחק</ion-button>
-                </td>
-                <td>אושר</td>
-                <td>12.4.19 7:45</td>
-                <td> 111111</td>
-
-              </tr>
-              <tr>
-                <td>
-                  <ion-button color="success">אשר</ion-button>
-                  <ion-button>מחק</ion-button>
-                </td>
-                <td>לא אושר</td>
-                <td>10.2.19 14:45</td>
-                <td> 111333</td>
-              </tr>
             </tbody>
           </table>
-        </ion-card>
 
+   
+         <ion-card>
+             <!-- Text editor for the stories -->
+           <ejs-richtexteditor id='defaultRTE' class='none' [(value)]='value' [toolbarSettings]='tools' [quickToolbarSettings]='quickTools' [hidden]="true"></ejs-richtexteditor>
+          <ion-button id= 'save-edit' (click) = "acceptStoryChange()" [hidden]="true" >שמור עריכה</ion-button>
+         </ion-card>
+
+        </ion-card>
+      
 
         <ion-card text-center id="Manage-Gallery" [hidden]="true">
           <p text-center>גלריה </p>

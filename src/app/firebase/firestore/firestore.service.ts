@@ -151,7 +151,14 @@ export class FirestoreService {
   public removeStory(storyId) {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).delete();
   }
+  
+  public editStory(storyId,description){
+    this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({description});
+  }
 
+  public confirmStory(storyId, approved){
+    this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({approved});
+  }
 
   /* METADATA COLLECTION FUNCTIONS */
   public getAnonNumber(): Observable<any> {
