@@ -17,9 +17,9 @@ export class GalleryComponent {
     sliderImageWidth: Number = 300;
     sliderImageHeight: Number = 225;
     sliderArrowShow: Boolean = true;
-    sliderInfinite: Boolean = false;
+    sliderInfinite: Boolean = true;
     sliderImagePopup: Boolean = true;
-    sliderAutoSlide: Boolean = false;
+    sliderAutoSlide: Boolean = true;
     sliderSlideImage: Number = 1;
     sliderAnimationSpeed: any = 1;
     imageObject: Array<object> = [];
