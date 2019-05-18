@@ -1,14 +1,17 @@
 .search{
-   
     width: 30%;
-    
     display: inline-block;
 
 }
 
+.my-custom-scrollbar {
+  position: relative;
+  height: 360px;
+  overflow: auto;
+  display: block;
+  }
 
-
-#supReptable1 {
+#supReptable1  {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
@@ -33,4 +36,68 @@
     color: white;
     
   }
+
+  #supReptable1 tbody{
+    overflow-y: auto
+  }
+
+
+
+  #supReptable2  {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #supReptable2 td, #supReptable2 th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    border-collapse: collapse;
+  }
+  
+  #supReptable2 tr:nth-child(even){background-color: #f2f2f2;};
+  
+  
+  //#supRepTBody1 tr:hover {background-color: #ddd;};
+  
+  #supReptable2 th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+    
+  }
+
+
+  #supReptable3  {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #supReptable3 td, #supReptable3 th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    border-collapse: collapse;
+  }
+  
+  #supReptable3 tr:nth-child(even){background-color: #f2f2f2;};
+  
+  
+  //#supRepTBody1 tr:hover {background-color: #ddd;};
+  
+  #supReptable3 th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+    
+  }
+
+  
+
+
+
 

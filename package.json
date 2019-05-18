@@ -37,6 +37,7 @@
     "firebase": "^5.11.0",
     "fullcalendar": "^3.10.0",
     "ionic-gallery-modal": "^0.2.7",
+    "ng-image-slider": "^1.3.0",
     "ng-simple-slideshow": "^1.2.9",
     "ng2-page-scroll": "^4.0.0-beta.12",
     "rxjs": "~6.3.3",

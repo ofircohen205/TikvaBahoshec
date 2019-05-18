@@ -18,7 +18,10 @@ export class FirestoreService {
 
   // ! CRUD ON EACH COLLECTION - CREATE READ(GET) UPDATE DELETE
 
+
+  /*****************************/
   /* CHAT COLLECTION FUNCTIONS */
+  /*****************************/
   public createChatRoom(username): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
       open: true,
@@ -27,11 +30,12 @@ export class FirestoreService {
       SupportRepName: null,
       ClientID: null,
       ClientName: username,
+      ChatRoomId: null,
       timestamp: new Date().getTime()
     });
   }
 
-  public getChatRoom(chatId) {
+  public getChatRoom(chatId): Observable<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).valueChanges();
   }
 
@@ -39,8 +43,29 @@ export class FirestoreService {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true)).valueChanges();
   }
 
+  public updateChatRooms(chatRoomId, supportRepName, supportRepId): void {
+    const chatRoomData = {
+      occupied : true,
+      SupportRepName : supportRepName,
+      SupportRepID : supportRepId
+    };
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
+  }
+
+  public updateChatRoomOpenField(chatRoomId, openStatus): void {
+    const chatRoomData = {
+      open : openStatus
+    };
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
+  }
+
+  public getSupportRepOpenChatRooms(supportRepId): Observable<any> {
+// tslint:disable-next-line: max-line-length
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true).where('SupportRepID', '==', supportRepId)).valueChanges();
+  }
+
   public getOwnChats(supportRepId): Observable<any> {
-    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('SupportRepID', '==', supportRepId)).get();
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('SupportRepID', '==', supportRepId)).valueChanges();
   }
 
   public getChatMessages(chatId): Observable<any> {
@@ -55,21 +80,28 @@ export class FirestoreService {
     });
   }
 
-  public updateClientId(chatId, ClientID) {
+  public updateClientId(chatId, ClientID): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
   }
 
-  public updateSupportRepId(chatId, SupportRepID) {
+  public updateChatRoomId(chatId): void {
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ChatRoomId: chatId });
+  }
+
+  public updateSupportRepId(chatId, SupportRepID): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ SupportRepID });
   }
 
 
+  /*******************************/
   /* CLIENT COLLECTION FUNCTIONS */
+  /*******************************/
   public createClient(username): Promise<any> {
     return this.firestore.collection(this.CLIENT_COLLECTION).add({
       username,
       location: null,
-      description: null
+      description: null,
+      ClientID: null
     });
   }
 
@@ -77,61 +109,94 @@ export class FirestoreService {
     return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
   }
 
-  public getClients() {
+  public getClients(): Observable<any> {
     return this.firestore.collection(this.CLIENT_COLLECTION).valueChanges();
   }
 
-  public updateClientName(chatId, username) {
+  public updateClientName(chatId, username): void {
     this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ username });
   }
 
-  public updateClientLocation(chatId, location) {
+  public updateClientLocation(chatId, location): void {
     this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ location });
   }
 
-  public updateClientDescription(chatId, description) {
+  public updateClientDescription(chatId, description): void {
     this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ description });
   }
 
 
+  /************************************/
   /* SUPPORT REP COLLECTION FUNCTIONS */
-  public createSupportRep(name, email): void {
+  /************************************/
+  public createSupportRep(name, email, phone): void {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
       email,
       name,
+      phone,
+      inShift: false,
+      SupportRepID: null,
       connectionTime: null
     });
+  }
+
+  public updateSupportRep(SupportRepId, name, email, phone): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepId).update({
+      email,
+      name,
+      phone
+    });
+  }
+
+  public updateSupportRepInShif(supportRepId, inShift): void {
+    const supportRepData = {
+      inShift : inShift
+    };
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).update(supportRepData);
+  }
+
+  public removeSupportRep(supportRepId): void {
+     this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).delete();
   }
 
   public getSupportRepName(supportRepId): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
 
-  public getSupportRepNameList() {
+
+  public getSupportRepNameList(): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
   }
 
-  public getSupportRepIdList() {
+  public getSupportRepIdList(): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
 
+  public getClientName(clientId): Observable<any> {
+    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
+  }
 
+
+  /*********************************/
   /* CALENDER COLLECTION FUNCTIONS */
-  public createEvent(title, date, description) {
+  /*********************************/
+  public createEvent(title, date, description): void {
     this.firestore.collection(this.CALENDER_COLLECTION).add({ title, date, description });
   }
 
-  public getEvents() {
+  public getEvents(): Observable<any> {
     return this.firestore.collection(this.CALENDER_COLLECTION).valueChanges();
   }
 
-  public removeEvent(eventId) {
+  public removeEvent(eventId): void {
     this.firestore.collection(this.CALENDER_COLLECTION).doc(eventId).delete();
   }
 
 
+  /********************************/
   /* STORIES COLLECTION FUNCTIONS */
-  public createStory(title, description) {
+  /********************************/
+  public createStory(title, description): void {
     this.firestore.collection(this.STORIES_COLLECTION).add({
       title,
       description,
@@ -140,15 +205,15 @@ export class FirestoreService {
     });
   }
 
-  public getStories() {
+  public getStories(): Observable<any> {
     return this.firestore.collection(this.STORIES_COLLECTION).valueChanges();
   }
 
-  public getStoriesId() {
+  public getStoriesId(): Observable<any> {
     return this.firestore.collection(this.STORIES_COLLECTION).stateChanges();
   }
 
-  public removeStory(storyId) {
+  public removeStory(storyId): void {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).delete();
   }
   
@@ -160,12 +225,14 @@ export class FirestoreService {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({approved});
   }
 
+  /*********************************/
   /* METADATA COLLECTION FUNCTIONS */
+  /*********************************/
   public getAnonNumber(): Observable<any> {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
   }
 
-  public updateAnonNumber(nextAnonymous) {
+  public updateAnonNumber(nextAnonymous): void {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ nextAnonymous });
   }
 
@@ -173,11 +240,11 @@ export class FirestoreService {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
   }
 
-  public getAboutAssociation() {
+  public getAboutAssociation(): Observable<any> {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
   }
 
-  public updateAboutAssociation(aboutAssociation) {
+  public updateAboutAssociation(aboutAssociation): void {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ aboutAssociation });
   }
 }
