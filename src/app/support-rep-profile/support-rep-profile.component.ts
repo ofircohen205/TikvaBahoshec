@@ -6,6 +6,7 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 
+
 @Component({
   selector: 'app-support-rep-profile',
   templateUrl: './support-rep-profile.component.html',
@@ -22,6 +23,7 @@ export class SupportRepProfileComponent implements OnInit {
   dateStatus = true;
   nameStatus = true;
   myChatsCopy =[]
+  txtMsg =""
   
 
   constructor(
@@ -56,14 +58,14 @@ export class SupportRepProfileComponent implements OnInit {
   });
 
   this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
-      if(result['inShift']){
-        document.getElementById('supportRepreadyButton').textContent = 'במשמרת';
-        document.getElementById('supportRepreadyButton').setAttribute('color' , 'success');
-      } else {
-        document.getElementById('supportRepreadyButton').textContent = 'לא במשמרת';
-        document.getElementById('supportRepreadyButton').setAttribute('color' , 'danger');
-      }
-  });
+    if(result['inShift']){
+      document.getElementById('supportRepreadyButton').textContent = 'במשמרת';
+      document.getElementById('supportRepreadyButton').setAttribute('color' , 'success');
+    } else {
+      document.getElementById('supportRepreadyButton').textContent = 'לא במשמרת';
+      document.getElementById('supportRepreadyButton').setAttribute('color' , 'danger');
+    }
+});
 
   }
 
@@ -76,23 +78,29 @@ export class SupportRepProfileComponent implements OnInit {
     alert.present();
   }
 
-
-
-
-
   async inShift() {
     var readyButton = document.getElementById('supportRepreadyButton');
     if(readyButton.getAttribute('color') === 'danger'){
       if(confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')){
       readyButton.setAttribute('color', 'success');
       readyButton.textContent = 'במשמרת';
+<<<<<<< HEAD
       this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, true);
+=======
+      console.log(this.userAuth.auth.currentUser.uid);
+      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, true)
+>>>>>>> 08add70dfff30c2598cda514e54356e147ca8fa6
       }
     } else {
       if(confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')){
       readyButton.setAttribute('color', 'danger');
       readyButton.textContent = 'לא במשמרת';
+<<<<<<< HEAD
       this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, false);
+=======
+      console.log(this.userAuth.auth.currentUser.uid);
+      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, false)
+>>>>>>> 08add70dfff30c2598cda514e54356e147ca8fa6
 
       }
     }
@@ -326,12 +334,20 @@ export class SupportRepProfileComponent implements OnInit {
    }
 
    onclickTable2(e,list,index) {
+<<<<<<< HEAD
     if(e['id'] === 'supRepTable2button1_' + (index + 1)){
       if(confirm('האם את/ה בטוח/ה רוצה לסגור את השיחה')){
         this.firestore.updateChatRoomOpenField( list[index]['ChatRoomId'], false);
       }
     }
     if(e['id'] === 'supRepTable2button2_' + (index + 1)){
+=======
+    // console.log(e['id']);
+     console.log('supRepTable2button2_' + (index+1));
+    if(e['id'] === 'supRepTable2button2_' + (index+1)){
+      window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+    } else{
+>>>>>>> 08add70dfff30c2598cda514e54356e147ca8fa6
       console.log('open client profile page');
     }
     if(e['id'] === 'supRepTable2button3_' + (index + 1)){
@@ -351,26 +367,33 @@ export class SupportRepProfileComponent implements OnInit {
 
 
     sortByDate(dateStatus){
+    var nameBtn =(<HTMLButtonElement>document.getElementById("dateBtn"))
     if(dateStatus==true){
       this.myChats.sort((a,b)=> (a.timestamp>=b.timestamp)? 1:-1)
       this.dateStatus=false
+      nameBtn.innerHTML ='&#8657;תאריך'
     }
     else{
       this.myChats.sort((a,b)=> (a.timestamp<=b.timestamp)? 1:-1)
     this.dateStatus=true;
+    nameBtn.innerHTML ='&#8659;תאריך'
+    
     }
 }
 
 
 sortByName(nameStatus){
+  var nameBtn =(<HTMLButtonElement>document.getElementById("nameBtn"))
+  console.log (nameBtn)
     if(nameStatus==true){
       this.myChats.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1)
       this.nameStatus=false
+      nameBtn.innerHTML ='&#8657;שם'
     }
     else{
       this.myChats.sort((a,b)=> (a.ClientName<=b.ClientName)? 1:-1)
     this.nameStatus=true;
-
+    nameBtn.innerHTML ='&#8659;שם'
  }
 
 }
@@ -381,7 +404,7 @@ wakeUpDate(){
   var dateTo = document.getElementById("Cdate2");
   (<HTMLInputElement>(dateTo)).value="";
 
-  dateTo.hidden=false;
+  
    dateTo.setAttribute("min",dateFrom);
 
 }
@@ -396,7 +419,7 @@ clearFields(){
   dateFrom.value=""
   dateTo.value =""
   this.myChats = Object.assign([], this.myChatsCopy);
-  dateTo.hidden=true;
+  
  
   }
 
@@ -441,7 +464,31 @@ searchChat(){
 
 
 
+openRoom(roomId){
+window.open('/chat/' +roomId, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
 
+}
+
+downloadChatMsg(roomId){
+  
+this.firestore.getChatMessages(roomId).subscribe(result =>{
+  
+result.forEach(msg=>{
+  
+  this.txtMsg+="From:"+msg.from +" Time:" +new Date(msg.timestamp)
+  this.txtMsg+="\n<"+msg.content +">\n\n"
+  
+})
+console.log("startDownload")
+var link = document.createElement('a');
+link.download = 'Chat:'+roomId+'.txt';
+var blob = new Blob([this.txtMsg], {type: 'text/plain'});
+link.href = window.URL.createObjectURL(blob);
+link.click();
+})
+
+
+}
 
  
 
