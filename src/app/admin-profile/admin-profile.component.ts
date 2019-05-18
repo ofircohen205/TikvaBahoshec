@@ -223,6 +223,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.manageStories();
     }
   }
 
