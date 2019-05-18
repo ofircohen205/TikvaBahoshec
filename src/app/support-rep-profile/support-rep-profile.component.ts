@@ -41,11 +41,9 @@ export class SupportRepProfileComponent implements OnInit {
   ngOnInit() {
     this.firestore.getOpenChatRooms().subscribe(result => {
         this.openChatList = result;
-        console.log(result);
       this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
-    console.log(this.userAuth.auth.currentUser.uid)
     this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result =>{
       
       this.supportRepOpenChatList = result;
@@ -105,7 +103,6 @@ export class SupportRepProfileComponent implements OnInit {
   }
 
   async  createTable1(tbody, list: any[]) {
-    console.log(document.getElementById('supReptable1'));
     var tbodyChildrens = tbody.childNodes;
     var scrollbar1 = document.getElementById('scrollbar1');
     if(list.length>=4){
@@ -261,7 +258,6 @@ export class SupportRepProfileComponent implements OnInit {
       if(v.SupportRepName !== '' && v.SupportRepName !=null){
         td5.textContent = v.SupportRepName;
       } else {
-       // console.log('kaka2');
         td5.textContent = 'no support name';
       }
       var td6 = document.createElement('td');
@@ -274,7 +270,6 @@ export class SupportRepProfileComponent implements OnInit {
       td7.style.border = ' 1px solid #ddd';
       td7.style.padding = '8px';
       td7.style.borderCollapse = 'collapse';
-      // this.firestore.getSupportRepName(v.SupportRepID)
       td7.textContent = v.ClientName;
 
       var td8 = document.createElement('td');
@@ -316,7 +311,6 @@ export class SupportRepProfileComponent implements OnInit {
 
   onclickTable1(e,list,index) {
     var button1 = document.getElementById('supRepTable1button_' + (index+1));
-    console.log(button1);
     this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
       this.firestore.updateChatRooms(list[index]['ChatRoomId'],result['name'], this.userAuth.auth.currentUser.uid);
       window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
@@ -330,7 +324,6 @@ export class SupportRepProfileComponent implements OnInit {
       }
     }
     if(e['id'] === 'supRepTable2button2_' + (index + 1)){
-      console.log('open client profile page');
     }
     if(e['id'] === 'supRepTable2button3_' + (index + 1)){
       window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
@@ -339,8 +332,6 @@ export class SupportRepProfileComponent implements OnInit {
 
    async removeChildren(tbody,tbodyId){
      var size = tbody.childNodes.length;
-     console.log(tbody);
-     console.log(tbodyId);
      var tbody1 = document.getElementById(tbodyId);
      while (tbody1.firstChild) {
       tbody1.removeChild(tbody1.firstChild);
@@ -366,7 +357,6 @@ export class SupportRepProfileComponent implements OnInit {
 
 sortByName(nameStatus){
   var nameBtn =(<HTMLButtonElement>document.getElementById("nameBtn"))
-  console.log (nameBtn)
     if(nameStatus==true){
       this.myChats.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1)
       this.nameStatus=false
