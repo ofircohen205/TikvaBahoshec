@@ -24,9 +24,8 @@
           <table id="tables" text-right>
             <thead>
               <tr>
-                <th text-center>פעולות</th>
-                <th text-center>התחבר לאחרונה</th>               
-                <th text-center>טלפון</th>
+                <th text-center></th>
+                <th text-center>התחבר לאחרונה</th>
                 <th text-center>אימייל</th>
                 <th text-center>שם נציג</th>
 
@@ -37,14 +36,9 @@
             <tbody text-right>
               <tr *ngFor="let x of list">
                 <td>
-                  <ion-button color="danger" (click)="deleteSupport(x)">מחק</ion-button>
-                  <ion-button  (click)="editSupport(x)"> ערוך</ion-button>
-                  <ion-button  (click)="seeChatHistory(x)">הסטוריית שיחות</ion-button>
-                 
-                 
+                  <ion-button color="danger" (click)="deleteSupportRep(x)">מחק</ion-button>
                 </td>
-                <td>{{x.currentTime}}</td>
-                <td>{{x.phone}}</td>
+                <td></td>
                 <td>{{x.email}}</td>
                 <td>{{x.name}}</td>
 
@@ -56,9 +50,8 @@
 
 
         <ion-card text-center id="Manage-Client-Stories" [hidden]="true">
-          <p text-center>רשימת סיפורים </p>
-          <ion-button>הוסף</ion-button>
-
+          <h3 text-center>רשימת סיפורים </h3>
+          <!-- check if need to have an option of adding a story here -->
 
           <table id="tables" text-center>
             <thead>
