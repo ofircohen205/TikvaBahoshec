@@ -36,9 +36,11 @@
             <tbody text-right>
               <tr *ngFor="let x of list">
                 <td>
-                  <ion-button color="danger" (click)="deleteSupportRep(x)">מחק</ion-button>
+                  <ion-button color="danger" (click)="deleteSupport(x)">מחק</ion-button>
+                  <ion-button  (click)="editSupport(x)">ערוך</ion-button>
+                  <ion-button  (click)="showHistory(x)">הצג שיחות</ion-button> 
                 </td>
-                <td></td>
+                <td>{{x.connectionTime}}</td>
                 <td>{{x.email}}</td>
                 <td>{{x.name}}</td>
 
@@ -89,7 +91,7 @@
 
         <ion-card text-center id="Manage-Gallery" [hidden]="true">
           <p>נהל גלריה</p>
-          <input type="file" (change)="addFile($event)"/>
+          <input type="file" (change)="addFile($event)">
           <div>{{ uploadPercent | async }}</div>
           <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
           <ion-button (click)="uploadFile()">הוסף</ion-button>
