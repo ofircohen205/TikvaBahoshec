@@ -5,8 +5,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
 import { FormGroup, FormControl } from '@angular/forms';
-
+import { AngularFireStorage } from '@angular/fire/storage';
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -21,6 +23,9 @@ import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableServ
 export class AdminProfileComponent implements OnInit {
   list = [];
   storiesArray: any = [];
+  file: File;
+  uploadPercent: Observable<number>;
+  downloadURL: Observable<string>;
 
 
   constructor(
@@ -28,6 +33,7 @@ export class AdminProfileComponent implements OnInit {
     private router: Router,
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
+    private afStorage: AngularFireStorage,
     private global: GlobalService
   ) { }
 
@@ -52,7 +58,23 @@ export class AdminProfileComponent implements OnInit {
     });
 
    }
+  addFile(event){
+    this.file = event.target.files[0];
+    console.log(this.file);
+  }
 
+  uploadFile(event) {
+    const filePath = 'images/' + this.file.name;
+    const task = this.afStorage.upload(filePath, this.file);
+
+    // observe percentage changes
+    this.uploadPercent = task.percentageChanges();
+    // get notified when the download URL is available
+    task.snapshotChanges().pipe(
+        finalize(() => console.log(this.file.name + "uploaded successfully") )
+     )
+    .subscribe()
+  }
   async logout() {
     const alert = await this.alertController.create({
       header: 'התנתק',

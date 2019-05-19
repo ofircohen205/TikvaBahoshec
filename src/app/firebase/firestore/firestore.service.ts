@@ -13,7 +13,6 @@ export class FirestoreService {
   readonly MESSAGES_COLLECTION = 'Messages';
   readonly STORIES_COLLECTION = 'Stories';
   readonly SUPPORT_REP_COLLECTION = 'SupportReps';
-
   constructor(private firestore: AngularFirestore) { }
 
   // ! CRUD ON EACH COLLECTION - CREATE READ(GET) UPDATE DELETE
@@ -247,4 +246,6 @@ export class FirestoreService {
   public updateAboutAssociation(aboutAssociation): void {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ aboutAssociation });
   }
+
+
 }
