@@ -8,7 +8,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, findIndex } from 'rxjs/operators';
+import { firestore } from 'firebase';
 
 
 @Component({
@@ -21,7 +22,7 @@ import { finalize } from 'rxjs/operators';
 
 
 export class AdminProfileComponent implements OnInit {
-  list = [];
+  list: any[] = [];
   storiesArray: any = [];
   file: File;
   uploadPercent: Observable<number>;
@@ -38,32 +39,37 @@ export class AdminProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.list = [];
-    this.firestore.getSupportRepIdList().subscribe(result => {
-      result.forEach(ele => {
-      const data = ele.payload.doc.data();
-      const id = ele.payload.doc.id;
-      if (ele.payload.type === 'added') {
-      this.list.push({id, ...data}) ;
-      } else if (ele.payload.type === 'modified') {
-        const index = this.list.findIndex(item => item.id === id);
 
-        // Replace the item by index.
-        this.list.splice(index, 1, {id, ...data});
-      } else {
-        this.list.slice(this.list.indexOf(id), 1);
-      }
-       });
+  }
 
-    });
+    manageSupportReps() {
+      this.list = [];
+      this.firestore.getSupportRepIdList().subscribe(result => {
+        result.forEach(ele => {
+        const data = ele.payload.doc.data();
+        const id = ele.payload.doc.id;
+        if (ele.payload.type === 'added') {
+        this.list.push({id, ...data}) ;
+        } else if (ele.payload.type === 'modified') {
+          const index = this.list.findIndex(item => item.id === id);
+  
+          // Replace the item by index.
+          this.list.splice(index, 1, {id, ...data});
+        } else {
+          this.list.slice(this.list.indexOf(id), 1);
+        }
+         });
+  
+      });
+  
+    }
 
-   }
   addFile(event){
     this.file = event.target.files[0];
     console.log(this.file);
   }
 
-  uploadFile(event) {
+  uploadFile() {
     const filePath = 'images/' + this.file.name;
     const task = this.afStorage.upload(filePath, this.file);
 
@@ -148,7 +154,12 @@ export class AdminProfileComponent implements OnInit {
       },
       {
         text: 'שמור שינויים',
-        handler: data => { this.firestore.updateSupportRep(x.id, data.username, data.email, data.phone); }
+        handler: data => { 
+          this.firestore.updateSupportRep(x.id, data.username, data.email, data.phone);
+          this.list[this.list.indexOf(x)].username = data.username;
+          this.list[this.list.indexOf(x)].email = data.email;
+          this.list[this.list.indexOf(x)].phone = data.phone;
+          }
       }]
     });
     alert.present();
@@ -163,8 +174,8 @@ export class AdminProfileComponent implements OnInit {
         {
            text: 'מחק',
          handler: () => {
-           this.firestore.removeSupportRep(x.id);
-           this.list.splice(this.list.indexOf(x), 1); }
+          this.firestore.removeSupportRep(x.id);
+          this.list.splice(this.list.indexOf(x), 1);}
         }]
     });
     alert.present();
@@ -196,6 +207,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.manageSupportReps();
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;

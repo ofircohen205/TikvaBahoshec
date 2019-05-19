@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Key } from 'protractor';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
+
+ 
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
 
@@ -135,8 +138,9 @@ export class FirestoreService {
       phone,
       inShift: false,
       SupportRepID: null,
-      connectionTime: null
+      connectionTime: null,
     });
+    
   }
 
   public updateSupportRep(SupportRepId, name, email, phone): void {
