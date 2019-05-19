@@ -1,12 +1,15 @@
 .search{
-   
     width: 30%;
-    
     display: inline-block;
 
 }
 
-
+.my-custom-scrollbar {
+  position: relative;
+  height: 360px;
+  overflow: auto;
+  display: block;
+  }
 
 #supReptable1  {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -32,6 +35,10 @@
     background-color: #4CAF50;
     color: white;
     
+  }
+
+  #supReptable1 tbody{
+    overflow-y: auto
   }
 
 
@@ -88,6 +95,8 @@
     color: white;
     
   }
+
+  
 
 
 

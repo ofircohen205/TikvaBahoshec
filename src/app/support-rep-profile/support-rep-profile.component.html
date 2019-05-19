@@ -5,12 +5,13 @@
 
 
         <ion-button style="text-align: center;" style="margin-left:20%" size='large'>התנתק</ion-button>
-        <ion-button size='large' color="danger" style="margin-left:40%" (click)="readyForChatColor(this)">"מוכן לשיחה"
+        <ion-button id="supportRepreadyButton" size='large'color ="danger" style="margin-left:40%" (click)="inShift()">"מוכן לשיחה"
         </ion-button>
 
         <ion-card>
             <p text-center> כל השיחות הפתוחות </p>
-          <table id="supReptable1" text-right>
+            <div id="scrollbar1" class="my-custom-scrollbar">
+          <table id="supReptable1" text-right class="table table-bordered table-striped mb-0">
             <thead>
               <tr>
                 <th text-center></th>
@@ -28,14 +29,17 @@
             </tbody> 
 
           </table>
+          </div>
         </ion-card>
 
 
         <ion-card>
             <p text-center>  כל השיחות הפתוחות שלי </p>
+            <div id="scrollbar2" class="my-custom-scrollbar">
           <table id="supReptable2" text-right>
             <thead>
               <tr>
+                <th text-center></th>
                 <th text-center></th>
                 <th text-center></th>
                 <th text-center> סטטוס</th>
@@ -52,6 +56,7 @@
             </tbody> 
 
           </table>
+        </div>
         </ion-card>
 
 
@@ -59,22 +64,22 @@
           <p text-center> היסטוריית שיחות </p>
           <ion-toolbar>
               
-            <ion-button id="reset" hidden (click)="searchCaht(Name,dateFrom,dateTo,true)">חזור לטבלה המלאה</ion-button>
-            <ion-button (click)="searchCaht(Name,dateFrom,dateTo,false)" >חיפוש</ion-button>
+            <ion-button id="reset" (click)="clearFields()">נקה שדות</ion-button>
+            <ion-button (click)=searchChat()>חיפוש</ion-button>
             
-            <input type="text" style="margin:10px" id="Cname"   [(ngModel)]="Name" placeholder="שם הלקוח" text-right>
+            <input type="text" style="margin:10px" id="Cname"   placeholder="שם הלקוח" text-right>
 
-            <input type="date" id="Cdate2" style="margin:10px" hidden [(ngModel)]="dateTo" text-right>
+            <input type="date" id="Cdate2" style="margin:10px" text-right>החל מ
 
-            <input type="date" id="Cdate1" style="margin:10px" (change)="wakeUpDate(dateFrom)" [(ngModel)]="dateFrom"  text-right>
+            <input type="date" id="Cdate1" style="margin:10px" (change)="wakeUpDate()" text-right>עד
           
             
           </ion-toolbar>
           <p text-center> :מיין לפי </p>
-          <ion-button size="small" color="success" (click)="sortByName(this.nameStatus)">שם </ion-button>
+          <ion-button size="small" color="success" id="nameBtn" (click)="sortByName(this.nameStatus)"> שם  </ion-button>
           
          <ion-button size="small" color="success" (click)="sortByDate(this.dateStatus)" >תאריך</ion-button>
-         
+         <div id="scrollbar3" class="my-custom-scrollbar">
           <table id="supReptable3" text-right>  
               <thead>
                 <tr>
@@ -92,8 +97,8 @@
   
                <tbody text-right id="supRepTBody3">
                  <tr *ngFor ="let i of myChats ; index as j">
-                 <td><ion-button color="success" disabled={{i.open}}>הורד שיחה</ion-button></td>
-                 <td><ion-button color="success" disabled={{!i.open}}>כנס לחדר</ion-button></td>
+                 <td><ion-button id="download" (click)="downloadChatMsg(i.ChatRoomId)" color="success" >הורד שיחה</ion-button></td>
+                 <td><ion-button (click)="openRoom(i.ChatRoomId)" color="success" disabled={{!i.open}}>כנס לחדר</ion-button></td>
                  <td>{{i.open? 'פתוח':'סגור'}}</td>
                  <td>{{!i.ClientName? 'לא הוכנס שם': i.ClientName}}</td>
                  <td>{{i.timestamp | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
@@ -101,7 +106,7 @@
                 </tr>
                 </tbody>
                 </table>
-
+              </div>
         </ion-card>
 
 

@@ -19,8 +19,9 @@ import { finalize } from 'rxjs/operators';
 export class AdminProfileComponent implements OnInit {
     divToShow = '';
     list: any[] = [];
-    file:File;
+    file: File;
     uploadPercent: Observable<number>;
+    downloadURL: Observable<string>;
  
     constructor(
     private alertController: AlertController,
@@ -52,25 +53,23 @@ export class AdminProfileComponent implements OnInit {
      });
 
     }
-    addFile(event){
-        this.file = event.target.files[0];
-    }
-    uploadFile() {
-     
-      console.log(this.file);
-      const filePath = 'images/ ' + this.file.name;
-      console.log(filePath);
-      const fileRef = this.afStorage.ref(filePath);
-      console.log(fileRef);
 
+    addFile(event) {
+      this.file = event.target.files[0];
+      console.log(this.file);
+    }
+
+
+    uploadFile(){
+      const filePath = 'images/' + this.file.name;
       const task = this.afStorage.upload(filePath, this.file);
       console.log(task);
-      
+
       // observe percentage changes
       this.uploadPercent = task.percentageChanges();
       // get notified when the download URL is available
       task.snapshotChanges().pipe(
-          finalize(() => console.log(this.file.name + " upload success"))
+          finalize(() => console.log(this.file.name + "uploaded successfully") )
        )
       .subscribe()
     }

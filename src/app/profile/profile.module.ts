@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
@@ -8,6 +8,8 @@ import { IonicModule } from '@ionic/angular';
 import { ProfilePage } from './profile.page';
 import { AdminProfileComponent } from '../admin-profile/admin-profile.component';
 import { SupportRepProfileComponent } from '../support-rep-profile/support-rep-profile.component';
+
+import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor';
 
 const routes: Routes = [
   {
@@ -21,7 +23,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    RichTextEditorAllModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ProfilePage,
