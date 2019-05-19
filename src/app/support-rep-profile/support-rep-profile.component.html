@@ -76,20 +76,20 @@
             
           </ion-toolbar>
           <p text-center> :מיין לפי </p>
-          <ion-button size="small" color="success" id="nameBtn" (click)="sortByName(this.nameStatus)"> שם  </ion-button>
+          <!-- <ion-button size="small" color="success" id="nameBtn" (click)="sortByName(this.nameStatus)"> שם  </ion-button> -->
           
-         <ion-button size="small" color="success" (click)="sortByDate(this.dateStatus)" >תאריך</ion-button>
+         <!-- <ion-button size="small" color="success"  (click)="sortByDate(this.dateStatus)" >תאריך</ion-button> -->
          <div id="scrollbar3" class="my-custom-scrollbar" >
-          <table id="supReptable3" text-right scrollY="true">  
+          <table class="fixed_header" id="supReptable3" text-right scrollY="true">  
               <thead>
                 <tr >
                   <th text-center></th>
                   <th text-center></th>
-                  <th text-center> מצב החדר</th>
-                  <th text-center> שם הלקוח</th>
-                  <th text-center>שעה ותאריך פתיחת החדר </th>
+                  <th text-center id="stateBtn" class="p" (click)="sortByState(this.stateStatus)">&#8661; מצב החדר</th>
+                  <th text-center id="nameBtn" class="p" (click)="sortByName(this.nameStatus)">&#8661; שם הלקוח</th>
+                  <th text-center id="dateBtn" class="p" (click)="sortByDate(this.dateStatus)"> &#8661; שעה ותאריך פתיחת החדר </th>
                   
-                  <th text-center> מספר </th>
+                  <th text-center>מספר</th>
   
                 </tr>
   
@@ -108,10 +108,7 @@
                 </table>
               </div>
         </ion-card>
-
-
-
-      </ion-col>
+        </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

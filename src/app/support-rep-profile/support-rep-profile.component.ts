@@ -22,6 +22,7 @@ export class SupportRepProfileComponent implements OnInit {
   myChats : any []
   dateStatus = true;
   nameStatus = true;
+  stateStatus = true;
   myChatsCopy =[]
   txtMsg =""
   
@@ -353,18 +354,17 @@ export class SupportRepProfileComponent implements OnInit {
    }
     }
 
-
     sortByDate(dateStatus){
     var nameBtn =(<HTMLButtonElement>document.getElementById("dateBtn"))
     if(dateStatus==true){
       this.myChats.sort((a,b)=> (a.timestamp>=b.timestamp)? 1:-1)
       this.dateStatus=false
-      nameBtn.innerHTML ='&#8657;תאריך'
+      nameBtn.innerHTML ='&#8657; שעה ותאריך פתיחת החדר'
     }
     else{
       this.myChats.sort((a,b)=> (a.timestamp<=b.timestamp)? 1:-1)
     this.dateStatus=true;
-    nameBtn.innerHTML ='&#8659;תאריך'
+    nameBtn.innerHTML ='&#8659; שעה ותאריך פתיחת החדר'
     
     }
 }
@@ -375,12 +375,28 @@ sortByName(nameStatus){
     if(nameStatus==true){
       this.myChats.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1)
       this.nameStatus=false
-      nameBtn.innerHTML ='&#8657;שם'
+      nameBtn.innerHTML ='&#8657; שם הלקוח'
     }
     else{
       this.myChats.sort((a,b)=> (a.ClientName<=b.ClientName)? 1:-1)
     this.nameStatus=true;
-    nameBtn.innerHTML ='&#8659;שם'
+    nameBtn.innerHTML ='&#8659; שם הלקוח'
+ }
+
+}
+
+
+sortByState(stateStatus){
+  var stateBtn =(<HTMLButtonElement>document.getElementById("stateBtn"))
+    if(stateStatus==true){
+      this.myChats.sort((a,b)=>a.open-b.open)
+      this.stateStatus=false
+      stateBtn.innerHTML ='&#8657; מצב החדר'
+    }
+    else{
+      this.myChats.sort((a,b)=>b.open-a.open)
+    this.stateStatus=true;
+    stateBtn.innerHTML ='&#8659; מצב החדר'
  }
 
 }
