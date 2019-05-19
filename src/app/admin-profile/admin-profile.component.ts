@@ -4,7 +4,9 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
-import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
+import { FormGroup, FormControl } from '@angular/forms';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
@@ -13,23 +15,26 @@ import { finalize } from 'rxjs/operators';
   selector: 'app-admin-profile',
   templateUrl: './admin-profile.component.html',
   styleUrls: ['./admin-profile.component.scss'],
+
+  providers: [ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService],
 })
 
 
 export class AdminProfileComponent implements OnInit {
-    divToShow = '';
-    list: any[] = [];
-    file: File;
-    uploadPercent: Observable<number>;
-    downloadURL: Observable<string>;
- 
-    constructor(
+  list = [];
+  storiesArray: any = [];
+  file: File;
+  uploadPercent: Observable<number>;
+  downloadURL: Observable<string>;
+
+
+  constructor(
     private alertController: AlertController,
     private router: Router,
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
     private afStorage: AngularFireStorage,
-    private global: GlobalService,
+    private global: GlobalService
   ) { }
 
   ngOnInit() {
@@ -50,31 +55,27 @@ export class AdminProfileComponent implements OnInit {
       }
        });
 
-     });
+    });
 
-    }
+   }
+  addFile(event){
+    this.file = event.target.files[0];
+    console.log(this.file);
+  }
 
-    addFile(event) {
-      this.file = event.target.files[0];
-      console.log(this.file);
-    }
+  uploadFile(event) {
+    const filePath = 'images/' + this.file.name;
+    const task = this.afStorage.upload(filePath, this.file);
 
-
-    uploadFile(){
-      const filePath = 'images/' + this.file.name;
-      const task = this.afStorage.upload(filePath, this.file);
-      console.log(task);
-
-      // observe percentage changes
-      this.uploadPercent = task.percentageChanges();
-      // get notified when the download URL is available
-      task.snapshotChanges().pipe(
-          finalize(() => console.log(this.file.name + "uploaded successfully") )
-       )
-      .subscribe()
-    }
-
-    async logout() {
+    // observe percentage changes
+    this.uploadPercent = task.percentageChanges();
+    // get notified when the download URL is available
+    task.snapshotChanges().pipe(
+        finalize(() => console.log(this.file.name + "uploaded successfully") )
+     )
+    .subscribe()
+  }
+  async logout() {
     const alert = await this.alertController.create({
       header: 'התנתק',
       message: 'אתה עומד להתנתק עכשיו',
@@ -173,10 +174,8 @@ export class AdminProfileComponent implements OnInit {
     this.global.readyForChat();
   }
 
-  scrollToElement(e): void {
-    this.global.scrollToElement(e.target.value);
-  }
-
+/*******************************************AdminProfile components performance******************************************************/
+  //shows the component of the selected button
   onClick(e): void {
     const targetId = e.target.id;
     console.log(targetId);
@@ -245,9 +244,115 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.manageStories();
     }
   }
 
+  /*******************************************Stories Management*******************************************************************/
+  manageStories() {
+    this.firestore.getStoriesId().subscribe(results => {
+      results.forEach(result => {
+        const id = result.payload.doc.id;
+        const data = result.payload.doc.data();
+        const timestampDate = data['date']['seconds'];   //save the date as timestamp
+        const stringDate = new Date(timestampDate * 1000).toDateString();  //save the date as a regular date form
+        //const approval = data['approved'];
+
+        this.storiesArray.push({stringDate, id, ...data });
+        console.log(this.storiesArray);
+      });
+
+      this.storiesArray.sort((s1, s2) => {
+        if (s1['date']['seconds'] > s2['date']['seconds']) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+    });
+
+  }
+
+  //variables for the text editor
+  public value: string =
+  `<br/>
+  כתוב על המקרה שלך כאן`
+
+  public tools: object = {
+    items: ['Undo', 'Redo', '|',
+      'Bold', 'Italic', 'Underline', 'StrikeThrough', '|',
+      'FontName', 'FontSize', 'FontColor', 'BackgroundColor', '|',
+      /*'SubScript', 'SuperScript', '|',
+      'LowerCase', 'UpperCase', '|',*/
+      'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
+      'Indent', 'Outdent', '|', 'CreateLink', 'CreateTable',
+      'Image', '|', 'ClearFormat',/* 'Print',*/ 'SourceCode', '|', 'FullScreen']
+  };
+  public quickTools: object = {
+    image: [
+      'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
+  };
+
+
+  editStory(story) {
+    document.getElementById('save-edit').hidden = false;
+    document.getElementById('defaultRTE').hidden = false;
+    document.getElementById('defaultRTE').className = story.id;
+    for (let i = 0; i < this.storiesArray.length; i++) {
+      if (story.id === this.storiesArray[i].id)
+      {
+        this.value = this.storiesArray[i].description;  //edit the story
+      }
+    }
+  }
+
+//delete the story from firebase and from the array of stories
+  deleteStory(story){
+    for (let i = 0; i < this.storiesArray.length; i++) {
+        if (story.id === this.storiesArray[i].id){
+          for (let j = i+1; j < this.storiesArray.length; j++) {  //the remove from the array doesn't work well
+              this.storiesArray[j-1] = this.storiesArray[j];
+              this.storiesArray[j] = null;
+          }
+          this.firestore.removeStory(this.storiesArray[i].id);
+        }
+    }
+  }
+
+  //to confirm the story can be uploaded to the website
+  confirmStory(story) {
+    for (let i = 0; i < this.storiesArray.length; i++) {
+      if (story.id === this.storiesArray[i].id){
+        this.storiesArray[i].approved = true;
+        this.firestore.confirmStory(this.storiesArray[i].id, true);
+      }
+    } 
+  }
+
+  //after the story was edited, we save the changes in it
+  acceptStoryChange() {
+    let storyId = document.getElementById('defaultRTE').className, areEquals : number;
+    for (let i = 0; i < this.storiesArray.length; i++) {
+      areEquals = this.strcmp(storyId, i);
+      if (areEquals === 0){
+        this.storiesArray[i].description = this.value;
+        this.firestore.editStory(this.storiesArray[i].id, this.value);
+        break;
+      }
+    }
+    alert("יש ללחוץ בטבלה על הכפתור 'אשר' עבור העדות הרצויה");
+    document.getElementById('defaultRTE').hidden = true;
+    document.getElementById('save-edit').hidden = true;
+  }
+
+  //compare 2 strings
+  private strcmp(storyId, i){         
+    for (let j=0,n=20; j < n; j++){
+      if (storyId.toString().charAt(j) !== this.storiesArray[i].id.toString().charAt(j))
+        return -1;
+    }
+    return 0;
+  }
+/*********************************************************************************************************************************/
+
 }
-
-

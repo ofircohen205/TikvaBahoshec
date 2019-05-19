@@ -89,7 +89,7 @@
 
         <ion-card text-center id="Manage-Gallery" [hidden]="true">
           <p>נהל גלריה</p>
-          <input type="file" (change)="addFile($event)" />
+          <input type="file" (change)="addFile($event)"/>
           <div>{{ uploadPercent | async }}</div>
           <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
           <ion-button (click)="uploadFile()">הוסף</ion-button>
