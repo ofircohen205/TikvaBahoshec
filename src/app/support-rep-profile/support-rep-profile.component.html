@@ -4,7 +4,7 @@
       <ion-col size='12'>
 
 
-        <ion-button style="text-align: center;" style="margin-left:20%" size='large'>התנתק</ion-button>
+        <ion-button style="text-align: center;" style="margin-left:20%" size='large' (click)="logOut()">התנתק</ion-button>
         <ion-button id="supportRepreadyButton" size='large'color ="danger" style="margin-left:40%" (click)="inShift()">"מוכן לשיחה"
         </ion-button>
 
@@ -79,10 +79,10 @@
           <ion-button size="small" color="success" id="nameBtn" (click)="sortByName(this.nameStatus)"> שם  </ion-button>
           
          <ion-button size="small" color="success" (click)="sortByDate(this.dateStatus)" >תאריך</ion-button>
-         <div id="scrollbar3" class="my-custom-scrollbar">
-          <table id="supReptable3" text-right>  
+         <div id="scrollbar3" class="my-custom-scrollbar" >
+          <table id="supReptable3" text-right scrollY="true">  
               <thead>
-                <tr>
+                <tr >
                   <th text-center></th>
                   <th text-center></th>
                   <th text-center> מצב החדר</th>

@@ -53,6 +53,13 @@ export class SupportRepProfileComponent implements OnInit {
     this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.myChats = result;
       this.myChatsCopy = result;
+      var scroll  = document.getElementById('scrollbar3')
+      if(this.myChats.length>=4){
+        scroll.style.height ='300px' 
+        
+      }
+        else
+        scroll.style.height ='200px'  
   });
 
   this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
@@ -67,11 +74,20 @@ export class SupportRepProfileComponent implements OnInit {
 
   }
 
-  async logout() {
+  async logOut() {
     const alert = await this.alertController.create({
       header: 'התנתק',
       message: 'אתה עומד להתנתק עכשיו',
-      buttons: ['סלמתאק', 'לא לא']
+      buttons: [{
+        text: 'המשך',
+        handler: () => {
+          this.userAuth.auth.signOut().then(() => {
+            this.router.navigateByUrl('/home');
+          }).catch((error) => console.log(error));
+        }
+      }, {
+        text: 'עדיין לא'
+      }]
     });
     alert.present();
   }
@@ -98,9 +114,7 @@ export class SupportRepProfileComponent implements OnInit {
     this.global.scrollToElement(e);
   }
 
-  readyForChatColor(e) {
-
-  }
+  
 
   async  createTable1(tbody, list: any[]) {
     var tbodyChildrens = tbody.childNodes;
