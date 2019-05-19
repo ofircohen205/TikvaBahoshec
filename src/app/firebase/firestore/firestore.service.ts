@@ -13,7 +13,6 @@ export class FirestoreService {
   readonly MESSAGES_COLLECTION = 'Messages';
   readonly STORIES_COLLECTION = 'Stories';
   readonly SUPPORT_REP_COLLECTION = 'SupportReps';
-
   constructor(private firestore: AngularFirestore) { }
 
   // ! CRUD ON EACH COLLECTION - CREATE READ(GET) UPDATE DELETE
@@ -217,6 +216,13 @@ export class FirestoreService {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).delete();
   }
 
+  public editStory(storyId, description) {
+    this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({description});
+  }
+
+  public confirmStory(storyId, approved) {
+    this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({approved});
+  }
 
   /*********************************/
   /* METADATA COLLECTION FUNCTIONS */
@@ -240,4 +246,6 @@ export class FirestoreService {
   public updateAboutAssociation(aboutAssociation): void {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ aboutAssociation });
   }
+
+
 }
