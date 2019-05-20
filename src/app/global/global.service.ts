@@ -70,4 +70,23 @@ export class GlobalService {
     element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'start'});
   }
 
+
+  async logout() {
+    const alert = await this.alertController.create({
+      header: 'התנתק',
+      message: 'אתה עומד להתנתק עכשיו',
+      buttons: [{
+        text: 'המשך',
+        handler: () => {
+          this.userAuth.auth.signOut().then(() => {
+            this.router.navigateByUrl('/home');
+          }).catch((error) => console.log(error));
+        }
+      }, {
+        text: 'עדיין לא'
+      }]
+    });
+    alert.present();
+  }
+
 }

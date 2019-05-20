@@ -10,22 +10,21 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 @Component({
   selector: 'app-support-rep-profile',
   templateUrl: './support-rep-profile.component.html',
-  styleUrls: ['./support-rep-profile.component.scss'],
-  
+  styleUrls: ['./support-rep-profile.component.scss']
 })
 
 export class SupportRepProfileComponent implements OnInit {
   chatReadyStatus = false;
   openChatList: any = [];
   supportRepOpenChatList: any = [];
-  rooms: any[] = []
-  myChats : any []
+  rooms: any[] = [];
+  myChats: any [];
   dateStatus = true;
   nameStatus = true;
   stateStatus = true;
-  myChatsCopy =[]
-  txtMsg =""
-  
+  myChatsCopy = [];
+  txtMsg = '';
+
 
   constructor(
     private alertController: AlertController,
@@ -33,8 +32,6 @@ export class SupportRepProfileComponent implements OnInit {
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
     private global: GlobalService
-
-
   ) {
 
   }
@@ -45,10 +42,9 @@ export class SupportRepProfileComponent implements OnInit {
       this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
-    this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result =>{
-      
+    this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.supportRepOpenChatList = result;
-      this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList); 
+      this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList);
     });
 
     this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
@@ -75,22 +71,8 @@ export class SupportRepProfileComponent implements OnInit {
 
   }
 
-  async logOut() {
-    const alert = await this.alertController.create({
-      header: 'התנתק',
-      message: 'אתה עומד להתנתק עכשיו',
-      buttons: [{
-        text: 'המשך',
-        handler: () => {
-          this.userAuth.auth.signOut().then(() => {
-            this.router.navigateByUrl('/home');
-          }).catch((error) => console.log(error));
-        }
-      }, {
-        text: 'עדיין לא'
-      }]
-    });
-    alert.present();
+  logOut() {
+    this.global.logout();
   }
 
   async inShift() {

@@ -6,10 +6,10 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AngularFireStorage } from '@angular/fire/storage';
+// tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Observable } from 'rxjs';
 import { finalize, findIndex } from 'rxjs/operators';
-import { firestore } from 'firebase';
 
 
 @Component({
@@ -22,11 +22,6 @@ import { firestore } from 'firebase';
 
 
 export class AdminProfileComponent implements OnInit {
-  list: any[] = [];
-  storiesArray: any = [];
-  file: File;
-  uploadPercent: Observable<number>;
-  downloadURL: Observable<string>;
 
 
   constructor(
@@ -37,9 +32,37 @@ export class AdminProfileComponent implements OnInit {
     private afStorage: AngularFireStorage,
     private global: GlobalService
   ) { }
+  list: any[] = [];
+  storiesArray: any = [];
+  file: File;
+  uploadPercent: Observable<number>;
+  downloadURL: Observable<string>;
 
-  ngOnInit() {
+  // variables for the text editor
+// tslint:disable-next-line: member-ordering
+  public value =
+  `<br/>
+  כתוב על המקרה שלך כאן`;
 
+  public tools: object = {
+    items: ['Undo', 'Redo', '|',
+      'Bold', 'Italic', 'Underline', 'StrikeThrough', '|',
+      'FontName', 'FontSize', 'FontColor', 'BackgroundColor', '|',
+      /*'SubScript', 'SuperScript', '|',
+      'LowerCase', 'UpperCase', '|',*/
+      'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
+      'Indent', 'Outdent', '|', 'CreateLink', 'CreateTable',
+      'Image', '|', 'ClearFormat', /* 'Print',*/ 'SourceCode', '|', 'FullScreen']
+  };
+  public quickTools: object = {
+    image: [
+      'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
+  };
+
+  ngOnInit() { }
+
+  logout() {
+    this.global.logout();
   }
 
     manageSupportReps() {
@@ -52,52 +75,17 @@ export class AdminProfileComponent implements OnInit {
         this.list.push({id, ...data}) ;
         } else if (ele.payload.type === 'modified') {
           const index = this.list.findIndex(item => item.id === id);
-  
+
           // Replace the item by index.
           this.list.splice(index, 1, {id, ...data});
         } else {
           this.list.slice(this.list.indexOf(id), 1);
         }
          });
-  
+
       });
-  
+
     }
-
-  addFile(event){
-    this.file = event.target.files[0];
-    console.log(this.file);
-  }
-
-  uploadFile() {
-    const filePath = 'images/' + this.file.name;
-    const task = this.afStorage.upload(filePath, this.file);
-
-    // observe percentage changes
-    this.uploadPercent = task.percentageChanges();
-    // get notified when the download URL is available
-    task.snapshotChanges().pipe(
-        finalize(() => console.log(this.file.name + "uploaded successfully") )
-     )
-    .subscribe()
-  }
-  async logout() {
-    const alert = await this.alertController.create({
-      header: 'התנתק',
-      message: 'אתה עומד להתנתק עכשיו',
-      buttons: [{
-        text: 'המשך',
-        handler: () => {
-          this.userAuth.auth.signOut().then(() => {
-            this.router.navigateByUrl('/home');
-          }).catch((error) => console.log(error));
-        }
-      }, {
-        text: 'עדיין לא'
-      }]
-    });
-    alert.present();
-  }
 
   async addSupport() {
     const alert = await this.alertController.create({
@@ -154,7 +142,7 @@ export class AdminProfileComponent implements OnInit {
       },
       {
         text: 'שמור שינויים',
-        handler: data => { 
+        handler: data => {
           this.firestore.updateSupportRep(x.id, data.username, data.email, data.phone);
           this.list[this.list.indexOf(x)].username = data.username;
           this.list[this.list.indexOf(x)].email = data.email;
@@ -172,10 +160,10 @@ export class AdminProfileComponent implements OnInit {
       buttons: [
         { text: 'חזור'},
         {
-           text: 'מחק',
-         handler: () => {
+          text: 'מחק',
+          handler: () => {
           this.firestore.removeSupportRep(x.id);
-          this.list.splice(this.list.indexOf(x), 1);}
+          this.list.splice(this.list.indexOf(x), 1); }
         }]
     });
     alert.present();
@@ -186,7 +174,7 @@ export class AdminProfileComponent implements OnInit {
   }
 
 /*******************************************AdminProfile components performance******************************************************/
-  //shows the component of the selected button
+  // shows the component of the selected button
   onClick(e): void {
     const targetId = e.target.id;
     console.log(targetId);
@@ -266,9 +254,9 @@ export class AdminProfileComponent implements OnInit {
       results.forEach(result => {
         const id = result.payload.doc.id;
         const data = result.payload.doc.data();
-        const timestampDate = data['date']['seconds'];   //save the date as timestamp
-        const stringDate = new Date(timestampDate * 1000).toDateString();  //save the date as a regular date form
-        //const approval = data['approved'];
+        const timestampDate = data['date']['seconds'];   // save the date as timestamp
+        const stringDate = new Date(timestampDate * 1000).toDateString();  // save the date as a regular date form
+        // const approval = data['approved'];
 
         this.storiesArray.push({stringDate, id, ...data });
         console.log(this.storiesArray);
@@ -285,45 +273,24 @@ export class AdminProfileComponent implements OnInit {
 
   }
 
-  //variables for the text editor
-  public value: string =
-  `<br/>
-  כתוב על המקרה שלך כאן`
-
-  public tools: object = {
-    items: ['Undo', 'Redo', '|',
-      'Bold', 'Italic', 'Underline', 'StrikeThrough', '|',
-      'FontName', 'FontSize', 'FontColor', 'BackgroundColor', '|',
-      /*'SubScript', 'SuperScript', '|',
-      'LowerCase', 'UpperCase', '|',*/
-      'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
-      'Indent', 'Outdent', '|', 'CreateLink', 'CreateTable',
-      'Image', '|', 'ClearFormat',/* 'Print',*/ 'SourceCode', '|', 'FullScreen']
-  };
-  public quickTools: object = {
-    image: [
-      'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
-  };
-
 
   editStory(story) {
     document.getElementById('save-edit').hidden = false;
     document.getElementById('defaultRTE').hidden = false;
     document.getElementById('defaultRTE').className = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id)
-      {
-        this.value = this.storiesArray[i].description;  //edit the story
+      if (story.id === this.storiesArray[i].id) {
+        this.value = this.storiesArray[i].description;  // edit the story
       }
     }
   }
 
-//delete the story from firebase and from the array of stories
-  deleteStory(story){
+  // delete the story from firebase and from the array of stories
+  deleteStory(story) {
     for (let i = 0; i < this.storiesArray.length; i++) {
-        if (story.id === this.storiesArray[i].id){
-          for (let j = i+1; j < this.storiesArray.length; j++) {  //the remove from the array doesn't work well
-              this.storiesArray[j-1] = this.storiesArray[j];
+        if (story.id === this.storiesArray[i].id) {
+          for (let j = i + 1; j < this.storiesArray.length; j++) {  // the remove from the array doesn't work well
+              this.storiesArray[j - 1] = this.storiesArray[j];
               this.storiesArray[j] = null;
           }
           this.firestore.removeStory(this.storiesArray[i].id);
@@ -331,40 +298,68 @@ export class AdminProfileComponent implements OnInit {
     }
   }
 
-  //to confirm the story can be uploaded to the website
+  // to confirm the story can be uploaded to the website
   confirmStory(story) {
     for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id){
+      if (story.id === this.storiesArray[i].id) {
         this.storiesArray[i].approved = true;
         this.firestore.confirmStory(this.storiesArray[i].id, true);
       }
-    } 
+    }
   }
 
-  //after the story was edited, we save the changes in it
+  // after the story was edited, we save the changes in it
   acceptStoryChange() {
-    let storyId = document.getElementById('defaultRTE').className, areEquals : number;
+    const storyId = document.getElementById('defaultRTE').className;
+    let areEquals: number;
     for (let i = 0; i < this.storiesArray.length; i++) {
       areEquals = this.strcmp(storyId, i);
-      if (areEquals === 0){
+      if (areEquals === 0) {
         this.storiesArray[i].description = this.value;
         this.firestore.editStory(this.storiesArray[i].id, this.value);
         break;
       }
     }
-    alert("יש ללחוץ בטבלה על הכפתור 'אשר' עבור העדות הרצויה");
+    alert('יש ללחוץ בטבלה על הכפתור \'אשר\' עבור העדות הרצויה');
     document.getElementById('defaultRTE').hidden = true;
     document.getElementById('save-edit').hidden = true;
   }
 
-  //compare 2 strings
-  private strcmp(storyId, i){         
-    for (let j=0,n=20; j < n; j++){
-      if (storyId.toString().charAt(j) !== this.storiesArray[i].id.toString().charAt(j))
+  // compare 2 strings
+  private strcmp(storyId, i) {
+    for (let j = 0, n = 20; j < n; j++) {
+      if (storyId.toString().charAt(j) !== this.storiesArray[i].id.toString().charAt(j)) {
         return -1;
+      }
     }
     return 0;
   }
 /*********************************************************************************************************************************/
+
+  /*******************************************Gallery Management*******************************************************************/
+  addFile(event) {
+    this.file = event.target.files[0];
+    console.log(this.file);
+
+    let reader = new FileReader();
+    
+  }
+
+  uploadFile() {
+    const filePath = 'assets/images/' + this.file.name;
+    const minifiedFilePath = 'assets/images/' + this.file.name + '_min';
+    const task = this.afStorage.upload(filePath, this.file);
+
+    // observe percentage changes
+    this.uploadPercent = task.percentageChanges();
+    // get notified when the download URL is available
+    task.snapshotChanges().pipe( finalize(() => {
+      console.log(this.file.name + 'uploaded successfully');
+    })).subscribe();
+  }
+
+  getFileList() {
+
+  }
 
 }

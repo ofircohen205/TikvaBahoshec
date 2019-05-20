@@ -21,7 +21,7 @@ export class GalleryComponent {
     sliderImagePopup: Boolean = true;
     sliderAutoSlide: Boolean = true;
     sliderSlideImage: Number = 1;
-    sliderAnimationSpeed: any = 1;
+    sliderAnimationSpeed: any = 3;
     imageObject: Array<object> = [];
 
     constructor() {

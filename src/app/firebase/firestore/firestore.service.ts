@@ -5,7 +5,7 @@ import { Key } from 'protractor';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 
- 
+
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
 
@@ -140,7 +140,7 @@ export class FirestoreService {
       SupportRepID: null,
       connectionTime: null,
     });
-    
+
   }
 
   public updateSupportRep(SupportRepId, name, email, phone): void {
