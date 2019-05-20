@@ -143,10 +143,7 @@ export class AdminProfileComponent implements OnInit {
       {
         text: 'שמור שינויים',
         handler: data => {
-          this.firestore.updateSupportRepID(x.id);
-          this.firestore.updateSupportRepName(x.id, data.username);
-          this.firestore.updateSupportRepEmail(x.id, data.email);
-          this.firestore.updateSupportRepPhone(x.id, data.phone);
+          this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone);
           this.list[this.list.indexOf(x)].username = data.username;
           this.list[this.list.indexOf(x)].email = data.email;
           this.list[this.list.indexOf(x)].phone = data.phone;
@@ -347,8 +344,8 @@ export class AdminProfileComponent implements OnInit {
   }
 
   uploadFile() {
-    let fileName = this.file.name;
-    let fileNameArr = fileName.split('.');
+    const fileName = this.file.name;
+    const fileNameArr = fileName.split('.');
     fileNameArr.splice(1, 0, '_min');
     fileNameArr.splice(2, 0, '.');
     const minFileName = 'assets/images/' + fileNameArr.join('');
