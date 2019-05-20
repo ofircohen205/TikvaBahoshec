@@ -82,7 +82,7 @@ export class FirestoreService {
     });
   }
 
-  public updateClientId(chatId, ClientID): void {
+  public updateChatClientId(chatId, ClientID): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
   }
 
@@ -90,7 +90,7 @@ export class FirestoreService {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ChatRoomId: chatId });
   }
 
-  public updateSupportRepId(chatId, SupportRepID): void {
+  public updateChatSupportRepId(chatId, SupportRepID): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ SupportRepID });
   }
 
@@ -107,12 +107,12 @@ export class FirestoreService {
     });
   }
 
-  public getUserName(clientId): Observable<any> {
-    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
-  }
-
   public getClients(): Observable<any> {
     return this.firestore.collection(this.CLIENT_COLLECTION).valueChanges();
+  }
+
+  public getClientName(clientId): Observable<any> {
+    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
   }
 
   public updateClientName(chatId, username): void {
@@ -140,32 +140,11 @@ export class FirestoreService {
       SupportRepID: null,
       connectionTime: null,
     });
-
-  }
-
-  public updateSupportRep(SupportRepId, name, email, phone): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepId).update({
-      email,
-      name,
-      phone
-    });
-  }
-
-  public updateSupportRepInShif(supportRepId, inShift): void {
-    const supportRepData = {
-      inShift : inShift
-    };
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).update(supportRepData);
-  }
-
-  public removeSupportRep(supportRepId): void {
-     this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).delete();
   }
 
   public getSupportRepName(supportRepId): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
-
 
   public getSupportRepNameList(): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
@@ -175,8 +154,31 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
 
-  public getClientName(clientId): Observable<any> {
-    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
+  public updateSupportRepEmail(SupportRepID, email): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ email });
+  }
+
+  public updateSupportRepName(SupportRepID, name): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ name });
+  }
+
+  public updateSupportRepPhone(SupportRepID, phone): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ phone });
+  }
+
+  public updateSupportRepID(SupportRepID): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID });
+  }
+
+  public updateSupportRepInShift(supportRepId, inShift): void {
+    const supportRepData = {
+      inShift : inShift
+    };
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).update(supportRepData);
+  }
+
+  public removeSupportRep(supportRepId): void {
+     this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).delete();
   }
 
 
@@ -242,14 +244,5 @@ export class FirestoreService {
   public checkIfAdmin(supportRepId): Observable<any> {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
   }
-
-  public getAboutAssociation(): Observable<any> {
-    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
-  }
-
-  public updateAboutAssociation(aboutAssociation): void {
-    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ aboutAssociation });
-  }
-
 
 }

@@ -81,13 +81,13 @@ export class SupportRepProfileComponent implements OnInit {
       if(confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')){
       readyButton.setAttribute('color', 'success');
       readyButton.textContent = 'במשמרת';
-      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, true);
+      this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, true);
       }
     } else {
       if(confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')){
       readyButton.setAttribute('color', 'danger');
       readyButton.textContent = 'לא במשמרת';
-      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, false);
+      this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, false);
 
       }
     }

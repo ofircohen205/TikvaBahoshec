@@ -143,7 +143,10 @@ export class AdminProfileComponent implements OnInit {
       {
         text: 'שמור שינויים',
         handler: data => {
-          this.firestore.updateSupportRep(x.id, data.username, data.email, data.phone);
+          this.firestore.updateSupportRepID(x.id);
+          this.firestore.updateSupportRepName(x.id, data.username);
+          this.firestore.updateSupportRepEmail(x.id, data.email);
+          this.firestore.updateSupportRepPhone(x.id, data.phone);
           this.list[this.list.indexOf(x)].username = data.username;
           this.list[this.list.indexOf(x)].email = data.email;
           this.list[this.list.indexOf(x)].phone = data.phone;
@@ -340,14 +343,16 @@ export class AdminProfileComponent implements OnInit {
   addFile(event) {
     this.file = event.target.files[0];
     console.log(this.file);
-
-    let reader = new FileReader();
-    
+    this.getFile();
   }
 
   uploadFile() {
+    let fileName = this.file.name;
+    let fileNameArr = fileName.split('.');
+    fileNameArr.splice(1, 0, '_min');
+    fileNameArr.splice(2, 0, '.');
+    const minFileName = 'assets/images/' + fileNameArr.join('');
     const filePath = 'assets/images/' + this.file.name;
-    const minifiedFilePath = 'assets/images/' + this.file.name + '_min';
     const task = this.afStorage.upload(filePath, this.file);
 
     // observe percentage changes
@@ -358,8 +363,9 @@ export class AdminProfileComponent implements OnInit {
     })).subscribe();
   }
 
-  getFileList() {
-
+  getFile() {
+    const storageRef = this.afStorage.ref('assets/images/1.JPG');
+    storageRef.getMetadata().subscribe(result => console.log(result));
   }
 
 }

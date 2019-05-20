@@ -12,9 +12,6 @@ import { GlobalService } from '../global/global.service';
 })
 export class MainComponent implements OnInit {
 
-  aboutAssociation = '';
-  anonymousNumber = -1;
-
   constructor(
     private alertController: AlertController,
     private userAuth: AngularFireAuth,
@@ -23,10 +20,7 @@ export class MainComponent implements OnInit {
     private global: GlobalService
     ) { }
 
-  ngOnInit() {
-    this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result['nextAnonymous']);
-    this.firestore.getAboutAssociation().subscribe(result => this.aboutAssociation = result['aboutAssociation']);
-  }
+  ngOnInit() { }
 
   userDetails() {
     this.global.userDetails();
