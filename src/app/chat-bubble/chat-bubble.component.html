@@ -5,7 +5,7 @@
       <ion-card-title text-right>{{data.content}}</ion-card-title>
     </ion-card-header>
     <ion-card-content text-right>
-      {{ messageTime }}
+      {{ data.from }}, {{ messageTime }}
     </ion-card-content>
   </ion-card>
 </ng-template>
@@ -15,7 +15,7 @@
       <ion-card-title text-right>{{data.content}}</ion-card-title>
     </ion-card-header>
     <ion-card-content text-right>
-      {{ messageTime }}
+      {{ data.from }} {{ messageTime }}
     </ion-card-content>
   </ion-card>
 </ng-template>

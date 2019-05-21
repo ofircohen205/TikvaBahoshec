@@ -9,14 +9,14 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 })
 export class GlobalService {
 
-  anonymousNumber = 0;
-
   constructor(
     private alertController: AlertController,
     private userAuth: AngularFireAuth,
     private router: Router,
     private firestore: FirestoreService
-    ) { }
+  ) { }
+
+  anonymousNumber = 0;
 
 // tslint:disable-next-line: use-life-cycle-interface
   ngOnInit() {

@@ -10,6 +10,8 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Observable } from 'rxjs';
 import { finalize, findIndex } from 'rxjs/operators';
+import { SupportRepsService } from '../global/admin/support-reps.service';
+import { ClientsService } from '../global/admin/clients.service';
 
 
 @Component({
@@ -23,15 +25,18 @@ import { finalize, findIndex } from 'rxjs/operators';
 
 export class AdminProfileComponent implements OnInit {
 
-
   constructor(
     private alertController: AlertController,
     private router: Router,
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
     private afStorage: AngularFireStorage,
-    private global: GlobalService
+    private global: GlobalService,
+    private supportRepService: SupportRepsService,
+    private clientService: ClientsService
   ) { }
+
+
   list: any[] = [];
   storiesArray: any = [];
   file: File;
@@ -39,7 +44,6 @@ export class AdminProfileComponent implements OnInit {
   downloadURL: Observable<string>;
 
   // variables for the text editor
-// tslint:disable-next-line: member-ordering
   public value =
   `<br/>
   כתוב על המקרה שלך כאן`;
@@ -65,27 +69,27 @@ export class AdminProfileComponent implements OnInit {
     this.global.logout();
   }
 
-    manageSupportReps() {
-      this.list = [];
-      this.firestore.getSupportRepIdList().subscribe(result => {
-        result.forEach(ele => {
-        const data = ele.payload.doc.data();
-        const id = ele.payload.doc.id;
-        if (ele.payload.type === 'added') {
-        this.list.push({id, ...data}) ;
-        } else if (ele.payload.type === 'modified') {
-          const index = this.list.findIndex(item => item.id === id);
+  manageSupportReps() {
+    this.list = [];
+    this.firestore.getSupportRepIdList().subscribe(result => {
+      result.forEach(ele => {
+      const data = ele.payload.doc.data();
+      const id = ele.payload.doc.id;
+      if (ele.payload.type === 'added') {
+      this.list.push({id, ...data}) ;
+      } else if (ele.payload.type === 'modified') {
+        const index = this.list.findIndex(item => item.id === id);
 
-          // Replace the item by index.
-          this.list.splice(index, 1, {id, ...data});
-        } else {
-          this.list.slice(this.list.indexOf(id), 1);
-        }
-         });
+        // Replace the item by index.
+        this.list.splice(index, 1, {id, ...data});
+      } else {
+        this.list.slice(this.list.indexOf(id), 1);
+      }
+        });
 
-      });
+    });
 
-    }
+  }
 
   async addSupport() {
     const alert = await this.alertController.create({
@@ -169,9 +173,6 @@ export class AdminProfileComponent implements OnInit {
     alert.present();
   }
 
-  readyForChat() {
-    this.global.readyForChat();
-  }
 
 /*******************************************AdminProfile components performance******************************************************/
   // shows the component of the selected button
@@ -195,7 +196,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.manageSupportReps();
+      this.supportRepService.manageSupportReps();
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -361,7 +362,7 @@ export class AdminProfileComponent implements OnInit {
   }
 
   getFile() {
-    const storageRef = this.afStorage.ref('assets/images/1.JPG');
+    const storageRef = this.afStorage.ref('assets/images/1.jpg');
     storageRef.getMetadata().subscribe(result => console.log(result));
   }
 
