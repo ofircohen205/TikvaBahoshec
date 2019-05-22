@@ -256,6 +256,32 @@ export class AdminProfileComponent implements OnInit {
     }
   }
 
+  resetHistoryTableFileds(){
+    var toDate = document.getElementById('historyToDate1');
+    var fromDate = document.getElementById('historyFromDate2');
+    var statusSelect: any = document.getElementById('historyStatusSelect');
+    var supportRepSelect = document.getElementById('historySupportSelect');
+    var clientName = document.getElementById('historyClientName');
+    (<HTMLInputElement>(toDate)).value = '';
+    (<HTMLInputElement>(fromDate)).value = '';
+    (<HTMLInputElement>(statusSelect)).value = '';
+    (<HTMLInputElement>(supportRepSelect)).value = '';
+    (<HTMLInputElement>(clientName)).value = '';
+  }
+
+  adminHistoryLimitMinDate(){
+    var dateFrom =  (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
+    var dateTo = document.getElementById('historyToDate1');
+    (<HTMLInputElement>(dateTo)).value="";
+    dateTo.setAttribute("min",dateFrom);
+  }
+  adminHistoryLimitMaxDate(){
+    var dateTo =  (<HTMLInputElement>document.getElementById('historyToDate1')).value;
+    var dateFrom = document.getElementById('historyFromDate2');
+    (<HTMLInputElement>(dateFrom)).value="";
+    dateFrom.setAttribute("max",dateTo);
+  }
+
   onclickAdminHistoryTable(e,index) {
     if(e['id'] === 'adminHistoryTablebutton1_' + (index + 1)){
       this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
