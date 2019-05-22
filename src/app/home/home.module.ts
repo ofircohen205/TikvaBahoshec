@@ -11,6 +11,8 @@ import { GalleryComponent } from '../gallery/gallery.component';
 import { DonateComponent } from '../donate/donate.component';
 import { MainComponent } from '../main/main.component';
 import { NgImageSliderModule } from 'ng-image-slider';
+import {SlideshowModule} from 'ng-simple-slideshow';
+
 
 
 
@@ -33,7 +35,8 @@ import { NgImageSliderModule } from 'ng-image-slider';
         component: CalenderComponent
       }
     ]),
-    NgImageSliderModule
+    NgImageSliderModule,
+    SlideshowModule
   ],
   declarations: [
     HomePage,

@@ -30,13 +30,14 @@ export class AdminProfileComponent implements OnInit {
     private router: Router,
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
-    private afStorage: AngularFireStorage,
+    private afs: AngularFireStorage,
     private global: GlobalService,
     private supportRepService: SupportRepsService,
     private clientService: ClientsService
   ) { }
 
 
+  imageUrls: string[] = [];
   list: any[] = [];
   storiesArray: any = [];
   file: File;
@@ -63,7 +64,9 @@ export class AdminProfileComponent implements OnInit {
       'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
   };
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.firestore.getImageArray().subscribe(res => this.imageUrls = res['images']);
+   }
 
   logout() {
     this.global.logout();
@@ -340,30 +343,31 @@ export class AdminProfileComponent implements OnInit {
   /*******************************************Gallery Management*******************************************************************/
   addFile(event) {
     this.file = event.target.files[0];
-    console.log(this.file);
-    this.getFile();
   }
 
+  // !Admin Functions
   uploadFile() {
     const fileName = this.file.name;
-    const fileNameArr = fileName.split('.');
-    fileNameArr.splice(1, 0, '_min');
-    fileNameArr.splice(2, 0, '.');
-    const minFileName = 'assets/images/' + fileNameArr.join('');
-    const filePath = 'assets/images/' + this.file.name;
-    const task = this.afStorage.upload(filePath, this.file);
+    const filePath = 'assets/images/' + fileName;
+    const task = this.afs.upload(filePath, this.file);
 
     // observe percentage changes
     this.uploadPercent = task.percentageChanges();
     // get notified when the download URL is available
     task.snapshotChanges().pipe( finalize(() => {
-      console.log(this.file.name + 'uploaded successfully');
+      this.getFile(filePath)
+      console.log(this.file.name + ' uploaded successfully');
     })).subscribe();
+
   }
 
-  getFile() {
-    const storageRef = this.afStorage.ref('assets/images/1.jpg');
-    storageRef.getMetadata().subscribe(result => console.log(result));
+  getFile(filePath) {
+    console.log(this.imageUrls);
+    const storageRef = this.afs.ref(filePath);
+    storageRef.getDownloadURL().subscribe(res => {
+      this.imageUrls.push(res);
+      this.firestore.updateImageArray(this.imageUrls);
+    });
   }
 
 }
