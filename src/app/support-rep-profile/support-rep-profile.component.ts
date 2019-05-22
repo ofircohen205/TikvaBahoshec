@@ -52,11 +52,10 @@ export class SupportRepProfileComponent implements OnInit {
       this.myChatsCopy = result;
       var scroll  = document.getElementById('scrollbar3')
       if(this.myChats.length>=4){
-        scroll.style.height ='300px' 
-        
+        scroll.style.height ='300px';
       }
         else
-        scroll.style.height ='200px'  
+        scroll.style.height ='200px';
   });
 
   this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
@@ -287,6 +286,7 @@ export class SupportRepProfileComponent implements OnInit {
       index++;
       tbody.appendChild(tr);
     }
+    //console.log(tbody);
     var tbodyChildrens = tbody.childNodes;
     for(let i = 0; i < tbody.childNodes.length; i++) {
       tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));

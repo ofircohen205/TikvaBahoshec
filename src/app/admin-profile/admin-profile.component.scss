@@ -27,3 +27,50 @@
   background-color: #4CAF50;
   color: white;
 }
+
+.my-custom-scrollbar {
+  position: relative;
+  height: 360px;
+  overflow: auto;
+  display: block;
+  }
+
+#adminHistorytable1  {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #adminHistorytable1 td, #adminHistorytable1 th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    border-collapse: collapse;
+  }
+  
+  #adminHistorytable1 tr:nth-child(even){background-color: #f2f2f2;};
+  
+  
+  //#supRepTBody1 tr:hover {background-color: #ddd;};
+  
+  #adminHistorytable1 th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+    
+  }
+
+  #adminHistorytable1 tbody{
+    overflow-y: auto
+    
+  }
+
+  #rounded {
+    width: 100%;
+    height: 100px;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 10px;
+    margin-bottom: 10px;  
+}

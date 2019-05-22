@@ -9,7 +9,9 @@ import { AngularFireStorage } from '@angular/fire/storage';
 // tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Observable } from 'rxjs';
-import { finalize, findIndex } from 'rxjs/operators';
+import { finalize, findIndex, timestamp } from 'rxjs/operators';
+import { forEach } from '@angular/router/src/utils/collection';
+import { createElement } from '@syncfusion/ej2-base';
 
 
 @Component({
@@ -37,11 +39,14 @@ export class AdminProfileComponent implements OnInit {
   file: File;
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
+  supportRepList: any[] = [];
+  chatRoomList: any[] =[];
+  txtMsg = '';
 
   // variables for the text editor
-// tslint:disable-next-line: member-ordering
+  // tslint:disable-next-line: member-ordering
   public value =
-  `<br/>
+    `<br/>
   כתוב על המקרה שלך כאן`;
 
   public tools: object = {
@@ -59,33 +64,252 @@ export class AdminProfileComponent implements OnInit {
       'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
   };
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.firestore.getSupportRepNameList().subscribe(result => {
+      this.supportRepList = result;
+      console.log(result);
+      this.initSupportSelectList();
+    });
+    this.firestore.getAllChatRoom().subscribe(result1 => {
+      this.chatRoomList = result1;
+      this.createHistoryTable();
+    });
+
+  }
+
+
+  initSupportSelectList() {
+    var selectElement = document.getElementById('historySupportSelect');
+    this.supportRepList.forEach(supportRep => {
+      if (supportRep !== undefined) {
+        var selection = document.createElement('ion-select-option');
+        selection.value = supportRep['name'];
+        selection.textContent = supportRep['name'];
+        selectElement.appendChild(selection);
+      }
+    });
+  }
+
+
+  createHistoryTable() {
+    var toDate = (<HTMLInputElement>document.getElementById('historyToDate1')).value;
+    var fromDate = (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
+    var statusSelect: any = (<HTMLInputElement>document.getElementById('historyStatusSelect')).value;
+    var supportRepSelect = (<HTMLInputElement>document.getElementById('historySupportSelect')).value;
+    var clientName = (<HTMLInputElement>document.getElementById('historyClientName')).value;
+    var chatRoomList: any[];
+    var body = document.getElementById('historyBodyTable');
+    this.removeChildren(body,'historyBodyTable');
+    var dateFrom;
+    var dateTo;
+    if (fromDate !== '') {
+      dateFrom = new Date(fromDate).toLocaleDateString();
+    }
+    else {
+      dateFrom = '';
+    }
+    if (toDate !== '') {
+      dateTo = new Date(toDate).toLocaleDateString();
+    } else {
+      dateTo = '';
+    }
+    var compareStatus;
+    var compareSupport;
+    var index = 1;
+    
+      index = 1;
+      for(let chatRoom of this.chatRoomList)
+      {
+        var tr = document.createElement('tr');
+        if (chatRoom !== undefined) 
+        {
+          var date = new Date(chatRoom['timestamp']).toLocaleDateString();
+          for (let v of statusSelect) {
+            if ((v === 'בטיפול' && chatRoom['occupied'] === true) || (v === 'לא בטיפול' && chatRoom['occupied'] === false)) {
+              compareStatus = true;
+              break;
+            }
+            else{
+              compareStatus = false;
+            }
+          }
+          for (let v of supportRepSelect) {
+            if (v === chatRoom['SupportRepName']) {
+              compareSupport = true;
+              break;
+            } else {
+              compareSupport = false;
+            }
+          }
+
+          if ((date >= dateFrom || dateFrom === '') && (date <= dateTo || dateTo === '') &&
+            (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
+            (clientName === chatRoom['ClientName'] || clientName === '')) {
+              var button1 = document.createElement('ion-button');
+              var td1 = document.createElement('td');
+              td1.appendChild(button1);
+              td1.id = 'adminHistoryTablebutton1_' + index;
+              button1.innerHTML = 'הורד שיחה';
+              button1.color = 'success';
+              td1.style.color = 'white';
+              td1.style.border = ' 1px solid #ddd';
+              td1.style.padding = '8px';
+              td1.style.borderCollapse = 'collapse';
+
+              var button2 = document.createElement('ion-button');
+              var td2 = document.createElement('td');
+              td2.appendChild(button2);
+              td2.id = 'adminHistoryTablebutton2_' + index;
+              button2.innerHTML = 'כנס לחדר';
+              button2.color = 'success';
+              td2.style.color = 'white';
+              td2.style.border = ' 1px solid #ddd';
+              td2.style.padding = '8px';
+              td2.style.borderCollapse = 'collapse';
+        
+              var button3 = document.createElement('ion-button');
+              var td3 = document.createElement('td');
+              td3.appendChild(button3);
+              td3.id = 'adminHistoryTablebutton3_' + index;
+              button3.innerHTML = 'כנס לטופס לקוח';
+              button3.color = 'success';
+              td3.style.color = 'white';
+              td3.style.border = ' 1px solid #ddd';
+              td3.style.padding = '8px';
+              td3.style.borderCollapse = 'collapse';
+        
+              var td4 = document.createElement('td');
+              td4.style.border = ' 1px solid #ddd';
+              td4.style.padding = '8px';
+              td4.style.borderCollapse = 'collapse';
+              if(chatRoom.occupied === true) {
+                td4.textContent = 'בטיפול';
+              } else {
+                td4.textContent = 'לא בטיפול';
+              }
+        
+              var td5 = document.createElement('td');
+              var name = '';
+              td5.style.border = ' 1px solid #ddd';
+              td5.style.padding = '8px';
+              td5.style.borderCollapse = 'collapse';
+              if(chatRoom.SupportRepName !== '' && chatRoom.SupportRepName !=null){
+                td5.textContent = chatRoom.SupportRepName;
+              } else {
+                td5.textContent = 'no support name';
+              }
+              var td6 = document.createElement('td');
+              td6.style.border = ' 1px solid #ddd';
+              td6.style.padding = '8px';
+              td6.style.borderCollapse = 'collapse';
+              td6.textContent = new Date(chatRoom.timestamp).toLocaleString();
+        
+              var td7 = document.createElement('td');
+              td7.style.border = ' 1px solid #ddd';
+              td7.style.padding = '8px';
+              td7.style.borderCollapse = 'collapse';
+              td7.textContent = chatRoom.ClientName;
+        
+              var td8 = document.createElement('td');
+              td8.style.border = ' 1px solid #ddd';
+              td8.style.padding = '8px';
+              td8.style.borderCollapse = 'collapse';
+              td8.textContent = index.toString();
+              tr.appendChild(td1);
+              tr.appendChild(td2);
+              tr.appendChild(td3);
+              tr.appendChild(td4);
+              tr.appendChild(td5);
+              tr.appendChild(td6);
+              tr.appendChild(td7);
+              tr.appendChild(td8);
+        
+              tr.id = 'adminHistoryTableTr_' + index; 
+              index++;
+              body.appendChild(tr);
+          }
+          var tbodyChildrens = body.childNodes;
+          for(let i = 0; i < body.childNodes.length; i++) {
+            tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
+            tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
+            var trChildren = tbodyChildrens[i].childNodes;
+            trChildren[0].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[0],i));
+            trChildren[1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[1],i));
+            trChildren[2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[2],i));
+          }
+        }
+      }
+
+  }
+
+  async removeChildren(tbody,tbodyId){
+    var size = tbody.childNodes.length;
+    var tbody1 = document.getElementById(tbodyId);
+    while (tbody1.firstChild) {
+     tbody1.removeChild(tbody1.firstChild);
+    }
+  }
+
+  onclickAdminHistoryTable(e,index) {
+    if(e['id'] === 'adminHistoryTablebutton1_' + (index + 1)){
+      this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
+    }
+    if(e['id'] === 'adminHistoryTablebutton2_' + (index + 1)){
+// tslint:disable-next-line: max-line-length
+      window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+    }
+    if(e['id'] === 'adminHistoryTablebutton3_' + (index + 1)){
+      console.log('go to client form page');
+      console.log(e['id']);
+    }
+   }
+
+   downloadChatMsg(roomId){
+    this.firestore.getChatMessages(roomId).subscribe(result =>{
+    result.forEach(msg=>{
+      this.txtMsg+="From:"+msg.from +" Time:" +new Date(msg.timestamp)
+      this.txtMsg+="\n<"+msg.content +">\n\n"  
+    })
+    console.log("startDownload")
+    var link = document.createElement('a');
+    link.download = 'Chat:'+roomId+'.txt';
+    var blob = new Blob([this.txtMsg], {type: 'text/plain'});
+    link.href = window.URL.createObjectURL(blob);
+    link.click();
+    })
+  }
+
+  onmouseover(e) {
+    e.style.background = '#ddd';
+  }
+  onmouseout(e) {
+    e.style.background = 'white';
+  }
+
 
   logout() {
     this.global.logout();
   }
 
-    manageSupportReps() {
-      this.list = [];
-      this.firestore.getSupportRepIdList().subscribe(result => {
-        result.forEach(ele => {
+  manageSupportReps() {
+    this.list = [];
+    this.firestore.getSupportRepIdList().subscribe(result => {
+      result.forEach(ele => {
         const data = ele.payload.doc.data();
         const id = ele.payload.doc.id;
         if (ele.payload.type === 'added') {
-        this.list.push({id, ...data}) ;
+          this.list.push({ id, ...data });
         } else if (ele.payload.type === 'modified') {
           const index = this.list.findIndex(item => item.id === id);
 
           // Replace the item by index.
-          this.list.splice(index, 1, {id, ...data});
+          this.list.splice(index, 1, { id, ...data });
         } else {
           this.list.slice(this.list.indexOf(id), 1);
         }
-         });
-
       });
-
-    }
+    });
+  }
 
   async addSupport() {
     const alert = await this.alertController.create({
@@ -147,7 +371,7 @@ export class AdminProfileComponent implements OnInit {
           this.list[this.list.indexOf(x)].username = data.username;
           this.list[this.list.indexOf(x)].email = data.email;
           this.list[this.list.indexOf(x)].phone = data.phone;
-          }
+        }
       }]
     });
     alert.present();
@@ -158,12 +382,13 @@ export class AdminProfileComponent implements OnInit {
       header: 'אישור מחיקה',
       message: `האם את/ה בטוח/ה שברצונך למחוק את הנציג/ה?`,
       buttons: [
-        { text: 'חזור'},
+        { text: 'חזור' },
         {
           text: 'מחק',
           handler: () => {
-          this.firestore.removeSupportRep(x.id);
-          this.list.splice(this.list.indexOf(x), 1); }
+            this.firestore.removeSupportRep(x.id);
+            this.list.splice(this.list.indexOf(x), 1);
+          }
         }]
     });
     alert.present();
@@ -173,7 +398,7 @@ export class AdminProfileComponent implements OnInit {
     this.global.readyForChat();
   }
 
-/*******************************************AdminProfile components performance******************************************************/
+  /*******************************************AdminProfile components performance******************************************************/
   // shows the component of the selected button
   onClick(e): void {
     const targetId = e.target.id;
@@ -258,7 +483,7 @@ export class AdminProfileComponent implements OnInit {
         const stringDate = new Date(timestampDate * 1000).toDateString();  // save the date as a regular date form
         // const approval = data['approved'];
 
-        this.storiesArray.push({stringDate, id, ...data });
+        this.storiesArray.push({ stringDate, id, ...data });
         console.log(this.storiesArray);
       });
 
@@ -288,13 +513,13 @@ export class AdminProfileComponent implements OnInit {
   // delete the story from firebase and from the array of stories
   deleteStory(story) {
     for (let i = 0; i < this.storiesArray.length; i++) {
-        if (story.id === this.storiesArray[i].id) {
-          for (let j = i + 1; j < this.storiesArray.length; j++) {  // the remove from the array doesn't work well
-              this.storiesArray[j - 1] = this.storiesArray[j];
-              this.storiesArray[j] = null;
-          }
-          this.firestore.removeStory(this.storiesArray[i].id);
+      if (story.id === this.storiesArray[i].id) {
+        for (let j = i + 1; j < this.storiesArray.length; j++) {  // the remove from the array doesn't work well
+          this.storiesArray[j - 1] = this.storiesArray[j];
+          this.storiesArray[j] = null;
         }
+        this.firestore.removeStory(this.storiesArray[i].id);
+      }
     }
   }
 
@@ -334,7 +559,7 @@ export class AdminProfileComponent implements OnInit {
     }
     return 0;
   }
-/*********************************************************************************************************************************/
+  /*********************************************************************************************************************************/
 
   /*******************************************Gallery Management*******************************************************************/
   addFile(event) {
@@ -355,7 +580,7 @@ export class AdminProfileComponent implements OnInit {
     // observe percentage changes
     this.uploadPercent = task.percentageChanges();
     // get notified when the download URL is available
-    task.snapshotChanges().pipe( finalize(() => {
+    task.snapshotChanges().pipe(finalize(() => {
       console.log(this.file.name + 'uploaded successfully');
     })).subscribe();
   }
