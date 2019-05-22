@@ -150,7 +150,7 @@ export class AdminProfileComponent implements OnInit {
 
           if ((date >= dateFrom || dateFrom === '') && (date <= dateTo || dateTo === '') &&
             (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
-            (clientName === chatRoom['ClientName'] || clientName === '')) {
+            (chatRoom['ClientName'].search(clientName) !=-1 || clientName === '')) {
               var button1 = document.createElement('ion-button');
               var td1 = document.createElement('td');
               td1.appendChild(button1);
