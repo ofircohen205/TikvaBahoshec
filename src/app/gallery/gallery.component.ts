@@ -3,6 +3,8 @@ import { NgImageSliderModule, NgImageSliderComponent } from 'ng-image-slider';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { FirestoreService } from '../firebase/firestore/firestore.service';
+import { getUrl } from '@ionic/angular/dist/directives/navigation/stack-utils';
 
 
 @Component({
@@ -11,9 +13,13 @@ import { finalize } from 'rxjs/operators';
   styleUrls: ['./gallery.component.scss'],
 })
 
-export class GalleryComponent {
+export class GalleryComponent implements OnInit {
 
-  constructor(private afs: AngularFireStorage) {
+  constructor(
+    private afs: AngularFireStorage,
+    private firestore: FirestoreService) { }
+
+  ngOnInit() {
     this.setImageObject();
   }
 
@@ -22,14 +28,14 @@ export class GalleryComponent {
   totalImages = 10;
 
   sliderWidth: Number = 950;
-  sliderImageWidth: Number = 350;
+  sliderImageWidth: Number = 500;
   sliderImageHeight: Number = 300;
   sliderArrowShow: Boolean = true;
   sliderInfinite: Boolean = true;
   sliderImagePopup: Boolean = true;
   sliderAutoSlide: Boolean = true;
   sliderSlideImage: Number = 1;
-  sliderAnimationSpeed: any = 3;
+  sliderAnimationSpeed: any = 5;
   imageObject: Array<object> = [];
 
 
@@ -46,39 +52,71 @@ export class GalleryComponent {
   }
 
   setImageObject() {
-    // const storageRef = this.afs.storage.ref('/assets/images/');
-    // for (let i = 1; i < this.totalImages; i++) {
-    //   let image, thumbImage;
-    //   storageRef.child(i + '.jpg').getDownloadURL().then(res => {
-    //     image = res;
-    //     storageRef.child(i + '_min.jpeg').getDownloadURL().then(result => {
-    //       thumbImage = result;
-    //       this.imageObject.push({ image, thumbImage });
-    //     });
-    //   });
-    //   console.log(this.imageObject);
-    // }
+
+    // get referance for images folder
+    // loop through images folder
+      // get URL of image
+      // get URL of thumbImage
+      // push object of {image, thumbImage} into the array
+
+    const storageRef = this.afs.storage.ref('/assets/images/');
+    const array = [];
+    for (let i = 1; i < this.totalImages; i++) {
+      const image = this.getURL(storageRef, i, 'reg');
+      const thumbImage = this.getURL(storageRef, i, 'min');
+      array.push({ image, thumbImage });
+      // let image, thumbImage;
+      // storageRef.child(i + '.jpg').getDownloadURL().then(res => {
+      //   image = res;
+      //   storageRef.child(i + '_min.jpeg').getDownloadURL().then(result => {
+      //     thumbImage = result;
+      //     this.imageObject.push({ image, thumbImage });
+      //   });
+      // });
+    }
+    Promise.all(array).then(result => console.log(result[0]['image']));
+
+    for (let i = 1; i < this.totalImages; i++) {
+      this.imageObject.push({ image: 'assets/img/slider/' + i + '.jpg', thumbImage: 'assets/img/slider/' + i + '_min.jpeg' });
+    }
 
 
-    this.imageObject = [{
-      image: 'assets/img/slider/4.jpg',
-      thumbImage: 'assets/img/slider/4_min.jpeg',
-    }, {
-      image: 'assets/img/slider/5.jpg',
-      thumbImage: 'assets/img/slider/5_min.jpeg'
-    }, {
-      image: 'assets/img/slider/6.jpg',
-      thumbImage: 'assets/img/slider/6_min.jpeg'
-    }, {
-      image: 'assets/img/slider/7.jpg',
-      thumbImage: 'assets/img/slider/7_min.jpeg'
-    }, {
-      image: 'assets/img/slider/8.jpg',
-      thumbImage: 'assets/img/slider/8_min.jpeg'
-    }, {
-      image: 'assets/img/slider/9.jpg',
-      thumbImage: 'assets/img/slider/9_min.jpeg'
-    }];
+    // this.imageObject = [{
+    //   image: 'assets/img/slider/1.jpg',
+    //   thumbImage: 'assets/img/slider/1_min.jpeg',
+    // }, {
+    //   image: 'assets/img/slider/2.jpg',
+    //   thumbImage: 'assets/img/slider/2_min.jpeg',
+    // }, {
+    //   image: 'assets/img/slider/3.jpg',
+    //   thumbImage: 'assets/img/slider/3_min.jpeg',
+    // }, {
+    //   image: 'assets/img/slider/4.jpg',
+    //   thumbImage: 'assets/img/slider/4_min.jpeg',
+    // }, {
+    //   image: 'assets/img/slider/5.jpg',
+    //   thumbImage: 'assets/img/slider/5_min.jpeg'
+    // }, {
+    //   image: 'assets/img/slider/6.jpg',
+    //   thumbImage: 'assets/img/slider/6_min.jpeg'
+    // }, {
+    //   image: 'assets/img/slider/7.jpg',
+    //   thumbImage: 'assets/img/slider/7_min.jpeg'
+    // }, {
+    //   image: 'assets/img/slider/8.jpg',
+    //   thumbImage: 'assets/img/slider/8_min.jpeg'
+    // }, {
+    //   image: 'assets/img/slider/9.jpg',
+    //   thumbImage: 'assets/img/slider/9_min.jpeg'
+    // }];
+  }
+
+  getURL(ref, index, type) {
+    if (type === 'reg') {
+      return ref.child(index + '.jpg').getDownloadURL().then(res => res);
+    } else if (type === 'min') {
+      return ref.child(index + '_min.jpeg').getDownloadURL().then(res => res);
+    }
   }
 
   imageOnClick(index) { }

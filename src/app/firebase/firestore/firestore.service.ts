@@ -250,4 +250,8 @@ export class FirestoreService {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
   }
 
+  public getImageArray(): Observable<any> {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
 }

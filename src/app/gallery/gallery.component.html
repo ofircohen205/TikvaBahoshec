@@ -1,17 +1,8 @@
-<!-- <p text-center>
-    <ion-slides class="image=slider" autoplay="1000" loop="true" speed="3000">
-        <ion-slide *ngFor="let img of images">
-            <img src="assets/images/{{img}}" class="thumb-img">
-        </ion-slide>
-    </ion-slides>
-
-</p> -->
-
-<div class="margin-auto demo-div box-shadow"
-    [ngStyle]="{'width':sliderWidth+'px', 'min-height': sliderImageHeight+'px'}">
+<!-- <div class="margin-auto demo-div box-shadow" -->
+    <!-- [ngStyle]="{'width':sliderWidth+'px', 'min-height': sliderImageHeight+'px'}"> -->
     <ng-image-slider *ngIf="showSlider" #nav [images]="imageObject" [infinite]="sliderInfinite"
         [imagePopup]="sliderImagePopup" [showArrow]="sliderArrowShow"
         [imageSize]="{width: sliderImageWidth, height: sliderImageHeight}" [autoSlide]="sliderAutoSlide ? 1 : 0"
         [slideImage]="+sliderSlideImage" [animationSpeed]="sliderAnimationSpeed" (imageClick)="imageOnClick($event)"
         (arrowClick)="arrowOnClick($event)" (lightboxArrowClick)="lightboxArrowClick($event)"></ng-image-slider>
-</div>
+<!-- </div> -->
