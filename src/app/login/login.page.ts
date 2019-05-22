@@ -23,18 +23,29 @@ export class LoginPage {
   ) { }
 
   // This function logs the support rep into the system
-  login() {
+ async login() {
+    this.loadingRef = await this.loadingController.create({ message: '...אנא המתן', });
+    await this.loadingRef.present();
+
     const email = this.emailField.value;
     const password = this.passField.value;
     // ! check if email and password aren't 'undefined'
-    this.presentLoading();
+    
     this.userAuth.auth.signInWithEmailAndPassword(email, password)
     .then(result => {
-      this.dismissLoading();
+      this.loadingRef.dismiss()
       this.router.navigateByUrl('/profile');
     })
-    .catch((error) => {
-      this.dismissLoading();
+    .catch(async (error) => {
+      this.loadingRef.dismiss();
+      var errorMSG = await this.alertController.create({ 
+        message:'User name or Password are incorrect, Please try again',
+      buttons:['OK'] ,
+      });
+      
+      await errorMSG.present();
+      
+      
     });
   }
 
@@ -66,9 +77,11 @@ export class LoginPage {
     await this.loadingRef.present();
   }
 
-  dismissLoading() {
-    this.loadingRef.dismiss();
+ async dismissLoading() {
+   await this.loadingRef.dismiss();
+   
   }
 
+  
 
 }

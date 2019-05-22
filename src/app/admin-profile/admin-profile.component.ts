@@ -12,6 +12,8 @@ import { Observable } from 'rxjs';
 import { finalize, findIndex, timestamp } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 import { createElement } from '@syncfusion/ej2-base';
+import { SupportRepsService } from '../global/admin/support-reps.service';
+import { ClientsService } from '../global/admin/clients.service';
 
 
 @Component({
@@ -25,15 +27,19 @@ import { createElement } from '@syncfusion/ej2-base';
 
 export class AdminProfileComponent implements OnInit {
 
-
   constructor(
     private alertController: AlertController,
     private router: Router,
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
-    private afStorage: AngularFireStorage,
-    private global: GlobalService
+    private afs: AngularFireStorage,
+    private global: GlobalService,
+    private supportRepService: SupportRepsService,
+    private clientService: ClientsService
   ) { }
+
+
+  imageUrls: string[] = [];
   list: any[] = [];
   storiesArray: any = [];
   file: File;
@@ -74,7 +80,7 @@ export class AdminProfileComponent implements OnInit {
       this.chatRoomList = result1;
       this.createHistoryTable();
     });
-
+    this.firestore.getImageArray().subscribe(res => this.imageUrls = res['images']);
   }
 
 
@@ -286,6 +292,7 @@ export class AdminProfileComponent implements OnInit {
     e.style.background = 'white';
   }
 
+  
 
   logout() {
     this.global.logout();
@@ -394,9 +401,6 @@ export class AdminProfileComponent implements OnInit {
     alert.present();
   }
 
-  readyForChat() {
-    this.global.readyForChat();
-  }
 
   /*******************************************AdminProfile components performance******************************************************/
   // shows the component of the selected button
@@ -420,7 +424,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.manageSupportReps();
+      this.supportRepService.manageSupportReps();
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -564,30 +568,31 @@ export class AdminProfileComponent implements OnInit {
   /*******************************************Gallery Management*******************************************************************/
   addFile(event) {
     this.file = event.target.files[0];
-    console.log(this.file);
-    this.getFile();
   }
 
+  // !Admin Functions
   uploadFile() {
     const fileName = this.file.name;
-    const fileNameArr = fileName.split('.');
-    fileNameArr.splice(1, 0, '_min');
-    fileNameArr.splice(2, 0, '.');
-    const minFileName = 'assets/images/' + fileNameArr.join('');
-    const filePath = 'assets/images/' + this.file.name;
-    const task = this.afStorage.upload(filePath, this.file);
+    const filePath = 'assets/images/' + fileName;
+    const task = this.afs.upload(filePath, this.file);
 
     // observe percentage changes
     this.uploadPercent = task.percentageChanges();
     // get notified when the download URL is available
-    task.snapshotChanges().pipe(finalize(() => {
-      console.log(this.file.name + 'uploaded successfully');
+    task.snapshotChanges().pipe( finalize(() => {
+      this.getFile(filePath)
+      console.log(this.file.name + ' uploaded successfully');
     })).subscribe();
+
   }
 
-  getFile() {
-    const storageRef = this.afStorage.ref('assets/images/1.JPG');
-    storageRef.getMetadata().subscribe(result => console.log(result));
+  getFile(filePath) {
+    console.log(this.imageUrls);
+    const storageRef = this.afs.ref(filePath);
+    storageRef.getDownloadURL().subscribe(res => {
+      this.imageUrls.push(res);
+      this.firestore.updateImageArray(this.imageUrls);
+    });
   }
 
 }

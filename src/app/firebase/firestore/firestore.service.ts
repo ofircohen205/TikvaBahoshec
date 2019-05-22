@@ -9,6 +9,8 @@ import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
 
+  constructor( private firestore: AngularFirestore ) { }
+
   readonly CHAT_ROOMS_COLLECTION = 'ChatRooms';
   readonly CALENDER_COLLECTION = 'Calender';
   readonly CLIENT_COLLECTION = 'Clients';
@@ -16,7 +18,6 @@ export class FirestoreService {
   readonly MESSAGES_COLLECTION = 'Messages';
   readonly STORIES_COLLECTION = 'Stories';
   readonly SUPPORT_REP_COLLECTION = 'SupportReps';
-  constructor(private firestore: AngularFirestore) { }
 
   // ! CRUD ON EACH COLLECTION - CREATE READ(GET) UPDATE DELETE
 
@@ -250,6 +251,14 @@ export class FirestoreService {
 
   public checkIfAdmin(supportRepId): Observable<any> {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public getImageArray(): Observable<any> {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public updateImageArray(images): void {
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ images });
   }
 
 }
