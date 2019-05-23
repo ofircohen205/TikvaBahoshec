@@ -36,7 +36,7 @@ export class ProfilePage implements OnInit {
           supportRepElement.hidden = false;
         }
       });
-      console.log(this.toolbarHeader.hidden);
+      console.log(toolbarHeaderElement.hidden);
     });
     
     this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
