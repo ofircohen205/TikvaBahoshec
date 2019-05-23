@@ -24,21 +24,21 @@ export class ProfilePage implements OnInit {
     const supportRepElement = document.getElementById('supportRep');
     const toolbarHeaderElement = document.getElementById('toolbarHeader');
     this.firestore.checkIfAdmin(this.userAuth.auth.currentUser.uid).subscribe(result => {
-      result['admins'].some(element => {
+      result['admins'].find(element => {
         if (element === this.userAuth.auth.currentUser.uid) {
           this.adminLoginAuth = true;
           toolbarHeaderElement.hidden = false;
           adminElement.hidden = true;
           supportRepElement.hidden = false;
-        } else {
-          toolbarHeaderElement.hidden = true;
-          adminElement.hidden = true ;
-          supportRepElement.hidden = false;
         }
+        // } else {
+        //   toolbarHeaderElement.hidden = true;
+        //   adminElement.hidden = true ;
+        //   supportRepElement.hidden = false;
+        // }
       });
-      console.log(this.toolbarHeader.hidden);
     });
-    
+
     this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
       if(result['inShift']){
         document.getElementById('inShiftButton').textContent = 'במשמרת';
