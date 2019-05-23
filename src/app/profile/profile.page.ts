@@ -33,18 +33,12 @@ export class ProfilePage implements OnInit {
           toolbarHeaderElement.hidden = false;
           adminElement.hidden = true;
           supportRepElement.hidden = false;
+        } else {
+          toolbarHeaderElement.hidden = true;
+          adminElement.hidden = true ;
+          supportRepElement.hidden = false;
         }
-<<<<<<< HEAD
-        //  else {
-        //   toolbarHeaderElement.hidden = true;
-        //   adminElement.hidden = true ;
-        //   supportRepElement.hidden = false;
-        // }
-      });
-      console.log(toolbarHeaderElement.hidden);
-=======
       }
->>>>>>> dc73b8b1276b5daf510f1eac48657e06a0282648
     });
     this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
       if(result['inShift']){
