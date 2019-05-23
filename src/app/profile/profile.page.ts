@@ -30,11 +30,12 @@ export class ProfilePage implements OnInit {
           toolbarHeaderElement.hidden = false;
           adminElement.hidden = true;
           supportRepElement.hidden = false;
-        } else {
-          toolbarHeaderElement.hidden = true;
-          adminElement.hidden = true ;
-          supportRepElement.hidden = false;
         }
+        //  else {
+        //   toolbarHeaderElement.hidden = true;
+        //   adminElement.hidden = true ;
+        //   supportRepElement.hidden = false;
+        // }
       });
       console.log(toolbarHeaderElement.hidden);
     });
