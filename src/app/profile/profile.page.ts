@@ -11,6 +11,7 @@ import { Location } from '@angular/common';
 })
 export class ProfilePage implements OnInit {
   adminLoginAuth = false;
+  admins :any[] = [];
 
   constructor(
     private firestore: FirestoreService,
@@ -24,13 +25,16 @@ export class ProfilePage implements OnInit {
     const supportRepElement = document.getElementById('supportRep');
     const toolbarHeaderElement = document.getElementById('toolbarHeader');
     this.firestore.checkIfAdmin(this.userAuth.auth.currentUser.uid).subscribe(result => {
-      result['admins'].some(element => {
-        if (element === this.userAuth.auth.currentUser.uid) {
+      console.log(result['admins']);
+      for (let admin of result['admins']){
+        console.log(admin);
+        if (admin === this.userAuth.auth.currentUser.uid) {
           this.adminLoginAuth = true;
           toolbarHeaderElement.hidden = false;
           adminElement.hidden = true;
           supportRepElement.hidden = false;
         }
+<<<<<<< HEAD
         //  else {
         //   toolbarHeaderElement.hidden = true;
         //   adminElement.hidden = true ;
@@ -38,8 +42,10 @@ export class ProfilePage implements OnInit {
         // }
       });
       console.log(toolbarHeaderElement.hidden);
+=======
+      }
+>>>>>>> dc73b8b1276b5daf510f1eac48657e06a0282648
     });
-    
     this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
       if(result['inShift']){
         document.getElementById('inShiftButton').textContent = 'במשמרת';
