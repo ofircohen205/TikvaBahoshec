@@ -11,9 +11,6 @@ import { Location } from '@angular/common';
 })
 export class ProfilePage implements OnInit {
   adminLoginAuth = false;
-  @ViewChild('admin') admin;
-  @ViewChild('supportRep') supportRep;
-  @ViewChild('toolbarHeader') toolbarHeader;
 
   constructor(
     private firestore: FirestoreService,
@@ -23,23 +20,34 @@ export class ProfilePage implements OnInit {
     ) {}
 
   ngOnInit() {
-    // const adminElement = document.getElementById('admin');
-    // const supportRepElement = document.getElementById('supportRep');
-    // const toolbarHeaderElement = document.getElementById('toolbarHeader');
+    const adminElement = document.getElementById('admin');
+    const supportRepElement = document.getElementById('supportRep');
+    const toolbarHeaderElement = document.getElementById('toolbarHeader');
     this.firestore.checkIfAdmin(this.userAuth.auth.currentUser.uid).subscribe(result => {
       result['admins'].some(element => {
         if (element === this.userAuth.auth.currentUser.uid) {
           this.adminLoginAuth = true;
-          this.toolbarHeader.hidden = false;
-          this.admin.hidden = true;
-          this.supportRep.hidden = false;
+          toolbarHeaderElement.hidden = false;
+          adminElement.hidden = true;
+          supportRepElement.hidden = false;
         } else {
-          this.toolbarHeader.hidden = true;
-          this.admin.hidden = true ;
-          this.supportRep.hidden = false;
+          toolbarHeaderElement.hidden = true;
+          adminElement.hidden = true ;
+          supportRepElement.hidden = false;
         }
       });
+      console.log(this.toolbarHeader.hidden);
     });
+    
+    this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
+      if(result['inShift']){
+        document.getElementById('inShiftButton').textContent = 'במשמרת';
+        document.getElementById('inShiftButton').setAttribute('color' , 'success');
+      } else {
+        document.getElementById('inShiftButton').textContent = 'לא במשמרת';
+        document.getElementById('inShiftButton').setAttribute('color' , 'danger');
+      }
+  });
     }
 
     logout(){

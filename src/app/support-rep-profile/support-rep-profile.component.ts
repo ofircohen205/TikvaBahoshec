@@ -58,16 +58,6 @@ export class SupportRepProfileComponent implements OnInit {
         scroll.style.height ='200px';
   });
 
-  this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
-    if(result['inShift']){
-      document.getElementById('supportRepreadyButton').textContent = 'במשמרת';
-      document.getElementById('supportRepreadyButton').setAttribute('color' , 'success');
-    } else {
-      document.getElementById('supportRepreadyButton').textContent = 'לא במשמרת';
-      document.getElementById('supportRepreadyButton').setAttribute('color' , 'danger');
-    }
-});
-
   }
   async inShift() {
     var readyButton = document.getElementById('supportRepreadyButton');

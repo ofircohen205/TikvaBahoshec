@@ -272,13 +272,11 @@ export class AdminProfileComponent implements OnInit {
   adminHistoryLimitMinDate(){
     var dateFrom =  (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
     var dateTo = document.getElementById('historyToDate1');
-    (<HTMLInputElement>(dateTo)).value="";
     dateTo.setAttribute("min",dateFrom);
   }
   adminHistoryLimitMaxDate(){
     var dateTo =  (<HTMLInputElement>document.getElementById('historyToDate1')).value;
     var dateFrom = document.getElementById('historyFromDate2');
-    (<HTMLInputElement>(dateFrom)).value="";
     dateFrom.setAttribute("max",dateTo);
   }
 
