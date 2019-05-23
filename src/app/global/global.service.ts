@@ -79,7 +79,7 @@ export class GlobalService {
         text: 'המשך',
         handler: () => {
           this.userAuth.auth.signOut().then(() => {
-            this.router.navigateByUrl('/home');
+            this.router.navigateByUrl('/login');
           }).catch((error) => console.log(error));
         }
       }, {

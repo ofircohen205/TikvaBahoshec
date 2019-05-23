@@ -69,11 +69,6 @@ export class SupportRepProfileComponent implements OnInit {
 });
 
   }
-
-  logOut() {
-    this.global.logout();
-  }
-
   async inShift() {
     var readyButton = document.getElementById('supportRepreadyButton');
     if(readyButton.getAttribute('color') === 'danger'){

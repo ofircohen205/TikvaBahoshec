@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { GlobalService } from '../global/global.service';
 import { Location } from '@angular/common';
 
 @Component({
@@ -17,6 +18,7 @@ export class ProfilePage implements OnInit {
   constructor(
     private firestore: FirestoreService,
     private userAuth: AngularFireAuth,
+    private global: GlobalService,
     private location: Location
     ) {}
 
@@ -40,6 +42,10 @@ export class ProfilePage implements OnInit {
     });
     }
 
+    logout(){
+      this.global.logout();
+    }
+
   onclick(e): void {
     const tar = e.target.value;
     const adminElement = document.getElementById('admin');
@@ -53,6 +59,23 @@ export class ProfilePage implements OnInit {
       if (supportRepElement.hidden === true) {
         adminElement.hidden = true;
         supportRepElement.hidden = false;
+      }
+    }
+  }
+  async inShift() {
+    var readyButton = document.getElementById('inShiftButton');
+    if(readyButton.getAttribute('color') === 'danger'){
+      if(confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')){
+      readyButton.setAttribute('color', 'success');
+      readyButton.textContent = 'במשמרת';
+      this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, true);
+      }
+    } else {
+      if(confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')){
+      readyButton.setAttribute('color', 'danger');
+      readyButton.textContent = 'לא במשמרת';
+      this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, false);
+
       }
     }
   }
