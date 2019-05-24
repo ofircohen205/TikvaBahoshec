@@ -92,11 +92,17 @@
 
 
         <ion-card text-center id="Manage-Gallery" [hidden]="true">
-          <p>נהל גלריה</p>
+           
+            <ion-card class="img-card" *ngFor = "let img of imageUrls" >
+                  <img src={{img}}>
+                  <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
+            </ion-card>
+
+
           <input type="file" (change)="addFile($event)">
           <div>{{ uploadPercent | async }}</div>
           <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
-          <ion-button (click)="uploadFile()">הוסף</ion-button>
+          <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
         </ion-card>
 
         <ion-card text- center id="Edit-Association-Info" [hidden]="true">
