@@ -75,11 +75,8 @@
     margin-bottom: 10px;  
 }
 
-.img-card{
-  display: flex;
-  flex-direction: column;
-  width: 100% !important;
-  margin: 0 !important;
+#manage-gallery{
+ display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
 }
-
-

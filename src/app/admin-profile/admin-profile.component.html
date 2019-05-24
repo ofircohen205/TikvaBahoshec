@@ -92,15 +92,20 @@
 
 
         <ion-card text-center id="Manage-Gallery" [hidden]="true">
-           
-            <ion-card class="img-card" *ngFor = "let img of imageUrls" >
-                  <img src={{img}}>
-                  <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
-            </ion-card>
+                  <ion-row>
+                    <ion-col>
+                        <ion-card class="img-card" *ngFor = "let img of imageUrls" >
+                            <img src={{img}}>
+                            <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
+                      </ion-card>
+                    </ion-col>
+                  </ion-row>
+              
+            
 
 
           <input type="file" (change)="addFile($event)">
-          <div>{{ uploadPercent | async }}</div>
+          <ion-progress-bar value= "{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
           <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
           <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
         </ion-card>

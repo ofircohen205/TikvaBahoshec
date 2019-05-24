@@ -596,13 +596,15 @@ export class AdminProfileComponent implements OnInit {
   /*******************************************Gallery Management*******************************************************************/
 
   deleteFile(img){
+    console.log(img);
     let storageRef = this.afs.storage.refFromURL(img);
     storageRef.delete().then(
-      () => {
+      (img) => {
         console.log(this.imageUrls);
-        this.imageUrls.splice(this.imageUrls.findIndex(img),1);
+      this.imageUrls.splice(this.imageUrls.indexOf(img),1);
+        console.log(this.imageUrls);
+
         this.firestore.updateImageArray(this.imageUrls);
-        console.log(this.imageUrls);
       }
     );
       
