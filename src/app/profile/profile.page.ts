@@ -25,13 +25,16 @@ export class ProfilePage implements OnInit {
     const supportRepElement = document.getElementById('supportRep');
     const toolbarHeaderElement = document.getElementById('toolbarHeader');
     this.firestore.checkIfAdmin(this.userAuth.auth.currentUser.uid).subscribe(result => {
-      console.log(result['admins']);
-      for (let admin of result['admins']) {
-        console.log(admin);
+      for (let admin of result['admins']){
         if (admin === this.userAuth.auth.currentUser.uid) {
           this.adminLoginAuth = true;
           toolbarHeaderElement.hidden = false;
           adminElement.hidden = true;
+          supportRepElement.hidden = false;
+          break;
+        } else {
+          toolbarHeaderElement.hidden = true;
+          adminElement.hidden = true ;
           supportRepElement.hidden = false;
         }
       }
