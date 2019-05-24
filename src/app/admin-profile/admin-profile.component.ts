@@ -595,25 +595,24 @@ export class AdminProfileComponent implements OnInit {
 
   /*******************************************Gallery Management*******************************************************************/
 
-  deleteFile(img){
-    let storageRef = this.afs.storage.refFromURL(img);
+  // !Admin Functions
+
+  deleteFile(img) {
+    const storageRef = this.afs.storage.refFromURL(img);
     storageRef.delete().then(
       () => {
         console.log(this.imageUrls);
-        this.imageUrls.splice(this.imageUrls.findIndex(img),1);
+        this.imageUrls.splice(this.imageUrls.findIndex(img), 1);
         this.firestore.updateImageArray(this.imageUrls);
         console.log(this.imageUrls);
       }
     );
-      
   }
 
   addFile(event) {
     this.file = event.target.files[0];
-
   }
 
-  // !Admin Functions
   uploadFile() {
     const fileName = this.file.name;
     const filePath = 'assets/images/' + fileName;
@@ -623,7 +622,7 @@ export class AdminProfileComponent implements OnInit {
     this.uploadPercent = task.percentageChanges();
     // get notified when the download URL is available
     task.snapshotChanges().pipe( finalize(() => {
-      this.getFile(filePath)
+      this.getFile(filePath);
       console.log(this.file.name + ' uploaded successfully');
     })).subscribe();
 

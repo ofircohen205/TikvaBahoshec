@@ -92,11 +92,18 @@
 
 
         <ion-card text-center id="Manage-Gallery" [hidden]="true">
-           
-            <ion-card class="img-card" *ngFor = "let img of imageUrls" >
-                  <img src={{img}}>
-                  <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
-            </ion-card>
+
+          <ion-grid>
+            <ion-row>
+              <ion-col *ngFor='let img of imageUrls' size='auto' style='margin-left: 5px'>
+                <img src={{img}} style='height: 200px; width: 200px; margin-right: 2%'>
+                <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <!-- <ion-card class="img-card" *ngFor="let img of imageUrls">
+
+          </ion-card> -->
 
 
           <input type="file" (change)="addFile($event)">
@@ -122,28 +129,31 @@
                       <ion-label style="text-align: right;width: 100%;">עד</ion-label>
                     </ion-row>
                     <ion-row>
-                      <ion-input type="date" id="historyToDate1" (change) = 'adminHistoryLimitMaxDate()' text-right></ion-input>
+                      <ion-input type="date" id="historyToDate1" (change)='adminHistoryLimitMaxDate()' text-right>
+                      </ion-input>
                     </ion-row>
                   </ion-col>
                 </ion-col>
                 <ion-col fixed=true style="border: 1px solid">
-                    <ion-col>
-                      <ion-row>
-                        <ion-label style="text-align: right;width: 100%;">החל מ</ion-label>
-                      </ion-row>
-                      <ion-row>
-                        <ion-input type="date" id="historyFromDate2" (change) = 'adminHistoryLimitMinDate()' text-right></ion-input>
-                      </ion-row>
-                    </ion-col>
+                  <ion-col>
+                    <ion-row>
+                      <ion-label style="text-align: right;width: 100%;">החל מ</ion-label>
+                    </ion-row>
+                    <ion-row>
+                      <ion-input type="date" id="historyFromDate2" (change)='adminHistoryLimitMinDate()' text-right>
+                      </ion-input>
+                    </ion-row>
                   </ion-col>
+                </ion-col>
                 <ion-col fixed=true style="border: 1px solid">
                   <ion-col>
                     <ion-row>
                       <ion-label style="text-align: right;width: 100%;">סטטוס שיחה</ion-label>
                     </ion-row>
                     <ion-row>
-                      <ion-select id="historyStatusSelect" multiple="true" placeholder="בחר סטטוס" style="margin-left:20%;">
-                        <ion-select-option >בטיפול</ion-select-option>
+                      <ion-select id="historyStatusSelect" multiple="true" placeholder="בחר סטטוס"
+                        style="margin-left:20%;">
+                        <ion-select-option>בטיפול</ion-select-option>
                         <ion-select-option>לא בטיפול</ion-select-option>
                       </ion-select>
                     </ion-row>
@@ -155,7 +165,8 @@
                       <ion-label style="text-align: right;width: 100%;">בחירת נציגים</ion-label>
                     </ion-row>
                     <ion-row>
-                      <ion-select id='historySupportSelect' placeholder="בחר נציגים" multiple="true" style="margin-left:20%">
+                      <ion-select id='historySupportSelect' placeholder="בחר נציגים" multiple="true"
+                        style="margin-left:20%">
                       </ion-select>
                     </ion-row>
                   </ion-col>
@@ -175,13 +186,16 @@
             <ion-row>
               <ion-col fixed=true style="align-self: center">
                 <ion-item lines="none">
-                  <ion-button id="historySearchButton"  style=" display: inline-block;" style="height: 60px;width: 80px;margin-left: 80%" (click)="createHistoryTable()">חיפוש
+                  <ion-button id="historySearchButton" style=" display: inline-block;"
+                    style="height: 60px;width: 80px;margin-left: 80%" (click)="createHistoryTable()">חיפוש
                   </ion-button>
                 </ion-item>
               </ion-col>
               <ion-col fixed=true style="align-self: center">
                 <ion-item lines="none">
-                  <ion-button id="historyResetButton" style=" display: inline-block;" style="height: 60px;width: 80px;" (click)="resetHistoryTableFileds()">ניקוי שדות</ion-button>                </ion-item>
+                  <ion-button id="historyResetButton" style=" display: inline-block;" style="height: 60px;width: 80px;"
+                    (click)="resetHistoryTableFileds()">ניקוי שדות</ion-button>
+                </ion-item>
               </ion-col>
             </ion-row>
           </ion-grid>
