@@ -14,6 +14,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 import { createElement } from '@syncfusion/ej2-base';
 import { SupportRepsService } from '../global/admin/support-reps.service';
 import { ClientsService } from '../global/admin/clients.service';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class AdminProfileComponent implements OnInit {
     private router: Router,
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
+    private location: Location,
     private afs: AngularFireStorage,
     private global: GlobalService,
     private supportRepService: SupportRepsService,
@@ -452,6 +454,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.location.go('/profile/support-reps');
       this.supportRepService.manageSupportReps();
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
@@ -461,6 +464,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = false;
       editEvents.hidden = true;
+      this.location.go('/profile/clients');
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -469,6 +473,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = false;
+      this.location.go('/profile/events');
     } else if (targetId === 'ViewHistoryChat') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -477,6 +482,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = false;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.location.go('/profile/history-chats');
     } else if (targetId === 'EditAssociationInfo') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -485,6 +491,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.location.go('/profile/about-association');
     } else if (targetId === 'ManageGallery') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -493,6 +500,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.location.go('/profile/gallery');
     } else {    // targetId === ManageClientStories
       manageSupportReps.hidden = true;
       manageClientStories.hidden = false;
@@ -501,6 +509,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.location.go('/profile/stories');
       this.manageStories();
     }
   }
@@ -595,16 +604,16 @@ export class AdminProfileComponent implements OnInit {
 
   /*******************************************Gallery Management*******************************************************************/
 
-  // !Admin Functions
-
-  deleteFile(img) {
-    const storageRef = this.afs.storage.refFromURL(img);
+  deleteFile(img){
+    console.log(img);
+    let storageRef = this.afs.storage.refFromURL(img);
     storageRef.delete().then(
-      () => {
+      (img) => {
         console.log(this.imageUrls);
-        this.imageUrls.splice(this.imageUrls.findIndex(img), 1);
+      this.imageUrls.splice(this.imageUrls.indexOf(img),1);
+        console.log(this.imageUrls);
+
         this.firestore.updateImageArray(this.imageUrls);
-        console.log(this.imageUrls);
       }
     );
   }
