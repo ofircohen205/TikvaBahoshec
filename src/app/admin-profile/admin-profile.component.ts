@@ -604,16 +604,11 @@ export class AdminProfileComponent implements OnInit {
 
   /*******************************************Gallery Management*******************************************************************/
 
-  deleteFile(img){
-    console.log(img);
-    let storageRef = this.afs.storage.refFromURL(img);
-    storageRef.delete().then(
-      (img) => {
-        console.log(this.imageUrls);
-      this.imageUrls.splice(this.imageUrls.indexOf(img),1);
-        console.log(this.imageUrls);
-
-        this.firestore.updateImageArray(this.imageUrls);
+  deleteFile(img) {
+    const storageRef = this.afs.storage.refFromURL(img);
+    storageRef.delete().then(() => {
+      this.imageUrls.splice(this.imageUrls.indexOf(img), 1);
+      this.firestore.updateImageArray(this.imageUrls);
       }
     );
   }
@@ -632,13 +627,11 @@ export class AdminProfileComponent implements OnInit {
     // get notified when the download URL is available
     task.snapshotChanges().pipe( finalize(() => {
       this.getFile(filePath);
-      console.log(this.file.name + ' uploaded successfully');
     })).subscribe();
 
   }
 
   getFile(filePath) {
-    console.log(this.imageUrls);
     const storageRef = this.afs.ref(filePath);
     storageRef.getDownloadURL().subscribe(res => {
       this.imageUrls.push(res);

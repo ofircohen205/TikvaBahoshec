@@ -101,14 +101,10 @@
               </ion-col>
             </ion-row>
           </ion-grid>
-          <!-- <ion-card class="img-card" *ngFor="let img of imageUrls">
 
-          </ion-card> -->
-
-
-          <input type="file" (change)="addFile($event)">
-          <ion-progress-bar value= "{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
+          <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
           <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
+          <input type="file" (change)="addFile($event)">
           <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
         </ion-card>
 
