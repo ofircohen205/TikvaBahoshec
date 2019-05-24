@@ -80,7 +80,11 @@ export class AdminProfileComponent implements OnInit {
       this.chatRoomList = result1;
       this.createHistoryTable();
     });
-    this.firestore.getImageArray().subscribe(res => this.imageUrls = res['images']);
+    this.firestore.getImageArray().subscribe(res =>
+      {
+        this.imageUrls = res.images;
+        console.log(res.images);
+      })
   }
 
 
@@ -590,8 +594,23 @@ export class AdminProfileComponent implements OnInit {
   /*********************************************************************************************************************************/
 
   /*******************************************Gallery Management*******************************************************************/
+
+  deleteFile(img){
+    let storageRef = this.afs.storage.refFromURL(img);
+    storageRef.delete().then(
+      () => {
+        console.log(this.imageUrls);
+        this.imageUrls.splice(this.imageUrls.findIndex(img),1);
+        this.firestore.updateImageArray(this.imageUrls);
+        console.log(this.imageUrls);
+      }
+    );
+      
+  }
+
   addFile(event) {
     this.file = event.target.files[0];
+
   }
 
   // !Admin Functions

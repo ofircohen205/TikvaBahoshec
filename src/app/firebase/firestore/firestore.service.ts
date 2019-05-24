@@ -259,6 +259,9 @@ export class FirestoreService {
 
   public updateImageArray(images): void {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ images });
+    console.log(images);
   }
+
+ 
 
 }
