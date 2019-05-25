@@ -8,6 +8,7 @@ import { firestore } from 'firebase';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
+import { deleteObject } from '@syncfusion/ej2-base';
 
 
 @Component({
@@ -22,6 +23,7 @@ import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableServ
 export class AdminProfileComponent implements OnInit {
   list = [];
   storiesArray: any = [];
+  firstEntrance: boolean = true;
 
 
   constructor(
@@ -223,11 +225,14 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.manageStories();
+      if (this.firstEntrance)
+        this.manageStories();
     }
   }
 
   /*******************************************Stories Management*******************************************************************/
+  public i : number = 0;
+  
   manageStories() {
     this.firestore.getStoriesId().subscribe(results => {
       results.forEach(result => {
@@ -235,21 +240,27 @@ export class AdminProfileComponent implements OnInit {
         const data = result.payload.doc.data();
         const timestampDate = data['date']['seconds'];   //save the date as timestamp
         const stringDate = new Date(timestampDate * 1000).toDateString();  //save the date as a regular date form
-        //const approval = data['approved'];
+        const approved = data['approved'];
+        const description = data['description'];
+        const title = data['title'];
 
-        this.storiesArray.push({stringDate, id, ...data });
+        let story = {id : id, title: title, description: description, stringDate : stringDate, approved : approved, timestampDate: timestampDate};
+        this.storiesArray[this.i] = story;
+        this.i++;
+        //this.storiesArray.push({stringDate, id, ...data });
         console.log(this.storiesArray);
       });
 
       this.storiesArray.sort((s1, s2) => {
-        if (s1['date']['seconds'] > s2['date']['seconds']) {
+        if (s1.timestampDate > s2.timestampDate) {
           return 1;
         } else {
           return -1;
         }
       });
     });
-
+    if(this.firstEntrance)
+      this.firstEntrance = false;
   }
 
   //variables for the text editor
@@ -281,6 +292,7 @@ export class AdminProfileComponent implements OnInit {
       if (story.id === this.storiesArray[i].id)
       {
         this.value = this.storiesArray[i].description;  //edit the story
+        this.i = i; //to update the array correctly
       }
     }
   }
@@ -288,12 +300,10 @@ export class AdminProfileComponent implements OnInit {
 //delete the story from firebase and from the array of stories
   deleteStory(story){
     for (let i = 0; i < this.storiesArray.length; i++) {
-        if (story.id === this.storiesArray[i].id){
-          for (let j = i+1; j < this.storiesArray.length; j++) {  //the remove from the array doesn't work well
-              this.storiesArray[j-1] = this.storiesArray[j];
-              this.storiesArray[j] = null;
-          }
+        if (story.id === this.storiesArray[i].id){ 
+          //this.i = i;
           this.firestore.removeStory(this.storiesArray[i].id);
+          this.storiesArray.splice(i,1);//doestn't work well
         }
     }
   }
@@ -303,6 +313,7 @@ export class AdminProfileComponent implements OnInit {
     for (let i = 0; i < this.storiesArray.length; i++) {
       if (story.id === this.storiesArray[i].id){
         this.storiesArray[i].approved = true;
+        this.i = i;
         this.firestore.confirmStory(this.storiesArray[i].id, true);
       }
     } 
@@ -315,11 +326,12 @@ export class AdminProfileComponent implements OnInit {
       areEquals = this.strcmp(storyId, i);
       if (areEquals === 0){
         this.storiesArray[i].description = this.value;
+        this.i = i;
         this.firestore.editStory(this.storiesArray[i].id, this.value);
         break;
       }
     }
-    alert("יש ללחוץ בטבלה על הכפתור 'אשר' עבור העדות הרצויה");
+    alert("אם העדות עדיין לא אושרה, יש ללחוץ בטבלה על הכפתור 'אשר' עבור העדות הרצויה");
     document.getElementById('defaultRTE').hidden = true;
     document.getElementById('save-edit').hidden = true;
   }
