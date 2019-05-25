@@ -11,7 +11,7 @@ import { Location } from '@angular/common';
 })
 export class ProfilePage implements OnInit {
   adminLoginAuth = false;
-  admins :any[] = [];
+  admins: any[] = [];
 
   constructor(
     private firestore: FirestoreService,
@@ -25,7 +25,7 @@ export class ProfilePage implements OnInit {
     const supportRepElement = document.getElementById('supportRep');
     const toolbarHeaderElement = document.getElementById('toolbarHeader');
     this.firestore.checkIfAdmin(this.userAuth.auth.currentUser.uid).subscribe(result => {
-      for (let admin of result['admins']){
+      for (let admin of result['admins']) {
         if (admin === this.userAuth.auth.currentUser.uid) {
           this.adminLoginAuth = true;
           toolbarHeaderElement.hidden = false;
@@ -39,8 +39,8 @@ export class ProfilePage implements OnInit {
         }
       }
     });
-    this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
-      if(result['inShift']){
+    this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result => {
+      if (result['inShift']) {
         document.getElementById('inShiftButton').textContent = 'במשמרת';
         document.getElementById('inShiftButton').setAttribute('color' , 'success');
       } else {
@@ -50,7 +50,7 @@ export class ProfilePage implements OnInit {
   });
     }
 
-    logout(){
+    logout() {
       this.global.logout();
     }
 
@@ -71,19 +71,18 @@ export class ProfilePage implements OnInit {
     }
   }
   async inShift() {
-    var readyButton = document.getElementById('inShiftButton');
-    if(readyButton.getAttribute('color') === 'danger'){
-      if(confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')){
+    const readyButton = document.getElementById('inShiftButton');
+    if (readyButton.getAttribute('color') === 'danger') {
+      if (confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')) {
       readyButton.setAttribute('color', 'success');
       readyButton.textContent = 'במשמרת';
       this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, true);
       }
     } else {
-      if(confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')){
+      if (confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')) {
       readyButton.setAttribute('color', 'danger');
       readyButton.textContent = 'לא במשמרת';
       this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, false);
-
       }
     }
   }
