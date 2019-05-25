@@ -60,7 +60,7 @@
                 <th text-center>עריכת עדות</th>
                 <th text-center>אושר/לא אושר</th>
                 <th text-center>תאריך העלאה</th>
-                <th text-center>מספר מזהה</th>
+                <th text-center>כותרת</th>
               </tr>
             </thead>
 
@@ -72,7 +72,7 @@
                 <td *ngIf='story && story.approved'> אושר</td>
                 <td *ngIf='story && !story.approved'> לא אושר</td>
                 <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
-                <td *ngIf='story'>{{story.id}}</td>
+                <td *ngIf='story'>{{story.title}}</td>
               </tr>
 
             </tbody>
