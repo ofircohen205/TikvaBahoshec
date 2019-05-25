@@ -85,8 +85,9 @@ export class AdminProfileComponent implements OnInit {
     this.firestore.getImageArray().subscribe(res =>
       {
         this.imageUrls = res.images;
-        console.log(res.images);
       })
+
+      
   }
 
 

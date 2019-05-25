@@ -102,6 +102,9 @@
             </ion-row>
           </ion-grid>
 
+          <hr>
+          <hr>
+
           <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
           <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
           <input type="file" (change)="addFile($event)">
