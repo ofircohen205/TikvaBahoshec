@@ -454,7 +454,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.location.go('/profile/support-reps');
+      // this.location.go('/profile/support-reps');
       this.supportRepService.manageSupportReps();
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
@@ -464,7 +464,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = false;
       editEvents.hidden = true;
-      this.location.go('/profile/clients');
+      // this.location.go('/profile/clients');
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -473,7 +473,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = false;
-      this.location.go('/profile/events');
+      // this.location.go('/profile/events');
     } else if (targetId === 'ViewHistoryChat') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -482,7 +482,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = false;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.location.go('/profile/history-chats');
+      // this.location.go('/profile/history-chats');
     } else if (targetId === 'EditAssociationInfo') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -491,7 +491,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.location.go('/profile/about-association');
+      // this.location.go('/profile/about-association');
     } else if (targetId === 'ManageGallery') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -500,7 +500,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.location.go('/profile/gallery');
+      // this.location.go('/profile/gallery');
     } else {    // targetId === ManageClientStories
       manageSupportReps.hidden = true;
       manageClientStories.hidden = false;
@@ -509,7 +509,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.location.go('/profile/stories');
+      // this.location.go('/profile/stories');
       this.manageStories();
     }
   }
