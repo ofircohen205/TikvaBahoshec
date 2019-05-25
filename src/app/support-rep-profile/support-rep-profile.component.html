@@ -2,12 +2,6 @@
   <ion-grid>
     <ion-row>
       <ion-col size='12'>
-
-
-        <ion-button style="text-align: center;" style="margin-left:20%" size='large'>התנתק</ion-button>
-        <ion-button id="supportRepreadyButton" size='large'color ="danger" style="margin-left:40%" (click)="inShift()">"מוכן לשיחה"
-        </ion-button>
-
         <ion-card>
             <p text-center> כל השיחות הפתוחות </p>
             <div id="scrollbar1" class="my-custom-scrollbar">
@@ -15,12 +9,11 @@
             <thead>
               <tr>
                 <th text-center></th>
-                <th text-center> סטטוס</th>
-                <th text-center> שם הנציג בשיחה</th>
-                <th text-center>שעת פתיחת חדר </th>
-                <th text-center>שם הלקוח</th>
+                <th text-center id ='supportRepstatusColTable1' class="p" (click)="sortByOccupiedState(this.sortArrowStatusTable1,0,'supportRepstatusColTable1',this.openChatList,'table1')">&#8661; סטטוס</th>
+                <th text-center id='supportRepSupportColTable1' class="p" (click)="sortBySupportRep(this.sortArrowStatusTable1,1,'supportRepSupportColTable1',this.openChatList,'table1')">&#8661; שם הנציג בשיחה</th>
+                <th text-center id ='supportRepDateColTable1' class="p" (click)="sortByDate(this.sortArrowStatusTable1,2,'supportRepDateColTable1',this.openChatList,'table1')">&#8661;שעת פתיחת חדר </th>
+                <th text-center id='supportRepClientColTable1' class="p" (click)="sortByClient(this.sortArrowStatusTable1,3,'supportRepClientColTable1',this.openChatList,'table1')">&#8661; שם הלקוח</th>
                 <th text-center>מספר </th>
-
               </tr>
 
             </thead>
@@ -42,10 +35,10 @@
                 <th text-center></th>
                 <th text-center></th>
                 <th text-center></th>
-                <th text-center> סטטוס</th>
-                <th text-center> שם הנציג בשיחה</th>
-                <th text-center>שעת פתיחת חדר </th>
-                <th text-center>שם הלקוח</th>
+                <th text-center id = 'supportRepstatusColTable1' > סטטוס</th>
+                <th text-center id='supportRepSupportColTable2' > שם הנציג בשיחה</th>
+                <th text-center id ='supportRepDateColTable2' class="p" (click)="sortByDate(this.sortArrowStatusTable2,0,'supportRepDateColTable2',this.supportRepOpenChatList,'table2')">&#8661;שעת פתיחת חדר </th>
+                <th text-center id='supportRepClientColTable2' class="p" (click)="sortByClient(this.sortArrowStatusTable2,1,'supportRepClientColTable2',this.supportRepOpenChatList,'table2')">&#8661;שם הלקוח</th>
                 <th text-center>מספר </th>
 
               </tr>
@@ -76,20 +69,20 @@
             
           </ion-toolbar>
           <p text-center> :מיין לפי </p>
-          <ion-button size="small" color="success" id="nameBtn" (click)="sortByName(this.nameStatus)"> שם  </ion-button>
+          <!-- <ion-button size="small" color="success" id="nameBtn" (click)="sortByName(this.nameStatus)"> שם  </ion-button> -->
           
-         <ion-button size="small" color="success" (click)="sortByDate(this.dateStatus)" >תאריך</ion-button>
-         <div id="scrollbar3" class="my-custom-scrollbar">
-          <table id="supReptable3" text-right>  
+         <!-- <ion-button size="small" color="success"  (click)="sortByDate(this.dateStatus)" >תאריך</ion-button> -->
+         <div id="scrollbar3" class="my-custom-scrollbar" >
+          <table class="fixed_header" id="supReptable3" text-right scrollY="true">  
               <thead>
-                <tr>
+                <tr >
                   <th text-center></th>
                   <th text-center></th>
-                  <th text-center> מצב החדר</th>
-                  <th text-center> שם הלקוח</th>
-                  <th text-center>שעה ותאריך פתיחת החדר </th>
+                  <th text-center id="stateBtn" class="p" (click)="sortByOpenRoomState(this.sortArrowStatusTable3,0,'stateBtn',this.myChats,'table3')">&#8661; מצב החדר</th>
+                  <th text-center id="nameBtn" class="p" (click)="sortByClient(this.sortArrowStatusTable3,1,'nameBtn',this.myChats,'table3')">&#8661; שם הלקוח</th>
+                  <th text-center id="dateBtn" class="p" (click)="sortByDate(this.sortArrowStatusTable3,2,'dateBtn',this.myChats,'table3')"> &#8661;שעת פתיחת חדר </th>
                   
-                  <th text-center> מספר </th>
+                  <th text-center>מספר</th>
   
                 </tr>
   
@@ -108,10 +101,7 @@
                 </table>
               </div>
         </ion-card>
-
-
-
-      </ion-col>
+        </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

@@ -65,25 +65,15 @@ export class ChatPage {
     });
   }
 
-  getName() {
-    if (this.client_support_flag) {
-      this.firestore.getUserName(this.clientId).subscribe(result => this.clientName = result['username']);
-    } else {
-      this.firestore.getSupportRepName(this.supportRepId).subscribe(result => this.supportRepName = result['name']);
-    }
-  }
-
   sendMessage(type) {
     if (this.isMessageInvalid()) {
       return;
     }
-    let fullName = '';
     if (type === 'username') {
-      fullName = this.clientName;
+      this.firestore.addChatMessage(this.chatId, this.clientName, this.messageField.value, new Date().getTime());
     } else if (type === 'SupportRepID') {
-      fullName = this.supportRepName;
+      this.firestore.addChatMessage(this.chatId, this.supportRepName, this.messageField.value, new Date().getTime());
     }
-    this.firestore.addChatMessage(this.chatId, fullName, this.messageField.value, new Date().getTime());
     this.messageField.value = '';
     this.scrollToBottom();
   }
@@ -99,10 +89,8 @@ export class ChatPage {
   }
 
   onKeyUp(data) {
-    this.getName();
     const ENTER_KET_CODE = 13;
     if (data.keyCode === ENTER_KET_CODE) {
-      setTimeout(() => console.log('sending message'), 700);
       if (this.client_support_flag) {
         this.sendMessage('username');
       } else {

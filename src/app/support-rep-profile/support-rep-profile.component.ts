@@ -10,21 +10,24 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 @Component({
   selector: 'app-support-rep-profile',
   templateUrl: './support-rep-profile.component.html',
-  styleUrls: ['./support-rep-profile.component.scss'],
-  
+  styleUrls: ['./support-rep-profile.component.scss']
 })
 
 export class SupportRepProfileComponent implements OnInit {
   chatReadyStatus = false;
   openChatList: any = [];
   supportRepOpenChatList: any = [];
-  rooms: any[] = []
-  myChats : any []
+  rooms: any[] = [];
+  myChats: any [];
+  sortArrowStatusTable1:boolean[] = [true,true,true,true] ;
+  sortArrowStatusTable2:boolean[] = [true,true] ;
+  sortArrowStatusTable3:boolean[] = [true,true,true] ;
   dateStatus = true;
   nameStatus = true;
-  myChatsCopy =[]
-  txtMsg =""
-  
+  stateStatus = true;
+  myChatsCopy = [];
+  txtMsg = '';
+
 
   constructor(
     private alertController: AlertController,
@@ -32,8 +35,6 @@ export class SupportRepProfileComponent implements OnInit {
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
     private global: GlobalService
-
-
   ) {
 
   }
@@ -44,51 +45,36 @@ export class SupportRepProfileComponent implements OnInit {
       this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
-    this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result =>{
-      
+    this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.supportRepOpenChatList = result;
-      this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList); 
+      this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList);
     });
 
     this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.myChats = result;
       this.myChatsCopy = result;
+      var scroll  = document.getElementById('scrollbar3')
+      if(this.myChats.length>=4){
+        scroll.style.height ='300px';
+      }
+        else
+        scroll.style.height ='200px';
   });
 
-  this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
-    if(result['inShift']){
-      document.getElementById('supportRepreadyButton').textContent = 'במשמרת';
-      document.getElementById('supportRepreadyButton').setAttribute('color' , 'success');
-    } else {
-      document.getElementById('supportRepreadyButton').textContent = 'לא במשמרת';
-      document.getElementById('supportRepreadyButton').setAttribute('color' , 'danger');
-    }
-});
-
   }
-
-  async logout() {
-    const alert = await this.alertController.create({
-      header: 'התנתק',
-      message: 'אתה עומד להתנתק עכשיו',
-      buttons: ['סלמתאק', 'לא לא']
-    });
-    alert.present();
-  }
-
   async inShift() {
     var readyButton = document.getElementById('supportRepreadyButton');
     if(readyButton.getAttribute('color') === 'danger'){
       if(confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')){
       readyButton.setAttribute('color', 'success');
       readyButton.textContent = 'במשמרת';
-      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, true);
+      this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, true);
       }
     } else {
       if(confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')){
       readyButton.setAttribute('color', 'danger');
       readyButton.textContent = 'לא במשמרת';
-      this.firestore.updateSupportRepInShif(this.userAuth.auth.currentUser.uid, false);
+      this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, false);
 
       }
     }
@@ -98,9 +84,7 @@ export class SupportRepProfileComponent implements OnInit {
     this.global.scrollToElement(e);
   }
 
-  readyForChatColor(e) {
-
-  }
+  
 
   async  createTable1(tbody, list: any[]) {
     var tbodyChildrens = tbody.childNodes;
@@ -290,6 +274,7 @@ export class SupportRepProfileComponent implements OnInit {
       index++;
       tbody.appendChild(tr);
     }
+    //console.log(tbody);
     var tbodyChildrens = tbody.childNodes;
     for(let i = 0; i < tbody.childNodes.length; i++) {
       tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
@@ -339,35 +324,116 @@ export class SupportRepProfileComponent implements OnInit {
    }
     }
 
-
-    sortByDate(dateStatus){
-    var nameBtn =(<HTMLButtonElement>document.getElementById("dateBtn"))
-    if(dateStatus==true){
-      this.myChats.sort((a,b)=> (a.timestamp>=b.timestamp)? 1:-1)
-      this.dateStatus=false
-      nameBtn.innerHTML ='&#8657;תאריך'
+    sortByDate(dateStatus,index,id,list,table){
+      console.log(id);
+    var nameBtn =(<HTMLButtonElement>document.getElementById(id));
+    if(dateStatus[index]==true){
+      list.sort((a,b)=> (a.timestamp>=b.timestamp)? 1:-1)
+      dateStatus[index] = false;
+      console.log(this.sortArrowStatusTable1[2]);
+      console.log(dateStatus);
+      nameBtn.innerHTML ='&#8657;שעת פתיחת חדר';
     }
     else{
-      this.myChats.sort((a,b)=> (a.timestamp<=b.timestamp)? 1:-1)
-    this.dateStatus=true;
-    nameBtn.innerHTML ='&#8659;תאריך'
+      list.sort((a,b)=> (a.timestamp<=b.timestamp)? 1:-1);
+    dateStatus[index] = true;
+    nameBtn.innerHTML = '&#8659;שעת פתיחת חדר';
     
+    }
+    if(table === 'table1'){
+      this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
+    }
+    if(table === 'table2'){
+      this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList);
     }
 }
 
 
-sortByName(nameStatus){
-  var nameBtn =(<HTMLButtonElement>document.getElementById("nameBtn"))
-    if(nameStatus==true){
-      this.myChats.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1)
-      this.nameStatus=false
-      nameBtn.innerHTML ='&#8657;שם'
+sortByClient(nameStatus,index,id,list,table){
+  var nameBtn =(<HTMLButtonElement>document.getElementById(id));
+    if(nameStatus[index]==true){
+      list.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1);
+      nameStatus[index]=false;
+      nameBtn.innerHTML ='&#8657; שם הלקוח'
     }
     else{
-      this.myChats.sort((a,b)=> (a.ClientName<=b.ClientName)? 1:-1)
-    this.nameStatus=true;
-    nameBtn.innerHTML ='&#8659;שם'
+      list.sort((a,b)=> (a.ClientName<=b.ClientName)? 1:-1)
+    nameStatus[index] = true;
+    nameBtn.innerHTML ='&#8659; שם הלקוח'
  }
+ if(table === 'table1'){
+  this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
+}
+if(table === 'table2'){
+  this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList);
+}
+
+}
+
+sortBySupportRep(nameStatus,index,id,list,table){
+  var nameBtn =(<HTMLButtonElement>document.getElementById(id));
+    if(nameStatus[index]==true){
+      list.sort((a,b)=> (a.SupportRepName>=b.SupportRepName)? 1:-1)
+      nameStatus[index]=false
+      nameBtn.innerHTML ='&#8657; שם הנציג בשיחה'
+    }
+    else{
+      list.sort((a,b)=> (a.SupportRepName<=b.SupportRepName)? 1:-1)
+    nameStatus[index] = true;
+    nameBtn.innerHTML ='&#8659; שם הנציג בשיחה'
+ }
+ if(table === 'table1'){
+  this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
+}
+if(table === 'table2'){
+  this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList);
+}
+
+}
+
+
+sortByOpenRoomState(stateStatus,index,id,list,table){
+  var stateBtn =(<HTMLButtonElement>document.getElementById(id));
+  console.log(list);
+    if(stateStatus[index] === true){
+      list.sort((a,b)=>a.open - b.open)
+      stateStatus[index] = false;
+      stateBtn.innerHTML = '&#8657; מצב החדר'
+    }
+    else{
+      list.sort((a,b)=>b.open-a.open)
+      stateStatus[index]=true;
+      stateBtn.innerHTML ='&#8659; מצב החדר';
+ }
+ if(table === 'table1'){
+  this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
+}
+if(table === 'table2'){
+  this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList);
+}
+
+}
+
+
+sortByOccupiedState(stateStatus,index,id,list,table){
+  var stateBtn =(<HTMLButtonElement>document.getElementById(id));
+  console.log(list);
+    if(stateStatus[index] === true){
+      list.sort((a,b)=>a.occupied - b.occupied)
+      stateStatus[index] = false;
+      stateBtn.innerHTML = '&#8657; מצב החדר'
+    }
+    else{
+      list.sort((a,b)=>b.occupied-a.occupied)
+      stateStatus[index]=true;
+      stateBtn.innerHTML ='&#8659; מצב החדר';
+ }
+ if(table === 'table1'){
+  this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
+}
+if(table === 'table2'){
+  this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList);
+}
 
 }
 

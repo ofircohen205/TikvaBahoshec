@@ -9,14 +9,14 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 })
 export class GlobalService {
 
-  anonymousNumber = 0;
-
   constructor(
     private alertController: AlertController,
     private userAuth: AngularFireAuth,
     private router: Router,
     private firestore: FirestoreService
-    ) { }
+  ) { }
+
+  anonymousNumber = 0;
 
 // tslint:disable-next-line: use-life-cycle-interface
   ngOnInit() {
@@ -44,7 +44,7 @@ export class GlobalService {
           });
           this.firestore.createChatRoom(data.name).then(result => {
             this.firestore.updateChatRoomId(result.id);
-            this.firestore.updateClientId(result.id, clientId);
+            this.firestore.updateChatClientId(result.id, clientId);
             this.router.navigateByUrl('/chat/' + result.id);
           }).catch((error) => console.log(error));
         }
@@ -68,6 +68,25 @@ export class GlobalService {
     const x = e.target.value;
     const element = document.getElementById(x);
     element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'start'});
+  }
+
+
+  async logout() {
+    const alert = await this.alertController.create({
+      header: 'התנתק',
+      message: 'אתה עומד להתנתק עכשיו',
+      buttons: [{
+        text: 'המשך',
+        handler: () => {
+          this.userAuth.auth.signOut().then(() => {
+            this.router.navigateByUrl('/login');
+          }).catch((error) => console.log(error));
+        }
+      }, {
+        text: 'עדיין לא'
+      }]
+    });
+    alert.present();
   }
 
 }

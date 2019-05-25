@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { GlobalService } from '../global/global.service';
 import { Location } from '@angular/common';
 
 @Component({
@@ -10,34 +11,47 @@ import { Location } from '@angular/common';
 })
 export class ProfilePage implements OnInit {
   adminLoginAuth = false;
-  @ViewChild('admin') admin;
-  @ViewChild('supportRep') supportRep;
-  @ViewChild('toolbarHeader') toolbarHeader;
+  admins :any[] = [];
 
   constructor(
     private firestore: FirestoreService,
     private userAuth: AngularFireAuth,
+    private global: GlobalService,
     private location: Location
     ) {}
 
   ngOnInit() {
-    // const adminElement = document.getElementById('admin');
-    // const supportRepElement = document.getElementById('supportRep');
-    // const toolbarHeaderElement = document.getElementById('toolbarHeader');
+    const adminElement = document.getElementById('admin');
+    const supportRepElement = document.getElementById('supportRep');
+    const toolbarHeaderElement = document.getElementById('toolbarHeader');
     this.firestore.checkIfAdmin(this.userAuth.auth.currentUser.uid).subscribe(result => {
-      result['admins'].some(element => {
-        if (element === this.userAuth.auth.currentUser.uid) {
+      for (let admin of result['admins']){
+        if (admin === this.userAuth.auth.currentUser.uid) {
           this.adminLoginAuth = true;
-          this.toolbarHeader.hidden = false;
-          this.admin.hidden = true;
-          this.supportRep.hidden = false;
+          toolbarHeaderElement.hidden = false;
+          adminElement.hidden = true;
+          supportRepElement.hidden = false;
+          break;
         } else {
-          this.toolbarHeader.hidden = true;
-          this.admin.hidden = true ;
-          this.supportRep.hidden = false;
+          toolbarHeaderElement.hidden = true;
+          adminElement.hidden = true ;
+          supportRepElement.hidden = false;
         }
-      });
+      }
     });
+    this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result =>{
+      if(result['inShift']){
+        document.getElementById('inShiftButton').textContent = 'במשמרת';
+        document.getElementById('inShiftButton').setAttribute('color' , 'success');
+      } else {
+        document.getElementById('inShiftButton').textContent = 'לא במשמרת';
+        document.getElementById('inShiftButton').setAttribute('color' , 'danger');
+      }
+  });
+    }
+
+    logout(){
+      this.global.logout();
     }
 
   onclick(e): void {
@@ -53,6 +67,23 @@ export class ProfilePage implements OnInit {
       if (supportRepElement.hidden === true) {
         adminElement.hidden = true;
         supportRepElement.hidden = false;
+      }
+    }
+  }
+  async inShift() {
+    var readyButton = document.getElementById('inShiftButton');
+    if(readyButton.getAttribute('color') === 'danger'){
+      if(confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')){
+      readyButton.setAttribute('color', 'success');
+      readyButton.textContent = 'במשמרת';
+      this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, true);
+      }
+    } else {
+      if(confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')){
+      readyButton.setAttribute('color', 'danger');
+      readyButton.textContent = 'לא במשמרת';
+      this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, false);
+
       }
     }
   }

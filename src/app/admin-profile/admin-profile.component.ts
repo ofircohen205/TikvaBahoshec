@@ -4,11 +4,17 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
-import { firestore } from 'firebase';
 import { FormGroup, FormControl } from '@angular/forms';
-
+import { AngularFireStorage } from '@angular/fire/storage';
+// tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
-import { deleteObject } from '@syncfusion/ej2-base';
+import { Observable } from 'rxjs';
+import { finalize, findIndex, timestamp } from 'rxjs/operators';
+import { forEach } from '@angular/router/src/utils/collection';
+import { createElement } from '@syncfusion/ej2-base';
+import { SupportRepsService } from '../global/admin/support-reps.service';
+import { ClientsService } from '../global/admin/clients.service';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -21,57 +27,325 @@ import { deleteObject } from '@syncfusion/ej2-base';
 
 
 export class AdminProfileComponent implements OnInit {
-  list = [];
-  storiesArray: any = [];
-  firstEntrance: boolean = true;
-
 
   constructor(
     private alertController: AlertController,
     private router: Router,
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
-    private global: GlobalService
+    private location: Location,
+    private afs: AngularFireStorage,
+    private global: GlobalService,
+    private supportRepService: SupportRepsService,
+    private clientService: ClientsService
   ) { }
 
+
+  imageUrls: string[] = [];
+  list: any[] = [];
+  storiesArray: any = [];
+  file: File;
+  uploadPercent: Observable<number>;
+  downloadURL: Observable<string>;
+  supportRepList: any[] = [];
+  chatRoomList: any[] =[];
+  txtMsg = '';
+
+  // variables for the text editor
+  // tslint:disable-next-line: member-ordering
+  public value =
+    `<br/>
+  כתוב על המקרה שלך כאן`;
+
+  public tools: object = {
+    items: ['Undo', 'Redo', '|',
+      'Bold', 'Italic', 'Underline', 'StrikeThrough', '|',
+      'FontName', 'FontSize', 'FontColor', 'BackgroundColor', '|',
+      /*'SubScript', 'SuperScript', '|',
+      'LowerCase', 'UpperCase', '|',*/
+      'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
+      'Indent', 'Outdent', '|', 'CreateLink', 'CreateTable',
+      'Image', '|', 'ClearFormat', /* 'Print',*/ 'SourceCode', '|', 'FullScreen']
+  };
+  public quickTools: object = {
+    image: [
+      'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
+  };
+
   ngOnInit() {
+    this.firestore.getSupportRepNameList().subscribe(result => {
+      this.supportRepList = result;
+      console.log(result);
+      this.initSupportSelectList();
+    });
+    this.firestore.getAllChatRoom().subscribe(result1 => {
+      this.chatRoomList = result1;
+      this.createHistoryTable();
+    });
+    this.firestore.getImageArray().subscribe(res =>
+      {
+        this.imageUrls = res.images;
+        console.log(res.images);
+      })
+  }
+
+
+  initSupportSelectList() {
+    var selectElement = document.getElementById('historySupportSelect');
+    this.supportRepList.forEach(supportRep => {
+      if (supportRep !== undefined) {
+        var selection = document.createElement('ion-select-option');
+        selection.value = supportRep['name'];
+        selection.textContent = supportRep['name'];
+        selectElement.appendChild(selection);
+      }
+    });
+  }
+
+
+  createHistoryTable() {
+    var toDate = (<HTMLInputElement>document.getElementById('historyToDate1')).value;
+    var fromDate = (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
+    var statusSelect: any = (<HTMLInputElement>document.getElementById('historyStatusSelect')).value;
+    var supportRepSelect = (<HTMLInputElement>document.getElementById('historySupportSelect')).value;
+    var clientName = (<HTMLInputElement>document.getElementById('historyClientName')).value;
+    var chatRoomList: any[];
+    var body = document.getElementById('historyBodyTable');
+    this.removeChildren(body,'historyBodyTable');
+    var dateFrom;
+    var dateTo;
+    if (fromDate !== '') {
+      dateFrom = new Date(fromDate).toLocaleDateString();
+    }
+    else {
+      dateFrom = '';
+    }
+    if (toDate !== '') {
+      dateTo = new Date(toDate).toLocaleDateString();
+    } else {
+      dateTo = '';
+    }
+    var compareStatus;
+    var compareSupport;
+    var index = 1;
+    
+      index = 1;
+      for(let chatRoom of this.chatRoomList)
+      {
+        var tr = document.createElement('tr');
+        if (chatRoom !== undefined) 
+        {
+          var date = new Date(chatRoom['timestamp']).toLocaleDateString();
+          for (let v of statusSelect) {
+            if ((v === 'בטיפול' && chatRoom['occupied'] === true) || (v === 'לא בטיפול' && chatRoom['occupied'] === false)) {
+              compareStatus = true;
+              break;
+            }
+            else{
+              compareStatus = false;
+            }
+          }
+          for (let v of supportRepSelect) {
+            if (v === chatRoom['SupportRepName']) {
+              compareSupport = true;
+              break;
+            } else {
+              compareSupport = false;
+            }
+          }
+
+          if ((date >= dateFrom || dateFrom === '') && (date <= dateTo || dateTo === '') &&
+            (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
+            (chatRoom['ClientName'].search(clientName) !=-1 || clientName === '')) {
+              var button1 = document.createElement('ion-button');
+              var td1 = document.createElement('td');
+              td1.appendChild(button1);
+              td1.id = 'adminHistoryTablebutton1_' + index;
+              button1.innerHTML = 'הורד שיחה';
+              button1.color = 'success';
+              td1.style.color = 'white';
+              td1.style.border = ' 1px solid #ddd';
+              td1.style.padding = '8px';
+              td1.style.borderCollapse = 'collapse';
+
+              var button2 = document.createElement('ion-button');
+              var td2 = document.createElement('td');
+              td2.appendChild(button2);
+              td2.id = 'adminHistoryTablebutton2_' + index;
+              button2.innerHTML = 'כנס לחדר';
+              button2.color = 'success';
+              td2.style.color = 'white';
+              td2.style.border = ' 1px solid #ddd';
+              td2.style.padding = '8px';
+              td2.style.borderCollapse = 'collapse';
+        
+              var button3 = document.createElement('ion-button');
+              var td3 = document.createElement('td');
+              td3.appendChild(button3);
+              td3.id = 'adminHistoryTablebutton3_' + index;
+              button3.innerHTML = 'כנס לטופס לקוח';
+              button3.color = 'success';
+              td3.style.color = 'white';
+              td3.style.border = ' 1px solid #ddd';
+              td3.style.padding = '8px';
+              td3.style.borderCollapse = 'collapse';
+        
+              var td4 = document.createElement('td');
+              td4.style.border = ' 1px solid #ddd';
+              td4.style.padding = '8px';
+              td4.style.borderCollapse = 'collapse';
+              if(chatRoom.occupied === true) {
+                td4.textContent = 'בטיפול';
+              } else {
+                td4.textContent = 'לא בטיפול';
+              }
+        
+              var td5 = document.createElement('td');
+              var name = '';
+              td5.style.border = ' 1px solid #ddd';
+              td5.style.padding = '8px';
+              td5.style.borderCollapse = 'collapse';
+              if(chatRoom.SupportRepName !== '' && chatRoom.SupportRepName !=null){
+                td5.textContent = chatRoom.SupportRepName;
+              } else {
+                td5.textContent = 'no support name';
+              }
+              var td6 = document.createElement('td');
+              td6.style.border = ' 1px solid #ddd';
+              td6.style.padding = '8px';
+              td6.style.borderCollapse = 'collapse';
+              td6.textContent = new Date(chatRoom.timestamp).toLocaleString();
+        
+              var td7 = document.createElement('td');
+              td7.style.border = ' 1px solid #ddd';
+              td7.style.padding = '8px';
+              td7.style.borderCollapse = 'collapse';
+              td7.textContent = chatRoom.ClientName;
+        
+              var td8 = document.createElement('td');
+              td8.style.border = ' 1px solid #ddd';
+              td8.style.padding = '8px';
+              td8.style.borderCollapse = 'collapse';
+              td8.textContent = index.toString();
+              tr.appendChild(td1);
+              tr.appendChild(td2);
+              tr.appendChild(td3);
+              tr.appendChild(td4);
+              tr.appendChild(td5);
+              tr.appendChild(td6);
+              tr.appendChild(td7);
+              tr.appendChild(td8);
+        
+              tr.id = 'adminHistoryTableTr_' + index; 
+              index++;
+              body.appendChild(tr);
+          }
+          var tbodyChildrens = body.childNodes;
+          for(let i = 0; i < body.childNodes.length; i++) {
+            tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
+            tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
+            var trChildren = tbodyChildrens[i].childNodes;
+            trChildren[0].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[0],i));
+            trChildren[1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[1],i));
+            trChildren[2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[2],i));
+          }
+        }
+      }
+
+  }
+
+  async removeChildren(tbody,tbodyId){
+    var size = tbody.childNodes.length;
+    var tbody1 = document.getElementById(tbodyId);
+    while (tbody1.firstChild) {
+     tbody1.removeChild(tbody1.firstChild);
+    }
+  }
+
+  resetHistoryTableFileds(){
+    var toDate = document.getElementById('historyToDate1');
+    var fromDate = document.getElementById('historyFromDate2');
+    var statusSelect: any = document.getElementById('historyStatusSelect');
+    var supportRepSelect = document.getElementById('historySupportSelect');
+    var clientName = document.getElementById('historyClientName');
+    (<HTMLInputElement>(toDate)).value = '';
+    (<HTMLInputElement>(fromDate)).value = '';
+    (<HTMLInputElement>(statusSelect)).value = '';
+    (<HTMLInputElement>(supportRepSelect)).value = '';
+    (<HTMLInputElement>(clientName)).value = '';
+  }
+
+  adminHistoryLimitMinDate(){
+    var dateFrom =  (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
+    var dateTo = document.getElementById('historyToDate1');
+    dateTo.setAttribute("min",dateFrom);
+  }
+  adminHistoryLimitMaxDate(){
+    var dateTo =  (<HTMLInputElement>document.getElementById('historyToDate1')).value;
+    var dateFrom = document.getElementById('historyFromDate2');
+    dateFrom.setAttribute("max",dateTo);
+  }
+
+  onclickAdminHistoryTable(e,index) {
+    if(e['id'] === 'adminHistoryTablebutton1_' + (index + 1)){
+      this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
+    }
+    if(e['id'] === 'adminHistoryTablebutton2_' + (index + 1)){
+// tslint:disable-next-line: max-line-length
+      window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+    }
+    if(e['id'] === 'adminHistoryTablebutton3_' + (index + 1)){
+      console.log('go to client form page');
+      console.log(e['id']);
+    }
+   }
+
+   downloadChatMsg(roomId){
+    this.firestore.getChatMessages(roomId).subscribe(result =>{
+    result.forEach(msg=>{
+      this.txtMsg+="From:"+msg.from +" Time:" +new Date(msg.timestamp)
+      this.txtMsg+="\n<"+msg.content +">\n\n"  
+    })
+    console.log("startDownload")
+    var link = document.createElement('a');
+    link.download = 'Chat:'+roomId+'.txt';
+    var blob = new Blob([this.txtMsg], {type: 'text/plain'});
+    link.href = window.URL.createObjectURL(blob);
+    link.click();
+    })
+  }
+
+  onmouseover(e) {
+    e.style.background = '#ddd';
+  }
+  onmouseout(e) {
+    e.style.background = 'white';
+  }
+
+  
+
+  logout() {
+    this.global.logout();
+  }
+
+  manageSupportReps() {
     this.list = [];
     this.firestore.getSupportRepIdList().subscribe(result => {
       result.forEach(ele => {
-      const data = ele.payload.doc.data();
-      const id = ele.payload.doc.id;
-      if (ele.payload.type === 'added') {
-      this.list.push({id, ...data}) ;
-      } else if (ele.payload.type === 'modified') {
-        const index = this.list.findIndex(item => item.id === id);
+        const data = ele.payload.doc.data();
+        const id = ele.payload.doc.id;
+        if (ele.payload.type === 'added') {
+          this.list.push({ id, ...data });
+        } else if (ele.payload.type === 'modified') {
+          const index = this.list.findIndex(item => item.id === id);
 
-        // Replace the item by index.
-        this.list.splice(index, 1, {id, ...data});
-      } else {
-        this.list.slice(this.list.indexOf(id), 1);
-      }
-       });
-
-    });
-
-   }
-
-  async logout() {
-    const alert = await this.alertController.create({
-      header: 'התנתק',
-      message: 'אתה עומד להתנתק עכשיו',
-      buttons: [{
-        text: 'המשך',
-        handler: () => {
-          this.userAuth.auth.signOut().then(() => {
-            this.router.navigateByUrl('/home');
-          }).catch((error) => console.log(error));
+          // Replace the item by index.
+          this.list.splice(index, 1, { id, ...data });
+        } else {
+          this.list.slice(this.list.indexOf(id), 1);
         }
-      }, {
-        text: 'עדיין לא'
-      }]
+      });
     });
-    alert.present();
   }
 
   async addSupport() {
@@ -129,7 +403,12 @@ export class AdminProfileComponent implements OnInit {
       },
       {
         text: 'שמור שינויים',
-        handler: data => { this.firestore.updateSupportRep(x.id, data.username, data.email, data.phone); }
+        handler: data => {
+          this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone);
+          this.list[this.list.indexOf(x)].username = data.username;
+          this.list[this.list.indexOf(x)].email = data.email;
+          this.list[this.list.indexOf(x)].phone = data.phone;
+        }
       }]
     });
     alert.present();
@@ -140,23 +419,21 @@ export class AdminProfileComponent implements OnInit {
       header: 'אישור מחיקה',
       message: `האם את/ה בטוח/ה שברצונך למחוק את הנציג/ה?`,
       buttons: [
-        { text: 'חזור'},
+        { text: 'חזור' },
         {
-           text: 'מחק',
-         handler: () => {
-           this.firestore.removeSupportRep(x.id);
-           this.list.splice(this.list.indexOf(x), 1); }
+          text: 'מחק',
+          handler: () => {
+            this.firestore.removeSupportRep(x.id);
+            this.list.splice(this.list.indexOf(x), 1);
+          }
         }]
     });
     alert.present();
   }
 
-  readyForChat() {
-    this.global.readyForChat();
-  }
 
-/*******************************************AdminProfile components performance******************************************************/
-  //shows the component of the selected button
+  /*******************************************AdminProfile components performance******************************************************/
+  // shows the component of the selected button
   onClick(e): void {
     const targetId = e.target.id;
     console.log(targetId);
@@ -177,6 +454,8 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.location.go('/profile/support-reps');
+      this.supportRepService.manageSupportReps();
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -185,6 +464,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = false;
       editEvents.hidden = true;
+      this.location.go('/profile/clients');
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -193,6 +473,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = false;
+      this.location.go('/profile/events');
     } else if (targetId === 'ViewHistoryChat') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -201,6 +482,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = false;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.location.go('/profile/history-chats');
     } else if (targetId === 'EditAssociationInfo') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -209,6 +491,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.location.go('/profile/about-association');
     } else if (targetId === 'ManageGallery') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -217,6 +500,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.location.go('/profile/gallery');
     } else {    // targetId === ManageClientStories
       manageSupportReps.hidden = true;
       manageClientStories.hidden = false;
@@ -225,8 +509,8 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      if (this.firstEntrance)
-        this.manageStories();
+      this.location.go('/profile/stories');
+      this.manageStories();
     }
   }
 
@@ -259,29 +543,9 @@ export class AdminProfileComponent implements OnInit {
         }
       });
     });
-    if(this.firstEntrance)
-      this.firstEntrance = false;
+    // if(this.firstEntrance
+    //   this.firstEntrance = false;
   }
-
-  //variables for the text editor
-  public value: string =
-    `<br/> 
-  כתוב על המקרה שלך כאן`
-
-  public tools: object = {
-    items: ['Undo', 'Redo', '|',
-      'Bold', 'Italic', 'Underline', 'StrikeThrough', '|',
-      'FontName', 'FontSize', 'FontColor', 'BackgroundColor', '|',
-      /*'SubScript', 'SuperScript', '|',
-      'LowerCase', 'UpperCase', '|',*/
-      'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
-      'Indent', 'Outdent', '|', 'CreateLink', 'CreateTable',
-      'Image', '|', 'ClearFormat',/* 'Print',*/ 'SourceCode', '|', 'FullScreen']
-  };
-  public quickTools: object = {
-    image: [
-      'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
-  };
 
 
   editStory(story) {
@@ -297,34 +561,37 @@ export class AdminProfileComponent implements OnInit {
     }
   }
 
-//delete the story from firebase and from the array of stories
-  deleteStory(story){
+  // delete the story from firebase and from the array of stories
+  deleteStory(story) {
     for (let i = 0; i < this.storiesArray.length; i++) {
         if (story.id === this.storiesArray[i].id){ 
           //this.i = i;
           this.firestore.removeStory(this.storiesArray[i].id);
           this.storiesArray.splice(i,1);//doestn't work well
         }
+        this.firestore.removeStory(this.storiesArray[i].id);
+      }
     }
-  }
 
-  //to confirm the story can be uploaded to the website
+
+  // to confirm the story can be uploaded to the website
   confirmStory(story) {
     for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id){
+      if (story.id === this.storiesArray[i].id) {
         this.storiesArray[i].approved = true;
         this.i = i;
         this.firestore.confirmStory(this.storiesArray[i].id, true);
       }
-    } 
+    }
   }
 
-  //after the story was edited, we save the changes in it
+  // after the story was edited, we save the changes in it
   acceptStoryChange() {
-    let storyId = document.getElementById('defaultRTE').className, areEquals : number;
+    const storyId = document.getElementById('defaultRTE').className;
+    let areEquals: number;
     for (let i = 0; i < this.storiesArray.length; i++) {
       areEquals = this.strcmp(storyId, i);
-      if (areEquals === 0){
+      if (areEquals === 0) {
         this.storiesArray[i].description = this.value;
         this.i = i;
         this.firestore.editStory(this.storiesArray[i].id, this.value);
@@ -336,14 +603,52 @@ export class AdminProfileComponent implements OnInit {
     document.getElementById('save-edit').hidden = true;
   }
 
-  //compare 2 strings
-  private strcmp(storyId, i){         
-    for (let j=0,n=20; j < n; j++){
-      if (storyId.toString().charAt(j) !== this.storiesArray[i].id.toString().charAt(j))
+  // compare 2 strings
+  private strcmp(storyId, i) {
+    for (let j = 0, n = 20; j < n; j++) {
+      if (storyId.toString().charAt(j) !== this.storiesArray[i].id.toString().charAt(j)) {
         return -1;
+      }
     }
     return 0;
   }
-/*********************************************************************************************************************************/
+  /*********************************************************************************************************************************/
+
+  /*******************************************Gallery Management*******************************************************************/
+
+  deleteFile(img) {
+    const storageRef = this.afs.storage.refFromURL(img);
+    storageRef.delete().then(() => {
+      this.imageUrls.splice(this.imageUrls.indexOf(img), 1);
+      this.firestore.updateImageArray(this.imageUrls);
+      }
+    );
+  }
+
+  addFile(event) {
+    this.file = event.target.files[0];
+  }
+
+  uploadFile() {
+    const fileName = this.file.name;
+    const filePath = 'assets/images/' + fileName;
+    const task = this.afs.upload(filePath, this.file);
+
+    // observe percentage changes
+    this.uploadPercent = task.percentageChanges();
+    // get notified when the download URL is available
+    task.snapshotChanges().pipe( finalize(() => {
+      this.getFile(filePath);
+    })).subscribe();
+
+  }
+
+  getFile(filePath) {
+    const storageRef = this.afs.ref(filePath);
+    storageRef.getDownloadURL().subscribe(res => {
+      this.imageUrls.push(res);
+      this.firestore.updateImageArray(this.imageUrls);
+    });
+  }
 
 }

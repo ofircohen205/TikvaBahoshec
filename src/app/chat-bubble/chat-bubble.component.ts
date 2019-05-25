@@ -18,7 +18,7 @@ export class ChatBubbleComponent implements OnInit {
 
   ngOnInit() {
     this.messageTime = new Date(this.data['timestamp']).toLocaleTimeString();
-    if (this.clientName) {
+    if (this.clientName === this.data.from) {
       this.flag = true;
     } else {
       this.flag = false;

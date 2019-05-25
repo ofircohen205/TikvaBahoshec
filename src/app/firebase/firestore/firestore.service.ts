@@ -2,9 +2,14 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Key } from 'protractor';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
+
+
 
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
+
+  constructor( private firestore: AngularFirestore ) { }
 
   readonly CHAT_ROOMS_COLLECTION = 'ChatRooms';
   readonly CALENDER_COLLECTION = 'Calender';
@@ -13,8 +18,6 @@ export class FirestoreService {
   readonly MESSAGES_COLLECTION = 'Messages';
   readonly STORIES_COLLECTION = 'Stories';
   readonly SUPPORT_REP_COLLECTION = 'SupportReps';
-
-  constructor(private firestore: AngularFirestore) { }
 
   // ! CRUD ON EACH COLLECTION - CREATE READ(GET) UPDATE DELETE
 
@@ -37,6 +40,9 @@ export class FirestoreService {
 
   public getChatRoom(chatId): Observable<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).valueChanges();
+  }
+  public getAllChatRoom(): Observable<any> {
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).valueChanges();
   }
 
   public getOpenChatRooms(): Observable<any> {
@@ -80,7 +86,7 @@ export class FirestoreService {
     });
   }
 
-  public updateClientId(chatId, ClientID): void {
+  public updateChatClientId(chatId, ClientID): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
   }
 
@@ -88,7 +94,7 @@ export class FirestoreService {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ChatRoomId: chatId });
   }
 
-  public updateSupportRepId(chatId, SupportRepID): void {
+  public updateChatSupportRepId(chatId, SupportRepID): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ SupportRepID });
   }
 
@@ -105,12 +111,12 @@ export class FirestoreService {
     });
   }
 
-  public getUserName(clientId): Observable<any> {
-    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
-  }
-
   public getClients(): Observable<any> {
     return this.firestore.collection(this.CLIENT_COLLECTION).valueChanges();
+  }
+
+  public getClientName(clientId): Observable<any> {
+    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
   }
 
   public updateClientName(chatId, username): void {
@@ -136,33 +142,13 @@ export class FirestoreService {
       phone,
       inShift: false,
       SupportRepID: null,
-      connectionTime: null
+      connectionTime: null,
     });
-  }
-
-  public updateSupportRep(SupportRepId, name, email, phone): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepId).update({
-      email,
-      name,
-      phone
-    });
-  }
-
-  public updateSupportRepInShif(supportRepId, inShift): void {
-    const supportRepData = {
-      inShift : inShift
-    };
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).update(supportRepData);
-  }
-
-  public removeSupportRep(supportRepId): void {
-     this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).delete();
   }
 
   public getSupportRepName(supportRepId): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
   }
-
 
   public getSupportRepNameList(): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).valueChanges();
@@ -172,8 +158,35 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
 
-  public getClientName(clientId): Observable<any> {
-    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
+  public updateSupportRepDetails(SupportRepID, name, email, phone): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, name, email, phone });
+  }
+
+  public updateSupportRepEmail(SupportRepID, email): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ email });
+  }
+
+  public updateSupportRepName(SupportRepID, name): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ name });
+  }
+
+  public updateSupportRepPhone(SupportRepID, phone): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ phone });
+  }
+
+  public updateSupportRepID(SupportRepID): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID });
+  }
+
+  public updateSupportRepInShift(supportRepId, inShift): void {
+    const supportRepData = {
+      inShift : inShift
+    };
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).update(supportRepData);
+  }
+
+  public removeSupportRep(supportRepId): void {
+     this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).delete();
   }
 
 
@@ -216,12 +229,12 @@ export class FirestoreService {
   public removeStory(storyId): void {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).delete();
   }
-  
-  public editStory(storyId,description){
+
+  public editStory(storyId, description) {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({description});
   }
 
-  public confirmStory(storyId, approved){
+  public confirmStory(storyId, approved) {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({approved});
   }
 
@@ -240,11 +253,15 @@ export class FirestoreService {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
   }
 
-  public getAboutAssociation(): Observable<any> {
+  public getImageArray(): Observable<any> {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
   }
 
-  public updateAboutAssociation(aboutAssociation): void {
-    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ aboutAssociation });
+  public updateImageArray(images): void {
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ images });
+    console.log(images);
   }
+
+ 
+
 }
