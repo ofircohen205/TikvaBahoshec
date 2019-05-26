@@ -52,33 +52,33 @@
             </tbody>
 
           </table>
-
-          </ion-card>
           <ion-card>
-          <table id="tables" text-right>
-              <thead>
-                <tr>
-                  <th text-center></th>
-                  <th text-center>תאריך</th>
-                  <th text-center>שם לקוח</th>
-                  <th text-center>שם נציג</th>
-
-  
-                </tr>
-  
-              </thead>
-              <tbody>
-                  <tr *ngFor="let hist of supportRepHistory">
-                      <td><ion-button>הצג שיחה</ion-button></td>
-                      <td>{{hist.timestamp}}</td>
-                      <td>{{hist.ClientName}}</td>
-                      <td>{{hist.SupportRepName}}</td>
-                  </tr>
-              </tbody>
+              <table id="tables" text-right>
+                  <thead>
+                    <tr>
+                      <th text-center></th>
+                      <th text-center>תאריך</th>
+                      <th text-center>שם לקוח</th>
+                      <th text-center>שם נציג</th>
+    
       
-      </table>
-  
-  </ion-card>
+                    </tr>
+      
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let hist of supportRepHistory">
+                          <td><ion-button>הצג שיחה</ion-button></td>
+                          <td>{{hist.timestamp}}</td>
+                          <td>{{hist.ClientName}}</td>
+                          <td>{{hist.SupportRepName}}</td>
+                      </tr>
+                  </tbody>
+          
+          </table>
+      
+      </ion-card>
+          </ion-card>
+
 
                
         <ion-card id="Manage-Clients" text-center [hidden]="true">
