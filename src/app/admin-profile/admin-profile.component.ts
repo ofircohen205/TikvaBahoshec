@@ -50,6 +50,7 @@ export class AdminProfileComponent implements OnInit {
   supportRepList: any[] = [];
   chatRoomList: any[] = [];
   txtMsg = '';
+  sortArrowStatusTable : boolean[] = [true,true,true,true];
 
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
@@ -257,6 +258,99 @@ export class AdminProfileComponent implements OnInit {
     }
   }
 
+  sortByDate(dateStatus,index,id,list,table){
+  var nameBtn =(<HTMLButtonElement>document.getElementById(id));
+  if(dateStatus[index] === true){
+    list.sort((a,b)=> (a.timestamp>=b.timestamp)? 1:-1)
+    dateStatus[index] = false;
+    nameBtn.innerHTML ='&#8657;שעת פתיחת חדר';
+  }
+  else{
+    list.sort((a,b)=> (a.timestamp<=b.timestamp)? 1:-1);
+  dateStatus[index] = true;
+  nameBtn.innerHTML = '&#8659;שעת פתיחת חדר';
+  
+  }
+  if(table === 'historyTable'){
+    this.createHistoryTable();
+  }
+}
+
+
+sortByClient(nameStatus,index,id,list,table){
+var nameBtn =(<HTMLButtonElement>document.getElementById(id));
+  if(nameStatus[index]==true){
+    list.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1);
+    nameStatus[index]=false;
+    nameBtn.innerHTML ='&#8657; שם הלקוח'
+  }
+  else{
+    list.sort((a,b)=> (a.ClientName<=b.ClientName)? 1:-1)
+  nameStatus[index] = true;
+  nameBtn.innerHTML ='&#8659; שם הלקוח'
+}
+if(table === 'historyTable'){
+  this.createHistoryTable();
+}
+
+}
+
+sortBySupportRep(nameStatus,index,id,list,table){
+var nameBtn =(<HTMLButtonElement>document.getElementById(id));
+  if(nameStatus[index]==true){
+    list.sort((a,b)=> (a.SupportRepName>=b.SupportRepName)? 1:-1)
+    nameStatus[index]=false
+    nameBtn.innerHTML ='&#8657; שם הנציג בשיחה'
+  }
+  else{
+    list.sort((a,b)=> (a.SupportRepName<=b.SupportRepName)? 1:-1)
+  nameStatus[index] = true;
+  nameBtn.innerHTML ='&#8659; שם הנציג בשיחה'
+}
+if(table === 'historyTable'){
+  this.createHistoryTable();
+}
+
+}
+
+
+sortByOpenRoomState(stateStatus,index,id,list,table){
+var stateBtn =(<HTMLButtonElement>document.getElementById(id));
+  if(stateStatus[index] === true){
+    list.sort((a,b)=>a.open - b.open)
+    stateStatus[index] = false;
+    stateBtn.innerHTML = '&#8657; מצב החדר'
+  }
+  else{
+    list.sort((a,b)=>b.open-a.open)
+    stateStatus[index]=true;
+    stateBtn.innerHTML ='&#8659; מצב החדר';
+}
+if(table === 'historyTable'){
+  this.createHistoryTable();
+}
+
+}
+
+
+sortByOccupiedState(stateStatus,index,id,list,table){
+var stateBtn =(<HTMLButtonElement>document.getElementById(id));
+  if(stateStatus[index] === true){
+    list.sort((a,b)=>a.occupied - b.occupied)
+    stateStatus[index] = false;
+    stateBtn.innerHTML = '&#8657; מצב החדר'
+  }
+  else{
+    list.sort((a,b)=>b.occupied-a.occupied)
+    stateStatus[index]=true;
+    stateBtn.innerHTML ='&#8659; מצב החדר';
+}
+if(table === 'historyTable'){
+  this.createHistoryTable();
+}
+
+}
+
   resetHistoryTableFileds() {
     var toDate = document.getElementById('historyToDate1');
     var fromDate = document.getElementById('historyFromDate2');
@@ -291,7 +385,6 @@ export class AdminProfileComponent implements OnInit {
     }
     if (e['id'] === 'adminHistoryTablebutton3_' + (index + 1)) {
       console.log('go to client form page');
-      console.log(e['id']);
     }
    }
 
