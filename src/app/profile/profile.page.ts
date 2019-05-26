@@ -25,7 +25,7 @@ export class ProfilePage implements OnInit {
     const supportRepElement = document.getElementById('supportRep');
     const toolbarHeaderElement = document.getElementById('toolbarHeader');
     this.firestore.checkIfAdmin(this.userAuth.auth.currentUser.uid).subscribe(result => {
-      for (let admin of result['admins']) {
+      for (const admin of result['admins']) {
         if (admin === this.userAuth.auth.currentUser.uid) {
           this.adminLoginAuth = true;
           toolbarHeaderElement.hidden = false;
