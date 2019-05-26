@@ -33,15 +33,15 @@
             </thead>
 
             <tbody text-right>
-              <tr *ngFor="let x of list">
+              <tr *ngFor="let supportRep of supportRepList">
                 <td>
-                  <ion-button color="danger" (click)="deleteSupport(x)">מחק</ion-button>
-                  <ion-button (click)="editSupport(x)">ערוך</ion-button>
-                  <ion-button (click)="showHistory(x)">הצג שיחות</ion-button>
+                  <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
+                  <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
+                  <ion-button (click)="showHistory(supportRep)">הצג שיחות</ion-button>
                 </td>
-                <td>{{x.connectionTime}}</td>
-                <td>{{x.email}}</td>
-                <td>{{x.name}}</td>
+                <td>{{supportRep.connectionTime}}</td>
+                <td>{{supportRep.email}}</td>
+                <td>{{supportRep.name}}</td>
 
               </tr>
             </tbody>
@@ -95,7 +95,7 @@
 
           <ion-grid>
             <ion-row>
-              <ion-col *ngFor='let img of imageUrls' size='auto' style='margin-left: 5px'>
+              <ion-col *ngFor='let img of imageUrls' size='auto' style='margin-left: 25px'>
                 <img src={{img}} style='height: 200px; width: 200px; margin-right: 2%'>
                 <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
               </ion-col>

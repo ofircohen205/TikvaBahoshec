@@ -48,7 +48,7 @@ export class AdminProfileComponent implements OnInit {
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
   supportRepList: any[] = [];
-  chatRoomList: any[] =[];
+  chatRoomList: any[] = [];
   txtMsg = '';
 
   // variables for the text editor
@@ -82,12 +82,10 @@ export class AdminProfileComponent implements OnInit {
       this.chatRoomList = result1;
       this.createHistoryTable();
     });
-    this.firestore.getImageArray().subscribe(res =>
-      {
+    this.firestore.getImageArray().subscribe(res => {
         this.imageUrls = res.images;
       })
-
-      
+    
   }
 
 
@@ -104,6 +102,7 @@ export class AdminProfileComponent implements OnInit {
   }
 
 
+  
   createHistoryTable() {
     var toDate = (<HTMLInputElement>document.getElementById('historyToDate1')).value;
     var fromDate = (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
@@ -131,18 +130,15 @@ export class AdminProfileComponent implements OnInit {
     var index = 1;
     
       index = 1;
-      for(let chatRoom of this.chatRoomList)
-      {
+      for(let chatRoom of this.chatRoomList) {
         var tr = document.createElement('tr');
-        if (chatRoom !== undefined) 
-        {
+        if (chatRoom !== undefined) {
           var date = new Date(chatRoom['timestamp']).toLocaleDateString();
           for (let v of statusSelect) {
             if ((v === 'בטיפול' && chatRoom['occupied'] === true) || (v === 'לא בטיפול' && chatRoom['occupied'] === false)) {
               compareStatus = true;
               break;
-            }
-            else{
+            } else {
               compareStatus = false;
             }
           }
@@ -179,7 +175,7 @@ export class AdminProfileComponent implements OnInit {
               td2.style.border = ' 1px solid #ddd';
               td2.style.padding = '8px';
               td2.style.borderCollapse = 'collapse';
-        
+
               var button3 = document.createElement('ion-button');
               var td3 = document.createElement('td');
               td3.appendChild(button3);
@@ -190,7 +186,7 @@ export class AdminProfileComponent implements OnInit {
               td3.style.border = ' 1px solid #ddd';
               td3.style.padding = '8px';
               td3.style.borderCollapse = 'collapse';
-        
+
               var td4 = document.createElement('td');
               td4.style.border = ' 1px solid #ddd';
               td4.style.padding = '8px';
@@ -200,7 +196,7 @@ export class AdminProfileComponent implements OnInit {
               } else {
                 td4.textContent = 'לא בטיפול';
               }
-        
+
               var td5 = document.createElement('td');
               var name = '';
               td5.style.border = ' 1px solid #ddd';
@@ -216,13 +212,13 @@ export class AdminProfileComponent implements OnInit {
               td6.style.padding = '8px';
               td6.style.borderCollapse = 'collapse';
               td6.textContent = new Date(chatRoom.timestamp).toLocaleString();
-        
+
               var td7 = document.createElement('td');
               td7.style.border = ' 1px solid #ddd';
               td7.style.padding = '8px';
               td7.style.borderCollapse = 'collapse';
               td7.textContent = chatRoom.ClientName;
-        
+
               var td8 = document.createElement('td');
               td8.style.border = ' 1px solid #ddd';
               td8.style.padding = '8px';
@@ -236,7 +232,7 @@ export class AdminProfileComponent implements OnInit {
               tr.appendChild(td6);
               tr.appendChild(td7);
               tr.appendChild(td8);
-        
+
               tr.id = 'adminHistoryTableTr_' + index; 
               index++;
               body.appendChild(tr);
@@ -252,10 +248,9 @@ export class AdminProfileComponent implements OnInit {
           }
         }
       }
-
   }
 
-  async removeChildren(tbody,tbodyId){
+  async removeChildren(tbody,tbodyId) {
     var size = tbody.childNodes.length;
     var tbody1 = document.getElementById(tbodyId);
     while (tbody1.firstChild) {
@@ -263,7 +258,7 @@ export class AdminProfileComponent implements OnInit {
     }
   }
 
-  resetHistoryTableFileds(){
+  resetHistoryTableFileds() {
     var toDate = document.getElementById('historyToDate1');
     var fromDate = document.getElementById('historyFromDate2');
     var statusSelect: any = document.getElementById('historyStatusSelect');
@@ -276,36 +271,36 @@ export class AdminProfileComponent implements OnInit {
     (<HTMLInputElement>(clientName)).value = '';
   }
 
-  adminHistoryLimitMinDate(){
+  adminHistoryLimitMinDate() {
     var dateFrom =  (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
     var dateTo = document.getElementById('historyToDate1');
-    dateTo.setAttribute("min",dateFrom);
+    dateTo.setAttribute("min", dateFrom);
   }
-  adminHistoryLimitMaxDate(){
+  adminHistoryLimitMaxDate() {
     var dateTo =  (<HTMLInputElement>document.getElementById('historyToDate1')).value;
     var dateFrom = document.getElementById('historyFromDate2');
-    dateFrom.setAttribute("max",dateTo);
+    dateFrom.setAttribute("max", dateTo);
   }
 
-  onclickAdminHistoryTable(e,index) {
-    if(e['id'] === 'adminHistoryTablebutton1_' + (index + 1)){
+  onclickAdminHistoryTable(e, index) {
+    if (e['id'] === 'adminHistoryTablebutton1_' + (index + 1)) {
       this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
     }
-    if(e['id'] === 'adminHistoryTablebutton2_' + (index + 1)){
+    if (e['id'] === 'adminHistoryTablebutton2_' + (index + 1)) {
 // tslint:disable-next-line: max-line-length
       window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
-    if(e['id'] === 'adminHistoryTablebutton3_' + (index + 1)){
+    if (e['id'] === 'adminHistoryTablebutton3_' + (index + 1)) {
       console.log('go to client form page');
       console.log(e['id']);
     }
    }
 
-   downloadChatMsg(roomId){
+   downloadChatMsg(roomId) {
     this.firestore.getChatMessages(roomId).subscribe(result =>{
-    result.forEach(msg=>{
-      this.txtMsg+="From:"+msg.from +" Time:" +new Date(msg.timestamp)
-      this.txtMsg+="\n<"+msg.content +">\n\n"  
+    result.forEach(msg=> {
+      this.txtMsg += "From:" + msg.from + " Time:" + new Date(msg.timestamp)
+      this.txtMsg += "\n<" + msg.content + ">\n\n"  
     })
     console.log("startDownload")
     var link = document.createElement('a');
@@ -313,7 +308,7 @@ export class AdminProfileComponent implements OnInit {
     var blob = new Blob([this.txtMsg], {type: 'text/plain'});
     link.href = window.URL.createObjectURL(blob);
     link.click();
-    })
+    });
   }
 
   onmouseover(e) {
@@ -323,31 +318,11 @@ export class AdminProfileComponent implements OnInit {
     e.style.background = 'white';
   }
 
-  
-
   logout() {
     this.global.logout();
   }
 
-  manageSupportReps() {
-    this.list = [];
-    this.firestore.getSupportRepIdList().subscribe(result => {
-      result.forEach(ele => {
-        const data = ele.payload.doc.data();
-        const id = ele.payload.doc.id;
-        if (ele.payload.type === 'added') {
-          this.list.push({ id, ...data });
-        } else if (ele.payload.type === 'modified') {
-          const index = this.list.findIndex(item => item.id === id);
-
-          // Replace the item by index.
-          this.list.splice(index, 1, { id, ...data });
-        } else {
-          this.list.slice(this.list.indexOf(id), 1);
-        }
-      });
-    });
-  }
+  
 
   async addSupport() {
     const alert = await this.alertController.create({
@@ -382,6 +357,8 @@ export class AdminProfileComponent implements OnInit {
   }
 
   async editSupport(x) {
+    console.log("edittttttttt");
+
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',
       inputs: [
@@ -406,9 +383,6 @@ export class AdminProfileComponent implements OnInit {
         text: 'שמור שינויים',
         handler: data => {
           this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone);
-          this.list[this.list.indexOf(x)].username = data.username;
-          this.list[this.list.indexOf(x)].email = data.email;
-          this.list[this.list.indexOf(x)].phone = data.phone;
         }
       }]
     });
@@ -416,6 +390,7 @@ export class AdminProfileComponent implements OnInit {
   }
 
   async deleteSupport(x) {
+    console.log("Deleeteeeee");
     const alert = await this.alertController.create({
       header: 'אישור מחיקה',
       message: `האם את/ה בטוח/ה שברצונך למחוק את הנציג/ה?`,
@@ -425,7 +400,6 @@ export class AdminProfileComponent implements OnInit {
           text: 'מחק',
           handler: () => {
             this.firestore.removeSupportRep(x.id);
-            this.list.splice(this.list.indexOf(x), 1);
           }
         }]
     });
@@ -455,8 +429,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.location.go('/profile/support-reps');
-      this.supportRepService.manageSupportReps();
+      // this.location.go('/profile/support-reps');
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -465,7 +438,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = false;
       editEvents.hidden = true;
-      this.location.go('/profile/clients');
+      // this.location.go('/profile/clients');
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -474,7 +447,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = false;
-      this.location.go('/profile/events');
+      // this.location.go('/profile/events');
     } else if (targetId === 'ViewHistoryChat') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -483,7 +456,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = false;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.location.go('/profile/history-chats');
+      // this.location.go('/profile/history-chats');
     } else if (targetId === 'EditAssociationInfo') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -492,7 +465,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.location.go('/profile/about-association');
+      // this.location.go('/profile/about-association');
     } else if (targetId === 'ManageGallery') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -501,7 +474,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.location.go('/profile/gallery');
+      // this.location.go('/profile/gallery');
     } else {    // targetId === ManageClientStories
       manageSupportReps.hidden = true;
       manageClientStories.hidden = false;
@@ -510,7 +483,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.location.go('/profile/stories');
+      // this.location.go('/profile/stories');
       this.manageStories();
     }
   }

@@ -262,6 +262,4 @@ export class FirestoreService {
     console.log(images);
   }
 
- 
-
 }
