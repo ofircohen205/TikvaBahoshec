@@ -85,7 +85,9 @@ export class AdminProfileComponent implements OnInit {
     this.firestore.getImageArray().subscribe(res => {
         this.imageUrls = res.images;
         console.log(res.images);
-      });
+      })
+
+    this.manageStories();
   }
 
 
@@ -503,7 +505,7 @@ export class AdminProfileComponent implements OnInit {
       manageClients.hidden = true;
       editEvents.hidden = true;
       // this.location.go('/profile/stories');
-      this.manageStories();
+      //this.manageStories();
     }
   }
 
@@ -513,23 +515,31 @@ export class AdminProfileComponent implements OnInit {
       results.forEach(result => {
         const id = result.payload.doc.id;
         const data = result.payload.doc.data();
-        const timestampDate = data['date']['seconds'];   // save the date as timestamp
-        const stringDate = new Date(timestampDate * 1000).toDateString();  // save the date as a regular date form
-        // const approval = data['approved'];
-
-        this.storiesArray.push({ stringDate, id, ...data });
-        console.log(this.storiesArray);
+        const timestampDate = data['date']['seconds'];   //save the date as timestamp
+        const stringDate = new Date(timestampDate * 1000).toDateString();  //save the date as a regular date form
+        if (result.payload.type === 'added'){
+          console.log("in added");
+          this.storiesArray.push({stringDate, id, ...data });
+        }else if (result.payload.type === 'modified') {
+          const index = this.storiesArray.findIndex(item => item.id === id);
+          console.log("in modified");
+          // Replace the item in index with the new object.
+          this.storiesArray.splice(index, 1, { stringDate, id, ...data });
+        } else  //(result.payload.type === 'removed')
+        {
+          console.log("inremove");
+          this.storiesArray.slice(this.storiesArray.indexOf(id), 1);
+        }
       });
 
       this.storiesArray.sort((s1, s2) => {
-        if (s1['date']['seconds'] > s2['date']['seconds']) {
+        if (s1.timestampDate > s2.timestampDate) {
           return 1;
         } else {
           return -1;
         }
       });
     });
-
   }
 
 
@@ -538,33 +548,54 @@ export class AdminProfileComponent implements OnInit {
     document.getElementById('defaultRTE').hidden = false;
     document.getElementById('defaultRTE').className = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id) {
-        this.value = this.storiesArray[i].description;  // edit the story
+      if (story.id === this.storiesArray[i].id)
+      {
+        this.value = this.storiesArray[i].description;  //edit the story
       }
     }
   }
 
   // delete the story from firebase and from the array of stories
-  deleteStory(story) {
-    for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id) {
-        for (let j = i + 1; j < this.storiesArray.length; j++) {  // the remove from the array doesn't work well
-          this.storiesArray[j - 1] = this.storiesArray[j];
-          this.storiesArray[j] = null;
-        }
-        this.firestore.removeStory(this.storiesArray[i].id);
-      }
+    async deleteStory(story) {
+      const alert = await this.alertController.create({
+        header: 'אישור מחיקה',
+        message: `האם את/ה בטוח/ה שברצונך למחוק את העדות?`,
+        buttons: [
+          { text: 'חזור' },
+          {
+            text: 'מחק',
+            handler: () => {
+              this.firestore.removeStory(story.id);
+              this.storiesArray.splice(this.storiesArray.indexOf(story), 1);
+              document.getElementById('defaultRTE').hidden = true;
+              document.getElementById('save-edit').hidden = true; 
+            }
+          }]
+      });
+      alert.present();
     }
-  }
+
 
   // to confirm the story can be uploaded to the website
-  confirmStory(story) {
-    for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id) {
-        this.storiesArray[i].approved = true;
-        this.firestore.confirmStory(this.storiesArray[i].id, true);
-      }
-    }
+  async confirmStory(story) {
+    const alert = await this.alertController.create({
+      header: 'אישור עדות',
+      message: `האם את/ה בטוח/ה שברצונך לאשר את העדות? שים לב כי אישור העדות יעלה אותה אוטומטית לאתר`,
+      buttons: [
+        { text: 'חזור' },
+        {
+          text: 'אשר',
+          handler: () => {
+            for (let i = 0; i < this.storiesArray.length; i++) {
+              if (story.id === this.storiesArray[i].id) {
+                this.storiesArray[i].approved = true;
+                this.firestore.confirmStory(this.storiesArray[i].id, true);
+              }
+            }
+          }
+        }]
+    });
+    alert.present();
   }
 
   // after the story was edited, we save the changes in it
@@ -579,7 +610,7 @@ export class AdminProfileComponent implements OnInit {
         break;
       }
     }
-    alert('יש ללחוץ בטבלה על הכפתור \'אשר\' עבור העדות הרצויה');
+    alert("אם העדות עדיין לא אושרה, יש ללחוץ בטבלה על הכפתור 'אשר' עבור העדות הרצויה");
     document.getElementById('defaultRTE').hidden = true;
     document.getElementById('save-edit').hidden = true;
   }

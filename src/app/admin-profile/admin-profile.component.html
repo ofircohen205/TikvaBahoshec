@@ -60,21 +60,19 @@
                 <th text-center>עריכת עדות</th>
                 <th text-center>אושר/לא אושר</th>
                 <th text-center>תאריך העלאה</th>
-                <th text-center>מספר מזהה</th>
+                <th text-center>כותרת</th>
               </tr>
             </thead>
 
             <tbody>
               <tr *ngFor='let story of storiesArray'>
-                <td>
-                  <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
-                  <ion-button (click)="editStory(story)">עריכה</ion-button>
-                  <ion-button *ngIf='!story.approved' color="success" (click)="confirmStory(story)">אשר</ion-button>
+                <td> <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button><ion-button (click)="editStory(story)">עריכה</ion-button>
+                  <ion-button *ngIf='story && !story.approved' color="success" (click) = "confirmStory(story)">אשר</ion-button>
                 </td>
-                <td *ngIf='story.approved'> אושר</td>
-                <td *ngIf='!story.approved'> לא אושר</td>
-                <td>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
-                <td>{{story.id}}</td>
+                <td *ngIf='story && story.approved'> אושר</td>
+                <td *ngIf='story && !story.approved'> לא אושר</td>
+                <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
+                <td *ngIf='story'>{{story.title}}</td>
               </tr>
 
             </tbody>
