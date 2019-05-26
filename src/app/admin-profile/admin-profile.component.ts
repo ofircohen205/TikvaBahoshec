@@ -109,7 +109,7 @@ export class AdminProfileComponent implements OnInit {
   }
 
 
-  
+
   createHistoryTable() {
     const toDate = (<HTMLInputElement>document.getElementById('historyToDate1')).value;
     const fromDate = (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
@@ -332,14 +332,10 @@ export class AdminProfileComponent implements OnInit {
   }
 
   showHistory(x){
-    this.firestore.getAllChatRoom().subscribe(
-      res => 
-      {
+    this.firestore.getAllChatRoom().subscribe(res => {
         console.log(res);
         this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
-      }
-    
-    )
+      });
     console.log(this.supportRepHistory);
   }
   async addSupport() {
@@ -368,7 +364,11 @@ export class AdminProfileComponent implements OnInit {
       },
       {
         text: 'הוסף',
-        handler: data => { this.firestore.createSupportRep(data.username, data.email, data.phone); }
+        handler: data => {
+          this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
+            this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
+          }).catch(error => console.log(error));
+        }
       }]
     });
     alert.present();
@@ -377,7 +377,7 @@ export class AdminProfileComponent implements OnInit {
 
 
   async editSupport(x) {
-    console.log("edittttttttt");
+    console.log('edittttttttt');
 
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',
@@ -519,7 +519,7 @@ export class AdminProfileComponent implements OnInit {
       this.manageStories();
     }
   }
-  
+
   /********************************************Clients Managment*****************************************/
 
     manageClients(){
