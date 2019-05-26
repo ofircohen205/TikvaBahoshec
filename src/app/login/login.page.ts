@@ -33,14 +33,14 @@ export class LoginPage {
 
     this.userAuth.auth.signInWithEmailAndPassword(email, password)
     .then(result => {
-      this.loadingRef.dismiss()
+      this.loadingRef.dismiss();
       this.router.navigateByUrl('/profile');
     })
     .catch(async (error) => {
       this.loadingRef.dismiss();
-      const errorMSG = await this.alertController.create({ 
+      const errorMSG = await this.alertController.create({
         message: 'User name or Password are incorrect, Please try again',
-      buttons: ['OK'] ,
+        buttons: ['OK'] ,
       });
       await errorMSG.present();
     });
