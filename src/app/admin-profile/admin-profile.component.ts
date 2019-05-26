@@ -6,7 +6,6 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AngularFireStorage } from '@angular/fire/storage';
-// tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Observable } from 'rxjs';
 import { finalize, findIndex, timestamp } from 'rxjs/operators';
@@ -17,6 +16,8 @@ import { ClientsService } from '../global/admin/clients.service';
 import { Location } from '@angular/common';
 import { ValueAccessor } from '@ionic/angular/dist/directives/control-value-accessors/value-accessor';
 import { getName } from 'ionicons/dist/types/icon/utils';
+
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 
 @Component({
@@ -41,7 +42,7 @@ export class AdminProfileComponent implements OnInit {
     private supportRepService: SupportRepsService,
     private clientService: ClientsService
   ) { }
-
+  
   chatRoomHistory: any[] = [];
   imageUrls: string[] = [];
   list: any[] = [];
@@ -53,7 +54,7 @@ export class AdminProfileComponent implements OnInit {
   chatRoomList: any[] = [];
   clientList: any[] = [];
   txtMsg = '';
-
+  supportRepHistory: any[] = [];
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
   public value =
@@ -330,16 +331,18 @@ export class AdminProfileComponent implements OnInit {
   manageSupportReps(){
    this.list = this.supportRepList;
   }
-  
+
   showHistory(x){
     this.firestore.getAllChatRoom().subscribe(
-      res =>{
-        this.chatRoomHistory = res;
-      } 
+      res => 
+      {
+        console.log(res);
+        this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
+      }
+    
     )
-
+    console.log(this.supportRepHistory);
   }
-  
   async addSupport() {
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',

@@ -11,11 +11,13 @@
         <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
       </ion-col>
       <ion-col size='12'>
+       
+       
         <ion-card id="Manage-SupportReps" text-center [hidden]="false">
           <p text-center>רשימת נציגים </p>
           <ion-toolbar>
 
-            <ion-searchbar class="search"></ion-searchbar>
+            <ion-searchbar class="search" type="text" [(ngModel)]="searchText"></ion-searchbar>
             <ion-button>חיפוש</ion-button>
 
           </ion-toolbar>
@@ -34,7 +36,7 @@
             </thead>
 
             <tbody text-right>
-              <tr *ngFor="let supportRep of list">
+              <tr *ngFor="let supportRep of supportRepList">
                 <td>
                   <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
                   <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
@@ -51,11 +53,34 @@
 
           </table>
 
-            <tr *ngFor="let hist of history">
-            <li>{{hist}}</li>
-            </tr>
-        </ion-card>
+          </ion-card>
+          <ion-card>
+          <table id="tables" text-right>
+              <thead>
+                <tr>
+                  <th text-center></th>
+                  <th text-center>תאריך</th>
+                  <th text-center>שם לקוח</th>
+                  <th text-center>שם נציג</th>
 
+  
+                </tr>
+  
+              </thead>
+              <tbody>
+                  <tr *ngFor="let hist of supportRepHistory">
+                      <td><ion-button>הצג שיחה</ion-button></td>
+                      <td>{{hist.timestamp}}</td>
+                      <td>{{hist.ClientName}}</td>
+                      <td>{{hist.SupportRepName}}</td>
+                  </tr>
+              </tbody>
+      
+      </table>
+  
+  </ion-card>
+
+               
         <ion-card id="Manage-Clients" text-center [hidden]="true">
           <p text-center>רשימת נציגים </p>
           <ion-toolbar>
@@ -106,21 +131,19 @@
                 <th text-center>עריכת עדות</th>
                 <th text-center>אושר/לא אושר</th>
                 <th text-center>תאריך העלאה</th>
-                <th text-center>מספר מזהה</th>
+                <th text-center>כותרת</th>
               </tr>
             </thead>
 
             <tbody>
               <tr *ngFor='let story of storiesArray'>
-                <td>
-                  <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
-                  <ion-button (click)="editStory(story)">עריכה</ion-button>
-                  <ion-button *ngIf='!story.approved' color="success" (click)="confirmStory(story)">אשר</ion-button>
+                <td> <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button><ion-button (click)="editStory(story)">עריכה</ion-button>
+                  <ion-button *ngIf='story && !story.approved' color="success" (click) = "confirmStory(story)">אשר</ion-button>
                 </td>
-                <td *ngIf='story.approved'> אושר</td>
-                <td *ngIf='!story.approved'> לא אושר</td>
-                <td>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
-                <td>{{story.id}}</td>
+                <td *ngIf='story && story.approved'> אושר</td>
+                <td *ngIf='story && !story.approved'> לא אושר</td>
+                <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
+                <td *ngIf='story'>{{story.title}}</td>
               </tr>
 
             </tbody>
@@ -141,7 +164,7 @@
 
           <ion-grid>
             <ion-row>
-              <ion-col *ngFor='let img of imageUrls' size='auto' style='margin-left: 25px'>
+              <ion-col *ngFor='let img of imageUrls' size='auto' style='margin-left: 30px'>
                 <img src={{img}} style='height: 200px; width: 200px; margin-right: 2%'>
                 <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
               </ion-col>

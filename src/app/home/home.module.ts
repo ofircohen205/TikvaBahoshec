@@ -13,6 +13,8 @@ import { MainComponent } from '../main/main.component';
 import { NgImageSliderModule } from 'ng-image-slider';
 import {SlideshowModule} from 'ng-simple-slideshow';
 
+import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor';
+
 
 
 
@@ -36,7 +38,8 @@ import {SlideshowModule} from 'ng-simple-slideshow';
       }
     ]),
     NgImageSliderModule,
-    SlideshowModule
+    SlideshowModule,
+    RichTextEditorAllModule
   ],
   declarations: [
     HomePage,
