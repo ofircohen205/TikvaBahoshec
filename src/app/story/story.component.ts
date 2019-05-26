@@ -12,8 +12,9 @@ import { stringify } from 'querystring';
   providers: [ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService],
 })
 export class StoryComponent implements OnInit {
+  alertController: any;
 
-  constructor( private firestore: FirestoreService ) { }
+  constructor(private firestore: FirestoreService) { }
 
   @ViewChild('title') title;
   //@ViewChild('description') description;
@@ -21,9 +22,9 @@ export class StoryComponent implements OnInit {
   storiesArray = [];
 
   // variables for the text editor
-  public value: string =
-  `<br/>
-  כתוב על המקרה שלך כאן`;
+  public value: string //=
+  //`<br/>
+  //כתוב על המקרה שלך כאן`;
 
   public tools: object = {
     items: ['Undo', 'Redo', '|',
@@ -61,28 +62,25 @@ export class StoryComponent implements OnInit {
   }
 
   sendStory() {
-    //this.firestore.createStory(this.title.value, this.description.value);
     console.log(this.value);
     this.firestore.createStory(this.title.value, this.value);
+    alert("תודה רבה ששיתפת אותנו במקרה האישי שלך! במידה והעדות תאושר ניתן יהיה לראותה באתר תוך מספר ימים")
+    document.getElementById('tell-your-story').hidden = true;
+
+
   }
 
-  showStories(){
-    let html;
+  showStories() {
+    let html= "<span></span>";
     this.stories.forEach(story => {
-      if (story.approved){
-      html+= "<ion-card><ion-card-header><ion-card-title text-right>" + story.title + "</ion-card-title></ion-card-header><ion-card-content id = 'desc' text-right >" + story.description + "</ion-card-content></ion-card>"
+      if (story.approved) {
+        html += "<ion-card><ion-card-header><ion-card-title text-right>" + story.title + "</ion-card-title></ion-card-header><ion-card-content id = 'desc' text-right >" + story.description + "</ion-card-content></ion-card>"
       }
     });
     console.log(html);
-    console.log(document.getElementById('upload-stories')); 
+    console.log(document.getElementById('upload-stories'));
     document.getElementById('upload-stories').innerHTML = html;
-    
-  }
 
-
-  showContent(description){
-    console.log("in showContent()");
-    document.getElementById('desc').innerHTML = description;
   }
 
   // manageStories() {
