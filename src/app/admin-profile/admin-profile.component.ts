@@ -15,6 +15,8 @@ import { createElement } from '@syncfusion/ej2-base';
 import { SupportRepsService } from '../global/admin/support-reps.service';
 import { ClientsService } from '../global/admin/clients.service';
 import { Location } from '@angular/common';
+import { ValueAccessor } from '@ionic/angular/dist/directives/control-value-accessors/value-accessor';
+import { getName } from 'ionicons/dist/types/icon/utils';
 
 
 @Component({
@@ -40,7 +42,7 @@ export class AdminProfileComponent implements OnInit {
     private clientService: ClientsService
   ) { }
 
-
+  chatRoomHistory: any[] = [];
   imageUrls: string[] = [];
   list: any[] = [];
   storiesArray: any = [];
@@ -49,6 +51,7 @@ export class AdminProfileComponent implements OnInit {
   downloadURL: Observable<string>;
   supportRepList: any[] = [];
   chatRoomList: any[] = [];
+  clientList: any[] = [];
   txtMsg = '';
 
   // variables for the text editor
@@ -73,11 +76,13 @@ export class AdminProfileComponent implements OnInit {
   };
 
   ngOnInit() {
+    console.log(this.firestore.getSupportRepNameList());
     this.firestore.getSupportRepNameList().subscribe(result => {
       this.supportRepList = result;
-      console.log(result);
       this.initSupportSelectList();
     });
+
+    
     this.firestore.getAllChatRoom().subscribe(result1 => {
       this.chatRoomList = result1;
       this.createHistoryTable();
@@ -85,7 +90,7 @@ export class AdminProfileComponent implements OnInit {
     this.firestore.getImageArray().subscribe(res => {
         this.imageUrls = res.images;
       })
-    
+   
   }
 
 
@@ -322,8 +327,19 @@ export class AdminProfileComponent implements OnInit {
     this.global.logout();
   }
 
+  manageSupportReps(){
+   this.list = this.supportRepList;
+  }
   
+  showHistory(x){
+    this.firestore.getAllChatRoom().subscribe(
+      res =>{
+        this.chatRoomHistory = res;
+      } 
+    )
 
+  }
+  
   async addSupport() {
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',
@@ -356,6 +372,8 @@ export class AdminProfileComponent implements OnInit {
     alert.present();
   }
 
+
+
   async editSupport(x) {
     console.log("edittttttttt");
 
@@ -364,16 +382,19 @@ export class AdminProfileComponent implements OnInit {
       inputs: [
         {
           name: 'username',
-          placeholder: x.name
+          placeholder: x.name,
+          value: x.name
         },
         {
           name: 'email',
-          placeholder: x.email
+          placeholder: x.email,
+          value: x.email
         },
 
         {
           name: 'phone',
-          placeholder: x.phone
+          placeholder: x.phone,
+          value: x.phone
         },
       ],
       buttons: [{
@@ -382,7 +403,11 @@ export class AdminProfileComponent implements OnInit {
       {
         text: 'שמור שינויים',
         handler: data => {
-          this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone);
+          console.log(x.SupportRepID);
+          this.firestore.updateSupportRepDetails(x.SupportRepID, data.username, data.email, data.phone);
+          x.username = data.username;
+          x.email = data.email;
+          x.phone = data.phone;
         }
       }]
     });
@@ -390,7 +415,6 @@ export class AdminProfileComponent implements OnInit {
   }
 
   async deleteSupport(x) {
-    console.log("Deleeteeeee");
     const alert = await this.alertController.create({
       header: 'אישור מחיקה',
       message: `האם את/ה בטוח/ה שברצונך למחוק את הנציג/ה?`,
@@ -399,7 +423,11 @@ export class AdminProfileComponent implements OnInit {
         {
           text: 'מחק',
           handler: () => {
-            this.firestore.removeSupportRep(x.id);
+            console.log(this.supportRepList);
+           const spId = x.SupportRepID;
+           console.log(spId);
+           console.log(this.firestore.removeSupportRep(spId));
+
           }
         }]
     });
@@ -429,6 +457,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+      this.manageSupportReps();
       // this.location.go('/profile/support-reps');
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
@@ -438,6 +467,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = false;
       editEvents.hidden = true;
+      this.manageClients();
       // this.location.go('/profile/clients');
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
@@ -487,6 +517,16 @@ export class AdminProfileComponent implements OnInit {
       this.manageStories();
     }
   }
+  
+  /********************************************Clients Managment*****************************************/
+
+    manageClients(){
+      this.firestore.getClients().subscribe(result => {
+        this.clientList = result;
+        console.log(this.clientList);
+      });
+    }
+
 
   /*******************************************Stories Management*******************************************************************/
   manageStories() {

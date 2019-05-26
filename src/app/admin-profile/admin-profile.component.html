@@ -25,6 +25,7 @@
               <tr>
                 <th text-center></th>
                 <th text-center>התחבר לאחרונה</th>
+                <th text-center>טלפון</th>
                 <th text-center>אימייל</th>
                 <th text-center>שם נציג</th>
 
@@ -33,13 +34,15 @@
             </thead>
 
             <tbody text-right>
-              <tr *ngFor="let supportRep of supportRepList">
+              <tr *ngFor="let supportRep of list">
                 <td>
                   <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
                   <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
                   <ion-button (click)="showHistory(supportRep)">הצג שיחות</ion-button>
                 </td>
+
                 <td>{{supportRep.connectionTime}}</td>
+                <td>{{supportRep.phone}}</td>
                 <td>{{supportRep.email}}</td>
                 <td>{{supportRep.name}}</td>
 
@@ -47,8 +50,51 @@
             </tbody>
 
           </table>
+
+            <tr *ngFor="let hist of history">
+            <li>{{hist}}</li>
+            </tr>
         </ion-card>
 
+        <ion-card id="Manage-Clients" text-center [hidden]="true">
+          <p text-center>רשימת נציגים </p>
+          <ion-toolbar>
+
+            <ion-searchbar class="search"></ion-searchbar>
+            <ion-button>חיפוש</ion-button>
+
+          </ion-toolbar>
+          <table id="tables" text-right>
+            <thead>
+              <tr>
+                <th text-center></th>
+                <th text-center>מיקום</th>
+                <th text-center>תיאור</th>
+                <th text-center>שם </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody text-right>
+              <tr *ngFor="let client of clientList">
+                <td>
+                  <ion-button>ערוך</ion-button>
+                  <ion-button>הצג שיחות</ion-button>
+                </td>
+
+                <td>{{client.location}}</td>
+                <td>{{client.descrption}}</td>
+                <td>{{client.username}}</td>
+
+              </tr>
+            </tbody>
+
+          </table>
+        </ion-card>
+
+
+       
 
         <ion-card text-center id="Manage-Client-Stories" [hidden]="true">
           <h3 text-center>רשימת סיפורים </h3>
