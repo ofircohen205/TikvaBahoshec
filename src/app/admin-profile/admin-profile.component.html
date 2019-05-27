@@ -108,12 +108,12 @@
             <tbody text-right>
               <tr *ngFor="let client of clientList">
                 <td>
-                  <ion-button>ערוך</ion-button>
-                  <ion-button>הצג שיחות</ion-button>
+                  <ion-button (click)="editClient(client)">ערוך</ion-button>
+                  <ion-button [routerLink]="['/chat', client.ChatRoomId]">הצג שיחה</ion-button>
                 </td>
 
                 <td>{{client.location}}</td>
-                <td>{{client.descrption}}</td>
+                <td>{{client.description}}</td>
                 <td>{{client.username}}</td>
 
               </tr>

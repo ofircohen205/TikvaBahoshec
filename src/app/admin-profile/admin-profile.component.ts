@@ -17,6 +17,9 @@ import { ClientsService } from '../global/admin/clients.service';
 import { Location } from '@angular/common';
 import { ValueAccessor } from '@ionic/angular/dist/directives/control-value-accessors/value-accessor';
 import { getName } from 'ionicons/dist/types/icon/utils';
+import * as firebase from 'firebase';
+import { text } from '@angular/core/src/render3';
+
 
 
 
@@ -88,7 +91,6 @@ export class AdminProfileComponent implements OnInit {
     });
     this.firestore.getImageArray().subscribe(res => {
         this.imageUrls = res.images;
-        console.log(res.images);
       });
 
     this.manageStories();
@@ -337,17 +339,14 @@ export class AdminProfileComponent implements OnInit {
         data.SupportRepID = id;
         if (ele.payload.type === 'added') {
           this.list.push(data);
-          console.log(this.list);
         } else if (ele.payload.type === 'modified') {
           const index = this.list.findIndex(item => item.SupportRepID === id);
  
           // Replace the item by index.
           this.list.splice(index, 1, data );
-          console.log(this.list);
 
         } else {
           this.list.slice(this.list.indexOf(id), 1);
-          console.log(this.list);
 
         }
       });
@@ -356,10 +355,8 @@ export class AdminProfileComponent implements OnInit {
  
   showHistory(x) {
     this.firestore.getAllChatRoom().subscribe(res => {
-        console.log(res);
         this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
       });
-    console.log(this.supportRepHistory);
   }
 
   async addSupport() {
@@ -388,7 +385,18 @@ export class AdminProfileComponent implements OnInit {
       },
       {
         text: 'הוסף',
-        handler: data => { this.firestore.createSupportRep(data.username, data.email, data.phone); }
+        handler: data => {
+          firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(
+            res =>{
+             this.firestore.createSupportRep(res.user.uid, data.username, data.email, data.phone);
+             console.log(res.user.displayName + "added new uid:" + res.user.uid);
+            } 
+          ).catch(error => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorCode, errorMessage);
+          });
+          }
       }]
     });
     alert.present();
@@ -541,12 +549,74 @@ export class AdminProfileComponent implements OnInit {
 
     manageClients() {
       this.firestore.getClients().subscribe(result => {
-        this.clientList = result;
-        console.log(this.clientList);
-      });
+        result.forEach(ele => {
+          const id = ele.payload.doc.id;
+          const data = ele.payload.doc.data();
+          const chatRoom =  this.chatRoomList.find(x => x.ClientID === id);
+          if(chatRoom !== undefined)
+          {
+            const ChatRoomId = chatRoom.ChatRoomId;
+            if(ele.payload.type === 'added'){
+              this.clientList.push({id,ChatRoomId, ...data});
+            }
+            else if(ele.payload.type === 'modified'){
+              const index = this.clientList.findIndex(item => item.id === id);
+              // Replace the item in index with the new object.
+              this.clientList.splice(index, 1, { id, ChatRoomId, ...data });
+            }
+            else 
+            {
+              this.clientList.slice(this.clientList.indexOf(id), 1);
+            }
+          }
+
+       
+        })
+
+
+      })
+
+
     }
 
+    async editClient(x) {
+      const alert = await this.alertController.create({
+        header: 'ערוך לקוח',
+        inputs: [
+          {
+            name: 'username',
+            placeholder: x.username,
+            value: x.username
+          },
+          {
+            name: 'description',
+            placeholder: x.description,
+            value: x.description
+          },
 
+          {
+            name: 'location',
+            placeholder: x.location,
+            value: x.location
+          },
+        ],
+        buttons: [{
+          text: 'חזור'
+        },
+        {
+          text: 'שמור שינויים',
+          handler: data => {
+            console.log(data);
+            this.firestore.updateClientDetails(x.id, data.username, data.description, data.location);
+            x.username = data.username;
+            x.description = data.description;
+            x.location = data.location;
+          }
+        }]
+      });
+      alert.present();
+    }
+    
   /*******************************************Stories Management*******************************************************************/
   manageStories() {
     this.firestore.getStoriesId().subscribe(results => {
@@ -580,9 +650,10 @@ export class AdminProfileComponent implements OnInit {
     });
   }
 
-  //edit the story. replace the old content of the story with the new content
+
   editStory(story) {
-    document.getElementById('editor').hidden = false;
+    document.getElementById('save-edit').hidden = false;
+    document.getElementById('defaultRTE').hidden = false;
     document.getElementById('defaultRTE').className = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
       if (story.id === this.storiesArray[i].id) {
@@ -591,47 +662,27 @@ export class AdminProfileComponent implements OnInit {
     }
   }
 
-// delete the story from firebase and from the array of stories
-async deleteStory(story) {
-  const alert = await this.alertController.create({
-    header: 'אישור מחיקה',
-    message: `האם את/ה בטוח/ה שברצונך למחוק את העדות?`,
-    buttons: [
-      { text: 'חזור' },
-      {
-        text: 'מחק',
-        handler: () => {
-          this.firestore.removeStory(story.id);
-          this.storiesArray.splice(this.storiesArray.indexOf(story), 1);
-          document.getElementById('editor').hidden = true;
+  // delete the story from firebase and from the array of stories
+  deleteStory(story) {
+    for (let i = 0; i < this.storiesArray.length; i++) {
+      if (story.id === this.storiesArray[i].id) {
+        for (let j = i + 1; j < this.storiesArray.length; j++) {  // the remove from the array doesn't work well
+          this.storiesArray[j - 1] = this.storiesArray[j];
+          this.storiesArray[j] = null;
         }
-      }]
-  });
-  alert.present();
-}
-
+        this.firestore.removeStory(this.storiesArray[i].id);
+      }
+    }
+  }
 
   // to confirm the story can be uploaded to the website
-  async confirmStory(story) {
-    const alert = await this.alertController.create({
-      header: 'אישור עדות',
-      message: `האם את/ה בטוח/ה שברצונך לאשר את העדות? שים לב כי אישור העדות יעלה אותה אוטומטית לאתר`,
-      buttons: [
-        { text: 'חזור' },
-        {
-          text: 'אשר',
-          handler: () => {
-            for (let i = 0; i < this.storiesArray.length; i++) {
-              if (story.id === this.storiesArray[i].id) {
-                this.storiesArray[i].approved = true;
-                this.firestore.confirmStory(this.storiesArray[i].id, true);
-                document.getElementById('editor').hidden = true;
-              }
-            }
-          }
-        }]
-    });
-    alert.present();
+  confirmStory(story) {
+    for (let i = 0; i < this.storiesArray.length; i++) {
+      if (story.id === this.storiesArray[i].id) {
+        this.storiesArray[i].approved = true;
+        this.firestore.confirmStory(this.storiesArray[i].id, true);
+      }
+    }
   }
 
   // after the story was edited, we save the changes in it
@@ -646,8 +697,9 @@ async deleteStory(story) {
         break;
       }
     }
-    alert('השינויים נשמרו. יש ללחוץ בטבלה על הכפתור \'אשר\' עבור העדות הרצויה');
-    document.getElementById('editor').hidden = true;
+    alert('יש ללחוץ בטבלה על הכפתור \'אשר\' עבור העדות הרצויה');
+    document.getElementById('defaultRTE').hidden = true;
+    document.getElementById('save-edit').hidden = true;
   }
 
   // compare 2 strings

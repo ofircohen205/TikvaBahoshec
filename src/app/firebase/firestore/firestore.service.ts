@@ -112,7 +112,7 @@ export class FirestoreService {
   }
 
   public getClients(): Observable<any> {
-    return this.firestore.collection(this.CLIENT_COLLECTION).valueChanges();
+    return this.firestore.collection(this.CLIENT_COLLECTION).stateChanges();
   }
 
   public getClientName(clientId): Observable<any> {
@@ -131,20 +131,26 @@ export class FirestoreService {
     this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ description });
   }
 
+  public updateClientDetails(ClientID, username, description, location): void {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(ClientID).update({  username, description, location });
+  }
+
+
 
   /************************************/
   /* SUPPORT REP COLLECTION FUNCTIONS */
   /************************************/
-  public createSupportRep(name, email, phone): void {
+  public createSupportRep(uid, name, email, phone): void {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
       email,
       name,
       phone,
       inShift: false,
-      SupportRepID: null,
+      SupportRepID: uid,
       connectionTime: null,
     });
   }
+
 
   public getSupportRepName(supportRepId): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
