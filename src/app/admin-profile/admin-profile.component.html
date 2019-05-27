@@ -36,7 +36,7 @@
             </thead>
 
             <tbody text-right>
-              <tr *ngFor="let supportRep of supportRepList">
+              <tr *ngFor="let supportRep of list">
                 <td>
                   <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
                   <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
@@ -52,6 +52,8 @@
             </tbody>
 
           </table>
+          <hr>
+          <hr>
           <ion-card>
               <table id="tables" text-right>
                   <thead>
@@ -67,7 +69,7 @@
                   </thead>
                   <tbody>
                       <tr *ngFor="let hist of supportRepHistory">
-                          <td><ion-button>הצג שיחה</ion-button></td>
+                          <td><ion-button  [routerLink] ="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button></td>
                           <td>{{hist.timestamp}}</td>
                           <td>{{hist.ClientName}}</td>
                           <td>{{hist.SupportRepName}}</td>

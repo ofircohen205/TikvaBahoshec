@@ -66,9 +66,9 @@ export class SupportRepsService {
       {
         text: 'הוסף',
         handler: data => {
-          this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
-            this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
-          }).catch(error => console.log(error));
+          // this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
+            // this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
+          // }).catch(error => console.log(error));
         }
       }]
     });

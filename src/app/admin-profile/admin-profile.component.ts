@@ -39,7 +39,6 @@ export class AdminProfileComponent implements OnInit {
     private location: Location,
     private afs: AngularFireStorage,
     private global: GlobalService,
-    private supportRepService: SupportRepsService,
     private clientService: ClientsService
   ) { }
 
@@ -327,10 +326,32 @@ export class AdminProfileComponent implements OnInit {
     this.global.logout();
   }
 
+ 
   manageSupportReps() {
-   this.list = this.supportRepList;
-  }
+    this.firestore.getSupportRepIdList().subscribe(result => {
+      result.forEach(ele => {
+        const data = ele.payload.doc.data();
+        const id = ele.payload.doc.id;
+        data.SupportRepID = id;
+        if (ele.payload.type === 'added') {
+          this.list.push(data);
+          console.log(this.list);
+        } else if (ele.payload.type === 'modified') {
+          const index = this.list.findIndex(item => item.SupportRepID === id);
+ 
+          // Replace the item by index.
+          this.list.splice(index, 1, data );
+          console.log(this.list);
 
+        } else {
+          this.list.slice(this.list.indexOf(id), 1);
+          console.log(this.list);
+
+        }
+      });
+    });
+  }
+ 
   showHistory(x) {
     this.firestore.getAllChatRoom().subscribe(res => {
         console.log(res);
@@ -338,6 +359,7 @@ export class AdminProfileComponent implements OnInit {
       });
     console.log(this.supportRepHistory);
   }
+
   async addSupport() {
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',
@@ -364,11 +386,7 @@ export class AdminProfileComponent implements OnInit {
       },
       {
         text: 'הוסף',
-        handler: data => {
-          this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
-            this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
-          }).catch(error => console.log(error));
-        }
+        handler: data => { this.firestore.createSupportRep(data.username, data.email, data.phone); }
       }]
     });
     alert.present();
@@ -425,11 +443,8 @@ export class AdminProfileComponent implements OnInit {
         {
           text: 'מחק',
           handler: () => {
-            console.log(this.supportRepList);
-           const spId = x.SupportRepID;
-           console.log(spId);
-           console.log(this.firestore.removeSupportRep(spId));
-
+            this.firestore.removeSupportRep(x.SupportRepID);
+            this.list.splice(this.list.indexOf(x),1);
           }
         }]
     });
@@ -536,23 +551,31 @@ export class AdminProfileComponent implements OnInit {
       results.forEach(result => {
         const id = result.payload.doc.id;
         const data = result.payload.doc.data();
-        const timestampDate = data['date']['seconds'];   // save the date as timestamp
-        const stringDate = new Date(timestampDate * 1000).toDateString();  // save the date as a regular date form
-        // const approval = data['approved'];
-
-        this.storiesArray.push({ stringDate, id, ...data });
-        console.log(this.storiesArray);
+        const timestampDate = data['date']['seconds'];   //save the date as timestamp
+        const stringDate = new Date(timestampDate * 1000).toDateString();  //save the date as a regular date form
+        if (result.payload.type === 'added'){
+          console.log("in added");
+          this.storiesArray.push({stringDate, id, ...data });
+        }else if (result.payload.type === 'modified') {
+          const index = this.storiesArray.findIndex(item => item.id === id);
+          console.log("in modified");
+          // Replace the item in index with the new object.
+          this.storiesArray.splice(index, 1, { stringDate, id, ...data });
+        } else  //(result.payload.type === 'removed')
+        {
+          console.log("inremove");
+          this.storiesArray.slice(this.storiesArray.indexOf(id), 1);
+        }
       });
-
+ 
       this.storiesArray.sort((s1, s2) => {
-        if (s1['date']['seconds'] > s2['date']['seconds']) {
+        if (s1.timestampDate > s2.timestampDate) {
           return 1;
         } else {
           return -1;
         }
       });
     });
-
   }
 
 

@@ -135,13 +135,13 @@ export class FirestoreService {
   /************************************/
   /* SUPPORT REP COLLECTION FUNCTIONS */
   /************************************/
-  public createSupportRep(name, email, phone, id): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(id).set({
+  public createSupportRep(name, email, phone): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
       email,
       name,
       phone,
       inShift: false,
-      SupportRepID: id,
+      SupportRepID: null,
       connectionTime: null,
     });
   }
