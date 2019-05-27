@@ -50,9 +50,13 @@ export class ProfilePage implements OnInit {
   });
     }
 
-    logout() {
-      this.global.logout();
-    }
+  logout() {
+    this.global.logout();
+  }
+
+  updatePassword() {
+    this.global.updatePassword();
+  }
 
   onclick(e): void {
     const tar = e.target.value;

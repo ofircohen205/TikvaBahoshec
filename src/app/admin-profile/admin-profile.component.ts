@@ -39,7 +39,8 @@ export class AdminProfileComponent implements OnInit {
     private location: Location,
     private afs: AngularFireStorage,
     private global: GlobalService,
-    private clientService: ClientsService
+    private clientService: ClientsService,
+    private supportRepService: SupportRepsService
   ) { }
 
   chatRoomHistory: any[] = [];
@@ -328,7 +329,7 @@ export class AdminProfileComponent implements OnInit {
     this.global.logout();
   }
 
- 
+
   manageSupportReps() {
     this.firestore.getSupportRepIdList().subscribe(result => {
       result.forEach(ele => {
@@ -337,29 +338,21 @@ export class AdminProfileComponent implements OnInit {
         data.SupportRepID = id;
         if (ele.payload.type === 'added') {
           this.list.push(data);
-          console.log(this.list);
         } else if (ele.payload.type === 'modified') {
           const index = this.list.findIndex(item => item.SupportRepID === id);
- 
           // Replace the item by index.
           this.list.splice(index, 1, data );
-          console.log(this.list);
-
         } else {
           this.list.slice(this.list.indexOf(id), 1);
-          console.log(this.list);
-
         }
       });
     });
   }
- 
+
   showHistory(x) {
     this.firestore.getAllChatRoom().subscribe(res => {
-        console.log(res);
         this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
       });
-    console.log(this.supportRepHistory);
   }
 
   async addSupport() {
@@ -388,7 +381,11 @@ export class AdminProfileComponent implements OnInit {
       },
       {
         text: 'הוסף',
-        handler: data => { this.firestore.createSupportRep(data.username, data.email, data.phone); }
+        handler: data => {
+          this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
+            this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
+          }).catch(error => console.log(error));
+         }
       }]
     });
     alert.present();
@@ -397,10 +394,9 @@ export class AdminProfileComponent implements OnInit {
 
 
   async editSupport(x) {
-    console.log('edittttttttt');
 
     const alert = await this.alertController.create({
-      header: 'הוספת נציג חדש',
+      header: 'עריכת נציג',
       inputs: [
         {
           name: 'username',
@@ -446,7 +442,7 @@ export class AdminProfileComponent implements OnInit {
           text: 'מחק',
           handler: () => {
             this.firestore.removeSupportRep(x.SupportRepID);
-            this.list.splice(this.list.indexOf(x),1);
+            this.list.splice(this.list.indexOf(x), 1);
           }
         }]
     });
