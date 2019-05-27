@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 
+// tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { stringify } from 'querystring';
 
@@ -74,10 +75,10 @@ export class StoryComponent implements OnInit {
     let html = '<span></span>';
     this.stories.forEach(story => {
       if (story.approved) {
-        html += "<ion-card><ion-card-header><ion-card-title text-right>" +
+        html += '<ion-card><ion-card-header><ion-card-title text-right>' +
                 story.title +
-                "</ion-card-title></ion-card-header><ion-card-content id = 'desc' text-right >" +
-                story.description + "</ion-card-content></ion-card>"
+                '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right >' +
+                story.description + '</ion-card-content></ion-card>';
       }
     });
     console.log(html);

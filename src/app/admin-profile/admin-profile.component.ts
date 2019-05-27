@@ -42,7 +42,8 @@ export class AdminProfileComponent implements OnInit {
     private location: Location,
     private afs: AngularFireStorage,
     private global: GlobalService,
-    private clientService: ClientsService
+    private clientService: ClientsService,
+    private supportRepService: SupportRepsService
   ) { }
 
   chatRoomHistory: any[] = [];
@@ -330,7 +331,7 @@ export class AdminProfileComponent implements OnInit {
     this.global.logout();
   }
 
- 
+
   manageSupportReps() {
     this.firestore.getSupportRepIdList().subscribe(result => {
       result.forEach(ele => {
@@ -341,19 +342,17 @@ export class AdminProfileComponent implements OnInit {
           this.list.push(data);
         } else if (ele.payload.type === 'modified') {
           const index = this.list.findIndex(item => item.SupportRepID === id);
- 
           // Replace the item by index.
           this.list.splice(index, 1, data );
-
         } else {
           this.list.slice(this.list.indexOf(id), 1);
-
         }
       });
     });
   }
- 
+
   showHistory(x) {
+    document.getElementById('chat-list').hidden = false;
     this.firestore.getAllChatRoom().subscribe(res => {
         this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
       });
@@ -386,17 +385,10 @@ export class AdminProfileComponent implements OnInit {
       {
         text: 'הוסף',
         handler: data => {
-          firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(
-            res =>{
-             this.firestore.createSupportRep(res.user.uid, data.username, data.email, data.phone);
-             console.log(res.user.displayName + "added new uid:" + res.user.uid);
-            } 
-          ).catch(error => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log(errorCode, errorMessage);
-          });
-          }
+          this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
+            this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
+          }).catch(error => console.log(error));
+         }
       }]
     });
     alert.present();
@@ -405,10 +397,9 @@ export class AdminProfileComponent implements OnInit {
 
 
   async editSupport(x) {
-    console.log('edittttttttt');
 
     const alert = await this.alertController.create({
-      header: 'הוספת נציג חדש',
+      header: 'עריכת נציג',
       inputs: [
         {
           name: 'username',
@@ -454,7 +445,7 @@ export class AdminProfileComponent implements OnInit {
           text: 'מחק',
           handler: () => {
             this.firestore.removeSupportRep(x.SupportRepID);
-            this.list.splice(this.list.indexOf(x),1);
+            this.list.splice(this.list.indexOf(x), 1);
           }
         }]
     });
@@ -484,7 +475,8 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      //this.manageSupportReps();
+      document.getElementById('chat-list').hidden = true;
+      // this.manageSupportReps();
       // this.location.go('/profile/support-reps');
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
@@ -494,7 +486,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = false;
       editEvents.hidden = true;
-      //this.manageClients();
+      // this.manageClients();
       // this.location.go('/profile/clients');
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
@@ -541,7 +533,6 @@ export class AdminProfileComponent implements OnInit {
       manageClients.hidden = true;
       editEvents.hidden = true;
       // this.location.go('/profile/stories');
-     
     }
   }
 
@@ -623,23 +614,22 @@ export class AdminProfileComponent implements OnInit {
       results.forEach(result => {
         const id = result.payload.doc.id;
         const data = result.payload.doc.data();
-        const timestampDate = data['date']['seconds'];   //save the date as timestamp
-        const stringDate = new Date(timestampDate * 1000).toDateString();  //save the date as a regular date form
-        if (result.payload.type === 'added'){
-          console.log("in added");
+        const timestampDate = data['date']['seconds'];   // save the date as timestamp
+        const stringDate = new Date(timestampDate * 1000).toDateString();  // save the date as a regular date form
+        if (result.payload.type === 'added') {
+          console.log('in added');
           this.storiesArray.push({stringDate, id, ...data });
-        }else if (result.payload.type === 'modified') {
+        } else if (result.payload.type === 'modified') {
           const index = this.storiesArray.findIndex(item => item.id === id);
-          console.log("in modified");
+          console.log('in modified');
           // Replace the item in index with the new object.
           this.storiesArray.splice(index, 1, { stringDate, id, ...data });
-        } else  //(result.payload.type === 'removed')
-        {
-          console.log("inremove");
+        } else  { // (result.payload.type === 'removed')
+          console.log('in remove');
           this.storiesArray.slice(this.storiesArray.indexOf(id), 1);
         }
       });
- 
+
       this.storiesArray.sort((s1, s2) => {
         if (s1.timestampDate > s2.timestampDate) {
           return 1;
@@ -650,7 +640,7 @@ export class AdminProfileComponent implements OnInit {
     });
   }
 
-
+  // edit the story. replace the old content of the story with the new content
   editStory(story) {
     document.getElementById('save-edit').hidden = false;
     document.getElementById('defaultRTE').hidden = false;
