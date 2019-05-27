@@ -54,7 +54,7 @@
           </table>
           <hr>
           <hr>
-          <ion-card>
+          <ion-card id="chat-list" hidden="true">
             <table id="tables" text-right>
               <thead>
                 <tr>
@@ -62,8 +62,6 @@
                   <th text-center>תאריך</th>
                   <th text-center>שם לקוח</th>
                   <th text-center>שם נציג</th>
-
-
                 </tr>
 
               </thead>
@@ -157,13 +155,13 @@
             </table>
           </ion-card>
 
-          <ion-card id = 'editor' [hidden]="true">
+          <ion-card id='editor' [hidden]="true">
             <ion-card-content>
               <!-- Text editor for the stories -->
               <ejs-richtexteditor text-right id='defaultRTE' class='none' [(value)]='value' [toolbarSettings]='tools'
-                [quickToolbarSettings]='quickTools' ></ejs-richtexteditor>
+                [quickToolbarSettings]='quickTools'></ejs-richtexteditor>
             </ion-card-content>
-            <ion-button id='save-edit' (click)="acceptStoryChange()" >שמור עריכה</ion-button>
+            <ion-button id='save-edit' (click)="acceptStoryChange()">שמור עריכה</ion-button>
           </ion-card>
         </ion-card>
 

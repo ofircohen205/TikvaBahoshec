@@ -101,7 +101,7 @@ export class GlobalService {
         text: 'אישור',
         handler: data => {
           this.userAuth.auth.currentUser.updatePassword(data.password)
-          .then(() => alert('הסיסמה שונתה בהצלחה')).catch(error => console.log(error));
+          .then(() => console.log('הסיסמה שונתה בהצלחה')).catch(error => console.log(error));
         }
       }]
     });

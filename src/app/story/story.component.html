@@ -2,9 +2,9 @@
 
   <ion-grid>
     <!-- <ion-row *ngFor='let story of stories'> -->
-      <ion-row>
+    <ion-row>
       <ion-col>
-        <div id = 'upload-stories'></div>
+        <div id='upload-stories'></div>
         <!-- <ion-card *ngIf='story.approved'>
           <ion-card-header>
             <ion-card-title text-right>{{ story.title }}</ion-card-title>
@@ -16,22 +16,22 @@
 
     <ion-row>
       <ion-col>
-        <ion-card id = 'tell-your-story' [hidden] = "false">
+        <ion-card id='tell-your-story' [hidden]="false">
           <ion-card-header>
             <ion-card-title text-right>ספר את הסיפור שלך</ion-card-title>
           </ion-card-header>
           <ion-card-content text-right>
             <!-- <ion-item> -->
-              <ion-input type="text" #title placeholder='נושא הסיפור שלי' text-right></ion-input>
+            <ion-input type="text" #title placeholder='נושא הסיפור שלי' text-right></ion-input>
             <!-- </ion-item> -->
-            <br/>
+            <br />
             <!-- <ion-item> -->
-              <!-- <ion-input type="text" #description placeholder='תיאור' text-right></ion-input> -->
-              <ejs-richtexteditor text-right placeholder='ספר/י על המקרה שלך. ניתן ללחוץ על החצים האלכסוניים מימין להגדלת/הקטנת תצוגת הכתיבה
-              ' id='defaultRTE' [(value)]='value' [toolbarSettings]='tools'
-              [quickToolbarSettings]='quickTools'></ejs-richtexteditor>
+            <!-- <ion-input type="text" #description placeholder='תיאור' text-right></ion-input> -->
+            <ejs-richtexteditor text-right placeholder='ספר/י על המקרה שלך. ניתן ללחוץ על החצים האלכסוניים מימין להגדלת/הקטנת תצוגת הכתיבה
+              ' id='defaultRTE' [(value)]='value' [toolbarSettings]='tools' [quickToolbarSettings]='quickTools'>
+            </ejs-richtexteditor>
             <!-- </ion-item> -->
-            <br/>
+            <br />
             <ion-button (click)='sendStory()'>שלח</ion-button>
           </ion-card-content>
         </ion-card>
