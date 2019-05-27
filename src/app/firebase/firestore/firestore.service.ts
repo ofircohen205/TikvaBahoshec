@@ -3,7 +3,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Key } from 'protractor';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
-import { firestore } from 'firebase';
 
 
 

@@ -42,7 +42,7 @@ export class AdminProfileComponent implements OnInit {
     private supportRepService: SupportRepsService,
     private clientService: ClientsService
   ) { }
-  
+
   chatRoomHistory: any[] = [];
   imageUrls: string[] = [];
   list: any[] = [];
@@ -327,11 +327,11 @@ export class AdminProfileComponent implements OnInit {
     this.global.logout();
   }
 
-  manageSupportReps(){
+  manageSupportReps() {
    this.list = this.supportRepList;
   }
 
-  showHistory(x){
+  showHistory(x) {
     this.firestore.getAllChatRoom().subscribe(res => {
         console.log(res);
         this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
@@ -522,7 +522,7 @@ export class AdminProfileComponent implements OnInit {
 
   /********************************************Clients Managment*****************************************/
 
-    manageClients(){
+    manageClients() {
       this.firestore.getClients().subscribe(result => {
         this.clientList = result;
         console.log(this.clientList);

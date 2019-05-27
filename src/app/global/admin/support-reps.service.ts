@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { FirestoreService } from 'src/app/firebase/firestore/firestore.service';
 import { Observable } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 
 @Injectable({
@@ -13,7 +14,8 @@ export class SupportRepsService {
 
   constructor(
     private firestore: FirestoreService,
-    private alertController: AlertController) {
+    private alertController: AlertController,
+    private userAuth: AngularFireAuth) {
       this.firestore.getSupportRepIdList().subscribe(result => {
         result.forEach(ele => {
         const data = ele.payload.doc.data();
@@ -22,7 +24,7 @@ export class SupportRepsService {
         this.list.push({id, ...data}) ;
         } else if (ele.payload.type === 'modified') {
           const index = this.list.findIndex(item => item.id === id);
-  
+
           // Replace the item by index.
           this.list.splice(index, 1, {id, ...data});
         } else {
@@ -36,7 +38,7 @@ export class SupportRepsService {
   manageSupportReps() {
     console.log(this.list);
   }
- 
+
   async addSupport() {
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',
@@ -63,7 +65,11 @@ export class SupportRepsService {
       },
       {
         text: 'הוסף',
-        handler: data => { this.firestore.createSupportRep(data.username, data.email, data.phone); }
+        handler: data => {
+          this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
+            this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
+          }).catch(error => console.log(error));
+        }
       }]
     });
     alert.present();
