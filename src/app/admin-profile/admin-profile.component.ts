@@ -92,6 +92,8 @@ export class AdminProfileComponent implements OnInit {
       });
 
     this.manageStories();
+    this.manageSupportReps();
+    this.manageClients();
   }
 
 
@@ -474,7 +476,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-      this.manageSupportReps();
+      //this.manageSupportReps();
       // this.location.go('/profile/support-reps');
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
@@ -484,7 +486,7 @@ export class AdminProfileComponent implements OnInit {
       viewHistoryChat.hidden = true;
       manageClients.hidden = false;
       editEvents.hidden = true;
-      this.manageClients();
+      //this.manageClients();
       // this.location.go('/profile/clients');
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
@@ -531,7 +533,7 @@ export class AdminProfileComponent implements OnInit {
       manageClients.hidden = true;
       editEvents.hidden = true;
       // this.location.go('/profile/stories');
-      this.manageStories();
+     
     }
   }
 
