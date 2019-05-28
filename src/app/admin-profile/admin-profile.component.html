@@ -280,10 +280,10 @@
                   <th text-center></th>
                   <th text-center></th>
                   <th text-center></th>
-                  <th text-center>סטטוס</th>
-                  <th text-center>שם הנציג</th>
-                  <th text-center>שעת פתיחת חדר</th>
-                  <th text-center>שם הלקוח</th>
+                  <th text-center id ='adminHistoryStatusColTable' class="p" (click)="sortByOccupiedState(this.sortArrowStatusTable,0,'adminHistoryStatusColTable',this.chatRoomList,'historyTable')">&#8661; סטטוס</th>
+                  <th text-center id='adminHistorySupportColTable' class="p" (click)="sortBySupportRep(this.sortArrowStatusTable,1,'adminHistorySupportColTable',this.chatRoomList,'historyTable')">&#8661; שם הנציג השיחה</th>
+                  <th text-center id ='adminHistoryDateColTable' class="p" (click)="sortByDate(this.sortArrowStatusTable,2,'adminHistoryDateColTable',this.chatRoomList,'historyTable')">&#8661;שעת פתיחת חדר </th>
+                <th text-center id='adminHistoryClientColTable' class="p" (click)="sortByClient(this.sortArrowStatusTable,3,'adminHistoryClientColTable',this.chatRoomList,'historyTable')">&#8661; שם הלקוח</th>
                   <th text-center>מספר</th>
                 </tr>
               </thead>

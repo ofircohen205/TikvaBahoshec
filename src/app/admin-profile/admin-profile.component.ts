@@ -58,6 +58,9 @@ export class AdminProfileComponent implements OnInit {
   clientList: any[] = [];
   txtMsg = '';
   supportRepHistory: any[] = [];
+  sortArrowStatusTable : boolean[] = [true,true,true,true];
+
+
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
   public value =
@@ -80,12 +83,11 @@ export class AdminProfileComponent implements OnInit {
   };
 
   ngOnInit() {
-    console.log(this.firestore.getSupportRepNameList());
     this.firestore.getSupportRepNameList().subscribe(result => {
       this.supportRepList = result;
+      console.log(result);
       this.initSupportSelectList();
     });
-
     this.firestore.getAllChatRoom().subscribe(result1 => {
       this.chatRoomList = result1;
       this.createHistoryTable();
@@ -101,10 +103,10 @@ export class AdminProfileComponent implements OnInit {
 
 
   initSupportSelectList() {
-    const selectElement = document.getElementById('historySupportSelect');
+    var selectElement = document.getElementById('historySupportSelect');
     this.supportRepList.forEach(supportRep => {
       if (supportRep !== undefined) {
-        const selection = document.createElement('ion-select-option');
+        var selection = document.createElement('ion-select-option');
         selection.value = supportRep['name'];
         selection.textContent = supportRep['name'];
         selectElement.appendChild(selection);
@@ -113,21 +115,21 @@ export class AdminProfileComponent implements OnInit {
   }
 
 
-
   createHistoryTable() {
-    const toDate = (<HTMLInputElement>document.getElementById('historyToDate1')).value;
-    const fromDate = (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
-    const statusSelect: any = (<HTMLInputElement>document.getElementById('historyStatusSelect')).value;
-    const supportRepSelect = (<HTMLInputElement>document.getElementById('historySupportSelect')).value;
-    const clientName = (<HTMLInputElement>document.getElementById('historyClientName')).value;
-    let chatRoomList: any[];
-    const body = document.getElementById('historyBodyTable');
-    this.removeChildren(body, 'historyBodyTable');
-    let dateFrom;
-    let dateTo;
+    var toDate = (<HTMLInputElement>document.getElementById('historyToDate1')).value;
+    var fromDate = (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
+    var statusSelect: any = (<HTMLInputElement>document.getElementById('historyStatusSelect')).value;
+    var supportRepSelect = (<HTMLInputElement>document.getElementById('historySupportSelect')).value;
+    var clientName = (<HTMLInputElement>document.getElementById('historyClientName')).value;
+    var chatRoomList: any[];
+    var body = document.getElementById('historyBodyTable');
+    this.removeChildren(body,'historyBodyTable');
+    var dateFrom;
+    var dateTo;
     if (fromDate !== '') {
       dateFrom = new Date(fromDate).toLocaleDateString();
-    } else {
+    }
+    else {
       dateFrom = '';
     }
     if (toDate !== '') {
@@ -135,143 +137,238 @@ export class AdminProfileComponent implements OnInit {
     } else {
       dateTo = '';
     }
-    let compareStatus;
-    let compareSupport;
-    let index = 1;
-    for (const chatRoom of this.chatRoomList) {
-      const tr = document.createElement('tr');
-      if (chatRoom !== undefined) {
-        const date = new Date(chatRoom['timestamp']).toLocaleDateString();
-        for (const v of statusSelect) {
-          if ((v === 'בטיפול' && chatRoom['occupied'] === true) || (v === 'לא בטיפול' && chatRoom['occupied'] === false)) {
-            compareStatus = true;
-            break;
-          } else {
-            compareStatus = false;
+    var compareStatus;
+    var compareSupport;
+    var index = 1;
+    
+      index = 1;
+      for(let chatRoom of this.chatRoomList) {
+        var tr = document.createElement('tr');
+        if (chatRoom !== undefined) {
+          var date = new Date(chatRoom['timestamp']).toLocaleDateString();
+          for (let v of statusSelect) {
+            if ((v === 'בטיפול' && chatRoom['occupied'] === true) || (v === 'לא בטיפול' && chatRoom['occupied'] === false)) {
+              compareStatus = true;
+              break;
+            } else {
+              compareStatus = false;
+            }
           }
-        }
-        for (const v of supportRepSelect) {
-          if (v === chatRoom['SupportRepName']) {
-            compareSupport = true;
-            break;
-          } else {
-            compareSupport = false;
-          }
-        }
-
-        if ((date >= dateFrom || dateFrom === '') && (date <= dateTo || dateTo === '') &&
-          (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
-          (chatRoom['ClientName'].search(clientName) !== -1 || clientName === '')) {
-          const button1 = document.createElement('ion-button');
-          const td1 = document.createElement('td');
-          td1.appendChild(button1);
-          td1.id = 'adminHistoryTablebutton1_' + index;
-          button1.innerHTML = 'הורד שיחה';
-          button1.color = 'success';
-          td1.style.color = 'white';
-          td1.style.border = ' 1px solid #ddd';
-          td1.style.padding = '8px';
-          td1.style.borderCollapse = 'collapse';
-
-          const button2 = document.createElement('ion-button');
-          const td2 = document.createElement('td');
-          td2.appendChild(button2);
-          td2.id = 'adminHistoryTablebutton2_' + index;
-          button2.innerHTML = 'כנס לחדר';
-          button2.color = 'success';
-          td2.style.color = 'white';
-          td2.style.border = ' 1px solid #ddd';
-          td2.style.padding = '8px';
-          td2.style.borderCollapse = 'collapse';
-
-          const button3 = document.createElement('ion-button');
-          const td3 = document.createElement('td');
-          td3.appendChild(button3);
-          td3.id = 'adminHistoryTablebutton3_' + index;
-          button3.innerHTML = 'כנס לטופס לקוח';
-          button3.color = 'success';
-          td3.style.color = 'white';
-          td3.style.border = ' 1px solid #ddd';
-          td3.style.padding = '8px';
-          td3.style.borderCollapse = 'collapse';
-
-          const td4 = document.createElement('td');
-          td4.style.border = ' 1px solid #ddd';
-          td4.style.padding = '8px';
-          td4.style.borderCollapse = 'collapse';
-          if (chatRoom.occupied === true) {
-            td4.textContent = 'בטיפול';
-          } else {
-            td4.textContent = 'לא בטיפול';
+          for (let v of supportRepSelect) {
+            if (v === chatRoom['SupportRepName']) {
+              compareSupport = true;
+              break;
+            } else {
+              compareSupport = false;
+            }
           }
 
-          const td5 = document.createElement('td');
-          const name = '';
-          td5.style.border = ' 1px solid #ddd';
-          td5.style.padding = '8px';
-          td5.style.borderCollapse = 'collapse';
-          if (chatRoom.SupportRepName !== '' && chatRoom.SupportRepName !== null) {
-            td5.textContent = chatRoom.SupportRepName;
-          } else {
-            td5.textContent = 'no support name';
+          if ((date >= dateFrom || dateFrom === '') && (date <= dateTo || dateTo === '') &&
+            (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
+            (chatRoom['ClientName'].search(clientName) !=-1 || clientName === '')) {
+              var button1 = document.createElement('ion-button');
+              var td1 = document.createElement('td');
+              td1.appendChild(button1);
+              td1.id = 'adminHistoryTablebutton1_' + index;
+              button1.innerHTML = 'הורד שיחה';
+              button1.color = 'success';
+              td1.style.color = 'white';
+              td1.style.border = ' 1px solid #ddd';
+              td1.style.padding = '8px';
+              td1.style.borderCollapse = 'collapse';
+
+              var button2 = document.createElement('ion-button');
+              var td2 = document.createElement('td');
+              td2.appendChild(button2);
+              td2.id = 'adminHistoryTablebutton2_' + index;
+              button2.innerHTML = 'כנס לחדר';
+              button2.color = 'success';
+              td2.style.color = 'white';
+              td2.style.border = ' 1px solid #ddd';
+              td2.style.padding = '8px';
+              td2.style.borderCollapse = 'collapse';
+
+              var button3 = document.createElement('ion-button');
+              var td3 = document.createElement('td');
+              td3.appendChild(button3);
+              td3.id = 'adminHistoryTablebutton3_' + index;
+              button3.innerHTML = 'כנס לטופס לקוח';
+              button3.color = 'success';
+              td3.style.color = 'white';
+              td3.style.border = ' 1px solid #ddd';
+              td3.style.padding = '8px';
+              td3.style.borderCollapse = 'collapse';
+
+              var td4 = document.createElement('td');
+              td4.style.border = ' 1px solid #ddd';
+              td4.style.padding = '8px';
+              td4.style.borderCollapse = 'collapse';
+              if(chatRoom.occupied === true) {
+                td4.textContent = 'בטיפול';
+              } else {
+                td4.textContent = 'לא בטיפול';
+              }
+
+              var td5 = document.createElement('td');
+              var name = '';
+              td5.style.border = ' 1px solid #ddd';
+              td5.style.padding = '8px';
+              td5.style.borderCollapse = 'collapse';
+              if(chatRoom.SupportRepName !== '' && chatRoom.SupportRepName !=null){
+                td5.textContent = chatRoom.SupportRepName;
+              } else {
+                td5.textContent = 'no support name';
+              }
+              var td6 = document.createElement('td');
+              td6.style.border = ' 1px solid #ddd';
+              td6.style.padding = '8px';
+              td6.style.borderCollapse = 'collapse';
+              td6.textContent = new Date(chatRoom.timestamp).toLocaleString();
+
+              var td7 = document.createElement('td');
+              td7.style.border = ' 1px solid #ddd';
+              td7.style.padding = '8px';
+              td7.style.borderCollapse = 'collapse';
+              td7.textContent = chatRoom.ClientName;
+
+              var td8 = document.createElement('td');
+              td8.style.border = ' 1px solid #ddd';
+              td8.style.padding = '8px';
+              td8.style.borderCollapse = 'collapse';
+              td8.textContent = index.toString();
+              tr.appendChild(td1);
+              tr.appendChild(td2);
+              tr.appendChild(td3);
+              tr.appendChild(td4);
+              tr.appendChild(td5);
+              tr.appendChild(td6);
+              tr.appendChild(td7);
+              tr.appendChild(td8);
+
+              tr.id = 'adminHistoryTableTr_' + index; 
+              index++;
+              body.appendChild(tr);
           }
-          const td6 = document.createElement('td');
-          td6.style.border = ' 1px solid #ddd';
-          td6.style.padding = '8px';
-          td6.style.borderCollapse = 'collapse';
-          td6.textContent = new Date(chatRoom.timestamp).toLocaleString();
-
-          const td7 = document.createElement('td');
-          td7.style.border = ' 1px solid #ddd';
-          td7.style.padding = '8px';
-          td7.style.borderCollapse = 'collapse';
-          td7.textContent = chatRoom.ClientName;
-
-          const td8 = document.createElement('td');
-          td8.style.border = ' 1px solid #ddd';
-          td8.style.padding = '8px';
-          td8.style.borderCollapse = 'collapse';
-          td8.textContent = index.toString();
-          tr.appendChild(td1);
-          tr.appendChild(td2);
-          tr.appendChild(td3);
-          tr.appendChild(td4);
-          tr.appendChild(td5);
-          tr.appendChild(td6);
-          tr.appendChild(td7);
-          tr.appendChild(td8);
-
-          tr.id = 'adminHistoryTableTr_' + index;
-          index++;
-          body.appendChild(tr);
-        }
-        const tbodyChildrens = body.childNodes;
-        for (let i = 0; i < body.childNodes.length; i++) {
-          tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
-          tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
-          const trChildren = tbodyChildrens[i].childNodes;
-          trChildren[0].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[0], i));
-          trChildren[1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[1], i));
-          trChildren[2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[2], i));
+          var tbodyChildrens = body.childNodes;
+          for(let i = 0; i < body.childNodes.length; i++) {
+            tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
+            tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
+            var trChildren = tbodyChildrens[i].childNodes;
+            trChildren[0].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[0],i));
+            trChildren[1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[1],i));
+            trChildren[2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[2],i));
+          }
         }
       }
-    }
   }
 
-  async removeChildren(tbody, tbodyId) {
-    const size = tbody.childNodes.length;
-    const tbody1 = document.getElementById(tbodyId);
+  async removeChildren(tbody,tbodyId) {
+    var size = tbody.childNodes.length;
+    var tbody1 = document.getElementById(tbodyId);
     while (tbody1.firstChild) {
      tbody1.removeChild(tbody1.firstChild);
     }
   }
 
+  sortByDate(dateStatus,index,id,list,table){
+  var nameBtn =(<HTMLButtonElement>document.getElementById(id));
+  if(dateStatus[index] === true){
+    list.sort((a,b)=> (a.timestamp>=b.timestamp)? 1:-1)
+    dateStatus[index] = false;
+    nameBtn.innerHTML ='&#8657;שעת פתיחת חדר';
+  }
+  else{
+    list.sort((a,b)=> (a.timestamp<=b.timestamp)? 1:-1);
+  dateStatus[index] = true;
+  nameBtn.innerHTML = '&#8659;שעת פתיחת חדר';
+  
+  }
+  if(table === 'historyTable'){
+    this.createHistoryTable();
+  }
+}
+
+
+sortByClient(nameStatus,index,id,list,table){
+var nameBtn =(<HTMLButtonElement>document.getElementById(id));
+  if(nameStatus[index]==true){
+    list.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1);
+    nameStatus[index]=false;
+    nameBtn.innerHTML ='&#8657; שם הלקוח'
+  }
+  else{
+    list.sort((a,b)=> (a.ClientName<=b.ClientName)? 1:-1)
+  nameStatus[index] = true;
+  nameBtn.innerHTML ='&#8659; שם הלקוח'
+}
+if(table === 'historyTable'){
+  this.createHistoryTable();
+}
+
+}
+
+sortBySupportRep(nameStatus,index,id,list,table){
+var nameBtn =(<HTMLButtonElement>document.getElementById(id));
+  if(nameStatus[index]==true){
+    list.sort((a,b)=> (a.SupportRepName>=b.SupportRepName)? 1:-1)
+    nameStatus[index]=false
+    nameBtn.innerHTML ='&#8657; שם הנציג בשיחה'
+  }
+  else{
+    list.sort((a,b)=> (a.SupportRepName<=b.SupportRepName)? 1:-1)
+  nameStatus[index] = true;
+  nameBtn.innerHTML ='&#8659; שם הנציג בשיחה'
+}
+if(table === 'historyTable'){
+  this.createHistoryTable();
+}
+
+}
+
+
+sortByOpenRoomState(stateStatus,index,id,list,table){
+var stateBtn =(<HTMLButtonElement>document.getElementById(id));
+  if(stateStatus[index] === true){
+    list.sort((a,b)=>a.open - b.open)
+    stateStatus[index] = false;
+    stateBtn.innerHTML = '&#8657; מצב החדר'
+  }
+  else{
+    list.sort((a,b)=>b.open-a.open)
+    stateStatus[index]=true;
+    stateBtn.innerHTML ='&#8659; מצב החדר';
+}
+if(table === 'historyTable'){
+  this.createHistoryTable();
+}
+
+}
+
+
+sortByOccupiedState(stateStatus,index,id,list,table){
+var stateBtn =(<HTMLButtonElement>document.getElementById(id));
+  if(stateStatus[index] === true){
+    list.sort((a,b)=>a.occupied - b.occupied)
+    stateStatus[index] = false;
+    stateBtn.innerHTML = '&#8657; מצב החדר'
+  }
+  else{
+    list.sort((a,b)=>b.occupied-a.occupied)
+    stateStatus[index]=true;
+    stateBtn.innerHTML ='&#8659; מצב החדר';
+}
+if(table === 'historyTable'){
+  this.createHistoryTable();
+}
+
+}
+
   resetHistoryTableFileds() {
-    const toDate = document.getElementById('historyToDate1');
-    const fromDate = document.getElementById('historyFromDate2');
-    const statusSelect: any = document.getElementById('historyStatusSelect');
-    const supportRepSelect = document.getElementById('historySupportSelect');
-    const clientName = document.getElementById('historyClientName');
+    var toDate = document.getElementById('historyToDate1');
+    var fromDate = document.getElementById('historyFromDate2');
+    var statusSelect: any = document.getElementById('historyStatusSelect');
+    var supportRepSelect = document.getElementById('historySupportSelect');
+    var clientName = document.getElementById('historyClientName');
     (<HTMLInputElement>(toDate)).value = '';
     (<HTMLInputElement>(fromDate)).value = '';
     (<HTMLInputElement>(statusSelect)).value = '';
@@ -280,15 +377,14 @@ export class AdminProfileComponent implements OnInit {
   }
 
   adminHistoryLimitMinDate() {
-    const dateFrom =  (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
-    const dateTo = document.getElementById('historyToDate1');
-    dateTo.setAttribute('min', dateFrom);
+    var dateFrom =  (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
+    var dateTo = document.getElementById('historyToDate1');
+    dateTo.setAttribute("min", dateFrom);
   }
-
   adminHistoryLimitMaxDate() {
-    const dateTo =  (<HTMLInputElement>document.getElementById('historyToDate1')).value;
-    const dateFrom = document.getElementById('historyFromDate2');
-    dateFrom.setAttribute('max', dateTo);
+    var dateTo =  (<HTMLInputElement>document.getElementById('historyToDate1')).value;
+    var dateFrom = document.getElementById('historyFromDate2');
+    dateFrom.setAttribute("max", dateTo);
   }
 
   onclickAdminHistoryTable(e, index) {
@@ -301,20 +397,19 @@ export class AdminProfileComponent implements OnInit {
     }
     if (e['id'] === 'adminHistoryTablebutton3_' + (index + 1)) {
       console.log('go to client form page');
-      console.log(e['id']);
     }
    }
 
    downloadChatMsg(roomId) {
-    this.firestore.getChatMessages(roomId).subscribe(result => {
-    result.forEach(msg => {
-      this.txtMsg += 'From:' + msg.from + ' Time:' + new Date(msg.timestamp);
-      this.txtMsg += '\n<' + msg.content + '>\n\n';
-    });
-    console.log('startDownload');
-    const link = document.createElement('a');
-    link.download = 'Chat:' + roomId + '.txt';
-    const blob = new Blob([this.txtMsg], {type: 'text/plain'});
+    this.firestore.getChatMessages(roomId).subscribe(result =>{
+    result.forEach(msg=> {
+      this.txtMsg += "From:" + msg.from + " Time:" + new Date(msg.timestamp)
+      this.txtMsg += "\n<" + msg.content + ">\n\n"  
+    })
+    console.log("startDownload")
+    var link = document.createElement('a');
+    link.download = 'Chat:'+roomId+'.txt';
+    var blob = new Blob([this.txtMsg], {type: 'text/plain'});
     link.href = window.URL.createObjectURL(blob);
     link.click();
     });
@@ -394,28 +489,22 @@ export class AdminProfileComponent implements OnInit {
     alert.present();
   }
 
-
-
   async editSupport(x) {
-
     const alert = await this.alertController.create({
       header: 'עריכת נציג',
       inputs: [
         {
           name: 'username',
-          placeholder: x.name,
-          value: x.name
+          placeholder: x.name
         },
         {
           name: 'email',
-          placeholder: x.email,
-          value: x.email
+          placeholder: x.email
         },
 
         {
           name: 'phone',
-          placeholder: x.phone,
-          value: x.phone
+          placeholder: x.phone
         },
       ],
       buttons: [{
@@ -424,11 +513,10 @@ export class AdminProfileComponent implements OnInit {
       {
         text: 'שמור שינויים',
         handler: data => {
-          console.log(x.SupportRepID);
-          this.firestore.updateSupportRepDetails(x.SupportRepID, data.username, data.email, data.phone);
-          x.username = data.username;
-          x.email = data.email;
-          x.phone = data.phone;
+          this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone);
+          this.list[this.list.indexOf(x)].username = data.username;
+          this.list[this.list.indexOf(x)].email = data.email;
+          this.list[this.list.indexOf(x)].phone = data.phone;
         }
       }]
     });
@@ -478,6 +566,7 @@ export class AdminProfileComponent implements OnInit {
       document.getElementById('chat-list').hidden = true;
       // this.manageSupportReps();
       // this.location.go('/profile/support-reps');
+      this.manageSupportReps();
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;

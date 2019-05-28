@@ -204,7 +204,6 @@ export class SupportRepProfileComponent implements OnInit {
       td2.id = 'supRepTable2button2_' + index;
       button2.innerHTML = 'מילוי טופס לקוח';
       button2.color = 'success';
-      button2.addEventListener('click', () => this.openClient(v['ClientID']));
       td2.style.color = 'white';
       td2.style.border = ' 1px solid #ddd';
       td2.style.padding = '8px';
@@ -306,7 +305,10 @@ export class SupportRepProfileComponent implements OnInit {
         this.firestore.updateChatRoomOpenField( list[index]['ChatRoomId'], false);
       }
     }
-    if (e['id'] === 'supRepTable2button2_' + (index + 1)) { }
+    if (e['id'] === 'supRepTable2button2_' + (index + 1)) {
+      console.log(list['ClientID']) ;
+      this.openClient(list[index]['ClientID']);
+    }
     if (e['id'] === 'supRepTable2button3_' + (index + 1)) {
       window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
