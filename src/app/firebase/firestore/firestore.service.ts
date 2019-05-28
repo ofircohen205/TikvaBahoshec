@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Key } from 'protractor';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
+import { firestore } from 'firebase';
 
 
 
@@ -135,13 +136,13 @@ export class FirestoreService {
   /************************************/
   /* SUPPORT REP COLLECTION FUNCTIONS */
   /************************************/
-  public createSupportRep(name, email, phone): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
+  public createSupportRep(name, email, phone, id): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(id).set({
       email,
       name,
       phone,
       inShift: false,
-      SupportRepID: null,
+      SupportRepID: id,
       connectionTime: null,
     });
   }

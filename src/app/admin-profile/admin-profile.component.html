@@ -11,11 +11,13 @@
         <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
       </ion-col>
       <ion-col size='12'>
+       
+       
         <ion-card id="Manage-SupportReps" text-center [hidden]="false">
           <p text-center>רשימת נציגים </p>
           <ion-toolbar>
 
-            <ion-searchbar class="search"></ion-searchbar>
+            <ion-searchbar class="search" type="text" [(ngModel)]="searchText"></ion-searchbar>
             <ion-button>חיפוש</ion-button>
 
           </ion-toolbar>
@@ -25,6 +27,7 @@
               <tr>
                 <th text-center></th>
                 <th text-center>התחבר לאחרונה</th>
+                <th text-center>טלפון</th>
                 <th text-center>אימייל</th>
                 <th text-center>שם נציג</th>
 
@@ -33,15 +36,81 @@
             </thead>
 
             <tbody text-right>
-              <tr *ngFor="let x of list">
+              <tr *ngFor="let supportRep of supportRepList">
                 <td>
-                  <ion-button color="danger" (click)="deleteSupport(x)">מחק</ion-button>
-                  <ion-button (click)="editSupport(x)">ערוך</ion-button>
-                  <ion-button (click)="showHistory(x)">הצג שיחות</ion-button>
+                  <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
+                  <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
+                  <ion-button (click)="showHistory(supportRep)">הצג שיחות</ion-button>
                 </td>
-                <td>{{x.connectionTime}}</td>
-                <td>{{x.email}}</td>
-                <td>{{x.name}}</td>
+
+                <td>{{supportRep.connectionTime}}</td>
+                <td>{{supportRep.phone}}</td>
+                <td>{{supportRep.email}}</td>
+                <td>{{supportRep.name}}</td>
+
+              </tr>
+            </tbody>
+
+          </table>
+          <ion-card>
+              <table id="tables" text-right>
+                  <thead>
+                    <tr>
+                      <th text-center></th>
+                      <th text-center>תאריך</th>
+                      <th text-center>שם לקוח</th>
+                      <th text-center>שם נציג</th>
+    
+      
+                    </tr>
+      
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let hist of supportRepHistory">
+                          <td><ion-button>הצג שיחה</ion-button></td>
+                          <td>{{hist.timestamp}}</td>
+                          <td>{{hist.ClientName}}</td>
+                          <td>{{hist.SupportRepName}}</td>
+                      </tr>
+                  </tbody>
+          
+          </table>
+      
+      </ion-card>
+          </ion-card>
+
+
+               
+        <ion-card id="Manage-Clients" text-center [hidden]="true">
+          <p text-center>רשימת נציגים </p>
+          <ion-toolbar>
+
+            <ion-searchbar class="search"></ion-searchbar>
+            <ion-button>חיפוש</ion-button>
+
+          </ion-toolbar>
+          <table id="tables" text-right>
+            <thead>
+              <tr>
+                <th text-center></th>
+                <th text-center>מיקום</th>
+                <th text-center>תיאור</th>
+                <th text-center>שם </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody text-right>
+              <tr *ngFor="let client of clientList">
+                <td>
+                  <ion-button>ערוך</ion-button>
+                  <ion-button>הצג שיחות</ion-button>
+                </td>
+
+                <td>{{client.location}}</td>
+                <td>{{client.descrption}}</td>
+                <td>{{client.username}}</td>
 
               </tr>
             </tbody>
@@ -49,6 +118,8 @@
           </table>
         </ion-card>
 
+
+       
 
         <ion-card text-center id="Manage-Client-Stories" [hidden]="true">
           <h3 text-center>רשימת סיפורים </h3>
@@ -60,7 +131,7 @@
                 <th text-center>עריכת עדות</th>
                 <th text-center>אושר/לא אושר</th>
                 <th text-center>תאריך העלאה</th>
-                <th text-center>מספר מזהה</th>
+                <th text-center>כותרת</th>
               </tr>
             </thead>
 
@@ -69,12 +140,13 @@
                 <td>
                   <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
                   <ion-button (click)="editStory(story)">עריכה</ion-button>
-                  <ion-button *ngIf='!story.approved' color="success" (click)="confirmStory(story)">אשר</ion-button>
+                  <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר
+                  </ion-button>
                 </td>
-                <td *ngIf='story.approved'> אושר</td>
-                <td *ngIf='!story.approved'> לא אושר</td>
-                <td>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
-                <td>{{story.id}}</td>
+                <td *ngIf='story && story.approved'> אושר</td>
+                <td *ngIf='story && !story.approved'> לא אושר</td>
+                <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
+                <td *ngIf='story'>{{story.title}}</td>
               </tr>
 
             </tbody>
@@ -95,12 +167,15 @@
 
           <ion-grid>
             <ion-row>
-              <ion-col *ngFor='let img of imageUrls' size='auto' style='margin-left: 25px'>
+              <ion-col *ngFor='let img of imageUrls' size='auto' style='margin-left: 30px'>
                 <img src={{img}} style='height: 200px; width: 200px; margin-right: 2%'>
                 <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>
+
+          <hr>
+          <hr>
 
           <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
           <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
