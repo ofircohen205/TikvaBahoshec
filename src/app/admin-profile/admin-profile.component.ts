@@ -94,7 +94,6 @@ export class AdminProfileComponent implements OnInit {
       });
 
     this.manageStories();
-    this.manageSupportReps();
   }
 
 
@@ -438,6 +437,7 @@ if(table === 'historyTable'){
         } else {
           this.list.slice(this.list.indexOf(id), 1);
         }
+        console.log(result);
       });
     });
   }
