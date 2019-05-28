@@ -15,15 +15,12 @@ import { createElement } from '@syncfusion/ej2-base';
 import { SupportRepsService } from '../global/admin/support-reps.service';
 import { ClientsService } from '../global/admin/clients.service';
 import { Location } from '@angular/common';
-<<<<<<< HEAD
-=======
 import { ValueAccessor } from '@ionic/angular/dist/directives/control-value-accessors/value-accessor';
 import { getName } from 'ionicons/dist/types/icon/utils';
 import * as firebase from 'firebase';
 import { text } from '@angular/core/src/render3';
 
 
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
 
 
 @Component({
@@ -49,11 +46,7 @@ export class AdminProfileComponent implements OnInit {
     private supportRepService: SupportRepsService
   ) { }
 
-<<<<<<< HEAD
-
-=======
   chatRoomHistory: any[] = [];
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
   imageUrls: string[] = [];
   list: any[] = [];
   storiesArray: any = [];
@@ -62,8 +55,11 @@ export class AdminProfileComponent implements OnInit {
   downloadURL: Observable<string>;
   supportRepList: any[] = [];
   chatRoomList: any[] = [];
+  clientList: any[] = [];
   txtMsg = '';
+  supportRepHistory: any[] = [];
   sortArrowStatusTable : boolean[] = [true,true,true,true];
+
 
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
@@ -99,13 +95,10 @@ export class AdminProfileComponent implements OnInit {
     this.firestore.getImageArray().subscribe(res => {
         this.imageUrls = res.images;
       });
-<<<<<<< HEAD
-=======
 
     this.manageStories();
     this.manageSupportReps();
     this.manageClients();
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
   }
 
 
@@ -433,31 +426,12 @@ if(table === 'historyTable'){
     this.global.logout();
   }
 
-<<<<<<< HEAD
-  manageSupportReps() {
-    this.list = [];
-=======
 
   manageSupportReps() {
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
     this.firestore.getSupportRepIdList().subscribe(result => {
       result.forEach(ele => {
         const data = ele.payload.doc.data();
         const id = ele.payload.doc.id;
-<<<<<<< HEAD
-        if (ele.payload.type === 'added') {
-          this.list.push({ id, ...data });
-        } else if (ele.payload.type === 'modified') {
-          const index = this.list.findIndex(item => item.id === id);
-
-          // Replace the item by index.
-          this.list.splice(index, 1, { id, ...data });
-        } else {
-          this.list.slice(this.list.indexOf(id), 1);
-        }
-      });
-    });
-=======
         data.SupportRepID = id;
         if (ele.payload.type === 'added') {
           this.list.push(data);
@@ -477,7 +451,6 @@ if(table === 'historyTable'){
     this.firestore.getAllChatRoom().subscribe(res => {
         this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
       });
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
   }
 
   async addSupport() {
@@ -506,25 +479,17 @@ if(table === 'historyTable'){
       },
       {
         text: 'הוסף',
-<<<<<<< HEAD
-        handler: data => { this.firestore.createSupportRep(data.username, data.email, data.phone); }
-=======
         handler: data => {
           this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
             this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
           }).catch(error => console.log(error));
          }
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
       }]
     });
     alert.present();
   }
 
   async editSupport(x) {
-<<<<<<< HEAD
-=======
-
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
     const alert = await this.alertController.create({
       header: 'עריכת נציג',
       inputs: [
@@ -567,11 +532,7 @@ if(table === 'historyTable'){
         {
           text: 'מחק',
           handler: () => {
-<<<<<<< HEAD
-            this.firestore.removeSupportRep(x.id);
-=======
             this.firestore.removeSupportRep(x.SupportRepID);
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
             this.list.splice(this.list.indexOf(x), 1);
           }
         }]
@@ -602,13 +563,10 @@ if(table === 'historyTable'){
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
-<<<<<<< HEAD
-=======
       document.getElementById('chat-list').hidden = true;
       // this.manageSupportReps();
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
       // this.location.go('/profile/support-reps');
-      this.supportRepService.manageSupportReps();
+      this.manageSupportReps();
     } else if (targetId === 'ShowClient') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -617,10 +575,7 @@ if(table === 'historyTable'){
       viewHistoryChat.hidden = true;
       manageClients.hidden = false;
       editEvents.hidden = true;
-<<<<<<< HEAD
-=======
       // this.manageClients();
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
       // this.location.go('/profile/clients');
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
@@ -670,8 +625,6 @@ if(table === 'historyTable'){
     }
   }
 
-<<<<<<< HEAD
-=======
   /********************************************Clients Managment*****************************************/
 
     manageClients() {
@@ -744,7 +697,6 @@ if(table === 'historyTable'){
       alert.present();
     }
     
->>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
   /*******************************************Stories Management*******************************************************************/
   manageStories() {
     this.firestore.getStoriesId().subscribe(results => {
