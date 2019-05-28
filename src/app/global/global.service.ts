@@ -103,6 +103,8 @@ export class GlobalService {
           this.userAuth.auth.currentUser.updatePassword(data.password)
           .then(() => console.log('הסיסמה שונתה בהצלחה')).catch(error => console.log(error));
         }
+      }, {
+        text: 'בטל'
       }]
     });
 

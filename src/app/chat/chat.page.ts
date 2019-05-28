@@ -55,14 +55,6 @@ export class ChatPage {
         this.messages.push(result[result.length - 1]);
       }
     });
-
-    this.userAuth.user.subscribe(result => {
-      if (result === null) {
-        this.client_support_flag = true;
-      } else {
-        this.client_support_flag = false;
-      }
-    });
   }
 
   sendMessage(type) {
@@ -70,9 +62,9 @@ export class ChatPage {
       return;
     }
     if (type === 'username') {
-      this.firestore.addChatMessage(this.chatId, this.clientName, this.messageField.value, new Date().getTime());
+      this.firestore.addChatMessage(this.chatId, this.clientId, this.clientName, this.messageField.value, new Date().getTime());
     } else if (type === 'SupportRepID') {
-      this.firestore.addChatMessage(this.chatId, this.supportRepName, this.messageField.value, new Date().getTime());
+      this.firestore.addChatMessage(this.chatId, this.supportRepId, this.supportRepName, this.messageField.value, new Date().getTime());
     }
     this.messageField.value = '';
     this.scrollToBottom();
@@ -90,6 +82,13 @@ export class ChatPage {
 
   onKeyUp(data) {
     const ENTER_KET_CODE = 13;
+    this.userAuth.user.subscribe(result => {
+      if (result === null) {
+        this.client_support_flag = true;
+      } else {
+        this.client_support_flag = false;
+      }
+    });
     if (data.keyCode === ENTER_KET_CODE) {
       if (this.client_support_flag) {
         this.sendMessage('username');

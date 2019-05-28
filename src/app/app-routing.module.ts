@@ -7,10 +7,12 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', loadChildren: './home/home.module#HomePageModule' },
   { path: 'chat/:id', loadChildren: './chat/chat.module#ChatPageModule' },
+  { path: 'client-profile/:id', loadChildren: './client-profile/client-profile.module#ClientProfilePageModule', canActivate: [AuthGuard] },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule', canActivate: [AuthGuard] },
   { path: '404', loadChildren: './not-found/not-found.module#NotFoundPageModule' },
   { path: '**', redirectTo: '404' }
+
 ];
 
 @NgModule({

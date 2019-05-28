@@ -204,6 +204,7 @@ export class SupportRepProfileComponent implements OnInit {
       td2.id = 'supRepTable2button2_' + index;
       button2.innerHTML = 'מילוי טופס לקוח';
       button2.color = 'success';
+      button2.addEventListener('click', () => this.openClient(v['ClientID']));
       td2.style.color = 'white';
       td2.style.border = ' 1px solid #ddd';
       td2.style.padding = '8px';
@@ -476,6 +477,10 @@ sortByOpenRoomState(stateStatus, index, id, list, table) {
 
   openRoom(roomId) {
     window.open('/chat/' + roomId, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+  }
+
+  openClient(clientId) {
+    window.open('/client-profile/' + clientId, '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
   }
 
   downloadChatMsg(roomId) {
