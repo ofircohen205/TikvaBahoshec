@@ -27,6 +27,7 @@ export class SupportRepProfileComponent implements OnInit {
   stateStatus = true;
   myChatsCopy = [];
   txtMsg = '';
+  supportRepInShift  ;
 
 
   constructor(
@@ -39,11 +40,15 @@ export class SupportRepProfileComponent implements OnInit {
 
 
   ngOnInit() {
-    this.firestore.getOpenChatRooms().subscribe(result => {
-        this.openChatList = result;
-      this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
+    this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result1 => {
+      this.supportRepInShift = result1['inShift'];
+    
+    this.firestore.getOpenChatRooms().subscribe(result2 => {
+        this.openChatList = result2;
+        this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
+  });
     this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.supportRepOpenChatList = result;
       this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList);
@@ -60,22 +65,6 @@ export class SupportRepProfileComponent implements OnInit {
       }
   });
 
-  }
-  async inShift() {
-    const readyButton = document.getElementById('supportRepreadyButton');
-    if (readyButton.getAttribute('color') === 'danger') {
-      if (confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')) {
-      readyButton.setAttribute('color', 'success');
-      readyButton.textContent = 'במשמרת';
-      this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, true);
-      }
-    } else {
-      if (confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')) {
-      readyButton.setAttribute('color', 'danger');
-      readyButton.textContent = 'לא במשמרת';
-      this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, false);
-      }
-    }
   }
 
   scrollToElement(e): void {
@@ -101,7 +90,9 @@ export class SupportRepProfileComponent implements OnInit {
       td1.id = 'supRepTable1button_' + index;
       button.innerHTML = 'שיחה מחכה לנציג';
       button.color = 'success';
-
+      if(!this.supportRepInShift){
+        button.setAttribute('disabled', 'true');
+      }
       if (v.occupied === true) {
         button.setAttribute('disabled', 'true');
         button.innerHTML = 'שיחה בטיפול';
@@ -499,5 +490,6 @@ sortByOpenRoomState(stateStatus, index, id, list, table) {
       link.click();
     });
   }
+
 
 }
