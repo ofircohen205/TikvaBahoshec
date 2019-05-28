@@ -11,9 +11,9 @@
         <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
       </ion-col>
       <ion-col size='12'>
-       
-       
-        <ion-card id="Manage-SupportReps" text-center [hidden]="false">
+
+
+        <ion-card id="Manage-SupportReps" text-center [hidden]="true">
           <p text-center>רשימת נציגים </p>
           <ion-toolbar>
 
@@ -36,7 +36,7 @@
             </thead>
 
             <tbody text-right>
-              <tr *ngFor="let supportRep of supportRepList">
+              <tr *ngFor="let supportRep of list">
                 <td>
                   <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
                   <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
@@ -52,35 +52,37 @@
             </tbody>
 
           </table>
-          <ion-card>
-              <table id="tables" text-right>
-                  <thead>
-                    <tr>
-                      <th text-center></th>
-                      <th text-center>תאריך</th>
-                      <th text-center>שם לקוח</th>
-                      <th text-center>שם נציג</th>
-    
-      
-                    </tr>
-      
-                  </thead>
-                  <tbody>
-                      <tr *ngFor="let hist of supportRepHistory">
-                          <td><ion-button>הצג שיחה</ion-button></td>
-                          <td>{{hist.timestamp}}</td>
-                          <td>{{hist.ClientName}}</td>
-                          <td>{{hist.SupportRepName}}</td>
-                      </tr>
-                  </tbody>
-          
-          </table>
-      
-      </ion-card>
+          <hr>
+          <hr>
+          <ion-card id="chat-list" hidden="true">
+            <table id="tables" text-right>
+              <thead>
+                <tr>
+                  <th text-center></th>
+                  <th text-center>תאריך</th>
+                  <th text-center>שם לקוח</th>
+                  <th text-center>שם נציג</th>
+                </tr>
+
+              </thead>
+              <tbody>
+                <tr *ngFor="let hist of supportRepHistory">
+                  <td>
+                    <ion-button [routerLink]="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button>
+                  </td>
+                  <td>{{hist.timestamp}}</td>
+                  <td>{{hist.ClientName}}</td>
+                  <td>{{hist.SupportRepName}}</td>
+                </tr>
+              </tbody>
+
+            </table>
+
           </ion-card>
+        </ion-card>
 
 
-               
+
         <ion-card id="Manage-Clients" text-center [hidden]="true">
           <p text-center>רשימת נציגים </p>
           <ion-toolbar>
@@ -104,12 +106,12 @@
             <tbody text-right>
               <tr *ngFor="let client of clientList">
                 <td>
-                  <ion-button>ערוך</ion-button>
-                  <ion-button>הצג שיחות</ion-button>
+                  <ion-button (click)="editClient(client)">ערוך</ion-button>
+                  <ion-button [routerLink]="['/chat', client.ChatRoomId]">הצג שיחה</ion-button>
                 </td>
 
                 <td>{{client.location}}</td>
-                <td>{{client.descrption}}</td>
+                <td>{{client.description}}</td>
                 <td>{{client.username}}</td>
 
               </tr>
@@ -119,47 +121,48 @@
         </ion-card>
 
 
-       
+
 
         <ion-card text-center id="Manage-Client-Stories" [hidden]="true">
           <h3 text-center>רשימת סיפורים </h3>
           <!-- check if need to have an option of adding a story here -->
-
-          <table id="tables" text-center>
-            <thead>
-              <tr>
-                <th text-center>עריכת עדות</th>
-                <th text-center>אושר/לא אושר</th>
-                <th text-center>תאריך העלאה</th>
-                <th text-center>כותרת</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr *ngFor='let story of storiesArray'>
-                <td>
-                  <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
-                  <ion-button (click)="editStory(story)">עריכה</ion-button>
-                  <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר
-                  </ion-button>
-                </td>
-                <td *ngIf='story && story.approved'> אושר</td>
-                <td *ngIf='story && !story.approved'> לא אושר</td>
-                <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
-                <td *ngIf='story'>{{story.title}}</td>
-              </tr>
-
-            </tbody>
-          </table>
-
-
           <ion-card>
-            <!-- Text editor for the stories -->
-            <ejs-richtexteditor id='defaultRTE' class='none' [(value)]='value' [toolbarSettings]='tools'
-              [quickToolbarSettings]='quickTools' [hidden]="true"></ejs-richtexteditor>
-            <ion-button id='save-edit' (click)="acceptStoryChange()" [hidden]="true">שמור עריכה</ion-button>
+            <table id="tables" text-center>
+              <thead>
+                <tr>
+                  <th text-center>עריכת עדות</th>
+                  <th text-center>אושר/לא אושר</th>
+                  <th text-center>תאריך העלאה</th>
+                  <th text-center>כותרת</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor='let story of storiesArray'>
+                  <td>
+                    <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
+                    <ion-button (click)="editStory(story)">עריכה</ion-button>
+                    <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר
+                    </ion-button>
+                  </td>
+                  <td *ngIf='story && story.approved'> אושר</td>
+                  <td *ngIf='story && !story.approved'> לא אושר</td>
+                  <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
+                  <td *ngIf='story'>{{story.title}}</td>
+                </tr>
+
+              </tbody>
+            </table>
           </ion-card>
 
+          <ion-card id='editor' [hidden]="true">
+            <ion-card-content>
+              <!-- Text editor for the stories -->
+              <ejs-richtexteditor text-right id='defaultRTE' class='none' [(value)]='value' [toolbarSettings]='tools'
+                [quickToolbarSettings]='quickTools'></ejs-richtexteditor>
+            </ion-card-content>
+            <ion-button id='save-edit' (click)="acceptStoryChange()">שמור עריכה</ion-button>
+          </ion-card>
         </ion-card>
 
 

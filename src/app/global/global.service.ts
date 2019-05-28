@@ -89,4 +89,24 @@ export class GlobalService {
     alert.present();
   }
 
+  async updatePassword() {
+    const alert = await this.alertController.create({
+      header: 'עדכן סיסמה',
+      message: 'אנא הזן את הסיסמה החדשה',
+      inputs: [{
+        name: 'password',
+        placeholder: 'סיסמה'
+      }],
+      buttons: [{
+        text: 'אישור',
+        handler: data => {
+          this.userAuth.auth.currentUser.updatePassword(data.password)
+          .then(() => console.log('הסיסמה שונתה בהצלחה')).catch(error => console.log(error));
+        }
+      }]
+    });
+
+    alert.present();
+  }
+
 }

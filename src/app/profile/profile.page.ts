@@ -53,6 +53,13 @@ export class ProfilePage implements OnInit {
   logout() {
     this.global.logout();
   }
+<<<<<<< HEAD
+=======
+
+  updatePassword() {
+    this.global.updatePassword();
+  }
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
 
   onclick(e): void {
     const tar = e.target.value;

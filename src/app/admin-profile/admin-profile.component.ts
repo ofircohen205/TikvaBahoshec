@@ -15,6 +15,15 @@ import { createElement } from '@syncfusion/ej2-base';
 import { SupportRepsService } from '../global/admin/support-reps.service';
 import { ClientsService } from '../global/admin/clients.service';
 import { Location } from '@angular/common';
+<<<<<<< HEAD
+=======
+import { ValueAccessor } from '@ionic/angular/dist/directives/control-value-accessors/value-accessor';
+import { getName } from 'ionicons/dist/types/icon/utils';
+import * as firebase from 'firebase';
+import { text } from '@angular/core/src/render3';
+
+
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
 
 
 @Component({
@@ -36,11 +45,15 @@ export class AdminProfileComponent implements OnInit {
     private location: Location,
     private afs: AngularFireStorage,
     private global: GlobalService,
-    private supportRepService: SupportRepsService,
-    private clientService: ClientsService
+    private clientService: ClientsService,
+    private supportRepService: SupportRepsService
   ) { }
 
+<<<<<<< HEAD
 
+=======
+  chatRoomHistory: any[] = [];
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
   imageUrls: string[] = [];
   list: any[] = [];
   storiesArray: any = [];
@@ -85,8 +98,14 @@ export class AdminProfileComponent implements OnInit {
     });
     this.firestore.getImageArray().subscribe(res => {
         this.imageUrls = res.images;
-        console.log(res.images);
       });
+<<<<<<< HEAD
+=======
+
+    this.manageStories();
+    this.manageSupportReps();
+    this.manageClients();
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
   }
 
 
@@ -414,12 +433,18 @@ if(table === 'historyTable'){
     this.global.logout();
   }
 
+<<<<<<< HEAD
   manageSupportReps() {
     this.list = [];
+=======
+
+  manageSupportReps() {
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
     this.firestore.getSupportRepIdList().subscribe(result => {
       result.forEach(ele => {
         const data = ele.payload.doc.data();
         const id = ele.payload.doc.id;
+<<<<<<< HEAD
         if (ele.payload.type === 'added') {
           this.list.push({ id, ...data });
         } else if (ele.payload.type === 'modified') {
@@ -432,6 +457,27 @@ if(table === 'historyTable'){
         }
       });
     });
+=======
+        data.SupportRepID = id;
+        if (ele.payload.type === 'added') {
+          this.list.push(data);
+        } else if (ele.payload.type === 'modified') {
+          const index = this.list.findIndex(item => item.SupportRepID === id);
+          // Replace the item by index.
+          this.list.splice(index, 1, data );
+        } else {
+          this.list.slice(this.list.indexOf(id), 1);
+        }
+      });
+    });
+  }
+
+  showHistory(x) {
+    document.getElementById('chat-list').hidden = false;
+    this.firestore.getAllChatRoom().subscribe(res => {
+        this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
+      });
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
   }
 
   async addSupport() {
@@ -460,15 +506,27 @@ if(table === 'historyTable'){
       },
       {
         text: 'הוסף',
+<<<<<<< HEAD
         handler: data => { this.firestore.createSupportRep(data.username, data.email, data.phone); }
+=======
+        handler: data => {
+          this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
+            this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
+          }).catch(error => console.log(error));
+         }
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
       }]
     });
     alert.present();
   }
 
   async editSupport(x) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
     const alert = await this.alertController.create({
-      header: 'הוספת נציג חדש',
+      header: 'עריכת נציג',
       inputs: [
         {
           name: 'username',
@@ -509,7 +567,11 @@ if(table === 'historyTable'){
         {
           text: 'מחק',
           handler: () => {
+<<<<<<< HEAD
             this.firestore.removeSupportRep(x.id);
+=======
+            this.firestore.removeSupportRep(x.SupportRepID);
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
             this.list.splice(this.list.indexOf(x), 1);
           }
         }]
@@ -540,6 +602,11 @@ if(table === 'historyTable'){
       viewHistoryChat.hidden = true;
       manageClients.hidden = true;
       editEvents.hidden = true;
+<<<<<<< HEAD
+=======
+      document.getElementById('chat-list').hidden = true;
+      // this.manageSupportReps();
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
       // this.location.go('/profile/support-reps');
       this.supportRepService.manageSupportReps();
     } else if (targetId === 'ShowClient') {
@@ -550,6 +617,10 @@ if(table === 'historyTable'){
       viewHistoryChat.hidden = true;
       manageClients.hidden = false;
       editEvents.hidden = true;
+<<<<<<< HEAD
+=======
+      // this.manageClients();
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
       // this.location.go('/profile/clients');
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
@@ -596,10 +667,84 @@ if(table === 'historyTable'){
       manageClients.hidden = true;
       editEvents.hidden = true;
       // this.location.go('/profile/stories');
-      this.manageStories();
     }
   }
 
+<<<<<<< HEAD
+=======
+  /********************************************Clients Managment*****************************************/
+
+    manageClients() {
+      this.firestore.getClients().subscribe(result => {
+        result.forEach(ele => {
+          const id = ele.payload.doc.id;
+          const data = ele.payload.doc.data();
+          const chatRoom =  this.chatRoomList.find(x => x.ClientID === id);
+          if(chatRoom !== undefined)
+          {
+            const ChatRoomId = chatRoom.ChatRoomId;
+            if(ele.payload.type === 'added'){
+              this.clientList.push({id,ChatRoomId, ...data});
+            }
+            else if(ele.payload.type === 'modified'){
+              const index = this.clientList.findIndex(item => item.id === id);
+              // Replace the item in index with the new object.
+              this.clientList.splice(index, 1, { id, ChatRoomId, ...data });
+            }
+            else 
+            {
+              this.clientList.slice(this.clientList.indexOf(id), 1);
+            }
+          }
+
+       
+        })
+
+
+      })
+
+
+    }
+
+    async editClient(x) {
+      const alert = await this.alertController.create({
+        header: 'ערוך לקוח',
+        inputs: [
+          {
+            name: 'username',
+            placeholder: x.username,
+            value: x.username
+          },
+          {
+            name: 'description',
+            placeholder: x.description,
+            value: x.description
+          },
+
+          {
+            name: 'location',
+            placeholder: x.location,
+            value: x.location
+          },
+        ],
+        buttons: [{
+          text: 'חזור'
+        },
+        {
+          text: 'שמור שינויים',
+          handler: data => {
+            console.log(data);
+            this.firestore.updateClientDetails(x.id, data.username, data.description, data.location);
+            x.username = data.username;
+            x.description = data.description;
+            x.location = data.location;
+          }
+        }]
+      });
+      alert.present();
+    }
+    
+>>>>>>> 5503e594c2ff51a14a5c75e57b230ad8d25f95ee
   /*******************************************Stories Management*******************************************************************/
   manageStories() {
     this.firestore.getStoriesId().subscribe(results => {
@@ -608,24 +753,31 @@ if(table === 'historyTable'){
         const data = result.payload.doc.data();
         const timestampDate = data['date']['seconds'];   // save the date as timestamp
         const stringDate = new Date(timestampDate * 1000).toDateString();  // save the date as a regular date form
-        // const approval = data['approved'];
-
-        this.storiesArray.push({ stringDate, id, ...data });
-        console.log(this.storiesArray);
+        if (result.payload.type === 'added') {
+          console.log('in added');
+          this.storiesArray.push({stringDate, id, ...data });
+        } else if (result.payload.type === 'modified') {
+          const index = this.storiesArray.findIndex(item => item.id === id);
+          console.log('in modified');
+          // Replace the item in index with the new object.
+          this.storiesArray.splice(index, 1, { stringDate, id, ...data });
+        } else  { // (result.payload.type === 'removed')
+          console.log('in remove');
+          this.storiesArray.slice(this.storiesArray.indexOf(id), 1);
+        }
       });
 
       this.storiesArray.sort((s1, s2) => {
-        if (s1['date']['seconds'] > s2['date']['seconds']) {
+        if (s1.timestampDate > s2.timestampDate) {
           return 1;
         } else {
           return -1;
         }
       });
     });
-
   }
 
-
+  // edit the story. replace the old content of the story with the new content
   editStory(story) {
     document.getElementById('save-edit').hidden = false;
     document.getElementById('defaultRTE').hidden = false;
