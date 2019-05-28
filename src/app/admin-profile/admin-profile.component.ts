@@ -628,8 +628,7 @@ if(table === 'historyTable'){
 
   // edit the story. replace the old content of the story with the new content
   editStory(story) {
-    document.getElementById('save-edit').hidden = false;
-    document.getElementById('defaultRTE').hidden = false;
+    document.getElementById('editor').hidden = false;
     document.getElementById('defaultRTE').className = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
       if (story.id === this.storiesArray[i].id) {
@@ -638,27 +637,47 @@ if(table === 'historyTable'){
     }
   }
 
-  // delete the story from firebase and from the array of stories
-  deleteStory(story) {
-    for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id) {
-        for (let j = i + 1; j < this.storiesArray.length; j++) {  // the remove from the array doesn't work well
-          this.storiesArray[j - 1] = this.storiesArray[j];
-          this.storiesArray[j] = null;
+
+// delete the story from firebase and from the array of stories
+async deleteStory(story) {
+  const alert = await this.alertController.create({
+    header: 'אישור מחיקה',
+    message: `האם את/ה בטוח/ה שברצונך למחוק את העדות?`,
+    buttons: [
+      { text: 'חזור' },
+      {
+        text: 'מחק',
+        handler: () => {
+          this.firestore.removeStory(story.id);
+          this.storiesArray.splice(this.storiesArray.indexOf(story), 1);
+          document.getElementById('editor').hidden = true;  
         }
-        this.firestore.removeStory(this.storiesArray[i].id);
-      }
-    }
-  }
+      }]
+  });
+  alert.present();
+}
+
 
   // to confirm the story can be uploaded to the website
-  confirmStory(story) {
-    for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id) {
-        this.storiesArray[i].approved = true;
-        this.firestore.confirmStory(this.storiesArray[i].id, true);
-      }
-    }
+  async confirmStory(story) {
+    const alert = await this.alertController.create({
+      header: 'אישור עדות',
+      message: `האם את/ה בטוח/ה שברצונך לאשר את העדות? שים לב כי אישור העדות יעלה אותה אוטומטית לאתר`,
+      buttons: [
+        { text: 'חזור' },
+        {
+          text: 'אשר',
+          handler: () => {
+            for (let i = 0; i < this.storiesArray.length; i++) {
+              if (story.id === this.storiesArray[i].id) {
+                this.storiesArray[i].approved = true;
+                this.firestore.confirmStory(this.storiesArray[i].id, true);
+              }
+            }
+          }
+        }]
+    });
+    alert.present();
   }
 
   // after the story was edited, we save the changes in it
@@ -674,8 +693,7 @@ if(table === 'historyTable'){
       }
     }
     alert('יש ללחוץ בטבלה על הכפתור \'אשר\' עבור העדות הרצויה');
-    document.getElementById('defaultRTE').hidden = true;
-    document.getElementById('save-edit').hidden = true;
+    document.getElementById('editor').hidden = true; 
   }
 
   // compare 2 strings
