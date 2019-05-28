@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -13,17 +13,14 @@ export class GlobalService {
     private alertController: AlertController,
     private userAuth: AngularFireAuth,
     private router: Router,
-    private firestore: FirestoreService
-  ) { }
+    private firestore: FirestoreService) {
+    this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result['nextAnonymous']);
+   }
 
   anonymousNumber = 0;
 
-// tslint:disable-next-line: use-life-cycle-interface
-  ngOnInit() {
-    this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result['nextAnonymous']);
-  }
-
   async userDetails() {
+    console.log(this.anonymousNumber);
     const alert = await this.alertController.create({
       header: 'הכנס שם',
       message: 'הזן את שמך. אם אינך מעוניין לחץ על כפתור המשך',
@@ -109,6 +106,10 @@ export class GlobalService {
     });
 
     alert.present();
+  }
+
+  openClient(clientId) {
+    window.open('/client-profile/' + clientId, '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
   }
 
 }
