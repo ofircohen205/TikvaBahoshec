@@ -94,6 +94,7 @@ export class AdminProfileComponent implements OnInit {
       });
 
     this.manageStories();
+    this.manageSupportReps();
   }
 
 
@@ -558,7 +559,6 @@ if(table === 'historyTable'){
       editEvents.hidden = true;
       document.getElementById('chat-list').hidden = true;
       // this.manageSupportReps();
-      this.manageSupportReps();
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
