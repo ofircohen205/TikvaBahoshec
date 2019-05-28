@@ -143,16 +143,12 @@ export class FirestoreService {
     this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).update(client_data);
   }
 
-  public updateClientName(chatId, username): void {
-    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ username });
+  public updateClientName(chatId, first_name): void {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ first_name });
   }
 
-  public updateClientLocation(chatId, location): void {
-    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ location });
-  }
-
-  public updateClientDescription(chatId, description): void {
-    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ description });
+  public updateClientID(chatId): void {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ ClientID: chatId });
   }
 
 
