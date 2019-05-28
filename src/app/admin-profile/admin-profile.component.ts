@@ -13,7 +13,6 @@ import { finalize, findIndex, timestamp } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 import { createElement } from '@syncfusion/ej2-base';
 import { SupportRepsService } from '../global/admin/support-reps.service';
-import { ClientsService } from '../global/admin/clients.service';
 import { Location } from '@angular/common';
 import { ValueAccessor } from '@ionic/angular/dist/directives/control-value-accessors/value-accessor';
 import { getName } from 'ionicons/dist/types/icon/utils';
@@ -42,7 +41,6 @@ export class AdminProfileComponent implements OnInit {
     private location: Location,
     private afs: AngularFireStorage,
     private global: GlobalService,
-    private clientService: ClientsService,
     private supportRepService: SupportRepsService
   ) { }
 
@@ -85,7 +83,6 @@ export class AdminProfileComponent implements OnInit {
   ngOnInit() {
     this.firestore.getSupportRepNameList().subscribe(result => {
       this.supportRepList = result;
-      console.log(result);
       this.initSupportSelectList();
     });
     this.firestore.getAllChatRoom().subscribe(result1 => {
@@ -98,7 +95,6 @@ export class AdminProfileComponent implements OnInit {
 
     this.manageStories();
     this.manageSupportReps();
-    this.manageClients();
   }
 
 
@@ -123,7 +119,7 @@ export class AdminProfileComponent implements OnInit {
     var clientName = (<HTMLInputElement>document.getElementById('historyClientName')).value;
     var chatRoomList: any[];
     var body = document.getElementById('historyBodyTable');
-    this.removeChildren(body,'historyBodyTable');
+    this.removeChildren(body, 'historyBodyTable');
     var dateFrom;
     var dateTo;
     if (fromDate !== '') {
@@ -396,7 +392,7 @@ if(table === 'historyTable'){
       window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
     if (e['id'] === 'adminHistoryTablebutton3_' + (index + 1)) {
-      console.log('go to client form page');
+      this.global.openClient(this.chatRoomList[index]['ClientID']);
     }
    }
 
@@ -545,13 +541,11 @@ if(table === 'historyTable'){
   // shows the component of the selected button
   onClick(e): void {
     const targetId = e.target.id;
-    console.log(targetId);
     const manageSupportReps = document.getElementById('Manage-SupportReps');
     const manageClientStories = document.getElementById('Manage-Client-Stories');
     const manageGallery = document.getElementById('Manage-Gallery');
     const editAssociationInfo = document.getElementById('Edit-Association-Info');
-    const viewHistoryChat = document.getElementById('View-History-Chat');
-    const manageClients = document.getElementById('Manage-Clients');
+    const viewHistoryClients = document.getElementById('View-History-Clients');
     const editEvents = document.getElementById('Edit-Events');
 
     // const calenderElement = document.getElementById('calender');
@@ -560,143 +554,49 @@ if(table === 'historyTable'){
       manageClientStories.hidden = true;
       manageGallery.hidden = true;
       editAssociationInfo.hidden = true;
-      viewHistoryChat.hidden = true;
-      manageClients.hidden = true;
+      viewHistoryClients.hidden = true;
       editEvents.hidden = true;
       document.getElementById('chat-list').hidden = true;
       // this.manageSupportReps();
-      // this.location.go('/profile/support-reps');
       this.manageSupportReps();
-    } else if (targetId === 'ShowClient') {
-      manageSupportReps.hidden = true;
-      manageClientStories.hidden = true;
-      manageGallery.hidden = true;
-      editAssociationInfo.hidden = true;
-      viewHistoryChat.hidden = true;
-      manageClients.hidden = false;
-      editEvents.hidden = true;
-      // this.manageClients();
-      // this.location.go('/profile/clients');
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
       manageGallery.hidden = true;
       editAssociationInfo.hidden = true;
-      viewHistoryChat.hidden = true;
-      manageClients.hidden = true;
+      viewHistoryClients.hidden = true;
       editEvents.hidden = false;
-      // this.location.go('/profile/events');
-    } else if (targetId === 'ViewHistoryChat') {
+    } else if (targetId === 'ViewHistoryClients') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
       manageGallery.hidden = true;
       editAssociationInfo.hidden = true;
-      viewHistoryChat.hidden = false;
-      manageClients.hidden = true;
+      viewHistoryClients.hidden = false;
       editEvents.hidden = true;
-      // this.location.go('/profile/history-chats');
     } else if (targetId === 'EditAssociationInfo') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
       manageGallery.hidden = true;
       editAssociationInfo.hidden = false;
-      viewHistoryChat.hidden = true;
-      manageClients.hidden = true;
+      viewHistoryClients.hidden = true;
       editEvents.hidden = true;
-      // this.location.go('/profile/about-association');
     } else if (targetId === 'ManageGallery') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
       manageGallery.hidden = false;
       editAssociationInfo.hidden = true;
-      viewHistoryChat.hidden = true;
-      manageClients.hidden = true;
+      viewHistoryClients.hidden = true;
       editEvents.hidden = true;
-      // this.location.go('/profile/gallery');
     } else {    // targetId === ManageClientStories
       manageSupportReps.hidden = true;
       manageClientStories.hidden = false;
       manageGallery.hidden = true;
       editAssociationInfo.hidden = true;
-      viewHistoryChat.hidden = true;
-      manageClients.hidden = true;
+      viewHistoryClients.hidden = true;
       editEvents.hidden = true;
-      // this.location.go('/profile/stories');
     }
   }
 
-  /********************************************Clients Managment*****************************************/
-
-    manageClients() {
-      this.firestore.getClients().subscribe(result => {
-        result.forEach(ele => {
-          const id = ele.payload.doc.id;
-          const data = ele.payload.doc.data();
-          const chatRoom =  this.chatRoomList.find(x => x.ClientID === id);
-          if(chatRoom !== undefined)
-          {
-            const ChatRoomId = chatRoom.ChatRoomId;
-            if(ele.payload.type === 'added'){
-              this.clientList.push({id,ChatRoomId, ...data});
-            }
-            else if(ele.payload.type === 'modified'){
-              const index = this.clientList.findIndex(item => item.id === id);
-              // Replace the item in index with the new object.
-              this.clientList.splice(index, 1, { id, ChatRoomId, ...data });
-            }
-            else 
-            {
-              this.clientList.slice(this.clientList.indexOf(id), 1);
-            }
-          }
-
-       
-        })
-
-
-      })
-
-
-    }
-
-    async editClient(x) {
-      const alert = await this.alertController.create({
-        header: 'ערוך לקוח',
-        inputs: [
-          {
-            name: 'username',
-            placeholder: x.username,
-            value: x.username
-          },
-          {
-            name: 'description',
-            placeholder: x.description,
-            value: x.description
-          },
-
-          {
-            name: 'location',
-            placeholder: x.location,
-            value: x.location
-          },
-        ],
-        buttons: [{
-          text: 'חזור'
-        },
-        {
-          text: 'שמור שינויים',
-          handler: data => {
-            console.log(data);
-            this.firestore.updateClientDetails(x.id, data.username, data.description, data.location);
-            x.username = data.username;
-            x.description = data.description;
-            x.location = data.location;
-          }
-        }]
-      });
-      alert.present();
-    }
-    
   /*******************************************Stories Management*******************************************************************/
   manageStories() {
     this.firestore.getStoriesId().subscribe(results => {
@@ -706,15 +606,12 @@ if(table === 'historyTable'){
         const timestampDate = data['date']['seconds'];   // save the date as timestamp
         const stringDate = new Date(timestampDate * 1000).toDateString();  // save the date as a regular date form
         if (result.payload.type === 'added') {
-          console.log('in added');
           this.storiesArray.push({stringDate, id, ...data });
         } else if (result.payload.type === 'modified') {
           const index = this.storiesArray.findIndex(item => item.id === id);
-          console.log('in modified');
           // Replace the item in index with the new object.
           this.storiesArray.splice(index, 1, { stringDate, id, ...data });
         } else  { // (result.payload.type === 'removed')
-          console.log('in remove');
           this.storiesArray.slice(this.storiesArray.indexOf(id), 1);
         }
       });

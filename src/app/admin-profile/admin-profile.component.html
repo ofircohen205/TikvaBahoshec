@@ -5,9 +5,8 @@
         <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
         <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
         <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
-        <ion-button id="ViewHistoryChat" (click)="onClick($event)">הסטוריית צ'אט</ion-button>
         <ion-button id="EditEvents" (click)="onClick($event)">עריכת ארועים</ion-button>
-        <ion-button id="ShowClient" (click)="onClick($event)">הצג לקוחות</ion-button>
+        <ion-button id="ViewHistoryClients" (click)="onClick($event)">הסטוריית לקוחות</ion-button>
         <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
       </ion-col>
       <ion-col size='12'>
@@ -82,47 +81,6 @@
         </ion-card>
 
 
-
-        <ion-card id="Manage-Clients" text-center [hidden]="true">
-          <p text-center>רשימת נציגים </p>
-          <ion-toolbar>
-
-            <ion-searchbar class="search"></ion-searchbar>
-            <ion-button>חיפוש</ion-button>
-
-          </ion-toolbar>
-          <table id="tables" text-right>
-            <thead>
-              <tr>
-                <th text-center></th>
-                <th text-center>מיקום</th>
-                <th text-center>תיאור</th>
-                <th text-center>שם </th>
-
-              </tr>
-
-            </thead>
-
-            <tbody text-right>
-              <tr *ngFor="let client of clientList">
-                <td>
-                  <ion-button (click)="editClient(client)">ערוך</ion-button>
-                  <ion-button [routerLink]="['/chat', client.ChatRoomId]">הצג שיחה</ion-button>
-                </td>
-
-                <td>{{client.location}}</td>
-                <td>{{client.description}}</td>
-                <td>{{client.username}}</td>
-
-              </tr>
-            </tbody>
-
-          </table>
-        </ion-card>
-
-
-
-
         <ion-card text-center id="Manage-Client-Stories" [hidden]="true">
           <h3 text-center>רשימת סיפורים </h3>
           <!-- check if need to have an option of adding a story here -->
@@ -192,7 +150,7 @@
           <ion-button>מחק</ion-button>
         </ion-card>
 
-        <ion-card text-center id="View-History-Chat" [hidden]="true">
+        <ion-card text-center id="View-History-Clients" [hidden]="true">
           <p text-center> היסטוריית שיחות </p>
           <ion-grid>
             <ion-card>
@@ -280,10 +238,18 @@
                   <th text-center></th>
                   <th text-center></th>
                   <th text-center></th>
-                  <th text-center id ='adminHistoryStatusColTable' class="p" (click)="sortByOccupiedState(this.sortArrowStatusTable,0,'adminHistoryStatusColTable',this.chatRoomList,'historyTable')">&#8661; סטטוס</th>
-                  <th text-center id='adminHistorySupportColTable' class="p" (click)="sortBySupportRep(this.sortArrowStatusTable,1,'adminHistorySupportColTable',this.chatRoomList,'historyTable')">&#8661; שם הנציג השיחה</th>
-                  <th text-center id ='adminHistoryDateColTable' class="p" (click)="sortByDate(this.sortArrowStatusTable,2,'adminHistoryDateColTable',this.chatRoomList,'historyTable')">&#8661;שעת פתיחת חדר </th>
-                <th text-center id='adminHistoryClientColTable' class="p" (click)="sortByClient(this.sortArrowStatusTable,3,'adminHistoryClientColTable',this.chatRoomList,'historyTable')">&#8661; שם הלקוח</th>
+                  <th text-center id='adminHistoryStatusColTable' class="p"
+                    (click)="sortByOccupiedState(this.sortArrowStatusTable,0,'adminHistoryStatusColTable',this.chatRoomList,'historyTable')">
+                    &#8661; סטטוס</th>
+                  <th text-center id='adminHistorySupportColTable' class="p"
+                    (click)="sortBySupportRep(this.sortArrowStatusTable,1,'adminHistorySupportColTable',this.chatRoomList,'historyTable')">
+                    &#8661; שם הנציג השיחה</th>
+                  <th text-center id='adminHistoryDateColTable' class="p"
+                    (click)="sortByDate(this.sortArrowStatusTable,2,'adminHistoryDateColTable',this.chatRoomList,'historyTable')">
+                    &#8661;שעת פתיחת חדר </th>
+                  <th text-center id='adminHistoryClientColTable' class="p"
+                    (click)="sortByClient(this.sortArrowStatusTable,3,'adminHistoryClientColTable',this.chatRoomList,'historyTable')">
+                    &#8661; שם הלקוח</th>
                   <th text-center>מספר</th>
                 </tr>
               </thead>
