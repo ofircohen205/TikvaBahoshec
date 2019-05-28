@@ -90,6 +90,7 @@
                 <tr>
                   <th text-center></th>
                   <th text-center></th>
+                  <th text-center></th>
                   <th text-center id="stateBtn" class="p"
                     (click)="sortByOpenRoomState(this.sortArrowStatusTable3,0,'stateBtn',this.myChats,'table3')">&#8661;
                     מצב החדר</th>
@@ -110,6 +111,10 @@
                 <tr *ngFor="let i of myChats ; index as j">
                   <td>
                     <ion-button id="download" (click)="downloadChatMsg(i.ChatRoomId)" color="success">הורד שיחה
+                    </ion-button>
+                  </td>
+                  <td>
+                    <ion-button id="openClientPage" (click)="openClient(i.ClientID)" color="success">כנס לטופס לקוח
                     </ion-button>
                   </td>
                   <td>
