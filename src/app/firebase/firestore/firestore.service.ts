@@ -78,11 +78,12 @@ export class FirestoreService {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).collection(this.MESSAGES_COLLECTION).valueChanges();
   }
 
-  public addChatMessage(chatId, fullName, content, timestamp): void {
+  public addChatMessage(chatId, id, fullName, content, timestamp): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).collection(this.MESSAGES_COLLECTION).add({
       from: fullName,
       content,
-      timestamp
+      timestamp,
+      id
     });
   }
 
@@ -102,11 +103,18 @@ export class FirestoreService {
   /*******************************/
   /* CLIENT COLLECTION FUNCTIONS */
   /*******************************/
-  public createClient(username): Promise<any> {
+  public createClient(first_name): Promise<any> {
     return this.firestore.collection(this.CLIENT_COLLECTION).add({
-      username,
-      location: null,
-      description: null,
+      first_name,
+      last_name: null,
+      address: null,
+      age: null,
+      cellphone: null,
+      phone_num: null,
+      email: null,
+      gender: null,
+      brief: null,
+      comments: null,
       ClientID: null
     });
   }
@@ -115,8 +123,24 @@ export class FirestoreService {
     return this.firestore.collection(this.CLIENT_COLLECTION).stateChanges();
   }
 
-  public getClientName(clientId): Observable<any> {
+  public getClientDetails(clientId): Observable<any> {
     return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).valueChanges();
+  }
+
+  public updateClientDetails(clientId, first_name, last_name, address, age, cellphone, phone_num, email, gender, brief, comments) {
+    const client_data = {
+      first_name,
+      last_name,
+      address,
+      age,
+      cellphone,
+      phone_num,
+      email,
+      gender,
+      brief,
+      comments
+    };
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).update(client_data);
   }
 
   public updateClientName(chatId, username): void {
@@ -130,11 +154,6 @@ export class FirestoreService {
   public updateClientDescription(chatId, description): void {
     this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ description });
   }
-
-  public updateClientDetails(ClientID, username, description, location): void {
-    this.firestore.collection(this.CLIENT_COLLECTION).doc(ClientID).update({  username, description, location });
-  }
-
 
 
   /************************************/
@@ -265,7 +284,6 @@ export class FirestoreService {
 
   public updateImageArray(images): void {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ images });
-    console.log(images);
   }
 
 }
