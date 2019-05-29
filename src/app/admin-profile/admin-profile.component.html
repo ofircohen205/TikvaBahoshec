@@ -34,7 +34,7 @@
             </thead>
 
             <tbody text-right>
-              <tr *ngFor="let supportRep of supportRepList | filter:filterText">
+              <tr *ngFor="let supportRep of list | filter:filterText">
                 <td>
                   <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
                   <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
