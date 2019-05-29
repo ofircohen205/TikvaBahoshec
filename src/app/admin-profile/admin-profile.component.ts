@@ -599,7 +599,11 @@ if(table === 'historyTable'){
 
   /*******************************************Stories Management*******************************************************************/
   manageStories() {
+    // this.firestore.getStories().subscribe(r =>{
+    //   console.log(r);
+    // })
     this.firestore.getStoriesId().subscribe(results => {
+      console.log(results);
       results.forEach(result => {
         const id = result.payload.doc.id;
         const data = result.payload.doc.data();
