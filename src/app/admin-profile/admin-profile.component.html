@@ -113,7 +113,11 @@
           </ion-card>
 
           <ion-card id='editor' [hidden]="true">
-            <ion-card-content>
+            <ion-card-header><h4 text-right>:כותרת הסיפור</h4></ion-card-header>
+              <ion-card-content><ion-input type="text" #title style="border: 1px solid rgb(194, 173, 173);" text-right [(value)]='titleValue'></ion-input></ion-card-content>
+            
+            <ion-card-header><h4 text-right>:תוכן הסיפור</h4></ion-card-header>
+              <ion-card-content>
               <!-- Text editor for the stories -->
               <ejs-richtexteditor text-right id='defaultRTE' class='none' [(value)]='value' [toolbarSettings]='tools'
                 [quickToolbarSettings]='quickTools'></ejs-richtexteditor>

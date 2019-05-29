@@ -81,8 +81,8 @@ export class StoryComponent implements OnInit {
                 story.description + '</ion-card-content></ion-card>';
       }
     });
-    console.log(html);
-    console.log(document.getElementById('upload-stories'));
+    // console.log(html);
+    // console.log(document.getElementById('upload-stories'));
     document.getElementById('upload-stories').innerHTML = html;
 
   }

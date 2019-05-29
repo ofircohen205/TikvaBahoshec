@@ -255,6 +255,10 @@ export class FirestoreService {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({description});
   }
 
+  public editStoryTitle(storyId, title) {
+    this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({title});
+  }
+
   public confirmStory(storyId, approved) {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({approved});
   }

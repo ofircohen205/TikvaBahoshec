@@ -58,7 +58,7 @@ export class AdminProfileComponent implements OnInit {
   supportRepHistory: any[] = [];
   sortArrowStatusTable : boolean[] = [true,true,true,true];
 
-
+  @ViewChild('title') title;
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
   public value =
@@ -644,6 +644,7 @@ if(table === 'historyTable'){
     for (let i = 0; i < this.storiesArray.length; i++) {
       if (story.id === this.storiesArray[i].id) {
         this.value = this.storiesArray[i].description;  // edit the story
+        this.title.value = this.storiesArray[i].title;
       }
     }
   }
@@ -700,10 +701,13 @@ async deleteStory(story) {
       if (areEquals === 0) {
         this.storiesArray[i].description = this.value;
         this.firestore.editStory(this.storiesArray[i].id, this.value);
+        this.storiesArray[i].title = this.title.value;
+        console.log("title = " + this.title.value);
+        this.firestore.editStoryTitle(this.storiesArray[i].id, this.title.value);
         break;
       }
     }
-    alert('יש ללחוץ בטבלה על הכפתור \'אשר\' עבור העדות הרצויה');
+    alert('יש ללחוץ "אשר" עבור העדות הרצויה, במידה והעדות עדיין לא אושרה');
     document.getElementById('editor').hidden = true; 
   }
 
