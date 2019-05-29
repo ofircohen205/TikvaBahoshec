@@ -56,7 +56,7 @@ export class AdminProfileComponent implements OnInit {
   txtMsg = '';
   filterText = '';
   supportRepHistory: any[] = [];
-  sortArrowStatusTable : boolean[] = [true,true,true,true];
+  sortArrowStatusTable: boolean[] = [true, true, true, true];
 
   @ViewChild('title') title;
   // variables for the text editor
@@ -90,8 +90,8 @@ export class AdminProfileComponent implements OnInit {
       this.createHistoryTable();
     });
     this.firestore.getImageArray().subscribe(res => {
-        this.imageUrls = res.images;
-      });
+      this.imageUrls = res.images;
+    });
 
     this.manageStories();
     this.manageSupportReps();
@@ -136,228 +136,228 @@ export class AdminProfileComponent implements OnInit {
     var compareStatus;
     var compareSupport;
     var index = 1;
-    
-      index = 1;
-      for(let chatRoom of this.chatRoomList) {
-        var tr = document.createElement('tr');
-        if (chatRoom !== undefined) {
-          var date = new Date(chatRoom['timestamp']).toLocaleDateString();
-          for (let v of statusSelect) {
-            if ((v === 'בטיפול' && chatRoom['occupied'] === true) || (v === 'לא בטיפול' && chatRoom['occupied'] === false)) {
-              compareStatus = true;
-              break;
-            } else {
-              compareStatus = false;
-            }
-          }
-          for (let v of supportRepSelect) {
-            if (v === chatRoom['SupportRepName']) {
-              compareSupport = true;
-              break;
-            } else {
-              compareSupport = false;
-            }
-          }
 
-          if ((date >= dateFrom || dateFrom === '') && (date <= dateTo || dateTo === '') &&
-            (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
-            (chatRoom['ClientName'].search(clientName) !=-1 || clientName === '')) {
-              var button1 = document.createElement('ion-button');
-              var td1 = document.createElement('td');
-              td1.appendChild(button1);
-              td1.id = 'adminHistoryTablebutton1_' + index;
-              button1.innerHTML = 'הורד שיחה';
-              button1.color = 'success';
-              td1.style.color = 'white';
-              td1.style.border = ' 1px solid #ddd';
-              td1.style.padding = '8px';
-              td1.style.borderCollapse = 'collapse';
-
-              var button2 = document.createElement('ion-button');
-              var td2 = document.createElement('td');
-              td2.appendChild(button2);
-              td2.id = 'adminHistoryTablebutton2_' + index;
-              button2.innerHTML = 'כנס לחדר';
-              button2.color = 'success';
-              td2.style.color = 'white';
-              td2.style.border = ' 1px solid #ddd';
-              td2.style.padding = '8px';
-              td2.style.borderCollapse = 'collapse';
-
-              var button3 = document.createElement('ion-button');
-              var td3 = document.createElement('td');
-              td3.appendChild(button3);
-              td3.id = 'adminHistoryTablebutton3_' + index;
-              button3.innerHTML = 'כנס לטופס לקוח';
-              button3.color = 'success';
-              td3.style.color = 'white';
-              td3.style.border = ' 1px solid #ddd';
-              td3.style.padding = '8px';
-              td3.style.borderCollapse = 'collapse';
-
-              var td4 = document.createElement('td');
-              td4.style.border = ' 1px solid #ddd';
-              td4.style.padding = '8px';
-              td4.style.borderCollapse = 'collapse';
-              if(chatRoom.occupied === true) {
-                td4.textContent = 'בטיפול';
-              } else {
-                td4.textContent = 'לא בטיפול';
-              }
-
-              var td5 = document.createElement('td');
-              var name = '';
-              td5.style.border = ' 1px solid #ddd';
-              td5.style.padding = '8px';
-              td5.style.borderCollapse = 'collapse';
-              if(chatRoom.SupportRepName !== '' && chatRoom.SupportRepName !=null){
-                td5.textContent = chatRoom.SupportRepName;
-              } else {
-                td5.textContent = 'no support name';
-              }
-              var td6 = document.createElement('td');
-              td6.style.border = ' 1px solid #ddd';
-              td6.style.padding = '8px';
-              td6.style.borderCollapse = 'collapse';
-              td6.textContent = new Date(chatRoom.timestamp).toLocaleString();
-
-              var td7 = document.createElement('td');
-              td7.style.border = ' 1px solid #ddd';
-              td7.style.padding = '8px';
-              td7.style.borderCollapse = 'collapse';
-              td7.textContent = chatRoom.ClientName;
-
-              var td8 = document.createElement('td');
-              td8.style.border = ' 1px solid #ddd';
-              td8.style.padding = '8px';
-              td8.style.borderCollapse = 'collapse';
-              td8.textContent = index.toString();
-              tr.appendChild(td1);
-              tr.appendChild(td2);
-              tr.appendChild(td3);
-              tr.appendChild(td4);
-              tr.appendChild(td5);
-              tr.appendChild(td6);
-              tr.appendChild(td7);
-              tr.appendChild(td8);
-
-              tr.id = 'adminHistoryTableTr_' + index; 
-              index++;
-              body.appendChild(tr);
-          }
-          var tbodyChildrens = body.childNodes;
-          for(let i = 0; i < body.childNodes.length; i++) {
-            tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
-            tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
-            var trChildren = tbodyChildrens[i].childNodes;
-            trChildren[0].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[0],i));
-            trChildren[1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[1],i));
-            trChildren[2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[2],i));
+    index = 1;
+    for (let chatRoom of this.chatRoomList) {
+      var tr = document.createElement('tr');
+      if (chatRoom !== undefined) {
+        var date = new Date(chatRoom['timestamp']).toLocaleDateString();
+        for (let v of statusSelect) {
+          if ((v === 'בטיפול' && chatRoom['occupied'] === true) || (v === 'לא בטיפול' && chatRoom['occupied'] === false)) {
+            compareStatus = true;
+            break;
+          } else {
+            compareStatus = false;
           }
         }
-      }
-  }
+        for (let v of supportRepSelect) {
+          if (v === chatRoom['SupportRepName']) {
+            compareSupport = true;
+            break;
+          } else {
+            compareSupport = false;
+          }
+        }
 
-  async removeChildren(tbody,tbodyId) {
-    var size = tbody.childNodes.length;
-    var tbody1 = document.getElementById(tbodyId);
-    while (tbody1.firstChild) {
-     tbody1.removeChild(tbody1.firstChild);
+        if ((date >= dateFrom || dateFrom === '') && (date <= dateTo || dateTo === '') &&
+          (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
+          (chatRoom['ClientName'].search(clientName) != -1 || clientName === '')) {
+          var button1 = document.createElement('ion-button');
+          var td1 = document.createElement('td');
+          td1.appendChild(button1);
+          td1.id = 'adminHistoryTablebutton1_' + index;
+          button1.innerHTML = 'הורד שיחה';
+          button1.color = 'success';
+          td1.style.color = 'white';
+          td1.style.border = ' 1px solid #ddd';
+          td1.style.padding = '8px';
+          td1.style.borderCollapse = 'collapse';
+
+          var button2 = document.createElement('ion-button');
+          var td2 = document.createElement('td');
+          td2.appendChild(button2);
+          td2.id = 'adminHistoryTablebutton2_' + index;
+          button2.innerHTML = 'כנס לחדר';
+          button2.color = 'success';
+          td2.style.color = 'white';
+          td2.style.border = ' 1px solid #ddd';
+          td2.style.padding = '8px';
+          td2.style.borderCollapse = 'collapse';
+
+          var button3 = document.createElement('ion-button');
+          var td3 = document.createElement('td');
+          td3.appendChild(button3);
+          td3.id = 'adminHistoryTablebutton3_' + index;
+          button3.innerHTML = 'כנס לטופס לקוח';
+          button3.color = 'success';
+          td3.style.color = 'white';
+          td3.style.border = ' 1px solid #ddd';
+          td3.style.padding = '8px';
+          td3.style.borderCollapse = 'collapse';
+
+          var td4 = document.createElement('td');
+          td4.style.border = ' 1px solid #ddd';
+          td4.style.padding = '8px';
+          td4.style.borderCollapse = 'collapse';
+          if (chatRoom.occupied === true) {
+            td4.textContent = 'בטיפול';
+          } else {
+            td4.textContent = 'לא בטיפול';
+          }
+
+          var td5 = document.createElement('td');
+          var name = '';
+          td5.style.border = ' 1px solid #ddd';
+          td5.style.padding = '8px';
+          td5.style.borderCollapse = 'collapse';
+          if (chatRoom.SupportRepName !== '' && chatRoom.SupportRepName != null) {
+            td5.textContent = chatRoom.SupportRepName;
+          } else {
+            td5.textContent = 'no support name';
+          }
+          var td6 = document.createElement('td');
+          td6.style.border = ' 1px solid #ddd';
+          td6.style.padding = '8px';
+          td6.style.borderCollapse = 'collapse';
+          td6.textContent = new Date(chatRoom.timestamp).toLocaleString();
+
+          var td7 = document.createElement('td');
+          td7.style.border = ' 1px solid #ddd';
+          td7.style.padding = '8px';
+          td7.style.borderCollapse = 'collapse';
+          td7.textContent = chatRoom.ClientName;
+
+          var td8 = document.createElement('td');
+          td8.style.border = ' 1px solid #ddd';
+          td8.style.padding = '8px';
+          td8.style.borderCollapse = 'collapse';
+          td8.textContent = index.toString();
+          tr.appendChild(td1);
+          tr.appendChild(td2);
+          tr.appendChild(td3);
+          tr.appendChild(td4);
+          tr.appendChild(td5);
+          tr.appendChild(td6);
+          tr.appendChild(td7);
+          tr.appendChild(td8);
+
+          tr.id = 'adminHistoryTableTr_' + index;
+          index++;
+          body.appendChild(tr);
+        }
+        var tbodyChildrens = body.childNodes;
+        for (let i = 0; i < body.childNodes.length; i++) {
+          tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
+          tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
+          var trChildren = tbodyChildrens[i].childNodes;
+          trChildren[0].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[0], i));
+          trChildren[1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[1], i));
+          trChildren[2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[2], i));
+        }
+      }
     }
   }
 
-  sortByDate(dateStatus,index,id,list,table){
-  var nameBtn =(<HTMLButtonElement>document.getElementById(id));
-  if(dateStatus[index] === true){
-    list.sort((a,b)=> (a.timestamp>=b.timestamp)? 1:-1)
-    dateStatus[index] = false;
-    nameBtn.innerHTML ='&#8657;שעת פתיחת חדר';
+  async removeChildren(tbody, tbodyId) {
+    var size = tbody.childNodes.length;
+    var tbody1 = document.getElementById(tbodyId);
+    while (tbody1.firstChild) {
+      tbody1.removeChild(tbody1.firstChild);
+    }
   }
-  else{
-    list.sort((a,b)=> (a.timestamp<=b.timestamp)? 1:-1);
-  dateStatus[index] = true;
-  nameBtn.innerHTML = '&#8659;שעת פתיחת חדר';
-  
+
+  sortByDate(dateStatus, index, id, list, table) {
+    var nameBtn = (<HTMLButtonElement>document.getElementById(id));
+    if (dateStatus[index] === true) {
+      list.sort((a, b) => (a.timestamp >= b.timestamp) ? 1 : -1)
+      dateStatus[index] = false;
+      nameBtn.innerHTML = '&#8657;שעת פתיחת חדר';
+    }
+    else {
+      list.sort((a, b) => (a.timestamp <= b.timestamp) ? 1 : -1);
+      dateStatus[index] = true;
+      nameBtn.innerHTML = '&#8659;שעת פתיחת חדר';
+
+    }
+    if (table === 'historyTable') {
+      this.createHistoryTable();
+    }
   }
-  if(table === 'historyTable'){
-    this.createHistoryTable();
+
+
+  sortByClient(nameStatus, index, id, list, table) {
+    var nameBtn = (<HTMLButtonElement>document.getElementById(id));
+    if (nameStatus[index] == true) {
+      list.sort((a, b) => (a.ClientName >= b.ClientName) ? 1 : -1);
+      nameStatus[index] = false;
+      nameBtn.innerHTML = '&#8657; שם הלקוח'
+    }
+    else {
+      list.sort((a, b) => (a.ClientName <= b.ClientName) ? 1 : -1)
+      nameStatus[index] = true;
+      nameBtn.innerHTML = '&#8659; שם הלקוח'
+    }
+    if (table === 'historyTable') {
+      this.createHistoryTable();
+    }
+
   }
-}
 
+  sortBySupportRep(nameStatus, index, id, list, table) {
+    var nameBtn = (<HTMLButtonElement>document.getElementById(id));
+    if (nameStatus[index] == true) {
+      list.sort((a, b) => (a.SupportRepName >= b.SupportRepName) ? 1 : -1)
+      nameStatus[index] = false
+      nameBtn.innerHTML = '&#8657; שם הנציג בשיחה'
+    }
+    else {
+      list.sort((a, b) => (a.SupportRepName <= b.SupportRepName) ? 1 : -1)
+      nameStatus[index] = true;
+      nameBtn.innerHTML = '&#8659; שם הנציג בשיחה'
+    }
+    if (table === 'historyTable') {
+      this.createHistoryTable();
+    }
 
-sortByClient(nameStatus,index,id,list,table){
-var nameBtn =(<HTMLButtonElement>document.getElementById(id));
-  if(nameStatus[index]==true){
-    list.sort((a,b)=> (a.ClientName>=b.ClientName)? 1:-1);
-    nameStatus[index]=false;
-    nameBtn.innerHTML ='&#8657; שם הלקוח'
   }
-  else{
-    list.sort((a,b)=> (a.ClientName<=b.ClientName)? 1:-1)
-  nameStatus[index] = true;
-  nameBtn.innerHTML ='&#8659; שם הלקוח'
-}
-if(table === 'historyTable'){
-  this.createHistoryTable();
-}
 
-}
 
-sortBySupportRep(nameStatus,index,id,list,table){
-var nameBtn =(<HTMLButtonElement>document.getElementById(id));
-  if(nameStatus[index]==true){
-    list.sort((a,b)=> (a.SupportRepName>=b.SupportRepName)? 1:-1)
-    nameStatus[index]=false
-    nameBtn.innerHTML ='&#8657; שם הנציג בשיחה'
+  sortByOpenRoomState(stateStatus, index, id, list, table) {
+    var stateBtn = (<HTMLButtonElement>document.getElementById(id));
+    if (stateStatus[index] === true) {
+      list.sort((a, b) => a.open - b.open)
+      stateStatus[index] = false;
+      stateBtn.innerHTML = '&#8657; מצב החדר'
+    }
+    else {
+      list.sort((a, b) => b.open - a.open)
+      stateStatus[index] = true;
+      stateBtn.innerHTML = '&#8659; מצב החדר';
+    }
+    if (table === 'historyTable') {
+      this.createHistoryTable();
+    }
+
   }
-  else{
-    list.sort((a,b)=> (a.SupportRepName<=b.SupportRepName)? 1:-1)
-  nameStatus[index] = true;
-  nameBtn.innerHTML ='&#8659; שם הנציג בשיחה'
-}
-if(table === 'historyTable'){
-  this.createHistoryTable();
-}
-
-}
 
 
-sortByOpenRoomState(stateStatus,index,id,list,table){
-var stateBtn =(<HTMLButtonElement>document.getElementById(id));
-  if(stateStatus[index] === true){
-    list.sort((a,b)=>a.open - b.open)
-    stateStatus[index] = false;
-    stateBtn.innerHTML = '&#8657; מצב החדר'
+  sortByOccupiedState(stateStatus, index, id, list, table) {
+    var stateBtn = (<HTMLButtonElement>document.getElementById(id));
+    if (stateStatus[index] === true) {
+      list.sort((a, b) => a.occupied - b.occupied)
+      stateStatus[index] = false;
+      stateBtn.innerHTML = '&#8657; מצב החדר'
+    }
+    else {
+      list.sort((a, b) => b.occupied - a.occupied)
+      stateStatus[index] = true;
+      stateBtn.innerHTML = '&#8659; מצב החדר';
+    }
+    if (table === 'historyTable') {
+      this.createHistoryTable();
+    }
+
   }
-  else{
-    list.sort((a,b)=>b.open-a.open)
-    stateStatus[index]=true;
-    stateBtn.innerHTML ='&#8659; מצב החדר';
-}
-if(table === 'historyTable'){
-  this.createHistoryTable();
-}
-
-}
-
-
-sortByOccupiedState(stateStatus,index,id,list,table){
-var stateBtn =(<HTMLButtonElement>document.getElementById(id));
-  if(stateStatus[index] === true){
-    list.sort((a,b)=>a.occupied - b.occupied)
-    stateStatus[index] = false;
-    stateBtn.innerHTML = '&#8657; מצב החדר'
-  }
-  else{
-    list.sort((a,b)=>b.occupied-a.occupied)
-    stateStatus[index]=true;
-    stateBtn.innerHTML ='&#8659; מצב החדר';
-}
-if(table === 'historyTable'){
-  this.createHistoryTable();
-}
-
-}
 
   resetHistoryTableFileds() {
     var toDate = document.getElementById('historyToDate1');
@@ -373,12 +373,12 @@ if(table === 'historyTable'){
   }
 
   adminHistoryLimitMinDate() {
-    var dateFrom =  (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
+    var dateFrom = (<HTMLInputElement>document.getElementById('historyFromDate2')).value;
     var dateTo = document.getElementById('historyToDate1');
     dateTo.setAttribute("min", dateFrom);
   }
   adminHistoryLimitMaxDate() {
-    var dateTo =  (<HTMLInputElement>document.getElementById('historyToDate1')).value;
+    var dateTo = (<HTMLInputElement>document.getElementById('historyToDate1')).value;
     var dateFrom = document.getElementById('historyFromDate2');
     dateFrom.setAttribute("max", dateTo);
   }
@@ -388,26 +388,26 @@ if(table === 'historyTable'){
       this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
     }
     if (e['id'] === 'adminHistoryTablebutton2_' + (index + 1)) {
-// tslint:disable-next-line: max-line-length
+      // tslint:disable-next-line: max-line-length
       window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
     if (e['id'] === 'adminHistoryTablebutton3_' + (index + 1)) {
       window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
     }
-   }
+  }
 
-   downloadChatMsg(roomId) {
-    this.firestore.getChatMessages(roomId).subscribe(result =>{
-    result.forEach(msg=> {
-      this.txtMsg += "From:" + msg.from + " Time:" + new Date(msg.timestamp)
-      this.txtMsg += "\n<" + msg.content + ">\n\n"  
-    })
-    console.log("startDownload")
-    var link = document.createElement('a');
-    link.download = 'Chat:'+roomId+'.txt';
-    var blob = new Blob([this.txtMsg], {type: 'text/plain'});
-    link.href = window.URL.createObjectURL(blob);
-    link.click();
+  downloadChatMsg(roomId) {
+    this.firestore.getChatMessages(roomId).subscribe(result => {
+      result.forEach(msg => {
+        this.txtMsg += "From:" + msg.from + " Time:" + new Date(msg.timestamp)
+        this.txtMsg += "\n<" + msg.content + ">\n\n"
+      })
+      console.log("startDownload")
+      var link = document.createElement('a');
+      link.download = 'Chat:' + roomId + '.txt';
+      var blob = new Blob([this.txtMsg], { type: 'text/plain' });
+      link.href = window.URL.createObjectURL(blob);
+      link.click();
     });
   }
 
@@ -434,7 +434,7 @@ if(table === 'historyTable'){
         } else if (ele.payload.type === 'modified') {
           const index = this.list.findIndex(item => item.SupportRepID === id);
           // Replace the item by index.
-          this.list.splice(index, 1, data );
+          this.list.splice(index, 1, data);
         } else {
           this.list.slice(this.list.indexOf(id), 1);
         }
@@ -446,8 +446,8 @@ if(table === 'historyTable'){
   showHistory(x) {
     document.getElementById('chat-list').hidden = false;
     this.firestore.getAllChatRoom().subscribe(res => {
-        this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
-      });
+      this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
+    });
   }
 
   async addSupport() {
@@ -481,13 +481,13 @@ if(table === 'historyTable'){
             this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
           }).catch(error => {
             alert.dismiss(); //here dismiss this alert
-            const errAlert =  this.alertController.create({
+            const errAlert = this.alertController.create({
               header: 'added failed',
               message: error,
               buttons: ['OK']
             }).then(res => res.present());
           });
-         }
+        }
       }]
     });
     alert.present();
@@ -617,12 +617,12 @@ if(table === 'historyTable'){
         const timestampDate = data['date']['seconds'];   // save the date as timestamp
         const stringDate = new Date(timestampDate * 1000).toDateString();  // save the date as a regular date form
         if (result.payload.type === 'added') {
-          this.storiesArray.push({stringDate, id, ...data });
+          this.storiesArray.push({ stringDate, id, ...data });
         } else if (result.payload.type === 'modified') {
           const index = this.storiesArray.findIndex(item => item.id === id);
           // Replace the item in index with the new object.
           this.storiesArray.splice(index, 1, { stringDate, id, ...data });
-        } else  { // (result.payload.type === 'removed')
+        } else { // (result.payload.type === 'removed')
           this.storiesArray.slice(this.storiesArray.indexOf(id), 1);
         }
       });
@@ -650,24 +650,24 @@ if(table === 'historyTable'){
   }
 
 
-// delete the story from firebase and from the array of stories
-async deleteStory(story) {
-  const alert = await this.alertController.create({
-    header: 'אישור מחיקה',
-    message: `האם את/ה בטוח/ה שברצונך למחוק את העדות?`,
-    buttons: [
-      { text: 'חזור' },
-      {
-        text: 'מחק',
-        handler: () => {
-          this.firestore.removeStory(story.id);
-          this.storiesArray.splice(this.storiesArray.indexOf(story), 1);
-          document.getElementById('editor').hidden = true;  
-        }
-      }]
-  });
-  alert.present();
-}
+  // delete the story from firebase and from the array of stories
+  async deleteStory(story) {
+    const alert = await this.alertController.create({
+      header: 'אישור מחיקה',
+      message: `האם את/ה בטוח/ה שברצונך למחוק את העדות?`,
+      buttons: [
+        { text: 'חזור' },
+        {
+          text: 'מחק',
+          handler: () => {
+            this.firestore.removeStory(story.id);
+            this.storiesArray.splice(this.storiesArray.indexOf(story), 1);
+            document.getElementById('editor').hidden = true;
+          }
+        }]
+    });
+    alert.present();
+  }
 
 
   // to confirm the story can be uploaded to the website
@@ -708,7 +708,7 @@ async deleteStory(story) {
       }
     }
     alert('יש ללחוץ "אשר" עבור העדות הרצויה, במידה והעדות עדיין לא אושרה');
-    document.getElementById('editor').hidden = true; 
+    document.getElementById('editor').hidden = true;
   }
 
   // compare 2 strings
@@ -729,7 +729,7 @@ async deleteStory(story) {
     storageRef.delete().then(() => {
       this.imageUrls.splice(this.imageUrls.indexOf(img), 1);
       this.firestore.updateImageArray(this.imageUrls);
-      }
+    }
     );
   }
 
@@ -745,7 +745,7 @@ async deleteStory(story) {
     // observe percentage changes
     this.uploadPercent = task.percentageChanges();
     // get notified when the download URL is available
-    task.snapshotChanges().pipe( finalize(() => {
+    task.snapshotChanges().pipe(finalize(() => {
       this.getFile(filePath);
     })).subscribe();
 
@@ -757,6 +757,16 @@ async deleteStory(story) {
       this.imageUrls.push(res);
       this.firestore.updateImageArray(this.imageUrls);
     });
+  }
+
+
+  /*************************************************************************************************************************************/
+
+  /**********************************************Association-Info Management************************************************************/
+
+  manageAssociationInfo() {
+    
+
   }
 
 }

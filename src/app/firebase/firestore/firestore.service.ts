@@ -286,4 +286,8 @@ export class FirestoreService {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ images });
   }
 
+  public getAssociationInfo(): Observable<any> {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
 }

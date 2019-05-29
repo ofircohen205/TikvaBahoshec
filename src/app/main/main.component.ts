@@ -12,15 +12,30 @@ import { GlobalService } from '../global/global.service';
 })
 export class MainComponent implements OnInit {
 
+  association_info: string;
+
   constructor(
     private alertController: AlertController,
     private userAuth: AngularFireAuth,
     private router: Router,
     private firestore: FirestoreService,
     private global: GlobalService
-    ) { }
+  ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+
+    //Get the Association info from firebase and inject it to the main's HTML
+    this.firestore.getAssociationInfo().subscribe(results => {
+      this.association_info = results.info;
+      console.log(this.association_info);
+      document.getElementById('association-info').innerHTML = this.association_info;
+      
+    });
+  }
+
+  
+  
+
 
   userDetails() {
     this.global.userDetails();
