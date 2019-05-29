@@ -58,6 +58,8 @@ export class AdminProfileComponent implements OnInit {
   supportRepHistory: any[] = [];
   sortArrowStatusTable: boolean[] = [true, true, true, true];
 
+  association_info: string;
+
   @ViewChild('title') title;
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
@@ -92,6 +94,11 @@ export class AdminProfileComponent implements OnInit {
     this.firestore.getImageArray().subscribe(res => {
       this.imageUrls = res.images;
     });
+
+    this.firestore.getAssociationInfo().subscribe(results => {
+      this.association_info = results.info;
+    });
+    
 
     this.manageStories();
     this.manageSupportReps();
@@ -702,7 +709,6 @@ export class AdminProfileComponent implements OnInit {
         this.storiesArray[i].description = this.value;
         this.firestore.editStory(this.storiesArray[i].id, this.value);
         this.storiesArray[i].title = this.title.value;
-        console.log("title = " + this.title.value);
         this.firestore.editStoryTitle(this.storiesArray[i].id, this.title.value);
         break;
       }
@@ -764,9 +770,22 @@ export class AdminProfileComponent implements OnInit {
 
   /**********************************************Association-Info Management************************************************************/
 
-  manageAssociationInfo() {
-    
-
+  async saveInfoEdit() {
+    const alert = await this.alertController.create({
+      header: 'אישור עריכת אודות העמותה',
+      message: `האם את/ה בטוח/ה שברצונך לאשר את עריכת אודות העמותה? דע/י כי אישור העריכה יעדכן את האודות אוטומטית באתר`,
+      buttons: [
+        { text: 'חזור' },
+        {
+          text: 'אשר',
+          handler: () => {
+            this.firestore.updateAssociationInfo(this.association_info);
+          }
+        }]
+    });
+    alert.present();
   }
+
+  /*************************************************************************************************************************************/
 
 }

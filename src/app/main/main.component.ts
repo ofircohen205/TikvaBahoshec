@@ -27,15 +27,10 @@ export class MainComponent implements OnInit {
     //Get the Association info from firebase and inject it to the main's HTML
     this.firestore.getAssociationInfo().subscribe(results => {
       this.association_info = results.info;
-      console.log(this.association_info);
       document.getElementById('association-info').innerHTML = this.association_info;
-      
+
     });
   }
-
-  
-  
-
 
   userDetails() {
     this.global.userDetails();

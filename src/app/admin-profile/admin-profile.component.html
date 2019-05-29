@@ -147,10 +147,14 @@
           <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
         </ion-card>
 
-        <ion-card text- center id="Edit-Association-Info" [hidden]="true">
-          <p text-center>עריכת מידע </p>
-          <ion-button>הוסף</ion-button>
-          <ion-button>מחק</ion-button>
+
+        <ion-card text-center id="Edit-Association-Info" [hidden]="true">
+          <h2 text-center>עריכת אודות העמותה</h2>
+          <ejs-richtexteditor text-right
+          id='info-editor' [(value)]='association_info' [toolbarSettings]='tools' [quickToolbarSettings]='quickTools'>
+        </ejs-richtexteditor>
+
+          <ion-button (click) = "saveInfoEdit()">שמור עריכה</ion-button>
         </ion-card>
 
         <ion-card text-center id="View-History-Clients" [hidden]="true">
