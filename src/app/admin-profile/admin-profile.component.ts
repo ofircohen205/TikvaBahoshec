@@ -21,7 +21,6 @@ import { text } from '@angular/core/src/render3';
 
 
 
-
 @Component({
   selector: 'app-admin-profile',
   templateUrl: './admin-profile.component.html',
@@ -55,6 +54,7 @@ export class AdminProfileComponent implements OnInit {
   chatRoomList: any[] = [];
   clientList: any[] = [];
   txtMsg = '';
+  filterText = '';
   supportRepHistory: any[] = [];
   sortArrowStatusTable : boolean[] = [true,true,true,true];
 
