@@ -13,14 +13,13 @@
 
 
         <ion-card id="Manage-SupportReps" text-center [hidden]="true">
-          <p text-center>רשימת נציגים </p>
+        
           <ion-toolbar>
-
-            <ion-searchbar class="search" type="text" [(ngModel)]="searchText"></ion-searchbar>
-            <ion-button>חיפוש</ion-button>
-
+            <ion-searchbar class="search" type="text" [(ngModel)]="filterText" placeholder="חפש נציג"></ion-searchbar>
           </ion-toolbar>
-          <ion-button (click)="addSupport()">הוסף</ion-button>
+
+
+          <ion-button (click)="addSupport()">הוסף נציג</ion-button>
           <table id="tables" text-right>
             <thead>
               <tr>
@@ -35,7 +34,7 @@
             </thead>
 
             <tbody text-right>
-              <tr *ngFor="let supportRep of list">
+              <tr *ngFor="let supportRep of list | filter:filterText">
                 <td>
                   <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
                   <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>

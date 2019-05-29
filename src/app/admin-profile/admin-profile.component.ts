@@ -21,7 +21,6 @@ import { text } from '@angular/core/src/render3';
 
 
 
-
 @Component({
   selector: 'app-admin-profile',
   templateUrl: './admin-profile.component.html',
@@ -55,6 +54,7 @@ export class AdminProfileComponent implements OnInit {
   chatRoomList: any[] = [];
   clientList: any[] = [];
   txtMsg = '';
+  filterText = '';
   supportRepHistory: any[] = [];
   sortArrowStatusTable : boolean[] = [true,true,true,true];
 
@@ -479,7 +479,14 @@ if(table === 'historyTable'){
         handler: data => {
           this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
             this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
-          }).catch(error => console.log(error));
+          }).catch(error => {
+            alert.dismiss(); //here dismiss this alert
+            const errAlert =  this.alertController.create({
+              header: 'added failed',
+              message: error,
+              buttons: ['OK']
+            }).then(res => res.present());
+          });
          }
       }]
     });
