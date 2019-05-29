@@ -1,6 +1,15 @@
 ion-card{
     display: fixed;
-    flex-direction: column;
+    //flex-direction: column;
     height: 100%;
     width: 100% ;
   }
+
+table{
+  width: 100%;
+  height: 80%;
+}
+
+th{
+  background:rgb(135, 164, 184);
+}

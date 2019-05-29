@@ -52,22 +52,29 @@ export class CalenderComponent implements OnInit {
         const row = document.createElement('tr');
 
         // creating individual cells, filing them up with data.
-        let cell, cellText;
+        let cell, cellText, data;
         for (let j = 0; j < 7; j++) {
           if (i === 0 && j < firstDay) {
             cell = document.createElement('td');
             cellText = document.createTextNode('');
+            data = document.createElement('div');//new. for data
             cell.appendChild(cellText);
+            cell.appendChild(data);
             row.appendChild(cell);
           } else if (date > daysInMonth(month, year)) {
             break;
           } else {
-            cell = document.createElement('td');
+            cell = document.createElement('td')
             cellText = document.createTextNode(date.toString());
+            data = document.createElement('div'); //new. for data
+            data.setAttribute('id', date.toString()+ "-" + (month+1) + "-" + year);
+          
+
             if (date === this.today.getDate() && year === this.today.getFullYear() && month === this.today.getMonth()) {
               cell.classList.add('bg-info');
             } // color today's date
-            cell.appendChild(cellText);
+            cell.appendChild(cellText); //the day in the month
+            cell.appendChild(data);  //the events in the day
             row.appendChild(cell);
             date++;
           }
@@ -82,6 +89,7 @@ export class CalenderComponent implements OnInit {
     function daysInMonth(iMonth, iYear) {
       return 32 - new Date(iYear, iMonth, 32).getDate();
     }
+    document.getElementById("7-7-2019").innerHTML = "a";
 
   }
 
@@ -89,11 +97,13 @@ export class CalenderComponent implements OnInit {
     this.currentYear = (this.currentMonth === 11) ? this.currentYear + 1 : this.currentYear;
     this.currentMonth = (this.currentMonth + 1) % 12;
     this.showCalendar(this.currentMonth, this.currentYear);
+    document.getElementById("7-7-2019").innerHTML = "a";
   }
 
   previous() {
     this.currentYear = (this.currentMonth === 0) ? this.currentYear - 1 : this.currentYear;
     this.currentMonth = (this.currentMonth === 0) ? 11 : this.currentMonth - 1;
     this.showCalendar(this.currentMonth, this.currentYear);
+    document.getElementById("7-7-2019").innerHTML = "a";
   }
 }

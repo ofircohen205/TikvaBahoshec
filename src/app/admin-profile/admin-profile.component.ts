@@ -18,6 +18,7 @@ import { ValueAccessor } from '@ionic/angular/dist/directives/control-value-acce
 import { getName } from 'ionicons/dist/types/icon/utils';
 import * as firebase from 'firebase';
 import { text } from '@angular/core/src/render3';
+import { Title } from '@angular/platform-browser';
 
 
 
@@ -58,6 +59,10 @@ export class AdminProfileComponent implements OnInit {
   supportRepHistory: any[] = [];
   sortArrowStatusTable: boolean[] = [true, true, true, true];
 
+  @ViewChild('eventitle') event_title;
+  @ViewChild('eventDate') event_date;
+  event_content: string;
+  eventsArray: string[] = [];
   association_info: string;
 
   @ViewChild('title') title;
@@ -95,10 +100,15 @@ export class AdminProfileComponent implements OnInit {
       this.imageUrls = res.images;
     });
 
-    this.firestore.getAssociationInfo().subscribe(results => {
-      this.association_info = results.info;
+    this.firestore.getAssociationInfo().subscribe(result => {
+      this.association_info = result.info;
     });
-    
+
+    this.firestore.getEvents().subscribe(result => {
+      this.eventsArray = result;
+      console.log(this.eventsArray);
+      //this.manageEvents();
+    });
 
     this.manageStories();
     this.manageSupportReps();
@@ -787,5 +797,26 @@ export class AdminProfileComponent implements OnInit {
   }
 
   /*************************************************************************************************************************************/
+  /************************************************Events Management********************************************************************/
+
+  // manageEvents() {
+
+  // }
+
+  addEventDetails() {
+    document.getElementById('events-input').hidden = false;
+  }
+  saveEvent() {
+    console.log("event_title = " + this.event_title);
+    console.log("event_date = " + this.event_date);
+    this.firestore.createEvent(this.event_title.value, this.event_date.value, this.event_content);
+    this.eventsArray.push(this.event_title.value, this.event_date.value, this.event_content);
+  }
+
+  //need to do the edit button, delete button and search button
+ 
+
+
+
 
 }
