@@ -297,7 +297,7 @@ export class SupportRepProfileComponent implements OnInit {
       }
     }
     if (e['id'] === 'supRepTable2button2_' + (index + 1)) {
-      console.log(list['ClientID']) ;
+      console.log(list[index]['ClientID']) ;
       this.global.openClient(list[index]['ClientID']);
     }
     if (e['id'] === 'supRepTable2button3_' + (index + 1)) {
@@ -470,6 +470,10 @@ sortByOpenRoomState(stateStatus, index, id, list, table) {
 
   openRoom(roomId) {
     window.open('/chat/' + roomId, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+  }
+
+  openClient(clientId){
+    this.global.openClient(clientId);
   }
 
   downloadChatMsg(roomId) {
