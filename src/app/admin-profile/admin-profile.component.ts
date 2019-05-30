@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ApplicationRef } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -41,6 +41,7 @@ export class AdminProfileComponent implements OnInit {
     private location: Location,
     private afs: AngularFireStorage,
     private global: GlobalService,
+    private appRef: ApplicationRef,
     private supportRepService: SupportRepsService
   ) { }
 
@@ -61,7 +62,7 @@ export class AdminProfileComponent implements OnInit {
 
   @ViewChild('eventitle') event_title;
   @ViewChild('eventDate') event_date;
-  event_content: string;
+  event_content: string = null;
   eventsArray: string[] = [];
   association_info: string;
 
@@ -657,7 +658,7 @@ export class AdminProfileComponent implements OnInit {
   // edit the story. replace the old content of the story with the new content
   editStory(story) {
     document.getElementById('editor').hidden = false;
-    document.getElementById('defaultRTE').className = story.id;
+    document.getElementById('story-editor').nodeValue = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
       if (story.id === this.storiesArray[i].id) {
         this.value = this.storiesArray[i].description;  // edit the story
@@ -711,7 +712,7 @@ export class AdminProfileComponent implements OnInit {
 
   // after the story was edited, we save the changes in it
   acceptStoryChange() {
-    const storyId = document.getElementById('defaultRTE').className;
+    const storyId = document.getElementById('story-editor').nodeValue;
     let areEquals: number;
     for (let i = 0; i < this.storiesArray.length; i++) {
       areEquals = this.strcmp(storyId, i);
@@ -807,10 +808,13 @@ export class AdminProfileComponent implements OnInit {
     document.getElementById('events-input').hidden = false;
   }
   saveEvent() {
-    console.log("event_title = " + this.event_title);
-    console.log("event_date = " + this.event_date);
+    console.log("event_title = " + this.event_title.value);
+    console.log("event_date = " + this.event_date.value);
+    console.log("typeof (event_date) = " + typeof(this.event_date.value));
+    
     this.firestore.createEvent(this.event_title.value, this.event_date.value, this.event_content);
-    this.eventsArray.push(this.event_title.value, this.event_date.value, this.event_content);
+    //this.eventsArray.push(this.event_title.value, this.event_date.value, this.event_content);
+    
   }
 
   //need to do the edit button, delete button and search button

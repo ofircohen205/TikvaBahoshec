@@ -2,12 +2,12 @@
   <ion-grid>
     <ion-row>
       <ion-col size='12' text-center>
-        <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
-        <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
-        <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
-        <ion-button id="EditEvents" (click)="onClick($event)">עריכת ארועים</ion-button>
-        <ion-button id="ViewHistoryClients" (click)="onClick($event)">הסטוריית לקוחות</ion-button>
         <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
+        <ion-button id="ViewHistoryClients" (click)="onClick($event)">הסטוריית לקוחות</ion-button>
+        <ion-button id="EditEvents" (click)="onClick($event)">עריכת ארועים</ion-button>
+        <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
+        <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
+        <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
       </ion-col>
       <ion-col size='12'>
 
@@ -126,7 +126,7 @@
             </ion-card-header>
             <ion-card-content>
               <!-- Text editor for the stories -->
-              <ejs-richtexteditor text-right id='defaultRTE' class='none' [(value)]='value' [toolbarSettings]='tools'
+              <ejs-richtexteditor text-right id='story-editor' [(value)]='value' [toolbarSettings]='tools'
                 [quickToolbarSettings]='quickTools'></ejs-richtexteditor>
             </ion-card-content>
             <ion-button id='save-edit' (click)="acceptStoryChange()">שמור עריכה</ion-button>
@@ -304,7 +304,7 @@
                     <ion-button (click)="editEvent(event)">עריכה</ion-button>
                   </td>
                   <td *ngIf='event'>
-                    {{ event.date }}
+                    {{ event.date | date: "dd/MM/yyyy" }}
                   </td>
                   <td *ngIf='event'>
                     {{ event.title }}
@@ -325,18 +325,23 @@
             </ion-card-content>
 
             <ion-card-header>
-                <h4 text-right>: תאריך האירוע</h4>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-input type="text" #eventDate style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
-                  [(value)]='event_date' placeholder=" DD/MM/YYYY תאריך האירוע. יש לכתוב בפורמט "></ion-input>
-              </ion-card-content>
-
-            <ion-card-header text-right><h4>:תיאור האירוע</h4></ion-card-header>
+              <h4 text-right>: תאריך האירוע</h4>
+            </ion-card-header>
             <ion-card-content>
-                <ejs-richtexteditor text-right placeholder="תיאור האירוע"
-               id='event-editor' [(value)]='event_content' [toolbarSettings]='tools' [quickToolbarSettings]='quickTools'>
-            </ejs-richtexteditor>
+              <!-- <ion-input type="text" #eventDate style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
+                  [(value)]='event_date' placeholder=" DD/MM/YYYY תאריך האירוע. יש לכתוב בפורמט "></ion-input> -->
+
+              <ion-input type="date" #eventDate style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
+                [(value)]='event_date'></ion-input>
+            </ion-card-content>
+
+            <ion-card-header text-right>
+              <h4>:תיאור האירוע</h4>
+            </ion-card-header>
+            <ion-card-content>
+              <ejs-richtexteditor text-right placeholder="תיאור האירוע" id='event-editor' [(value)]='event_content'
+                [toolbarSettings]='tools' [quickToolbarSettings]='quickTools'>
+              </ejs-richtexteditor>
             </ion-card-content>
 
             <ion-button id='save-event-edit' (click)="saveEvent()">שמור</ion-button>
