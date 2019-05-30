@@ -26,16 +26,9 @@
 
                 <ion-row>
                   <ion-col class="class-margin">
-                    <ion-label>גיל</ion-label>
+                    <ion-label>שם פרטי</ion-label>
                     <ion-item text-right>
-                      <ion-input placeholder="גיל" #age></ion-input>
-                    </ion-item>
-                  </ion-col>
-
-                  <ion-col class="class-margin">
-                    <ion-label>כתובת</ion-label>
-                    <ion-item text-right>
-                      <ion-input placeholder="כתובת" #address></ion-input>
+                      <ion-input placeholder="שם פרטי" #first_name></ion-input>
                     </ion-item>
                   </ion-col>
 
@@ -47,14 +40,42 @@
                   </ion-col>
 
                   <ion-col class="class-margin">
-                    <ion-label>שם פרטי</ion-label>
+                    <ion-label>כתובת</ion-label>
                     <ion-item text-right>
-                      <ion-input placeholder="שם פרטי" #first_name></ion-input>
+                      <ion-input placeholder="כתובת" #address></ion-input>
+                    </ion-item>
+                  </ion-col>
+
+                  <ion-col class="class-margin">
+                    <ion-label>גיל</ion-label>
+                    <ion-item text-right>
+                      <ion-input placeholder="גיל" #age></ion-input>
                     </ion-item>
                   </ion-col>
                 </ion-row>
 
                 <ion-row>
+                  <ion-col class="class-margin">
+                    <ion-label>פלאפון</ion-label>
+                    <ion-item text-right>
+                      <ion-input placeholder="פלאפון" #cellphone></ion-input>
+                    </ion-item>
+                  </ion-col>
+
+                  <ion-col class="class-margin">
+                    <ion-label>טלפון בית</ion-label>
+                    <ion-item text-right>
+                      <ion-input placeholder="טלפון בית" #phone_num></ion-input>
+                    </ion-item>
+                  </ion-col>
+
+                  <ion-col class="class-margin">
+                    <ion-label>כתובת מייל</ion-label>
+                    <ion-item text-right>
+                      <ion-input placeholder="כתובת מייל" #email></ion-input>
+                    </ion-item>
+                  </ion-col>
+
                   <ion-col class="class-margin">
                     <ion-label>מין</ion-label>
                     <ion-radio-group>
@@ -73,27 +94,6 @@
                         </ion-col>
                       </ion-row>
                     </ion-radio-group>
-                  </ion-col>
-
-                  <ion-col class="class-margin">
-                    <ion-label>כתובת מייל</ion-label>
-                    <ion-item text-right>
-                      <ion-input placeholder="כתובת מייל" #email></ion-input>
-                    </ion-item>
-                  </ion-col>
-
-                  <ion-col class="class-margin">
-                    <ion-label>טלפון בית</ion-label>
-                    <ion-item text-right>
-                      <ion-input placeholder="טלפון בית" #phone_num></ion-input>
-                    </ion-item>
-                  </ion-col>
-
-                  <ion-col class="class-margin">
-                    <ion-label>פלאפון</ion-label>
-                    <ion-item text-right>
-                      <ion-input placeholder="פלאפון" #cellphone></ion-input>
-                    </ion-item>
                   </ion-col>
                 </ion-row>
 
@@ -132,7 +132,7 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-button style="margin-left: 45%" (click)="updateClientProfile()">עדכן תיק לקוח</ion-button>
+          <ion-button style="margin-right: 45%" (click)="updateClientProfile()">עדכן תיק לקוח</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

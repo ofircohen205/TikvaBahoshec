@@ -13,11 +13,8 @@
     <ion-grid>
         <ion-row>
             <ion-col>
-                <ion-button style="margin-left: 10%" (click)='logout()'>
-                    התנתק
-                </ion-button>
-                <ion-button color="secondary" style="margin-left: 5%" (click)='updatePassword()'>
-                    שנה סיסמה
+                <ion-button id='inShiftButton' style="margin-right: 50%" color="danger" (click)="inShift()">
+                    לא במשמרת
                 </ion-button>
             </ion-col>
             <ion-col>
@@ -33,8 +30,11 @@
                 </ion-toolbar>
             </ion-col>
             <ion-col>
-                <ion-button id='inShiftButton' style="margin-left: 60%" color="danger" (click)="inShift()">
-                    לא במשמרת
+                <ion-button color="secondary" style="margin-right: 5%" (click)='updatePassword()'>
+                    שנה סיסמה
+                </ion-button>
+                <ion-button style="margin-right: 10%" (click)='logout()'>
+                    התנתק
                 </ion-button>
             </ion-col>
         </ion-row>

@@ -180,76 +180,79 @@ export class AdminProfileComponent implements OnInit {
         if ((date >= dateFrom || dateFrom === '') && (date <= dateTo || dateTo === '') &&
           (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
           (chatRoom['ClientName'].search(clientName) != -1 || clientName === '')) {
-          var button1 = document.createElement('ion-button');
-          var td1 = document.createElement('td');
-          td1.appendChild(button1);
-          td1.id = 'adminHistoryTablebutton1_' + index;
-          button1.innerHTML = 'הורד שיחה';
-          button1.color = 'success';
-          td1.style.color = 'white';
-          td1.style.border = ' 1px solid #ddd';
-          td1.style.padding = '8px';
-          td1.style.borderCollapse = 'collapse';
 
-          var button2 = document.createElement('ion-button');
-          var td2 = document.createElement('td');
-          td2.appendChild(button2);
-          td2.id = 'adminHistoryTablebutton2_' + index;
-          button2.innerHTML = 'כנס לחדר';
-          button2.color = 'success';
-          td2.style.color = 'white';
+            var td1 = document.createElement('td');
+            td1.style.border = ' 1px solid #ddd';
+            td1.style.padding = '8px';
+            td1.style.borderCollapse = 'collapse';
+            td1.textContent = index.toString();
+
+            var td2 = document.createElement('td');
           td2.style.border = ' 1px solid #ddd';
           td2.style.padding = '8px';
           td2.style.borderCollapse = 'collapse';
+          td2.textContent = chatRoom.ClientName;
 
-          var button3 = document.createElement('ion-button');
           var td3 = document.createElement('td');
-          td3.appendChild(button3);
-          td3.id = 'adminHistoryTablebutton3_' + index;
-          button3.innerHTML = 'כנס לטופס לקוח';
-          button3.color = 'success';
-          td3.style.color = 'white';
           td3.style.border = ' 1px solid #ddd';
           td3.style.padding = '8px';
           td3.style.borderCollapse = 'collapse';
+          td3.textContent = new Date(chatRoom.timestamp).toLocaleString();
 
           var td4 = document.createElement('td');
+          var name = '';
           td4.style.border = ' 1px solid #ddd';
           td4.style.padding = '8px';
           td4.style.borderCollapse = 'collapse';
-          if (chatRoom.occupied === true) {
-            td4.textContent = 'בטיפול';
+          if (chatRoom.SupportRepName !== '' && chatRoom.SupportRepName != null) {
+            td4.textContent = chatRoom.SupportRepName;
           } else {
-            td4.textContent = 'לא בטיפול';
+            td4.textContent = 'no support name';
           }
 
           var td5 = document.createElement('td');
-          var name = '';
           td5.style.border = ' 1px solid #ddd';
           td5.style.padding = '8px';
           td5.style.borderCollapse = 'collapse';
-          if (chatRoom.SupportRepName !== '' && chatRoom.SupportRepName != null) {
-            td5.textContent = chatRoom.SupportRepName;
+          if (chatRoom.occupied === true) {
+            td5.textContent = 'בטיפול';
           } else {
-            td5.textContent = 'no support name';
+            td5.textContent = 'לא בטיפול';
           }
+
+          var button1 = document.createElement('ion-button');
           var td6 = document.createElement('td');
+          td6.appendChild(button1);
+          td6.id = 'adminHistoryTablebutton1_' + index;
+          button1.innerHTML = 'כנס לטופס לקוח';
+          button1.color = 'success';
+          td6.style.color = 'white';
           td6.style.border = ' 1px solid #ddd';
           td6.style.padding = '8px';
           td6.style.borderCollapse = 'collapse';
-          td6.textContent = new Date(chatRoom.timestamp).toLocaleString();
 
+          var button2 = document.createElement('ion-button');
           var td7 = document.createElement('td');
+          td7.appendChild(button2);
+          td7.id = 'adminHistoryTablebutton2_' + index;
+          button2.innerHTML = 'כנס לחדר';
+          button2.color = 'success';
+          td7.style.color = 'white';
           td7.style.border = ' 1px solid #ddd';
           td7.style.padding = '8px';
           td7.style.borderCollapse = 'collapse';
-          td7.textContent = chatRoom.ClientName;
 
+          var button3 = document.createElement('ion-button');
           var td8 = document.createElement('td');
+          td8.appendChild(button3);
+          td8.id = 'adminHistoryTablebutton3_' + index;
+          button3.innerHTML = 'הורד שיחה';
+          button3.color = 'success';
+          td8.style.color = 'white';
           td8.style.border = ' 1px solid #ddd';
           td8.style.padding = '8px';
           td8.style.borderCollapse = 'collapse';
-          td8.textContent = index.toString();
+
           tr.appendChild(td1);
           tr.appendChild(td2);
           tr.appendChild(td3);
@@ -268,9 +271,9 @@ export class AdminProfileComponent implements OnInit {
           tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
           tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
           var trChildren = tbodyChildrens[i].childNodes;
-          trChildren[0].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[0], i));
-          trChildren[1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[1], i));
-          trChildren[2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[2], i));
+          trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 1], i));
+          trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
+          trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
         }
       }
     }
@@ -402,14 +405,14 @@ export class AdminProfileComponent implements OnInit {
   }
 
   onclickAdminHistoryTable(e, index) {
-    if (e['id'] === 'adminHistoryTablebutton1_' + (index + 1)) {
+    if (e['id'] === 'adminHistoryTablebutton3_' + (index + 1)) {
       this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
     }
     if (e['id'] === 'adminHistoryTablebutton2_' + (index + 1)) {
       // tslint:disable-next-line: max-line-length
       window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
-    if (e['id'] === 'adminHistoryTablebutton3_' + (index + 1)) {
+    if (e['id'] === 'adminHistoryTablebutton1_' + (index + 1)) {
       window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
     }
   }
