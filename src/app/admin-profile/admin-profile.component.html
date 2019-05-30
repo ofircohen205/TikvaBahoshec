@@ -87,42 +87,40 @@
             <table id="tables" text-center>
               <thead>
                 <tr>
-                  <th text-center>עריכת עדות</th>
-                  <th text-center>אושר/לא אושר</th>
-                  <th text-center>תאריך העלאה</th>
                   <th text-center>כותרת</th>
+                  <th text-center>תאריך העלאה</th>
+                  <th text-center>אושר/לא אושר</th>
+                  <th text-center>עריכת עדות</th>
                 </tr>
               </thead>
 
               <tbody>
                 <tr *ngFor='let story of storiesArray'>
-                  <td>
-                    <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
-                    <ion-button (click)="editStory(story)">עריכה</ion-button>
-                    <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר
-                    </ion-button>
-                  </td>
-                  <td *ngIf='story && story.approved'> אושר</td>
-                  <td *ngIf='story && !story.approved'> לא אושר</td>
-                  <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
                   <td *ngIf='story'>{{story.title}}</td>
+                  <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
+                  <td *ngIf='story && story.approved'> אושר</td>
+                  <td *ngIf='story && !story.approved'> לא אושר</td>    
+                  <td>
+                    <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר</ion-button>
+                    <ion-button (click)="editStory(story)">עריכה</ion-button>
+                    <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
+                  </td>
                 </tr>
-
               </tbody>
             </table>
           </ion-card>
 
           <ion-card id='editor' [hidden]="true">
             <ion-card-header>
-              <h4 text-right>:כותרת הסיפור</h4>
-            </ion-card-header>
+              <h4 text-right>כותרת הסיפור:</h4>
+            </ion-card-header>  
             <ion-card-content>
               <ion-input type="text" #title style="border: 1px solid rgb(194, 173, 173);" text-right
                 [(value)]='titleValue'></ion-input>
             </ion-card-content>
 
             <ion-card-header>
-              <h4 text-right>:תוכן הסיפור</h4>
+              <h4 text-right>תוכן הסיפור:</h4>
             </ion-card-header>
             <ion-card-content>
               <!-- Text editor for the stories -->
