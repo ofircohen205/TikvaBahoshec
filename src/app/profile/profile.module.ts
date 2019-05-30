@@ -10,6 +10,7 @@ import { AdminProfileComponent } from '../admin-profile/admin-profile.component'
 import { SupportRepProfileComponent } from '../support-rep-profile/support-rep-profile.component';
 
 import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor';
+import { FilterPipe } from '../admin-profile/filter.pipe';
 
 const routes: Routes = [
   {
@@ -30,7 +31,8 @@ const routes: Routes = [
   declarations: [
     ProfilePage,
     AdminProfileComponent,
-    SupportRepProfileComponent
+    SupportRepProfileComponent,
+    FilterPipe
   ]
 })
 export class ProfilePageModule {}

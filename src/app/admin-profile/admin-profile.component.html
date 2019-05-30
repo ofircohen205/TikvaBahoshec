@@ -2,25 +2,24 @@
   <ion-grid>
     <ion-row>
       <ion-col size='12' text-center>
-        <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
-        <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
-        <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
-        <ion-button id="EditEvents" (click)="onClick($event)">עריכת ארועים</ion-button>
-        <ion-button id="ViewHistoryClients" (click)="onClick($event)">הסטוריית לקוחות</ion-button>
         <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
+        <ion-button id="ViewHistoryClients" (click)="onClick($event)">הסטוריית לקוחות</ion-button>
+        <ion-button id="EditEvents" (click)="onClick($event)">עריכת ארועים</ion-button>
+        <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
+        <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
+        <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
       </ion-col>
       <ion-col size='12'>
 
 
         <ion-card id="Manage-SupportReps" text-center [hidden]="true">
-          <p text-center>רשימת נציגים </p>
+
           <ion-toolbar>
-
-            <ion-searchbar class="search" type="text" [(ngModel)]="searchText"></ion-searchbar>
-            <ion-button>חיפוש</ion-button>
-
+            <ion-searchbar class="search" type="text" [(ngModel)]="filterText" placeholder="חפש נציג"></ion-searchbar>
           </ion-toolbar>
-          <ion-button (click)="addSupport()">הוסף</ion-button>
+
+
+          <ion-button (click)="addSupport()">הוסף נציג</ion-button>
           <table id="tables" text-right>
             <thead>
               <tr>
@@ -35,7 +34,7 @@
             </thead>
 
             <tbody text-right>
-              <tr *ngFor="let supportRep of list">
+              <tr *ngFor="let supportRep of list | filter:filterText">
                 <td>
                   <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
                   <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
@@ -88,35 +87,44 @@
             <table id="tables" text-center>
               <thead>
                 <tr>
-                  <th text-center>עריכת עדות</th>
-                  <th text-center>אושר/לא אושר</th>
-                  <th text-center>תאריך העלאה</th>
                   <th text-center>כותרת</th>
+                  <th text-center>תאריך העלאה</th>
+                  <th text-center>אושר/לא אושר</th>
+                  <th text-center>עריכת עדות</th>
                 </tr>
               </thead>
 
               <tbody>
                 <tr *ngFor='let story of storiesArray'>
-                  <td>
-                    <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
-                    <ion-button (click)="editStory(story)">עריכה</ion-button>
-                    <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר
-                    </ion-button>
-                  </td>
-                  <td *ngIf='story && story.approved'> אושר</td>
-                  <td *ngIf='story && !story.approved'> לא אושר</td>
-                  <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
                   <td *ngIf='story'>{{story.title}}</td>
+                  <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
+                  <td *ngIf='story && story.approved'> אושר</td>
+                  <td *ngIf='story && !story.approved'> לא אושר</td>    
+                  <td>
+                    <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר</ion-button>
+                    <ion-button (click)="editStory(story)">עריכה</ion-button>
+                    <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
+                  </td>
                 </tr>
-
               </tbody>
             </table>
           </ion-card>
 
           <ion-card id='editor' [hidden]="true">
+            <ion-card-header>
+              <h4 text-right>כותרת הסיפור:</h4>
+            </ion-card-header>  
+            <ion-card-content>
+              <ion-input type="text" #title style="border: 1px solid rgb(194, 173, 173);" text-right
+                [(value)]='titleValue'></ion-input>
+            </ion-card-content>
+
+            <ion-card-header>
+              <h4 text-right>תוכן הסיפור:</h4>
+            </ion-card-header>
             <ion-card-content>
               <!-- Text editor for the stories -->
-              <ejs-richtexteditor text-right id='defaultRTE' class='none' [(value)]='value' [toolbarSettings]='tools'
+              <ejs-richtexteditor text-right id='story-editor' [(value)]='value' [toolbarSettings]='tools'
                 [quickToolbarSettings]='quickTools'></ejs-richtexteditor>
             </ion-card-content>
             <ion-button id='save-edit' (click)="acceptStoryChange()">שמור עריכה</ion-button>
@@ -144,10 +152,14 @@
           <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
         </ion-card>
 
-        <ion-card text- center id="Edit-Association-Info" [hidden]="true">
-          <p text-center>עריכת מידע </p>
-          <ion-button>הוסף</ion-button>
-          <ion-button>מחק</ion-button>
+
+        <ion-card text-center id="Edit-Association-Info" [hidden]="true">
+          <h2 text-center>עריכת אודות העמותה</h2>
+          <ejs-richtexteditor text-right id='info-editor' [(value)]='association_info' [toolbarSettings]='tools'
+            [quickToolbarSettings]='quickTools'>
+          </ejs-richtexteditor>
+
+          <ion-button (click)="saveInfoEdit()">שמור עריכה</ion-button>
         </ion-card>
 
         <ion-card text-center id="View-History-Clients" [hidden]="true">
@@ -163,7 +175,7 @@
                     <ion-row>
                       <ion-input type="date" id="historyToDate1" (change)='adminHistoryLimitMaxDate()' text-right>
                       </ion-input>
-                     </ion-row>
+                    </ion-row>
                   </ion-col>
                 </ion-col>
                 <ion-col fixed=true style="border: 1px solid">
@@ -268,11 +280,74 @@
         </ion-card>
 
         <ion-card text-center id="Edit-Events" [hidden]="true">
-          <p text-center>עריכת ארועים </p>
-          <ion-button> חיפוש ארוע</ion-button>
-          <ion-button> הוספת ארוע </ion-button>
-          <ion-button> הסרת ארוע</ion-button>
+          <h2 text-center>עריכת אירועים</h2>
+          <ion-button> חיפוש אירוע</ion-button>
+          <ion-button color="success" (click)="addEventDetails()">הוספת אירוע</ion-button>
+
+          <h3 text-center>רשימת אירועים </h3>
+          <ion-card>
+            <table id="tables" text-center>
+              <thead>
+                <tr>
+                  <th text-center>עריכת האירוע</th>
+                  <th text-center>תאריך האירוע</th>
+                  <th text-center>שם האירוע</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor='let event of eventsArray'>
+                  <td>
+                    <ion-button color="danger" (click)="deleteEvent(event)">מחק</ion-button>
+                    <ion-button (click)="editEvent(event)">עריכה</ion-button>
+                  </td>
+                  <td *ngIf='event'>
+                    {{ event.date | date: "dd/MM/yyyy" }}
+                  </td>
+                  <td *ngIf='event'>
+                    {{ event.title }}
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </ion-card>
+
+          <ion-card id='events-input' [hidden]="true">
+            <ion-card-header>
+              <h4 text-right>: שם האירוע</h4>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-input type="text" #eventitle style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
+                [(value)]='event_title' placeholder="שם האירוע"></ion-input>
+            </ion-card-content>
+
+            <ion-card-header>
+              <h4 text-right>: תאריך האירוע</h4>
+            </ion-card-header>
+            <ion-card-content>
+              <!-- <ion-input type="text" #eventDate style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
+                  [(value)]='event_date' placeholder=" DD/MM/YYYY תאריך האירוע. יש לכתוב בפורמט "></ion-input> -->
+
+              <ion-input type="date" #eventDate style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
+                [(value)]='event_date'></ion-input>
+            </ion-card-content>
+
+            <ion-card-header text-right>
+              <h4>:תיאור האירוע</h4>
+            </ion-card-header>
+            <ion-card-content>
+              <ejs-richtexteditor text-right placeholder="תיאור האירוע" id='event-editor' [(value)]='event_content'
+                [toolbarSettings]='tools' [quickToolbarSettings]='quickTools'>
+              </ejs-richtexteditor>
+            </ion-card-content>
+
+            <ion-button id='save-event-edit' (click)="saveEvent()">שמור</ion-button>
+          </ion-card>
+
+
         </ion-card>
+
       </ion-col>
     </ion-row>
   </ion-grid>

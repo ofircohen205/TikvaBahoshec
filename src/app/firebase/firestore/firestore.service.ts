@@ -255,6 +255,10 @@ export class FirestoreService {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({description});
   }
 
+  public editStoryTitle(storyId, title) {
+    this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({title});
+  }
+
   public confirmStory(storyId, approved) {
     this.firestore.collection(this.STORIES_COLLECTION).doc(storyId).update({approved});
   }
@@ -280,6 +284,14 @@ export class FirestoreService {
 
   public updateImageArray(images): void {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ images });
+  }
+
+  public getAssociationInfo(): Observable<any> {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public updateAssociationInfo(info): void {
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ info });
   }
 
 }

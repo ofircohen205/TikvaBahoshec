@@ -7,11 +7,13 @@ import { IonicModule } from '@ionic/angular';
 
 import { ChatPage } from './chat.page';
 import { ChatBubbleComponent } from '../chat-bubble/chat-bubble.component';
+import { LockedRoomGuard } from '../global/locked-room/locked-room.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: ChatPage
+    component: ChatPage,
+    canActivate: [LockedRoomGuard]
   }
 ];
 
