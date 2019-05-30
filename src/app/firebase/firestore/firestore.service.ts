@@ -38,6 +38,7 @@ export class FirestoreService {
     });
   }
 
+ 
   public getChatRoom(chatId): Observable<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).valueChanges();
   }
@@ -48,7 +49,6 @@ export class FirestoreService {
   public getOpenChatRooms(): Observable<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true)).valueChanges();
   }
-
   public updateChatRooms(chatRoomId, supportRepName, supportRepId): void {
     const chatRoomData = {
       occupied : true,
