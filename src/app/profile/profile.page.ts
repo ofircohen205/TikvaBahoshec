@@ -39,7 +39,9 @@ export class ProfilePage implements OnInit {
         }
       }
     });
-    this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result => {
+      this.firestore.getSupportRepNameList().subscribe(r => {
+      });
+      this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result => {
       if (result['inShift']) {
         document.getElementById('inShiftButton').textContent = 'במשמרת';
         document.getElementById('inShiftButton').setAttribute('color', 'success');

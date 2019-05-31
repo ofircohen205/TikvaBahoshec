@@ -84,10 +84,51 @@ export class SupportRepProfileComponent implements OnInit {
     for (const v of list) {
       const tr = document.createElement('tr');
 
-      const button = document.createElement('ion-button');
       const td1 = document.createElement('td');
-      td1.appendChild(button);
-      td1.id = 'supRepTable1button_' + index;
+      td1.style.border = ' 1px solid #ddd';
+      td1.style.padding = '8px';
+      td1.style.borderCollapse = 'collapse';
+      td1.textContent = index.toString();
+
+      const td2 = document.createElement('td');
+      td2.style.border = ' 1px solid #ddd';
+      td2.style.padding = '8px';
+      td2.style.borderCollapse = 'collapse';
+      // this.firestore.getSupportRepName(v.SupportRepID)
+      td2.textContent = v.ClientName;
+
+      const td3 = document.createElement('td');
+      td3.style.border = ' 1px solid #ddd';
+      td3.style.padding = '8px';
+      td3.style.borderCollapse = 'collapse';
+      td3.textContent = new Date(v.timestamp).toLocaleString();
+
+      const td4 = document.createElement('td');
+      const name = '';
+      td4.style.border = ' 1px solid #ddd';
+      td4.style.padding = '8px';
+      td4.style.borderCollapse = 'collapse';
+      if (v.SupportRepName !== '' && v.SupportRepName != null) {
+        td4.textContent = v.SupportRepName;
+      } else {
+       // console.log('kaka2');
+        td4.textContent = '';
+      }
+
+      const td5 = document.createElement('td');
+      td5.style.border = ' 1px solid #ddd';
+      td5.style.padding = '8px';
+      td5.style.borderCollapse = 'collapse';
+      if (v.occupied === true) {
+        td5.textContent = 'בטיפול';
+      } else {
+        td5.textContent = 'לא בטיפול';
+      }
+
+      const button = document.createElement('ion-button');
+      const td6 = document.createElement('td');
+      td6.appendChild(button);
+      td6.id = 'supRepTable1button_' + index;
       button.innerHTML = 'שיחה מחכה לנציג';
       button.color = 'success';
       if(!this.supportRepInShift){
@@ -98,50 +139,11 @@ export class SupportRepProfileComponent implements OnInit {
         button.innerHTML = 'שיחה בטיפול';
         button.color = 'danger';
       }
-      td1.style.color = 'white';
-      td1.style.border = ' 1px solid #ddd';
-      td1.style.padding = '8px';
-      td1.style.borderCollapse = 'collapse';
-
-      const td2 = document.createElement('td');
-      td2.style.border = ' 1px solid #ddd';
-      td2.style.padding = '8px';
-      td2.style.borderCollapse = 'collapse';
-      if (v.occupied === true) {
-        td2.textContent = 'בטיפול';
-      } else {
-        td2.textContent = 'לא בטיפול';
-      }
-
-      const td3 = document.createElement('td');
-      const name = '';
-      td3.style.border = ' 1px solid #ddd';
-      td3.style.padding = '8px';
-      td3.style.borderCollapse = 'collapse';
-      if (v.SupportRepName !== '' && v.SupportRepName != null) {
-        td3.textContent = v.SupportRepName;
-      } else {
-       // console.log('kaka2');
-        td3.textContent = '';
-      }
-      const td4 = document.createElement('td');
-      td4.style.border = ' 1px solid #ddd';
-      td4.style.padding = '8px';
-      td4.style.borderCollapse = 'collapse';
-      td4.textContent = new Date(v.timestamp).toLocaleString();
-
-      const td5 = document.createElement('td');
-      td5.style.border = ' 1px solid #ddd';
-      td5.style.padding = '8px';
-      td5.style.borderCollapse = 'collapse';
-      // this.firestore.getSupportRepName(v.SupportRepID)
-      td5.textContent = v.ClientName;
-
-      const td6 = document.createElement('td');
+      td6.style.color = 'white';
       td6.style.border = ' 1px solid #ddd';
       td6.style.padding = '8px';
       td6.style.borderCollapse = 'collapse';
-      td6.textContent = index.toString();
+
       tr.appendChild(td1);
       tr.appendChild(td2);
       tr.appendChild(td3);
@@ -159,7 +161,7 @@ export class SupportRepProfileComponent implements OnInit {
       tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
       tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
       const trChildren = tbodyChildrens[i].childNodes;
-      trChildren[0].addEventListener('click', () => this.onclickTable1(tbodyChildrens[i], list, i));
+      trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickTable1(tbodyChildrens[i], list, i));
     }
   }
 
@@ -177,77 +179,78 @@ export class SupportRepProfileComponent implements OnInit {
     for (const v of list) {
       const tr = document.createElement('tr');
 
-      const button1 = document.createElement('ion-button');
       const td1 = document.createElement('td');
-      td1.appendChild(button1);
-      td1.id = 'supRepTable2button1_' + index;
-      button1.innerHTML = 'סגור שיחה';
-      button1.color = 'success';
-      td1.style.color = 'white';
       td1.style.border = ' 1px solid #ddd';
       td1.style.padding = '8px';
       td1.style.borderCollapse = 'collapse';
+      td1.textContent = index.toString();
 
-
-      const button2 = document.createElement('ion-button');
       const td2 = document.createElement('td');
-      td2.appendChild(button2);
-      td2.id = 'supRepTable2button2_' + index;
-      button2.innerHTML = 'מילוי טופס לקוח';
-      button2.color = 'success';
-      td2.style.color = 'white';
       td2.style.border = ' 1px solid #ddd';
       td2.style.padding = '8px';
       td2.style.borderCollapse = 'collapse';
+      td2.textContent = v.ClientName;
 
-      const button3 = document.createElement('ion-button');
       const td3 = document.createElement('td');
-      td3.appendChild(button3);
-      td3.id = 'supRepTable2button3_' + index;
-      button3.innerHTML = 'כנס לשיחה';
-      button3.color = 'success';
-      td3.style.color = 'white';
       td3.style.border = ' 1px solid #ddd';
       td3.style.padding = '8px';
       td3.style.borderCollapse = 'collapse';
+      td3.textContent = new Date(v.timestamp).toLocaleString();
 
       const td4 = document.createElement('td');
+      const name = '';
       td4.style.border = ' 1px solid #ddd';
       td4.style.padding = '8px';
       td4.style.borderCollapse = 'collapse';
-      if (v.occupied === true) {
-        td4.textContent = 'בטיפול';
+      if (v.SupportRepName !== '' && v.SupportRepName !== null) {
+        td4.textContent = v.SupportRepName;
       } else {
-        td4.textContent = 'לא בטיפול';
+        td4.textContent = 'no support name';
       }
 
       const td5 = document.createElement('td');
-      const name = '';
       td5.style.border = ' 1px solid #ddd';
       td5.style.padding = '8px';
       td5.style.borderCollapse = 'collapse';
-      if (v.SupportRepName !== '' && v.SupportRepName !== null) {
-        td5.textContent = v.SupportRepName;
+      if (v.occupied === true) {
+        td5.textContent = 'בטיפול';
       } else {
-        td5.textContent = 'no support name';
+        td5.textContent = 'לא בטיפול';
       }
+
+      const button1 = document.createElement('ion-button');
       const td6 = document.createElement('td');
+      td6.appendChild(button1);
+      td6.id = 'supRepTable2button1_' + index;
+      button1.innerHTML = 'כנס לשיחה';
+      button1.color = 'success';
+      td6.style.color = 'white';
       td6.style.border = ' 1px solid #ddd';
       td6.style.padding = '8px';
       td6.style.borderCollapse = 'collapse';
-      td6.textContent = new Date(v.timestamp).toLocaleString();
 
+      const button2 = document.createElement('ion-button');
       const td7 = document.createElement('td');
+      td7.appendChild(button2);
+      td7.id = 'supRepTable2button2_' + index;
+      button2.innerHTML = 'מילוי טופס לקוח';
+      button2.color = 'success';
+      td7.style.color = 'white';
       td7.style.border = ' 1px solid #ddd';
       td7.style.padding = '8px';
       td7.style.borderCollapse = 'collapse';
-      td7.textContent = v.ClientName;
 
+      const button3 = document.createElement('ion-button');
       const td8 = document.createElement('td');
+      td8.appendChild(button3);
+      td8.id = 'supRepTable2button3_' + index;
+      button3.innerHTML = 'סגור שיחה';
+      button3.color = 'success';
+      td8.style.color = 'white';
       td8.style.border = ' 1px solid #ddd';
       td8.style.padding = '8px';
       td8.style.borderCollapse = 'collapse';
-      td8.textContent = index.toString();
+
       tr.appendChild(td1);
       tr.appendChild(td2);
       tr.appendChild(td3);
@@ -267,9 +270,9 @@ export class SupportRepProfileComponent implements OnInit {
       tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
       tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
       const trChildren = tbodyChildrens[i].childNodes;
-      trChildren[0].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[0], list, i));
-      trChildren[1].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[1], list, i));
-      trChildren[2].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[2], list, i));
+      trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[trChildren.length - 1], list, i));
+      trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[trChildren.length - 2], list, i));
+      trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickTable2(tbodyChildrens[i].childNodes[trChildren.length - 3], list, i));
     }
 
   }
@@ -282,7 +285,7 @@ export class SupportRepProfileComponent implements OnInit {
   }
 
   onclickTable1(e, list, index) {
-    if (e.childNodes[1].textContent === 'לא בטיפול') {
+    if (e.childNodes[e.childNodes.length - 2].textContent === 'לא בטיפול' && this.supportRepInShift) {
       this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.firestore.updateChatRooms(list[index]['ChatRoomId'], result['name'], this.userAuth.auth.currentUser.uid);
       window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
@@ -291,16 +294,15 @@ export class SupportRepProfileComponent implements OnInit {
    }
 
   onclickTable2(e, list, index) {
-    if (e['id'] === 'supRepTable2button1_' + (index + 1)) {
+    if (e['id'] === 'supRepTable2button3_' + (index + 1)) {
       if (confirm('האם את/ה בטוח/ה רוצה לסגור את השיחה')) {
         this.firestore.updateChatRoomOpenField( list[index]['ChatRoomId'], false);
       }
     }
     if (e['id'] === 'supRepTable2button2_' + (index + 1)) {
-      console.log(list['ClientID']) ;
-      this.global.openClient(list[index]['ClientID']);
+      this.openClient(list[index]['ClientID']);
     }
-    if (e['id'] === 'supRepTable2button3_' + (index + 1)) {
+    if (e['id'] === 'supRepTable2button1_' + (index + 1)) {
       window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
    }
@@ -470,6 +472,10 @@ sortByOpenRoomState(stateStatus, index, id, list, table) {
 
   openRoom(roomId) {
     window.open('/chat/' + roomId, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+  }
+
+  openClient(clientId){
+    window.open('/client-profile/' + clientId, '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
   }
 
   downloadChatMsg(roomId) {
