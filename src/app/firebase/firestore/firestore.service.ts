@@ -215,15 +215,26 @@ export class FirestoreService {
   /* CALENDER COLLECTION FUNCTIONS */
   /*********************************/
   public createEvent(title, date, description): void {
-    this.firestore.collection(this.CALENDER_COLLECTION).add({ title, date, description });
+    this.firestore.collection(this.CALENDER_COLLECTION).add({ title, date, description, id: null })
+    .then(docRef => {
+      console.log("Document written with ID: ", docRef.id);
+      this.firestore.collection(this.CALENDER_COLLECTION).doc(docRef.id).update({ id : docRef.id});
+      //console.log("You can now also access .this as expected: ", this.foo)
+  })
+  .catch(error => console.error("Error adding document: ", error))
   }
 
   public getEvents(): Observable<any> {
     return this.firestore.collection(this.CALENDER_COLLECTION).valueChanges();
   }
 
+
   public removeEvent(eventId): void {
     this.firestore.collection(this.CALENDER_COLLECTION).doc(eventId).delete();
+  }
+
+  public editEvent(event, title, date, description) {
+    this.firestore.collection(this.CALENDER_COLLECTION).doc(event).update({title, date, description});
   }
 
 

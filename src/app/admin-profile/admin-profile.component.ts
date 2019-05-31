@@ -17,7 +17,7 @@ import { Location } from '@angular/common';
 import { ValueAccessor } from '@ionic/angular/dist/directives/control-value-accessors/value-accessor';
 import { getName } from 'ionicons/dist/types/icon/utils';
 import * as firebase from 'firebase';
-import { text } from '@angular/core/src/render3';
+import { text, element } from '@angular/core/src/render3';
 import { Title } from '@angular/platform-browser';
 
 
@@ -62,8 +62,11 @@ export class AdminProfileComponent implements OnInit {
 
   @ViewChild('eventitle') event_title;
   @ViewChild('eventDate') event_date;
+  @ViewChild('eventSearch') event_search = null;
   event_content: string = null;
-  eventsArray: string[] = [];
+  is_new_event_flag: boolean;
+  eventsArray: any[] = [];
+  event_to_change: any;
   association_info: string;
 
   @ViewChild('title') title;
@@ -628,7 +631,6 @@ export class AdminProfileComponent implements OnInit {
     //   console.log(r);
     // })
     this.firestore.getStoriesId().subscribe(results => {
-      console.log(results);
       results.forEach(result => {
         const id = result.payload.doc.id;
         const data = result.payload.doc.data();
@@ -806,21 +808,75 @@ export class AdminProfileComponent implements OnInit {
 
   addEventDetails() {
     document.getElementById('events-input').hidden = false;
+    this.is_new_event_flag = true;
   }
   saveEvent() {
-    console.log("event_title = " + this.event_title.value);
-    console.log("event_date = " + this.event_date.value);
-    console.log("typeof (event_date) = " + typeof(this.event_date.value));
-    
-    this.firestore.createEvent(this.event_title.value, this.event_date.value, this.event_content);
-    //this.eventsArray.push(this.event_title.value, this.event_date.value, this.event_content);
-    
+    if (this.is_new_event_flag === true) {
+      this.firestore.createEvent(this.event_title.value, this.event_date.value, this.event_content);
+      alert("האירוע נוסף בהצלחה!");
+    }
+    else  //this.is_new_event_flag === false
+      this.firestore.editEvent(this.event_to_change.id, this.event_title.value, this.event_date.value, this.event_content);
+    alert("האירוע שונה בהצלחה!");
   }
 
-  //need to do the edit button, delete button and search button
- 
+  //need to do the delete button and search button
+
+  editEvent(event) {
+    document.getElementById('events-input').hidden = false;
+    this.event_title.value = event.title;
+    this.event_date.value = event.date;
+    this.event_content = event.description;
+    this.is_new_event_flag = false;
+    this.event_to_change = event;
+  }
 
 
+  async deleteEvent(event) {
+    const alert = await this.alertController.create({
+      header: 'אישור מחיקה',
+      message: `האם את/ה בטוח/ה שברצונך למחוק את האירוע?`,
+      buttons: [
+        { text: 'חזור' },
+        {
+          text: 'מחק',
+          handler: () => {
+            this.firestore.removeEvent(event.id);
+            document.getElementById('events-input').hidden = true;
+          }
+        }]
+    });
+    alert.present();
+  }
+
+  searchEvent() {
+    // this.eventsArray.forEach(event => {
+    //console.log("event.title = " + event.title);
+    //console.log("event_search = " + this.event_search.value)
+    let line;
+    for (let i = 0; i < this.eventsArray.length; i++) {
+      if (this.eventsArray[i].title === this.event_search.value) {
+        console.log("found " + this.eventsArray[i].title);
+        line = i;
+        let elment = document.getElementById(this.eventsArray[line].id);
+        elment.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+        document.getElementById(this.eventsArray[line].id).style.background = "#ffd78e";
+
+        let background;
+        if (line%2 === 0)
+            background = "white";
+        else
+            background = "#f2f2f2";
+
+        setTimeout(() => {
+          document.getElementById(this.eventsArray[line].id).style.background = background}, 3000);
+       break;   
+      }
+    }
+  }
 
 
-}
+} //end of AdminProfileComponent

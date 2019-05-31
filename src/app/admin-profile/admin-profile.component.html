@@ -281,41 +281,39 @@
 
         <ion-card text-center id="Edit-Events" [hidden]="true">
           <h2 text-center>עריכת אירועים</h2>
-          <ion-button> חיפוש אירוע</ion-button>
           <ion-button color="success" (click)="addEventDetails()">הוספת אירוע</ion-button>
+          <br/>
+          <ion-button (click) = "searchEvent()"> חיפוש אירוע</ion-button>
+          <ion-input type = "text" #eventSearch [(value)] = "event_search" placeholder = "שם האירוע"></ion-input>
 
-          <h3 text-center>רשימת אירועים </h3>
+          <h3 text-center>רשימת אירועים</h3>
           <ion-card>
             <table id="tables" text-center>
               <thead>
                 <tr>
-                  <th text-center>עריכת האירוע</th>
-                  <th text-center>תאריך האירוע</th>
                   <th text-center>שם האירוע</th>
+                  <th text-center>תאריך האירוע</th> 
+                  <th text-center>עריכת האירוע</th>
                 </tr>
               </thead>
 
               <tbody>
-                <tr *ngFor='let event of eventsArray'>
+                <tr *ngFor='let event of eventsArray' [attr.id]="event.id">
+                  <td *ngIf='event'>{{ event.title }}</td>
+                  <td *ngIf='event'>{{ event.date | date: "dd/MM/yyyy" }}</td>
                   <td>
+                    <ion-button (click)="editEvent(event)">עריכה</ion-button>  
                     <ion-button color="danger" (click)="deleteEvent(event)">מחק</ion-button>
-                    <ion-button (click)="editEvent(event)">עריכה</ion-button>
-                  </td>
-                  <td *ngIf='event'>
-                    {{ event.date | date: "dd/MM/yyyy" }}
-                  </td>
-                  <td *ngIf='event'>
-                    {{ event.title }}
                   </td>
                 </tr>
 
               </tbody>
             </table>
-          </ion-card>
 
+          </ion-card>
           <ion-card id='events-input' [hidden]="true">
             <ion-card-header>
-              <h4 text-right>: שם האירוע</h4>
+              <h4 text-right>שם האירוע:</h4>
             </ion-card-header>
             <ion-card-content>
               <ion-input type="text" #eventitle style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
@@ -323,18 +321,15 @@
             </ion-card-content>
 
             <ion-card-header>
-              <h4 text-right>: תאריך האירוע</h4>
+              <h4 text-right>תאריך האירוע:</h4>
             </ion-card-header>
             <ion-card-content>
-              <!-- <ion-input type="text" #eventDate style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
-                  [(value)]='event_date' placeholder=" DD/MM/YYYY תאריך האירוע. יש לכתוב בפורמט "></ion-input> -->
-
               <ion-input type="date" #eventDate style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
                 [(value)]='event_date'></ion-input>
             </ion-card-content>
 
             <ion-card-header text-right>
-              <h4>:תיאור האירוע</h4>
+              <h4>תיאור האירוע:</h4>
             </ion-card-header>
             <ion-card-content>
               <ejs-richtexteditor text-right placeholder="תיאור האירוע" id='event-editor' [(value)]='event_content'
@@ -344,8 +339,6 @@
 
             <ion-button id='save-event-edit' (click)="saveEvent()">שמור</ion-button>
           </ion-card>
-
-
         </ion-card>
 
       </ion-col>
