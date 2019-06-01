@@ -5,15 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ChatPage } from './chat.page';
-import { ChatBubbleComponent } from '../chat-bubble/chat-bubble.component';
-import { LockedRoomGuard } from '../global/locked-room/locked-room.guard';
+import { ClientProfilePage } from './client-profile.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ChatPage,
-    canActivate: [LockedRoomGuard]
+    component: ClientProfilePage
   }
 ];
 
@@ -24,9 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [
-    ChatPage,
-    ChatBubbleComponent
-  ]
+  declarations: [ClientProfilePage]
 })
-export class ChatPageModule {}
+export class ClientProfilePageModule {}

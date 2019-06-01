@@ -4,7 +4,7 @@
       <img style="display:inline-block" src="../assets/logo/association_logo.jpg" />
     </ion-thumbnail>
     <a href='/home' style="color: white; text-decoration: none;">
-      <ion-title text-right>תקווה בחושך</ion-title>
+      <ion-title text-right>תקווה בחושך - כניסת נציגים</ion-title>
     </a>
   </ion-toolbar>
 </ion-header>
@@ -36,6 +36,12 @@
       <ion-col text-center>
         <ion-button (click)='login()'>התחבר</ion-button>
         <ion-button (click)='forgotPassword()'>שכחתי סיסמה</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col id='alreadyLogged' hidden='true'>
+        אתה כבר מחובר למשתמש
       </ion-col>
     </ion-row>
 

@@ -1,26 +1,26 @@
 <ion-header>
     <ion-toolbar color="primary">
         <ion-thumbnail slot="start">
-            <img style="display:inline-block" src="../assets/logo/association_logo.jpg" />
+            <img style="display:inline-block;" src="../assets/logo/association_logo.jpg" />
         </ion-thumbnail>
         <a href='/home' style="color: white; text-decoration: none;">
-            <ion-title text-right>תקווה בחושך</ion-title>
+            <ion-title id='title-header' text-right>תקווה בחושך</ion-title>
         </a>
     </ion-toolbar>
 
     <ion-toolbar>
         <ion-segment color="dark">
-            <ion-segment-button value="chat" (click)="userDetails()">
-                צ'אט עם נציג
-            </ion-segment-button>
-            <ion-segment-button value="calender" (click)=(onclick($event))>
-                אירועים
+            <ion-segment-button value="home" checked (click)=(onclick($event))>
+                אודות
             </ion-segment-button>
             <ion-segment-button value="story" (click)=(onclick($event))>
                 סיפורים
             </ion-segment-button>
-            <ion-segment-button value="home" checked (click)=(onclick($event))>
-                אודות
+            <ion-segment-button value="calender" (click)=(onclick($event))>
+                אירועים
+            </ion-segment-button>
+            <ion-segment-button value="chat" (click)="userDetails()">
+                צ'אט עם נציג
             </ion-segment-button>
         </ion-segment>
     </ion-toolbar>

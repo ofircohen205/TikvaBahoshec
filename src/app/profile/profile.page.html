@@ -5,20 +5,20 @@
             <img style="display:inline-block" src="../assets/logo/association_logo.jpg" />
         </ion-thumbnail>
         <a href='/home' style="color: white; text-decoration: none;">
-            <ion-title text-right>תקווה בחושך</ion-title>
+            <ion-title text-right>תקווה בחושך - פרופיל ניהול</ion-title>
         </a>
     </ion-toolbar>
 
-    
+
     <ion-grid>
         <ion-row>
-            <ion-col >
-                <ion-button style="margin-left: 10%" (click) = 'logout()'>
-                    התנתק
+            <ion-col>
+                <ion-button id='inShiftButton' style="margin-right: 50%" color="danger" (click)="inShift()">
+                    לא במשמרת
                 </ion-button>
             </ion-col>
-            <ion-col >
-                <ion-toolbar  id='toolbarHeader' #toolbarHeader hidden='true' >
+            <ion-col>
+                <ion-toolbar id='toolbarHeader' #toolbarHeader hidden='true'>
                     <ion-segment>
                         <ion-segment-button value="supportRep" checked (click)=(onclick($event))>
                             דף נציג
@@ -30,19 +30,22 @@
                 </ion-toolbar>
             </ion-col>
             <ion-col>
-                <ion-button id='inShiftButton' style="margin-left: 60%" color ="danger" (click)="inShift()">
-                    לא במשמרת
+                <ion-button color="secondary" style="margin-right: 5%" (click)='updatePassword()'>
+                    שנה סיסמה
+                </ion-button>
+                <ion-button style="margin-right: 10%" (click)='logout()'>
+                    התנתק
                 </ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>
-    
+
 
 </ion-header>
 
 <ion-content>
     <app-support-rep-profile #supportRep id="supportRep" [hidden]=false></app-support-rep-profile>
     <app-admin-profile #admin id="admin" [hidden]=true></app-admin-profile>
-    
+
 
 </ion-content>

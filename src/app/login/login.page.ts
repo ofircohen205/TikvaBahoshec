@@ -30,22 +30,19 @@ export class LoginPage {
     const email = this.emailField.value;
     const password = this.passField.value;
     // ! check if email and password aren't 'undefined'
-    
+
     this.userAuth.auth.signInWithEmailAndPassword(email, password)
     .then(result => {
-      this.loadingRef.dismiss()
+      this.loadingRef.dismiss();
       this.router.navigateByUrl('/profile');
     })
     .catch(async (error) => {
       this.loadingRef.dismiss();
-      var errorMSG = await this.alertController.create({ 
-        message:'User name or Password are incorrect, Please try again',
-      buttons:['OK'] ,
+      const errorMSG = await this.alertController.create({
+        message: 'User name or Password are incorrect, Please try again',
+        buttons: ['OK'] ,
       });
-      
       await errorMSG.present();
-      
-      
     });
   }
 
@@ -79,9 +76,6 @@ export class LoginPage {
 
  async dismissLoading() {
    await this.loadingRef.dismiss();
-   
   }
-
-  
 
 }

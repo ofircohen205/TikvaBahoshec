@@ -74,3 +74,28 @@
     border-radius: 10px;
     margin-bottom: 10px;  
 }
+
+#manage-gallery{
+ display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+.p{
+  cursor: pointer;
+}
+
+#info-editor_rte-edit-view {
+  padding-top: 50px;
+}
+
+#story-editor_rte-edit-view {
+  padding-top: 50px;
+}
+
+#event-editor_rte-edit-view {
+  padding-top: 50px;
+}
+
+tr.active {
+  background-color: yellow;
+}
