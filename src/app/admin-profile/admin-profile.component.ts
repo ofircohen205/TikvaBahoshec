@@ -853,21 +853,18 @@ export class AdminProfileComponent implements OnInit {
   }
 
   searchEvent() {
-    // this.eventsArray.forEach(event => {
-    //console.log("event.title = " + event.title);
-    //console.log("event_search = " + this.event_search.value)
-    let line;
+    let line = -1;
     for (let i = 0; i < this.eventsArray.length; i++) {
       if (this.eventsArray[i].title === this.event_search.value) {
-        console.log("found " + this.eventsArray[i].title);
-        line = i;
-        let elment = document.getElementById(this.eventsArray[line].id);
-        elment.scrollIntoView({
+        line = i; //line in the table
+        let element = document.getElementById(this.eventsArray[line].id);
+        element.scrollIntoView({
           behavior: 'smooth',
           block: 'center'
         });
         document.getElementById(this.eventsArray[line].id).style.background = "#ffd78e";
 
+        //after marking the needed line' paint the background back to it's normal color
         let background;
         if (line%2 === 0)
             background = "white";
@@ -879,6 +876,8 @@ export class AdminProfileComponent implements OnInit {
        break;   
       }
     }
+    if (line === -1)
+      alert("האירוע שחיפשת לא נמצא");
   }
 
 
