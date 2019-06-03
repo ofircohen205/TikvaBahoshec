@@ -502,7 +502,7 @@ export class AdminProfileComponent implements OnInit {
         text: 'הוסף',
         handler: data => {
           this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
-            this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
+            this.firestore.createSupportRep(res.user.uid, data.username, data.email, data.phone);
           }).catch(error => {
             alert.dismiss(); //here dismiss this alert
             const errAlert = this.alertController.create({
