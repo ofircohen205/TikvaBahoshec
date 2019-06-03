@@ -169,11 +169,11 @@ export class FirestoreService {
   /************************************/
   public createSupportRep(uid, name, email, phone): void {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
+      SupportRepID: uid,
       email,
       name,
       phone,
       inShift: false,
-      SupportRepID: uid,
       connectionTime: null,
     });
   }

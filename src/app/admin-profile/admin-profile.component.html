@@ -23,11 +23,11 @@
           <table id="tables" text-right>
             <thead>
               <tr>
-                <th text-center></th>
-                <th text-center>התחבר לאחרונה</th>
-                <th text-center>טלפון</th>
-                <th text-center>אימייל</th>
                 <th text-center>שם נציג</th>
+                <th text-center>אימייל</th>
+                <th text-center>טלפון</th>
+                <th text-center>התחבר לאחרונה</th>
+                <th text-center></th>
 
               </tr>
 
@@ -35,17 +35,18 @@
 
             <tbody text-right>
               <tr *ngFor="let supportRep of list | filter:filterText">
+            
+                <td>{{supportRep.name}}</td>
+                <td>{{supportRep.email}}</td>
+                <td>{{supportRep.phone}}</td>
+
+                <td>{{supportRep.connectionTime}}</td>
+              
                 <td>
                   <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
                   <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
                   <ion-button (click)="showHistory(supportRep)">הצג שיחות</ion-button>
                 </td>
-
-                <td>{{supportRep.connectionTime}}</td>
-                <td>{{supportRep.phone}}</td>
-                <td>{{supportRep.email}}</td>
-                <td>{{supportRep.name}}</td>
-
               </tr>
             </tbody>
 
@@ -56,21 +57,21 @@
             <table id="tables" text-right>
               <thead>
                 <tr>
-                  <th text-center></th>
-                  <th text-center>תאריך</th>
-                  <th text-center>שם לקוח</th>
                   <th text-center>שם נציג</th>
+                  <th text-center>שם לקוח</th>
+                  <th text-center>תאריך</th>
+                  <th text-center></th>
                 </tr>
 
               </thead>
               <tbody>
                 <tr *ngFor="let hist of supportRepHistory">
-                  <td>
-                    <ion-button [routerLink]="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button>
-                  </td>
-                  <td>{{hist.timestamp}}</td>
-                  <td>{{hist.ClientName}}</td>
                   <td>{{hist.SupportRepName}}</td>
+                  <td>{{hist.ClientName}}</td> 
+                  <td>{{hist.timestamp}}</td>
+                  <td>
+                  <ion-button [routerLink]="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button>
+                  </td>
                 </tr>
               </tbody>
 
