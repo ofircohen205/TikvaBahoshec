@@ -27,9 +27,9 @@
 <ion-footer>
 
     <ion-toolbar>
-        <h6 slot='end'>:הודעה</h6>
+        <h6 slot='start'>הודעה:</h6>
         <ion-input (keyup)='onKeyUp($event)' #messageField></ion-input>
-        <ion-button [disabled]='isMessageInvalid()' slot='start' (click)='sendMessage()'>שלח</ion-button>
+        <ion-button [disabled]='isMessageInvalid()' slot='end' (click)='sendMessage()'>שלח</ion-button>
     </ion-toolbar>
 
 </ion-footer>

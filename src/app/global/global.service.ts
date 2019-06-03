@@ -9,18 +9,19 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 })
 export class GlobalService {
 
+  anonymousNumber = 0;
+  currentChatRoomId = '';
+
   constructor(
     private alertController: AlertController,
     private userAuth: AngularFireAuth,
     private router: Router,
     private firestore: FirestoreService) {
     this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result['nextAnonymous']);
-   }
+  }
 
-  anonymousNumber = 0;
 
   async userDetails() {
-    console.log(this.anonymousNumber);
     const alert = await this.alertController.create({
       header: 'הכנס שם',
       message: 'הזן את שמך. אם אינך מעוניין לחץ על כפתור המשך',
@@ -41,7 +42,9 @@ export class GlobalService {
           });
           this.firestore.createChatRoom(data.name).then(result => {
             this.firestore.updateChatRoomId(result.id);
+            this.currentChatRoomId = result.id;
             this.firestore.updateChatClientId(result.id, clientId);
+            this.firestore.updateOccuipedByClientField(result.id, true);
             this.router.navigateByUrl('/chat/' + result.id);
           }).catch((error) => console.log(error));
         }

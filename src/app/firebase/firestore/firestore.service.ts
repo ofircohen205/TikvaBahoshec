@@ -29,6 +29,7 @@ export class FirestoreService {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
       open: true,
       occupied: false,
+      occupiedByClient: false,
       SupportRepID: null,
       SupportRepName: null,
       ClientID: null,
@@ -38,7 +39,6 @@ export class FirestoreService {
     });
   }
 
- 
   public getChatRoom(chatId): Observable<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).valueChanges();
   }
@@ -49,6 +49,7 @@ export class FirestoreService {
   public getOpenChatRooms(): Observable<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true)).valueChanges();
   }
+
   public updateChatRooms(chatRoomId, supportRepName, supportRepId): void {
     const chatRoomData = {
       occupied : true,
@@ -63,6 +64,17 @@ export class FirestoreService {
       open : openStatus
     };
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
+  }
+
+  public updateOccuipedByClientField(chatRoomId, occupiedStatus): void {
+    const chatRoomData = {
+      occupiedByClient: occupiedStatus
+    };
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
+  }
+
+  public getOccupiedByClientField(chatRoomId) {
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).valueChanges();
   }
 
   public getSupportRepOpenChatRooms(supportRepId): Observable<any> {
