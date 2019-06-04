@@ -96,6 +96,9 @@ export class GlobalService {
       inputs: [{
         name: 'password',
         placeholder: 'סיסמה'
+      }, {
+        name: 'validate-password',
+        placeholder: 'וידוא סיסמה'
       }],
       buttons: [{
         text: 'אישור',

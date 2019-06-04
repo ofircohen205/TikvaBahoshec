@@ -26,8 +26,12 @@
                 <th text-center>שם נציג</th>
                 <th text-center>אימייל</th>
                 <th text-center>טלפון</th>
-                <th text-center>התחבר לאחרונה</th>
-                <th text-center></th>
+                <th text-center>כתובת</th>
+                <th text-center>תעודת זהות</th>
+                <th text-center>מין</th>
+                <th text-center>מחיקת נציג</th>
+                <th text-center>עריכת נציג</th>
+                <th text-center>שיחות נציג</th>
 
               </tr>
 
@@ -39,12 +43,16 @@
                 <td>{{supportRep.name}}</td>
                 <td>{{supportRep.email}}</td>
                 <td>{{supportRep.phone}}</td>
-
-                <td>{{supportRep.connectionTime}}</td>
-              
+                <td>{{supportRep.address}}</td>
+                <td>{{supportRep.gender}}</td>
+                <td>{{supportRep.id}}</td>
                 <td>
                   <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
+                </td>
+                <td>
                   <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
+                </td>
+                <td>
                   <ion-button (click)="showHistory(supportRep)">הצג שיחות</ion-button>
                 </td>
               </tr>

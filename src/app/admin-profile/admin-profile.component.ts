@@ -462,7 +462,7 @@ export class AdminProfileComponent implements OnInit {
         } else {
           this.list.slice(this.list.indexOf(id), 1);
         }
-        //console.log(result);
+        // console.log(result);
       });
     });
   }
@@ -477,10 +477,27 @@ export class AdminProfileComponent implements OnInit {
   async addSupport() {
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',
+      cssClass: 'add-support',
       inputs: [
         {
           name: 'username',
           placeholder: 'שם הנציג'
+        },
+        {
+          name: 'id',
+          placeholder: 'תעודת זהות'
+        },
+        {
+          name: 'address',
+          placeholder: 'כתובת'
+        },
+        {
+          name: 'phone',
+          placeholder: 'מספר פלאפון'
+        },
+        {
+          name: 'gender',
+          placeholder: 'מין'
         },
         {
           name: 'email',
@@ -489,11 +506,7 @@ export class AdminProfileComponent implements OnInit {
         {
           name: 'password',
           placeholder: 'סיסמא'
-        },
-        {
-          name: 'phone',
-          placeholder: 'טלפון'
-        },
+        }
       ],
       buttons: [{
         text: 'חזור'
@@ -502,9 +515,9 @@ export class AdminProfileComponent implements OnInit {
         text: 'הוסף',
         handler: data => {
           this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
-            this.firestore.createSupportRep(res.user.uid, data.username, data.email, data.phone);
+            this.firestore.createSupportRep(res.user.uid, data.username, data.email, data.phone, data.id, data.address, data.gender);
           }).catch(error => {
-            alert.dismiss(); //here dismiss this alert
+            alert.dismiss(); // here dismiss this alert
             const errAlert = this.alertController.create({
               header: 'added failed',
               message: error,
@@ -523,17 +536,32 @@ export class AdminProfileComponent implements OnInit {
       inputs: [
         {
           name: 'username',
-          placeholder: x.name
+          placeholder: 'שם הנציג'
+        },
+        {
+          name: 'id',
+          placeholder: 'תעודת זהות'
+        },
+        {
+          name: 'address',
+          placeholder: 'כתובת'
+        },
+        {
+          name: 'phone',
+          placeholder: 'מספר פלאפון'
+        },
+        {
+          name: 'gender',
+          placeholder: 'מין'
         },
         {
           name: 'email',
-          placeholder: x.email
+          placeholder: 'אימייל'
         },
-
         {
-          name: 'phone',
-          placeholder: x.phone
-        },
+          name: 'password',
+          placeholder: 'סיסמא'
+        }
       ],
       buttons: [{
         text: 'חזור'
@@ -541,7 +569,7 @@ export class AdminProfileComponent implements OnInit {
       {
         text: 'שמור שינויים',
         handler: data => {
-          this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone);
+          this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone, data.id, data.address, data.gender);
           this.list[this.list.indexOf(x)].username = data.username;
           this.list[this.list.indexOf(x)].email = data.email;
           this.list[this.list.indexOf(x)].phone = data.phone;

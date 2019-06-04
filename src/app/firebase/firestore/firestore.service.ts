@@ -167,14 +167,16 @@ export class FirestoreService {
   /************************************/
   /* SUPPORT REP COLLECTION FUNCTIONS */
   /************************************/
-  public createSupportRep(uid, name, email, phone): void {
+  public createSupportRep(uid, name, email, phone, id, address, gender): void {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
       SupportRepID: uid,
       email,
       name,
       phone,
+      id,
+      address,
+      gender,
       inShift: false,
-      connectionTime: null,
     });
   }
 
@@ -191,8 +193,9 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
 
-  public updateSupportRepDetails(SupportRepID, name, email, phone): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, name, email, phone });
+  public updateSupportRepDetails(SupportRepID, name, email, phone, id, address, gender): void {
+// tslint:disable-next-line: max-line-length
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, name, email, phone, id, address, gender });
   }
 
   public updateSupportRepEmail(SupportRepID, email): void {
