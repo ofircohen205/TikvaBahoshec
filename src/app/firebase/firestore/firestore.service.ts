@@ -25,14 +25,14 @@ export class FirestoreService {
   /*****************************/
   /* CHAT COLLECTION FUNCTIONS */
   /*****************************/
-  public createChatRoom(username): Promise<any> {
+  public createChatRoom(username, id): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
       open: true,
       occupied: false,
       occupiedByClient: false,
       SupportRepID: null,
       SupportRepName: null,
-      ClientID: null,
+      ClientID: id,
       ClientName: username,
       ChatRoomId: null,
       timestamp: new Date().getTime()
@@ -99,9 +99,6 @@ export class FirestoreService {
     });
   }
 
-  public updateChatClientId(chatId, ClientID): void {
-    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
-  }
 
   public updateChatRoomId(chatId): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ChatRoomId: chatId });

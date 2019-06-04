@@ -36,17 +36,14 @@ export class GlobalService {
             data.name = 'אנונימי' + this.anonymousNumber;
             this.firestore.updateAnonNumber(this.anonymousNumber + 1);
           }
-          let clientId = '';
-          this.firestore.createClient(data.name).then(result => {
-            clientId = result.id;
+          this.firestore.createClient(data.name).then(result1 => {
+            this.firestore.createChatRoom(data.name, result1.id).then(result2 => {
+              this.currentChatRoomId = result2.id;
+              this.firestore.updateChatRoomId(result2.id);
+              this.firestore.updateOccuipedByClientField(result2.id, true);
+              this.router.navigateByUrl('/chat/' + result2.id);
+            }).catch((error) => console.log(error));
           });
-          this.firestore.createChatRoom(data.name).then(result => {
-            this.firestore.updateChatRoomId(result.id);
-            this.currentChatRoomId = result.id;
-            this.firestore.updateChatClientId(result.id, clientId);
-            this.firestore.updateOccuipedByClientField(result.id, true);
-            this.router.navigateByUrl('/chat/' + result.id);
-          }).catch((error) => console.log(error));
         }
       }]
     });

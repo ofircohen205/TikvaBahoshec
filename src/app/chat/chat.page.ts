@@ -46,7 +46,6 @@ export class ChatPage implements OnInit {
       this.clientName = result['ClientName'];
       this.supportRepId = result['SupportRepID'];
       this.supportRepName = result['SupportRepName'];
-      this.firestore.updateClientID(this.clientId);
     });
 
     this.firestore.getChatMessages(this.chatId).subscribe(result => {
