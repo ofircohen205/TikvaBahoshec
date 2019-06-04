@@ -114,6 +114,18 @@ export class GlobalService {
     alert.present();
   }
 
+  async invalidImage() {
+    const alert = await this.alertController.create({
+      header: 'קובץ אינו תקין',
+      message: 'סוג הקובץ שהעלית איננו תמונה. אנא העלה סוג קובץ אחר',
+      buttons: [{
+        text: 'אישור'
+      }]
+    });
+
+    alert.present();
+  }
+
   openClient(clientId) {
     window.open('/client-profile/' + clientId, '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
   }

@@ -294,7 +294,7 @@
           <ion-button color="success" (click)="addEventDetails()">הוספת אירוע</ion-button>
           <br/>
           <ion-button (click) = "searchEvent()"> חיפוש אירוע</ion-button>
-          <ion-input type = "text" #eventSearch [(value)] = "event_search" placeholder = "שם האירוע"></ion-input>
+          <ion-input type="text" #eventSearch [(value)]="event_search" placeholder="שם האירוע"></ion-input>
 
           <h3 text-center>רשימת אירועים</h3>
           <ion-card>

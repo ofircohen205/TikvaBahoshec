@@ -789,6 +789,11 @@ export class AdminProfileComponent implements OnInit {
 
   uploadFile() {
     const fileName = this.file.name;
+// tslint:disable-next-line: max-line-length
+    if (!(fileName.includes('.jpg') || fileName.includes('.jpeg') || fileName.includes('.png') || fileName.includes('.JPG') || fileName.includes('.JPEG') || fileName.includes('.PNG'))) {
+      this.global.invalidImage();
+      return;
+    }
     const filePath = 'assets/images/' + fileName;
     const task = this.afs.upload(filePath, this.file);
 
@@ -844,14 +849,14 @@ export class AdminProfileComponent implements OnInit {
   saveEvent() {
     if (this.is_new_event_flag === true) {
       this.firestore.createEvent(this.event_title.value, this.event_date.value, this.event_content);
-      alert("האירוע נוסף בהצלחה!");
-    }
-    else  //this.is_new_event_flag === false
+      alert('האירוע נוסף בהצלחה!');
+    } else {  // this.is_new_event_flag === false
       this.firestore.editEvent(this.event_to_change.id, this.event_title.value, this.event_date.value, this.event_content);
-    alert("האירוע שונה בהצלחה!");
+      alert('האירוע שונה בהצלחה!');
+    }
   }
 
-  //need to do the delete button and search button
+  // need to do the delete button and search button
 
   editEvent(event) {
     document.getElementById('events-input').hidden = false;
@@ -884,7 +889,7 @@ export class AdminProfileComponent implements OnInit {
     let line = -1;
     for (let i = 0; i < this.eventsArray.length; i++) {
       if (this.eventsArray[i].title === this.event_search.value) {
-        line = i; //line in the table
+        line = i; // line in the table
         let element = document.getElementById(this.eventsArray[line].id);
         element.scrollIntoView({
           behavior: 'smooth',
@@ -892,20 +897,22 @@ export class AdminProfileComponent implements OnInit {
         });
         document.getElementById(this.eventsArray[line].id).style.background = "#ffd78e";
 
-        //after marking the needed line' paint the background back to it's normal color
+        // after marking the needed line' paint the background back to it's normal color
         let background;
-        if (line%2 === 0)
-            background = "white";
-        else
-            background = "#f2f2f2";
+        if (line % 2 === 0) {
+          background = 'white';
+        } else {
+          background = '#f2f2f2';
+        }
 
         setTimeout(() => {
-          document.getElementById(this.eventsArray[line].id).style.background = background}, 3000);
-       break;   
+          document.getElementById(this.eventsArray[line].id).style.background = background; }, 3000);
+       break;
       }
     }
-    if (line === -1)
-      alert("האירוע שחיפשת לא נמצא");
+    if (line === -1) {
+      alert('האירוע שחיפשת לא נמצא');
+    }
   }
 
 

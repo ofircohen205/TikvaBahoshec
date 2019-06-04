@@ -90,8 +90,8 @@ export class ChatPage implements OnInit {
   }
 
   onKeyUp(data) {
-    const ENTER_KET_CODE = 13;
-    if (data.keyCode === ENTER_KET_CODE) {
+    const ENTER_KEY_CODE = 13;
+    if (data.keyCode === ENTER_KEY_CODE) {
       if (this.client_support_flag) {
         this.sendMessage('username');
       } else {

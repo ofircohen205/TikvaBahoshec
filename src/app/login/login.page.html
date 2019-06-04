@@ -10,6 +10,7 @@
 </ion-header>
 
 <ion-content>
+  
   <ion-grid>
     <ion-row>
       <ion-title text-center>כניסת נציגים</ion-title>
@@ -18,7 +19,7 @@
       <ion-col size='6' offset='3'>
         <ion-item>
           <ion-label position="floating">אימייל</ion-label>
-          <ion-input #email></ion-input>
+          <ion-input #email (keyup)='onKeyUp($event)'></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -27,7 +28,7 @@
       <ion-col size='6' offset='3'>
         <ion-item>
           <ion-label position="floating">סיסמה</ion-label>
-          <ion-input type='password' #password></ion-input>
+          <ion-input type='password' (keyup)='onKeyUp($event)' #password></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -38,13 +39,6 @@
         <ion-button (click)='forgotPassword()'>שכחתי סיסמה</ion-button>
       </ion-col>
     </ion-row>
-
-    <ion-row>
-      <ion-col id='alreadyLogged' hidden='true'>
-        אתה כבר מחובר למשתמש
-      </ion-col>
-    </ion-row>
-
   </ion-grid>
 
 </ion-content>
