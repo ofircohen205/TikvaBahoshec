@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ApplicationRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ApplicationRef, OnDestroy } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -31,7 +31,7 @@ import { Title } from '@angular/platform-browser';
 })
 
 
-export class AdminProfileComponent implements OnInit {
+export class AdminProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private alertController: AlertController,
@@ -45,6 +45,15 @@ export class AdminProfileComponent implements OnInit {
     private supportRepService: SupportRepsService
   ) { }
 
+  // Subscribe variables
+  support_rep_list_subscribe;
+  all_chat_room_subscribe;
+  image_array_subscribe;
+  association_subscribe;
+  events_subscribe;
+
+
+  // Variables
   chatRoomHistory: any[] = [];
   imageUrls: string[] = [];
   list: any[] = [];
@@ -92,23 +101,23 @@ export class AdminProfileComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.firestore.getSupportRepNameList().subscribe(result => {
+    this.support_rep_list_subscribe = this.firestore.getSupportRepNameList().subscribe(result => {
       this.supportRepList = result;
       this.initSupportSelectList();
     });
-    this.firestore.getAllChatRoom().subscribe(result1 => {
+    this.all_chat_room_subscribe = this.firestore.getAllChatRoom().subscribe(result1 => {
       this.chatRoomList = result1;
       this.createHistoryTable();
     });
-    this.firestore.getImageArray().subscribe(res => {
+    this.image_array_subscribe = this.firestore.getImageArray().subscribe(res => {
       this.imageUrls = res.images;
     });
 
-    this.firestore.getAssociationInfo().subscribe(result => {
+    this.association_subscribe = this.firestore.getAssociationInfo().subscribe(result => {
       this.association_info = result.info;
     });
 
-    this.firestore.getEvents().subscribe(result => {
+    this.events_subscribe = this.firestore.getEvents().subscribe(result => {
       this.eventsArray = result;
       // this.manageEvents();
     });
@@ -271,7 +280,6 @@ export class AdminProfileComponent implements OnInit {
       }
     }
         var tbodyChildrens = body.childNodes;
-        console.log(tbodyChildrens[0].childNodes[5]);
         for (let i = 0; i < body.childNodes.length; i++) {
           tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
           tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
@@ -920,4 +928,12 @@ export class AdminProfileComponent implements OnInit {
   }
 
 
-} //end of AdminProfileComponent
+  ngOnDestroy() {
+    this.events_subscribe.unsubscribe();
+    this.support_rep_list_subscribe.unsubscribe();
+    this.all_chat_room_subscribe.unsubscribe();
+    this.image_array_subscribe.unsubscribe();
+    this.association_subscribe.unsubscribe();
+  }
+
+} // end of AdminProfileComponent

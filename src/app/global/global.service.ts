@@ -50,25 +50,21 @@ export class GlobalService {
           });
 
           this.afiredb.database.ref('/sendmail').remove();
-         
-          var connectList =[]
+          let connectList =[];
           this.firestore.getInShiftSupportRep().subscribe(result => {
-            
             connectList = result;
-            connectList.forEach(x=>{
+            connectList.forEach(x => {
               this.afiredb.database.ref('/sendmail').push({
                 emailid: x['email'],
                 ClientName: data.name
-            })});            
-          }); 
+              });
+            });
+          });
         }
       }]
     });
-
-
     await alert.present();
   }
-  
 
   async readyForChat() {
     const alert = await this.alertController.create({
