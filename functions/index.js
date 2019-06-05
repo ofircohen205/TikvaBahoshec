@@ -23,7 +23,7 @@ const pdfdocument = require('pdfkit');
 
     var server = emailjs.server.connect({
         user: 'tikva.bahoshec@gmail.com',
-        password: 'CHANGE TO REAL PASSWORD',
+        password: 'tikvab173',
         host: 'smtp.gmail.com',
         ssl: true
     });
