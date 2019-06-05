@@ -1,30 +1,33 @@
-.search{
-   
+.search {
   width: 30%;
-  
   display: inline-block;
-
 }
+
 #tables {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-#tables td, #tables th {
+#tables td,
+#tables th {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-#tables tr:nth-child(even){background-color: #f2f2f2;}
+#tables tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
-#tables tr:hover {background-color: #ddd;}
+#tables tr:hover {
+  background-color: #ddd;
+}
 
 #tables th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #4CAF50;
+  background-color: #49C2FE;
   color: white;
 }
 
@@ -33,54 +36,59 @@
   height: 360px;
   overflow: auto;
   display: block;
-  }
-
-#adminHistorytable1  {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  #adminHistorytable1 td, #adminHistorytable1 th {
-    border: 1px solid #ddd;
-    padding: 8px;
-    border-collapse: collapse;
-  }
-  
-  #adminHistorytable1 tr:nth-child(even){background-color: #f2f2f2;};
-  
-  
-  //#supRepTBody1 tr:hover {background-color: #ddd;};
-  
-  #adminHistorytable1 th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
-    
-  }
-
-  #adminHistorytable1 tbody{
-    overflow-y: auto
-    
-  }
-
-  #rounded {
-    width: 100%;
-    height: 100px;
-    -moz-border-radius: 50px;
-    -webkit-border-radius: 50px;
-    border-radius: 10px;
-    margin-bottom: 10px;  
 }
 
-#manage-gallery{
- display: grid;
+#adminHistorytable1 {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#adminHistorytable1 td,
+#adminHistorytable1 th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-collapse: collapse;
+}
+
+#adminHistorytable1 tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+;
+
+
+//#supRepTBody1 tr:hover {background-color: #ddd;};
+
+#adminHistorytable1 th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #49C2FE;
+  color: white;
+
+}
+
+#adminHistorytable1 tbody {
+  overflow-y: auto
+}
+
+#rounded {
+  width: 100%;
+  height: 100px;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+#manage-gallery {
+  display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 10px;
 }
-.p{
+
+.p {
   cursor: pointer;
 }
 

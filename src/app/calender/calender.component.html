@@ -8,36 +8,40 @@
     integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
 <!-- <div class="container col-sm-4 col-md-8 col-lg-8 mt-5"> -->
-:<ion-card text-center>
+<ion-card text-center fixed>
 
-        <h3 class="card-header" id="monthAndYear"></h3>
-        <table class="table table-bordered table-responsive-md" id="calendar">
-            <thead>
-                <tr>
-                    <th>ראשון</th>
-                    <th>שני</th>
-                    <th>שלישי</th>
-                    <th>רביעי</th>
-                    <th>חמישי</th>
-                    <th>שישי</th>
-                    <th>שבת</th>
-                </tr>
-            </thead>
+    <h3 class="card-header" id="monthAndYear"></h3>
+    <table class="table table-bordered table-responsive-md" id="calendar">
+        <thead>
+            <tr>
+                <th>ראשון</th>
+                <th>שני</th>
+                <th>שלישי</th>
+                <th>רביעי</th>
+                <th>חמישי</th>
+                <th>שישי</th>
+                <th>שבת</th>
+            </tr>
+        </thead>
 
-            <tbody id="calendar-body">
+        <tbody id="calendar-body">
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center">
 
-            <button class="btn btn-outline-primary col-lg-4 col-md-6 col-sm-6" id="previous"
-                (click)="previous()"><span>&#8594;</span></button>
+        <button class="btn btn-outline-primary col-lg-4 col-md-6 col-sm-6" id="previous"
+            (click)="previous()"><span>&#8594;</span></button>
 
-            <button class="btn btn-outline-primary col-lg-4 col-md-6 col-sm-6" id="next" (click)="next()"><span>&#8592;</span> </button>
-        </div>
+        <button class="btn btn-outline-primary col-lg-4 col-md-6 col-sm-6" id="next"
+            (click)="next()"><span>&#8592;</span> </button>
+    </div>
 </ion-card>
 
+<ion-card id='event-description' text-right style="padding: 20px;">
+    <!-- <div id = 'event-description' text-right></div> -->
+</ion-card>
 
 
 

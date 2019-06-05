@@ -11,6 +11,10 @@ import { AngularFireDatabase } from '@angular/fire/database';
   providedIn: 'root'
 })
 export class GlobalService {
+
+  anonymousNumber = 0;
+  currentChatRoomId = '';
+
   constructor(
     private alertController: AlertController,
     private userAuth: AngularFireAuth,
@@ -18,12 +22,10 @@ export class GlobalService {
     private router: Router,
     private firestore: FirestoreService) {
     this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result['nextAnonymous']);
-   }
+  }
 
-  anonymousNumber = 0;
 
   async userDetails() {
-    console.log(this.anonymousNumber);
     const alert = await this.alertController.create({
       header: 'הכנס שם',
       message: 'הזן את שמך. אם אינך מעוניין לחץ על כפתור המשך',
@@ -38,31 +40,14 @@ export class GlobalService {
             data.name = 'אנונימי' + this.anonymousNumber;
             this.firestore.updateAnonNumber(this.anonymousNumber + 1);
           }
-          
-          let clientId = '';
-          this.firestore.createClient(data.name).then(result => {
-            clientId = result.id;
+          this.firestore.createClient(data.name).then(result1 => {
+            this.firestore.createChatRoom(data.name, result1.id).then(result2 => {
+              this.currentChatRoomId = result2.id;
+              this.firestore.updateChatRoomId(result2.id);
+              this.firestore.updateOccuipedByClientField(result2.id, true);
+              this.router.navigateByUrl('/chat/' + result2.id);
+            }).catch((error) => console.log(error));
           });
-          this.firestore.createChatRoom(data.name).then(result => {
-            this.firestore.updateChatRoomId(result.id);
-            this.firestore.updateChatClientId(result.id, clientId);
-            this.router.navigateByUrl('/chat/' + result.id);
-          }).catch((error) => console.log(error));
-          
-          this.afiredb.database.ref('/sendmail').remove();
-         
-
-          var connectList =[]
-          this.firestore.getInShiftSupportRep().subscribe(result => {
-            
-            connectList = result;
-            connectList.forEach(x=>{
-              this.afiredb.database.ref('/sendmail').push({
-                emailid: x['email'],
-                ClientName: data.name
-            })});
-            
-          }); 
         }
       }]
     });
@@ -114,6 +99,9 @@ export class GlobalService {
       inputs: [{
         name: 'password',
         placeholder: 'סיסמה'
+      }, {
+        name: 'validate-password',
+        placeholder: 'וידוא סיסמה'
       }],
       buttons: [{
         text: 'אישור',
@@ -123,6 +111,18 @@ export class GlobalService {
         }
       }, {
         text: 'בטל'
+      }]
+    });
+
+    alert.present();
+  }
+
+  async invalidImage() {
+    const alert = await this.alertController.create({
+      header: 'קובץ אינו תקין',
+      message: 'סוג הקובץ שהעלית איננו תמונה. אנא העלה סוג קובץ אחר',
+      buttons: [{
+        text: 'אישור'
       }]
     });
 

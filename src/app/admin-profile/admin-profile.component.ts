@@ -110,8 +110,7 @@ export class AdminProfileComponent implements OnInit {
 
     this.firestore.getEvents().subscribe(result => {
       this.eventsArray = result;
-      console.log(this.eventsArray);
-      //this.manageEvents();
+      // this.manageEvents();
     });
 
     this.manageStories();
@@ -269,7 +268,10 @@ export class AdminProfileComponent implements OnInit {
           index++;
           body.appendChild(tr);
         }
+      }
+    }
         var tbodyChildrens = body.childNodes;
+        console.log(tbodyChildrens[0].childNodes[5]);
         for (let i = 0; i < body.childNodes.length; i++) {
           tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
           tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
@@ -278,8 +280,6 @@ export class AdminProfileComponent implements OnInit {
           trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
           trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
         }
-      }
-    }
   }
 
   async removeChildren(tbody, tbodyId) {
@@ -409,14 +409,18 @@ export class AdminProfileComponent implements OnInit {
 
   onclickAdminHistoryTable(e, index) {
     if (e['id'] === 'adminHistoryTablebutton3_' + (index + 1)) {
-      this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
+      console.log('hi');
+      // this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
     }
     if (e['id'] === 'adminHistoryTablebutton2_' + (index + 1)) {
+      console.log('hi');
       // tslint:disable-next-line: max-line-length
-      window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+      // window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
     if (e['id'] === 'adminHistoryTablebutton1_' + (index + 1)) {
-      window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
+      console.log('hi');
+// tslint:disable-next-line: max-line-length
+      // window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
     }
   }
 
@@ -462,7 +466,7 @@ export class AdminProfileComponent implements OnInit {
         } else {
           this.list.slice(this.list.indexOf(id), 1);
         }
-        //console.log(result);
+        // console.log(result);
       });
     });
   }
@@ -477,10 +481,27 @@ export class AdminProfileComponent implements OnInit {
   async addSupport() {
     const alert = await this.alertController.create({
       header: 'הוספת נציג חדש',
+      cssClass: 'add-support',
       inputs: [
         {
           name: 'username',
           placeholder: 'שם הנציג'
+        },
+        {
+          name: 'id',
+          placeholder: 'תעודת זהות'
+        },
+        {
+          name: 'address',
+          placeholder: 'כתובת'
+        },
+        {
+          name: 'phone',
+          placeholder: 'מספר פלאפון'
+        },
+        {
+          name: 'gender',
+          placeholder: 'מין'
         },
         {
           name: 'email',
@@ -489,11 +510,7 @@ export class AdminProfileComponent implements OnInit {
         {
           name: 'password',
           placeholder: 'סיסמא'
-        },
-        {
-          name: 'phone',
-          placeholder: 'טלפון'
-        },
+        }
       ],
       buttons: [{
         text: 'חזור'
@@ -502,9 +519,9 @@ export class AdminProfileComponent implements OnInit {
         text: 'הוסף',
         handler: data => {
           this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
-            this.firestore.createSupportRep(data.username, data.email, data.phone, res.user.uid);
+            this.firestore.createSupportRep(res.user.uid, data.username, data.email, data.phone, data.id, data.address, data.gender);
           }).catch(error => {
-            alert.dismiss(); //here dismiss this alert
+            alert.dismiss(); // here dismiss this alert
             const errAlert = this.alertController.create({
               header: 'added failed',
               message: error,
@@ -523,17 +540,32 @@ export class AdminProfileComponent implements OnInit {
       inputs: [
         {
           name: 'username',
-          placeholder: x.name
+          placeholder: 'שם הנציג'
+        },
+        {
+          name: 'id',
+          placeholder: 'תעודת זהות'
+        },
+        {
+          name: 'address',
+          placeholder: 'כתובת'
+        },
+        {
+          name: 'phone',
+          placeholder: 'מספר פלאפון'
+        },
+        {
+          name: 'gender',
+          placeholder: 'מין'
         },
         {
           name: 'email',
-          placeholder: x.email
+          placeholder: 'אימייל'
         },
-
         {
-          name: 'phone',
-          placeholder: x.phone
-        },
+          name: 'password',
+          placeholder: 'סיסמא'
+        }
       ],
       buttons: [{
         text: 'חזור'
@@ -541,7 +573,7 @@ export class AdminProfileComponent implements OnInit {
       {
         text: 'שמור שינויים',
         handler: data => {
-          this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone);
+          this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone, data.id, data.address, data.gender);
           this.list[this.list.indexOf(x)].username = data.username;
           this.list[this.list.indexOf(x)].email = data.email;
           this.list[this.list.indexOf(x)].phone = data.phone;
@@ -761,6 +793,11 @@ export class AdminProfileComponent implements OnInit {
 
   uploadFile() {
     const fileName = this.file.name;
+// tslint:disable-next-line: max-line-length
+    if (!(fileName.includes('.jpg') || fileName.includes('.jpeg') || fileName.includes('.png') || fileName.includes('.JPG') || fileName.includes('.JPEG') || fileName.includes('.PNG'))) {
+      this.global.invalidImage();
+      return;
+    }
     const filePath = 'assets/images/' + fileName;
     const task = this.afs.upload(filePath, this.file);
 
@@ -816,14 +853,14 @@ export class AdminProfileComponent implements OnInit {
   saveEvent() {
     if (this.is_new_event_flag === true) {
       this.firestore.createEvent(this.event_title.value, this.event_date.value, this.event_content);
-      alert("האירוע נוסף בהצלחה!");
-    }
-    else  //this.is_new_event_flag === false
+      alert('האירוע נוסף בהצלחה!');
+    } else {  // this.is_new_event_flag === false
       this.firestore.editEvent(this.event_to_change.id, this.event_title.value, this.event_date.value, this.event_content);
-    alert("האירוע שונה בהצלחה!");
+      alert('האירוע שונה בהצלחה!');
+    }
   }
 
-  //need to do the delete button and search button
+  // need to do the delete button and search button
 
   editEvent(event) {
     document.getElementById('events-input').hidden = false;
@@ -853,31 +890,32 @@ export class AdminProfileComponent implements OnInit {
   }
 
   searchEvent() {
-    // this.eventsArray.forEach(event => {
-    //console.log("event.title = " + event.title);
-    //console.log("event_search = " + this.event_search.value)
-    let line;
+    let line = -1;
     for (let i = 0; i < this.eventsArray.length; i++) {
       if (this.eventsArray[i].title === this.event_search.value) {
-        console.log("found " + this.eventsArray[i].title);
-        line = i;
-        let elment = document.getElementById(this.eventsArray[line].id);
-        elment.scrollIntoView({
+        line = i; // line in the table
+        let element = document.getElementById(this.eventsArray[line].id);
+        element.scrollIntoView({
           behavior: 'smooth',
           block: 'center'
         });
         document.getElementById(this.eventsArray[line].id).style.background = "#ffd78e";
 
+        // after marking the needed line' paint the background back to it's normal color
         let background;
-        if (line%2 === 0)
-            background = "white";
-        else
-            background = "#f2f2f2";
+        if (line % 2 === 0) {
+          background = 'white';
+        } else {
+          background = '#f2f2f2';
+        }
 
         setTimeout(() => {
-          document.getElementById(this.eventsArray[line].id).style.background = background}, 3000);
-       break;   
+          document.getElementById(this.eventsArray[line].id).style.background = background; }, 3000);
+       break;
       }
+    }
+    if (line === -1) {
+      alert('האירוע שחיפשת לא נמצא');
     }
   }
 

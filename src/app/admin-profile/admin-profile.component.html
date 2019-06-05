@@ -1,18 +1,18 @@
 <ion-content>
-  <ion-grid>
+  <ion-grid fixed>
     <ion-row>
       <ion-col size='12' text-center>
         <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
-        <ion-button id="ViewHistoryClients" (click)="onClick($event)">הסטוריית לקוחות</ion-button>
-        <ion-button id="EditEvents" (click)="onClick($event)">עריכת ארועים</ion-button>
-        <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת האודות</ion-button>
+        <ion-button id="ViewHistoryClients" (click)="onClick($event)">היסטורית לקוחות</ion-button>
+        <ion-button id="EditEvents" (click)="onClick($event)">עריכת אירועים</ion-button>
+        <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת אודות</ion-button>
         <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
         <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
       </ion-col>
       <ion-col size='12'>
 
 
-        <ion-card id="Manage-SupportReps" text-center [hidden]="true">
+        <ion-card id="Manage-SupportReps" text-center [hidden]="false">
 
           <ion-toolbar>
             <ion-searchbar class="search" type="text" [(ngModel)]="filterText" placeholder="חפש נציג"></ion-searchbar>
@@ -23,11 +23,16 @@
           <table id="tables" text-right>
             <thead>
               <tr>
-                <th text-center></th>
-                <th text-center>התחבר לאחרונה</th>
-                <th text-center>טלפון</th>
-                <th text-center>אימייל</th>
                 <th text-center>שם נציג</th>
+                <th text-center>אימייל</th>
+                <th text-center>טלפון</th>
+                <th text-center>כתובת</th>
+                <th text-center>תעודת זהות</th>
+                <th text-center>מין</th>
+                <th text-center>במשמרת</th>
+                <th text-center>מחיקת נציג</th>
+                <th text-center>עריכת נציג</th>
+                <th text-center>שיחות נציג</th>
 
               </tr>
 
@@ -35,17 +40,24 @@
 
             <tbody text-right>
               <tr *ngFor="let supportRep of list | filter:filterText">
+            
+                <td>{{supportRep.name}}</td>
+                <td>{{supportRep.email}}</td>
+                <td>{{supportRep.phone}}</td>
+                <td>{{supportRep.address}}</td>
+                <td>{{supportRep.id}}</td>
+                <td>{{supportRep.gender}}</td>
+                <td *ngIf='supportRep.inShift'>במשמרת</td>
+                <td *ngIf='!supportRep.inShift'>לא במשמרת</td>
                 <td>
                   <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
+                </td>
+                <td>
                   <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
+                </td>
+                <td>
                   <ion-button (click)="showHistory(supportRep)">הצג שיחות</ion-button>
                 </td>
-
-                <td>{{supportRep.connectionTime}}</td>
-                <td>{{supportRep.phone}}</td>
-                <td>{{supportRep.email}}</td>
-                <td>{{supportRep.name}}</td>
-
               </tr>
             </tbody>
 
@@ -56,21 +68,21 @@
             <table id="tables" text-right>
               <thead>
                 <tr>
-                  <th text-center></th>
-                  <th text-center>תאריך</th>
-                  <th text-center>שם לקוח</th>
                   <th text-center>שם נציג</th>
+                  <th text-center>שם לקוח</th>
+                  <th text-center>תאריך</th>
+                  <th text-center></th>
                 </tr>
 
               </thead>
               <tbody>
                 <tr *ngFor="let hist of supportRepHistory">
-                  <td>
-                    <ion-button [routerLink]="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button>
-                  </td>
-                  <td>{{hist.timestamp}}</td>
-                  <td>{{hist.ClientName}}</td>
                   <td>{{hist.SupportRepName}}</td>
+                  <td>{{hist.ClientName}}</td> 
+                  <td>{{hist.timestamp | date: "dd/MM/yyyy"}}</td>
+                  <td>
+                  <ion-button [routerLink]="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button>
+                  </td>
                 </tr>
               </tbody>
 
@@ -81,7 +93,7 @@
 
 
         <ion-card text-center id="Manage-Client-Stories" [hidden]="true">
-          <h3 text-center>רשימת סיפורים </h3>
+          <h3 text-center>רשימת סיפורים</h3>
           <!-- check if need to have an option of adding a story here -->
           <ion-card>
             <table id="tables" text-center>
@@ -135,22 +147,23 @@
 
         <ion-card text-center id="Manage-Gallery" [hidden]="true">
 
-          <ion-grid>
+          <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
+          <input type="file" (change)="addFile($event)">
+          <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
+          <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
+
+          <hr>
+          <hr>
+
+          <ion-grid fixed>
             <ion-row>
-              <ion-col *ngFor='let img of imageUrls' size='auto' style='margin-left: 30px'>
-                <img src={{img}} style='height: 200px; width: 200px; margin-right: 2%'>
+              <ion-col *ngFor='let img of imageUrls' size='auto'>
+                <img src={{img}} style='height: 200px; width: 200px; margin-right: 3%'>
                 <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>
 
-          <hr>
-          <hr>
-
-          <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
-          <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
-          <input type="file" (change)="addFile($event)">
-          <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
         </ion-card>
 
 
@@ -164,7 +177,7 @@
         </ion-card>
 
         <ion-card text-center id="View-History-Clients" [hidden]="true">
-          <p text-center> היסטוריית שיחות </p>
+          <p text-center> היסטורית שיחות </p>
           <ion-grid>
             <ion-card>
               <ion-row>
@@ -275,17 +288,12 @@
 
         </ion-card>
 
-        <ion-card text-center id="Manage-Clients" [hidden]="true">
-          <p text-center> כאן ניצור טבלה של הלקוחות </p>
-          <ion-button>חיפוש</ion-button>
-        </ion-card>
-
         <ion-card text-center id="Edit-Events" [hidden]="true">
           <h2 text-center>עריכת אירועים</h2>
           <ion-button color="success" (click)="addEventDetails()">הוספת אירוע</ion-button>
           <br/>
           <ion-button (click) = "searchEvent()"> חיפוש אירוע</ion-button>
-          <ion-input type = "text" #eventSearch [(value)] = "event_search" placeholder = "שם האירוע"></ion-input>
+          <ion-input type="text" #eventSearch [(value)]="event_search" placeholder="שם האירוע"></ion-input>
 
           <h3 text-center>רשימת אירועים</h3>
           <ion-card>
@@ -345,4 +353,6 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  
+  <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir</ion-footer>
 </ion-content>

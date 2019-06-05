@@ -25,20 +25,20 @@ export class FirestoreService {
   /*****************************/
   /* CHAT COLLECTION FUNCTIONS */
   /*****************************/
-  public createChatRoom(username): Promise<any> {
+  public createChatRoom(username, id): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
       open: true,
       occupied: false,
+      occupiedByClient: false,
       SupportRepID: null,
       SupportRepName: null,
-      ClientID: null,
+      ClientID: id,
       ClientName: username,
       ChatRoomId: null,
       timestamp: new Date().getTime()
     });
   }
 
- 
   public getChatRoom(chatId): Observable<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).valueChanges();
   }
@@ -49,6 +49,7 @@ export class FirestoreService {
   public getOpenChatRooms(): Observable<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true)).valueChanges();
   }
+
   public updateChatRooms(chatRoomId, supportRepName, supportRepId): void {
     const chatRoomData = {
       occupied : true,
@@ -63,6 +64,17 @@ export class FirestoreService {
       open : openStatus
     };
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
+  }
+
+  public updateOccuipedByClientField(chatRoomId, occupiedStatus): void {
+    const chatRoomData = {
+      occupiedByClient: occupiedStatus
+    };
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
+  }
+
+  public getOccupiedByClientField(chatRoomId) {
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).valueChanges();
   }
 
   public getSupportRepOpenChatRooms(supportRepId): Observable<any> {
@@ -87,9 +99,6 @@ export class FirestoreService {
     });
   }
 
-  public updateChatClientId(chatId, ClientID): void {
-    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
-  }
 
   public updateChatRoomId(chatId): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ChatRoomId: chatId });
@@ -155,14 +164,16 @@ export class FirestoreService {
   /************************************/
   /* SUPPORT REP COLLECTION FUNCTIONS */
   /************************************/
-  public createSupportRep(uid, name, email, phone): void {
+  public createSupportRep(uid, name, email, phone, id, address, gender): void {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
+      SupportRepID: uid,
       email,
       name,
       phone,
+      id,
+      address,
+      gender,
       inShift: false,
-      SupportRepID: uid,
-      connectionTime: null,
     });
   }
 
@@ -179,12 +190,9 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).stateChanges();
   }
 
-  public getInShiftSupportRep() {
-    return this.firestore.collection(this.SUPPORT_REP_COLLECTION, ref => ref.where('inShift', '==', true)).valueChanges();
-  }
-
-  public updateSupportRepDetails(SupportRepID, name, email, phone): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, name, email, phone });
+  public updateSupportRepDetails(SupportRepID, name, email, phone, id, address, gender): void {
+// tslint:disable-next-line: max-line-length
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, name, email, phone, id, address, gender });
   }
 
   public updateSupportRepEmail(SupportRepID, email): void {

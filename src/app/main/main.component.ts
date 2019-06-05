@@ -24,7 +24,7 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
 
-    //Get the Association info from firebase and inject it to the main's HTML
+    // Get the Association info from firebase and inject it to the main's HTML
     this.firestore.getAssociationInfo().subscribe(results => {
       this.association_info = results.info;
       document.getElementById('association-info').innerHTML = this.association_info;

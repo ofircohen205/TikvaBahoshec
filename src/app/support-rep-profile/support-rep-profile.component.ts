@@ -42,7 +42,6 @@ export class SupportRepProfileComponent implements OnInit {
   ngOnInit() {
     this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result1 => {
       this.supportRepInShift = result1['inShift'];
-    
     this.firestore.getOpenChatRooms().subscribe(result2 => {
         this.openChatList = result2;
         this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);

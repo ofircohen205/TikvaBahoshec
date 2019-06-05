@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
-export class ChatPage {
+export class ChatPage implements OnInit {
 
   @ViewChild('messageField') messageField;
   @ViewChild('mainContent') mainContent;
@@ -28,7 +28,15 @@ export class ChatPage {
   constructor(
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
-    private activatedRoute: ActivatedRoute) {}
+    private activatedRoute: ActivatedRoute) {
+      this.userAuth.user.subscribe(result => {
+        if (result === null) {
+          this.client_support_flag = true;
+        } else {
+          this.client_support_flag = false;
+        }
+      });
+    }
 
 // tslint:disable-next-line: use-life-cycle-interface
   ngOnInit(): void {
@@ -38,7 +46,6 @@ export class ChatPage {
       this.clientName = result['ClientName'];
       this.supportRepId = result['SupportRepID'];
       this.supportRepName = result['SupportRepName'];
-      this.firestore.updateClientID(this.clientId);
     });
 
     this.firestore.getChatMessages(this.chatId).subscribe(result => {
@@ -82,15 +89,8 @@ export class ChatPage {
   }
 
   onKeyUp(data) {
-    const ENTER_KET_CODE = 13;
-    this.userAuth.user.subscribe(result => {
-      if (result === null) {
-        this.client_support_flag = true;
-      } else {
-        this.client_support_flag = false;
-      }
-    });
-    if (data.keyCode === ENTER_KET_CODE) {
+    const ENTER_KEY_CODE = 13;
+    if (data.keyCode === ENTER_KEY_CODE) {
       if (this.client_support_flag) {
         this.sendMessage('username');
       } else {

@@ -1,4 +1,4 @@
-<ion-grid>
+<ion-grid fixed>
     <ion-row>
         <ion-col>
             <ion-card text-center class='toChat'>
@@ -9,24 +9,24 @@
         </ion-col>
     </ion-row>
     <ion-row>
-        <ion-col size='8'>
+        <ion-col>
             <ion-card text-right class="about">
-                <ion-card-content id = 'association-info'></ion-card-content>
+                <ion-card-content id='association-info'></ion-card-content>
             </ion-card>
         </ion-col>
-        <ion-col size='4'>
-                <ion-card text-right>
-                    <ion-card-content>
-                        <app-donate></app-donate>
-                    </ion-card-content>
-                </ion-card>
-            </ion-col>
+        <ion-col size='auto'>
+            <ion-card text-right>
+                <ion-card-content>
+                    <app-donate></app-donate>
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
     </ion-row>
     <ion-row>
         <ion-col size='12'>
             <ion-card>
                 <ion-card-content>
-                    <app-gallery style='margin-left: -12%'></app-gallery>
+                    <app-gallery></app-gallery>
                 </ion-card-content>
             </ion-card>
         </ion-col>

@@ -22,6 +22,13 @@ export class LoginPage {
     private alertController: AlertController,
   ) { }
 
+  onKeyUp(data) {
+    const ENTER_KEY_CODE = 13;
+    if (data.keyCode === ENTER_KEY_CODE) {
+      this.login();
+    }
+  }
+
   // This function logs the support rep into the system
  async login() {
     this.loadingRef = await this.loadingController.create({ message: '...אנא המתן', });
@@ -39,7 +46,7 @@ export class LoginPage {
     .catch(async (error) => {
       this.loadingRef.dismiss();
       const errorMSG = await this.alertController.create({
-        message: 'User name or Password are incorrect, Please try again',
+        message: 'שם משתמש ו/או סיסמה אינם נכונים. אנא הזן שנית',
         buttons: ['OK'] ,
       });
       await errorMSG.present();
@@ -57,10 +64,13 @@ export class LoginPage {
       buttons: [{
         text: 'שלח',
         handler: data => {
-          console.log(data);
           this.userAuth.auth.sendPasswordResetEmail(data.email).then(() => {
-          }).catch((error) => {
-            console.log(error);
+          }).catch(async (error) => {
+            const errorMSG = await this.alertController.create({
+              message: 'אימייל זה אינו קיים. אנא הזן אימייל קיים',
+              buttons: ['OK'] ,
+            });
+            await errorMSG.present();
           });
         }
       }]
@@ -70,7 +80,7 @@ export class LoginPage {
   }
 
   async presentLoading() {
-    this.loadingRef = await this.loadingController.create({ message: '...אנא המתן', });
+    this.loadingRef = await this.loadingController.create({ message: 'אנא המתן...', });
     await this.loadingRef.present();
   }
 
