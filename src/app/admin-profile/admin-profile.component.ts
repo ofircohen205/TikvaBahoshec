@@ -268,6 +268,8 @@ export class AdminProfileComponent implements OnInit {
           index++;
           body.appendChild(tr);
         }
+      }
+    }
         var tbodyChildrens = body.childNodes;
         console.log(tbodyChildrens[0].childNodes[5]);
         for (let i = 0; i < body.childNodes.length; i++) {
@@ -278,8 +280,6 @@ export class AdminProfileComponent implements OnInit {
           trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
           trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
         }
-      }
-    }
   }
 
   async removeChildren(tbody, tbodyId) {
