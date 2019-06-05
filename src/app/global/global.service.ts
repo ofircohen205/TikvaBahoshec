@@ -4,14 +4,17 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 
+import { AngularFireDatabase } from '@angular/fire/database';
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class GlobalService {
-
   constructor(
     private alertController: AlertController,
     private userAuth: AngularFireAuth,
+    private afiredb: AngularFireDatabase,
     private router: Router,
     private firestore: FirestoreService) {
     this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result['nextAnonymous']);
@@ -35,6 +38,7 @@ export class GlobalService {
             data.name = 'אנונימי' + this.anonymousNumber;
             this.firestore.updateAnonNumber(this.anonymousNumber + 1);
           }
+          
           let clientId = '';
           this.firestore.createClient(data.name).then(result => {
             clientId = result.id;
@@ -44,12 +48,29 @@ export class GlobalService {
             this.firestore.updateChatClientId(result.id, clientId);
             this.router.navigateByUrl('/chat/' + result.id);
           }).catch((error) => console.log(error));
+          
+          this.afiredb.database.ref('/sendmail').remove();
+         
+
+          var connectList =[]
+          this.firestore.getInShiftSupportRep().subscribe(result => {
+            
+            connectList = result;
+            connectList.forEach(x=>{
+              this.afiredb.database.ref('/sendmail').push({
+                emailid: x['email'],
+                ClientName: data.name
+            })});
+            
+          }); 
         }
       }]
     });
 
+
     await alert.present();
   }
+  
 
   async readyForChat() {
     const alert = await this.alertController.create({
