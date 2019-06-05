@@ -48,6 +48,19 @@ export class GlobalService {
               this.router.navigateByUrl('/chat/' + result2.id);
             }).catch((error) => console.log(error));
           });
+
+          this.afiredb.database.ref('/sendmail').remove();
+         
+          var connectList =[]
+          this.firestore.getInShiftSupportRep().subscribe(result => {
+            
+            connectList = result;
+            connectList.forEach(x=>{
+              this.afiredb.database.ref('/sendmail').push({
+                emailid: x['email'],
+                ClientName: data.name
+            })});            
+          }); 
         }
       }]
     });
