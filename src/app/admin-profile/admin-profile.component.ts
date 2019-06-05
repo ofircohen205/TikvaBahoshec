@@ -12,7 +12,6 @@ import { Observable } from 'rxjs';
 import { finalize, findIndex, timestamp } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 import { createElement } from '@syncfusion/ej2-base';
-import { SupportRepsService } from '../global/admin/support-reps.service';
 import { Location } from '@angular/common';
 import { ValueAccessor } from '@ionic/angular/dist/directives/control-value-accessors/value-accessor';
 import { getName } from 'ionicons/dist/types/icon/utils';
@@ -41,8 +40,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     private location: Location,
     private afs: AngularFireStorage,
     private global: GlobalService,
-    private appRef: ApplicationRef,
-    private supportRepService: SupportRepsService
+    private appRef: ApplicationRef
   ) { }
 
   // Subscribe variables
