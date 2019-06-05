@@ -11,12 +11,12 @@
 
 <ion-content>
   
-  <ion-grid>
+  <ion-grid fixed>
     <ion-row>
       <ion-title text-center>כניסת נציגים</ion-title>
     </ion-row>
     <ion-row>
-      <ion-col size='6' offset='3'>
+      <ion-col size='8' offset='2'>
         <ion-item>
           <ion-label position="floating">אימייל</ion-label>
           <ion-input #email (keyup)='onKeyUp($event)'></ion-input>
@@ -25,7 +25,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-col size='6' offset='3'>
+      <ion-col size='8' offset='2'>
         <ion-item>
           <ion-label position="floating">סיסמה</ion-label>
           <ion-input type='password' (keyup)='onKeyUp($event)' #password></ion-input>
@@ -40,5 +40,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir</ion-footer>
 
 </ion-content>

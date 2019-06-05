@@ -110,8 +110,7 @@ export class AdminProfileComponent implements OnInit {
 
     this.firestore.getEvents().subscribe(result => {
       this.eventsArray = result;
-      console.log(this.eventsArray);
-      //this.manageEvents();
+      // this.manageEvents();
     });
 
     this.manageStories();
@@ -270,6 +269,7 @@ export class AdminProfileComponent implements OnInit {
           body.appendChild(tr);
         }
         var tbodyChildrens = body.childNodes;
+        console.log(tbodyChildrens[0].childNodes[5]);
         for (let i = 0; i < body.childNodes.length; i++) {
           tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
           tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
@@ -409,14 +409,18 @@ export class AdminProfileComponent implements OnInit {
 
   onclickAdminHistoryTable(e, index) {
     if (e['id'] === 'adminHistoryTablebutton3_' + (index + 1)) {
-      this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
+      console.log('hi');
+      // this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
     }
     if (e['id'] === 'adminHistoryTablebutton2_' + (index + 1)) {
+      console.log('hi');
       // tslint:disable-next-line: max-line-length
-      window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+      // window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
     if (e['id'] === 'adminHistoryTablebutton1_' + (index + 1)) {
-      window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
+      console.log('hi');
+// tslint:disable-next-line: max-line-length
+      // window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
     }
   }
 

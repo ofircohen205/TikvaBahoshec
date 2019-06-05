@@ -12,8 +12,8 @@
 
     <ion-grid>
         <ion-row>
-            <ion-col>
-                <ion-button id='inShiftButton' style="margin-right: 50%" color="danger" (click)="inShift()">
+            <ion-col push='2' style='padding-right: 4%;'>
+                <ion-button id='inShiftButton' color="danger" (click)="inShift()">
                     לא במשמרת
                 </ion-button>
             </ion-col>
@@ -29,11 +29,11 @@
                     </ion-segment>
                 </ion-toolbar>
             </ion-col>
-            <ion-col>
-                <ion-button color="secondary" style="margin-right: 5%" (click)='updatePassword()'>
+            <ion-col style="margin-right: 2%;">
+                <ion-button color="primary" (click)='updatePassword()'>
                     שנה סיסמה
                 </ion-button>
-                <ion-button style="margin-right: 10%" (click)='logout()'>
+                <ion-button (click)='logout()'>
                     התנתק
                 </ion-button>
             </ion-col>
@@ -46,6 +46,4 @@
 <ion-content>
     <app-support-rep-profile #supportRep id="supportRep" [hidden]=false></app-support-rep-profile>
     <app-admin-profile #admin id="admin" [hidden]=true></app-admin-profile>
-
-
 </ion-content>
