@@ -269,6 +269,8 @@ export class AdminProfileComponent implements OnInit {
           index++;
           body.appendChild(tr);
         }
+      }
+    }
         var tbodyChildrens = body.childNodes;
         for (let i = 0; i < body.childNodes.length; i++) {
           tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
@@ -278,8 +280,6 @@ export class AdminProfileComponent implements OnInit {
           trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
           trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
         }
-      }
-    }
   }
 
   async removeChildren(tbody, tbodyId) {
