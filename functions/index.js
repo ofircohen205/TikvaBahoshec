@@ -1,7 +1,17 @@
 const functions = require('firebase-functions');
 const emailjs = require('emailjs/email');
 const pdfdocument = require('pdfkit');
+const admin = require('firebase-admin');
+admin.initializeApp();
 
+
+exports.deleteUser = functions.firestore
+    .document('SupportReps/{SupportRepID}')
+    .onDelete((snap, context) => {
+      return admin.auth().deleteUser(snap.data().SupportRepID)
+          .then(() => console.log('Deleted user with ID:' + snap.data().SupportRepID))
+          .catch((error) => console.error('There was an error while deleting user:', error));
+    });
 // var nameOfClient
 
 // exports.getName =  functions.database.ref('/nameOfClient/{namekey}').onWrite(( change,context) =>{
