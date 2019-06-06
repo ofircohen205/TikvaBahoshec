@@ -44,13 +44,13 @@ export class GlobalService {
             this.firestore.createChatRoom(data.name, result1.id).then(result2 => {
               this.currentChatRoomId = result2.id;
               this.firestore.updateChatRoomId(result2.id);
-              this.firestore.updateOccuipedByClientField(result2.id, true);
+              this.afiredb.database.ref('/ChatRooms/' + this.currentChatRoomId).set({ occupiedByClient: false });
               this.router.navigateByUrl('/chat/' + result2.id);
             }).catch((error) => console.log(error));
           });
 
           this.afiredb.database.ref('/sendmail').remove();
-          let connectList =[];
+          let connectList = [];
           this.firestore.getInShiftSupportRep().subscribe(result => {
             connectList = result;
             connectList.forEach(x => {

@@ -165,7 +165,7 @@ export class FirestoreService {
   /* SUPPORT REP COLLECTION FUNCTIONS */
   /************************************/
   public createSupportRep(uid, name, email, phone, id, address, gender): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(uid).set({
       SupportRepID: uid,
       email,
       name,
