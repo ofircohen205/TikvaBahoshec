@@ -799,8 +799,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     return 0;
   }
 
-  //search for the story. Has to get the full name of the story to find it
-  searchStory() {
+  // search for the story. Has to get the full name of the story to find it
+  async searchStory() {
     let line = -1;
     for (let i = 0; i < this.storiesArray.length; i++) {
       if (this.storiesArray[i].title === this.story_search) {
@@ -827,7 +827,11 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       }
     }
     if (line === -1) {
-      alert('האירוע שחיפשת לא נמצא');
+      const alert = await this.alertController.create({
+        message: 'האירוע שחיפשת לא נמצא',
+        buttons: ['המשך']
+      });
+      alert.present();
     }
   }
 

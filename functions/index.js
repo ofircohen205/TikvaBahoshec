@@ -29,8 +29,6 @@ exports.deleteClient = functions.firestore
 //    })
 
 
-
-
 // exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onWrite(event => {
     exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onWrite(( change,context) =>{
     var nameOfClient = functions.database.ref().val
