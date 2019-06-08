@@ -28,7 +28,6 @@ export class MainComponent implements OnInit {
     this.firestore.getAssociationInfo().subscribe(results => {
       this.association_info = results.info;
       document.getElementById('association-info').innerHTML = this.association_info;
-
     });
   }
 

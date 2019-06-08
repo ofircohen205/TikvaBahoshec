@@ -25,24 +25,18 @@ export class LockedRoomGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): boolean | Observable<boolean> | Promise<boolean> {
-    // return new Promise((resolve, reject) => {
-    //   this.afiredb.list('/ChatRooms/').snapshotChanges().subscribe(result1 => {
-    //     result1.forEach(item => {
-    //       this.chatId = item.key;
-    //     });
-    //     this.afiredb.list('/ChatRooms/' + this.chatId).valueChanges().subscribe(result2 => {
-    //       console.log(result2[0]);
-    //       if (result2[0]) {
-    //         this.router.navigateByUrl('/');
-    //         resolve(false);
-    //       }
-    //       this.afiredb.database.ref('/ChatRooms/' + this.chatId).set({ occupiedByClient: true });
-    //       resolve(true);
-    //     });
-    //   });
-    // });
-    return true;
-  }
+    return new Promise((resolve, reject) => {
+      if (this.userAuth.auth.currentUser) {
+        resolve(true);
+      }
 
+      if (this.userAuth.auth.currentUser === null) {
+        this.router.navigateByUrl('/');
+        resolve(false);
+      } else if (this.userAuth.auth.currentUser.isAnonymous) {
+        resolve(true);
+      }
+    });
+  }
 
 }

@@ -1,17 +1,22 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
-export class ChatPage implements OnInit {
+export class ChatPage implements OnInit, OnDestroy {
 
   @ViewChild('messageField') messageField;
   @ViewChild('mainContent') mainContent;
+
+  // Subscribe Variables
+  params_subscribe;
+  chat_room_subscribe;
+  chat_message_subscribe;
 
   messages = [];
   chatId = '';
@@ -23,32 +28,34 @@ export class ChatPage implements OnInit {
   supportRepName = '';
 
   client_support_flag: boolean;
-  maxParticipants = 2;
+  num_of_entries = 0;
 
   constructor(
     private userAuth: AngularFireAuth,
     private firestore: FirestoreService,
-    private activatedRoute: ActivatedRoute) {
-      this.userAuth.user.subscribe(result => {
-        if (result === null) {
-          this.client_support_flag = true;
-        } else {
-          this.client_support_flag = false;
-        }
-      });
+    private activatedRoute: ActivatedRoute,
+    private router: Router) {
+      if (this.userAuth.auth.currentUser.isAnonymous) {
+        this.client_support_flag = true;
+      } else {
+        this.client_support_flag = false;
+      }
+      this.params_subscribe = this.activatedRoute.params.subscribe(params => this.chatId = params.id);
     }
 
 // tslint:disable-next-line: use-life-cycle-interface
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(params => this.chatId = params.id);
-    this.firestore.getChatRoom(this.chatId).subscribe(result => {
+    this.chat_room_subscribe = this.firestore.getChatRoom(this.chatId).subscribe(result => {
       this.clientId = result['ClientID'];
       this.clientName = result['ClientName'];
       this.supportRepId = result['SupportRepID'];
       this.supportRepName = result['SupportRepName'];
+      if (result['numOfEntries'] === 2) {
+        this.router.navigateByUrl('/');
+      }
     });
 
-    this.firestore.getChatMessages(this.chatId).subscribe(result => {
+    this.chat_message_subscribe = this.firestore.getChatMessages(this.chatId).subscribe(result => {
       result.sort((m1, m2) => {
         if (m1['timestamp'] > m2['timestamp']) {
           return 1;
@@ -97,6 +104,13 @@ export class ChatPage implements OnInit {
         this.sendMessage('SupportRepID');
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.firestore.removeClient(this.clientId);
+    this.params_subscribe.unsubscribe();
+    this.chat_room_subscribe.unsubscribe();
+    this.chat_message_subscribe.unsubscribe();
   }
 
 }
