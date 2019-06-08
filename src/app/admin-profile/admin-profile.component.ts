@@ -49,6 +49,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   image_array_subscribe;
   association_subscribe;
   events_subscribe;
+  stories_subscribe;
 
 
   // Variables
@@ -69,7 +70,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   @ViewChild('eventitle') event_title;
   @ViewChild('eventDate') event_date;
-  @ViewChild('eventSearch') event_search = null;
+  //@ViewChild('eventSearch') event_search;
+  event_search = '';
   event_content: string = null;
   is_new_event_flag: boolean;
   eventsArray: any[] = [];
@@ -117,8 +119,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
     this.events_subscribe = this.firestore.getEvents().subscribe(result => {
       this.eventsArray = result;
-      // this.manageEvents();
     });
+    //this.event_search.value = null;
 
     this.manageStories();
     this.manageSupportReps();
@@ -190,13 +192,13 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
           (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
           (chatRoom['ClientName'].search(clientName) != -1 || clientName === '')) {
 
-            var td1 = document.createElement('td');
-            td1.style.border = ' 1px solid #ddd';
-            td1.style.padding = '8px';
-            td1.style.borderCollapse = 'collapse';
-            td1.textContent = index.toString();
+          var td1 = document.createElement('td');
+          td1.style.border = ' 1px solid #ddd';
+          td1.style.padding = '8px';
+          td1.style.borderCollapse = 'collapse';
+          td1.textContent = index.toString();
 
-            var td2 = document.createElement('td');
+          var td2 = document.createElement('td');
           td2.style.border = ' 1px solid #ddd';
           td2.style.padding = '8px';
           td2.style.borderCollapse = 'collapse';
@@ -277,15 +279,15 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         }
       }
     }
-        var tbodyChildrens = body.childNodes;
-        for (let i = 0; i < body.childNodes.length; i++) {
-          tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
-          tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
-          var trChildren = tbodyChildrens[i].childNodes;
-          trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 1], i));
-          trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
-          trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
-        }
+    var tbodyChildrens = body.childNodes;
+    for (let i = 0; i < body.childNodes.length; i++) {
+      tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
+      tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
+      var trChildren = tbodyChildrens[i].childNodes;
+      trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 1], i));
+      trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
+      trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
+    }
   }
 
   async removeChildren(tbody, tbodyId) {
@@ -425,7 +427,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     }
     if (e['id'] === 'adminHistoryTablebutton1_' + (index + 1)) {
       console.log('hi');
-// tslint:disable-next-line: max-line-length
+      // tslint:disable-next-line: max-line-length
       // window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
     }
   }
@@ -668,10 +670,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   /*******************************************Stories Management*******************************************************************/
   manageStories() {
-    // this.firestore.getStories().subscribe(r =>{
-    //   console.log(r);
-    // })
-    this.firestore.getStoriesId().subscribe(results => {
+    this.stories_subscribe = this.firestore.getStoriesId().subscribe(results => {
       results.forEach(result => {
         const id = result.payload.doc.id;
         const data = result.payload.doc.data();
@@ -799,7 +798,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   uploadFile() {
     const fileName = this.file.name;
-// tslint:disable-next-line: max-line-length
+    // tslint:disable-next-line: max-line-length
     if (!(fileName.includes('.jpg') || fileName.includes('.jpeg') || fileName.includes('.png') || fileName.includes('.JPG') || fileName.includes('.JPEG') || fileName.includes('.PNG'))) {
       this.global.invalidImage();
       return;
@@ -854,8 +853,17 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   addEventDetails() {
     document.getElementById('events-input').hidden = false;
+    this.event_title.value = null;
+    this.event_date.value = null;
+    this.event_content = null;
     this.is_new_event_flag = true;
+    document.getElementById('events-input').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
   }
+
+
   saveEvent() {
     if (this.is_new_event_flag === true) {
       this.firestore.createEvent(this.event_title.value, this.event_date.value, this.event_content);
@@ -866,7 +874,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  // need to do the delete button and search button
 
   editEvent(event) {
     document.getElementById('events-input').hidden = false;
@@ -875,6 +882,10 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.event_content = event.description;
     this.is_new_event_flag = false;
     this.event_to_change = event;
+    document.getElementById('events-input').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
   }
 
 
@@ -898,13 +909,13 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   searchEvent() {
     let line = -1;
     for (let i = 0; i < this.eventsArray.length; i++) {
-      if (this.eventsArray[i].title === this.event_search.value) {
+      if (this.eventsArray[i].title === this.event_search) {
         line = i; // line in the table
-        let element = document.getElementById(this.eventsArray[line].id);
-        element.scrollIntoView({
+        document.getElementById(this.eventsArray[line].id).scrollIntoView({
           behavior: 'smooth',
           block: 'center'
         });
+        
         document.getElementById(this.eventsArray[line].id).style.background = "#ffd78e";
 
         // after marking the needed line' paint the background back to it's normal color
@@ -916,8 +927,9 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         }
 
         setTimeout(() => {
-          document.getElementById(this.eventsArray[line].id).style.background = background; }, 3000);
-       break;
+          document.getElementById(this.eventsArray[line].id).style.background = background;
+        }, 3000);
+        break;
       }
     }
     if (line === -1) {
@@ -932,6 +944,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.all_chat_room_subscribe.unsubscribe();
     this.image_array_subscribe.unsubscribe();
     this.association_subscribe.unsubscribe();
+    this.stories_subscribe.unsubscribe();
   }
 
 } // end of AdminProfileComponent

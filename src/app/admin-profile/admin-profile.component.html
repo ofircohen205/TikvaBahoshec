@@ -290,10 +290,14 @@
 
         <ion-card text-center id="Edit-Events" [hidden]="true">
           <h2 text-center>עריכת אירועים</h2>
-          <ion-button color="success" (click)="addEventDetails()">הוספת אירוע</ion-button>
+          <ion-button color="success" (click)="addEventDetails()"> <ion-icon name="add-circle-outline"></ion-icon> הוספת אירוע</ion-button>
           <br/>
-          <ion-button (click) = "searchEvent()"> חיפוש אירוע</ion-button>
-          <ion-input type="text" #eventSearch [(value)]="event_search" placeholder="שם האירוע"></ion-input>
+          
+           <ion-searchbar class="search" type="text" [(ngModel)]="event_search" placeholder="שם האירוע לחיפוש"><ion-button  (click) = "searchEvent()" > <ion-icon name="search"></ion-icon> חיפוש אירוע</ion-button></ion-searchbar>
+          <!-- <ion-col size = "6" text-right><ion-input  type="text" placeholder="שם האירוע" #eventSearch [(value)]="event_search" ></ion-input></ion-col> -->
+          <!-- <ion-button  (click) = "searchEvent()" > <ion-icon name="search"></ion-icon> חיפוש אירוע</ion-button> -->
+       
+        
 
           <h3 text-center>רשימת אירועים</h3>
           <ion-card>
@@ -311,8 +315,8 @@
                   <td *ngIf='event'>{{ event.title }}</td>
                   <td *ngIf='event'>{{ event.date | date: "dd/MM/yyyy" }}</td>
                   <td>
-                    <ion-button (click)="editEvent(event)">עריכה</ion-button>  
-                    <ion-button color="danger" (click)="deleteEvent(event)">מחק</ion-button>
+                    <ion-button (click)="editEvent(event)"><ion-icon name="create"></ion-icon> עריכה</ion-button>  
+                    <ion-button color="danger" (click)="deleteEvent(event)"><ion-icon name="trash"></ion-icon> מחק</ion-button>
                   </td>
                 </tr>
 
