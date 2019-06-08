@@ -767,13 +767,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   }
 
   // after the story was edited, we save the changes in it
-<<<<<<< HEAD
   async acceptStoryChange() {
-    const storyId = document.getElementById('story-editor').nodeValue;
-=======
-  acceptStoryChange() {
     const storyId = this.curr_story_edit_id;
->>>>>>> ff712f52b6ea95e08be8ba40c8538c9066c147c9
     let areEquals: number;
     for (let i = 0; i < this.storiesArray.length; i++) {
       areEquals = this.strcmp(storyId, i);
@@ -967,12 +962,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     alert.present();
   }
 
-<<<<<<< HEAD
   async searchEvent() {
-=======
-  //search for the story. Has to get the full name of the story to find it
-  searchEvent() {
->>>>>>> ff712f52b6ea95e08be8ba40c8538c9066c147c9
     let line = -1;
     for (let i = 0; i < this.eventsArray.length; i++) {
       if (this.eventsArray[i].title === this.event_search) {
@@ -982,11 +972,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
           block: 'center'
         });
 
-<<<<<<< HEAD
         document.getElementById(this.eventsArray[line].id).style.background = '#ffd78e';
-=======
-        document.getElementById(this.eventsArray[line].id).style.background = "#ffd78e";
->>>>>>> ff712f52b6ea95e08be8ba40c8538c9066c147c9
 
         // after marking the needed line' paint the background back to it's normal color
         let background;
