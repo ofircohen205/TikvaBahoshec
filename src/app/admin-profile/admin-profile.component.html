@@ -40,7 +40,7 @@
 
             <tbody text-right>
               <tr *ngFor="let supportRep of list | filter:filterText">
-            
+
                 <td>{{supportRep.name}}</td>
                 <td>{{supportRep.email}}</td>
                 <td>{{supportRep.phone}}</td>
@@ -78,10 +78,10 @@
               <tbody>
                 <tr *ngFor="let hist of supportRepHistory">
                   <td>{{hist.SupportRepName}}</td>
-                  <td>{{hist.ClientName}}</td> 
+                  <td>{{hist.ClientName}}</td>
                   <td>{{hist.timestamp | date: "dd/MM/yyyy"}}</td>
                   <td>
-                  <ion-button [routerLink]="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button>
+                    <ion-button [routerLink]="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button>
                   </td>
                 </tr>
               </tbody>
@@ -96,31 +96,33 @@
           <h3 text-center>רשימת סיפורים</h3>
           <!-- check if need to have an option of adding a story here -->
           <ion-card>
-            <table id="tables" text-center>
-              <thead>
-                <tr>
-                  <th text-center>כותרת</th>
-                  <th text-center>תאריך העלאה</th>
-                  <th text-center>אושר/לא אושר</th>
-                  <th text-center>עריכת עדות</th>
-                </tr>
-              </thead>
+            <div id="scrollbar1" class="my-custom-scrollbar">
+              <table id="tables" text-center>
+                <thead>
+                  <tr>
+                    <th text-center>כותרת</th>
+                    <th text-center>תאריך העלאה</th>
+                    <th text-center>אושר/לא אושר</th>
+                    <th text-center>עריכת עדות</th>
+                  </tr>
+                </thead>
 
-              <tbody>
-                <tr *ngFor='let story of storiesArray'>
-                  <td *ngIf='story'>{{story.title}}</td>
-                  <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
-                  <td *ngIf='story && story.approved'> אושר</td>
-                  <td *ngIf='story && !story.approved'> לא אושר</td>
-                  <td>
-                    <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר
-                    </ion-button>
-                    <ion-button (click)="editStory(story)">עריכה</ion-button>
-                    <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                <tbody>
+                  <tr *ngFor='let story of storiesArray'>
+                    <td *ngIf='story'>{{story.title}}</td>
+                    <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
+                    <td *ngIf='story && story.approved'> אושר</td>
+                    <td *ngIf='story && !story.approved'> לא אושר</td>
+                    <td>
+                      <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר
+                      </ion-button>
+                      <ion-button (click)="editStory(story)">עריכה</ion-button>
+                      <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </ion-card>
 
           <ion-card id='editor' [hidden]="true">
@@ -290,38 +292,50 @@
 
         <ion-card text-center id="Edit-Events" [hidden]="true">
           <h2 text-center>עריכת אירועים</h2>
-          <ion-button color="success" (click)="addEventDetails()"> <ion-icon name="add-circle-outline"></ion-icon> הוספת אירוע</ion-button>
-          <br/>
-          
-           <ion-searchbar class="search" type="text" [(ngModel)]="event_search" placeholder="שם האירוע לחיפוש"><ion-button  (click) = "searchEvent()" > <ion-icon name="search"></ion-icon> חיפוש אירוע</ion-button></ion-searchbar>
+          <ion-button color="success" (click)="addEventDetails()">
+            <ion-icon name="add-circle-outline"></ion-icon> הוספת אירוע
+          </ion-button>
+          <br />
+
+          <ion-searchbar class="search" type="text" [(ngModel)]="event_search" placeholder="שם האירוע לחיפוש">
+            <ion-button (click)="searchEvent()">
+              <ion-icon name="search"></ion-icon> חיפוש אירוע
+            </ion-button>
+          </ion-searchbar>
           <!-- <ion-col size = "6" text-right><ion-input  type="text" placeholder="שם האירוע" #eventSearch [(value)]="event_search" ></ion-input></ion-col> -->
           <!-- <ion-button  (click) = "searchEvent()" > <ion-icon name="search"></ion-icon> חיפוש אירוע</ion-button> -->
-       
-        
+
+
 
           <h3 text-center>רשימת אירועים</h3>
           <ion-card>
-            <table id="tables" text-center>
-              <thead>
-                <tr>
-                  <th text-center>שם האירוע</th>
-                  <th text-center>תאריך האירוע</th> 
-                  <th text-center>עריכת האירוע</th>
-                </tr>
-              </thead>
+            <div id="scrollbar1" class="my-custom-scrollbar">
+              <table id="tables" text-center>
+                <thead class="table-header">
+                  <tr>
+                    <th text-center>שם האירוע</th>
+                    <th text-center>תאריך האירוע</th>
+                    <th text-center>עריכת האירוע</th>
+                  </tr>
+                </thead>
 
-              <tbody>
-                <tr *ngFor='let event of eventsArray' [attr.id]="event.id">
-                  <td *ngIf='event'>{{ event.title }}</td>
-                  <td *ngIf='event'>{{ event.date | date: "dd/MM/yyyy" }}</td>
-                  <td>
-                    <ion-button (click)="editEvent(event)"><ion-icon name="create"></ion-icon> עריכה</ion-button>  
-                    <ion-button color="danger" (click)="deleteEvent(event)"><ion-icon name="trash"></ion-icon> מחק</ion-button>
-                  </td>
-                </tr>
+                <tbody>
+                  <tr *ngFor='let event of eventsArray' [attr.id]="event.id">
+                    <td *ngIf='event'>{{ event.title }}</td>
+                    <td *ngIf='event'>{{ event.date | date: "dd/MM/yyyy" }}</td>
+                    <td>
+                      <ion-button (click)="editEvent(event)">
+                        <ion-icon name="create"></ion-icon> עריכה
+                      </ion-button>
+                      <ion-button color="danger" (click)="deleteEvent(event)">
+                        <ion-icon name="trash"></ion-icon> מחק
+                      </ion-button>
+                    </td>
+                  </tr>
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
 
           </ion-card>
           <ion-card id='events-input' [hidden]="true">
@@ -357,6 +371,6 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  
+
   <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir</ion-footer>
 </ion-content>

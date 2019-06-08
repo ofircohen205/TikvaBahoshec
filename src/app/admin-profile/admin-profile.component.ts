@@ -79,6 +79,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   association_info: string;
 
   @ViewChild('title') title;
+  private  curr_story_edit_id : string;
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
   public value =
@@ -700,7 +701,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   // edit the story. replace the old content of the story with the new content
   editStory(story) {
     document.getElementById('editor').hidden = false;
-    document.getElementById('story-editor').nodeValue = story.id;
+    this.curr_story_edit_id = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
       if (story.id === this.storiesArray[i].id) {
         this.value = this.storiesArray[i].description;  // edit the story
@@ -754,7 +755,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   // after the story was edited, we save the changes in it
   acceptStoryChange() {
-    const storyId = document.getElementById('story-editor').nodeValue;
+    const storyId = this.curr_story_edit_id;
     let areEquals: number;
     for (let i = 0; i < this.storiesArray.length; i++) {
       areEquals = this.strcmp(storyId, i);
@@ -763,6 +764,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         this.firestore.editStory(this.storiesArray[i].id, this.value);
         this.storiesArray[i].title = this.title.value;
         this.firestore.editStoryTitle(this.storiesArray[i].id, this.title.value);
+        this.curr_story_edit_id = null;
         break;
       }
     }
@@ -915,7 +917,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
           behavior: 'smooth',
           block: 'center'
         });
-        
+
         document.getElementById(this.eventsArray[line].id).style.background = "#ffd78e";
 
         // after marking the needed line' paint the background back to it's normal color
