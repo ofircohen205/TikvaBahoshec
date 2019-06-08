@@ -18,6 +18,7 @@ import { getName } from 'ionicons/dist/types/icon/utils';
 import * as firebase from 'firebase';
 import { text, element } from '@angular/core/src/render3';
 import { Title } from '@angular/platform-browser';
+import { StoryComponent } from '../story/story.component';
 
 
 
@@ -79,7 +80,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   association_info: string;
 
   @ViewChild('title') title;
-  private  curr_story_edit_id : string;
+  story_search = '';
+  private curr_story_edit_id: string;
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
   public value =
@@ -703,11 +705,19 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     document.getElementById('editor').hidden = false;
     this.curr_story_edit_id = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id) {
+      if (this.strcmp(story.id, i) === 0) {
         this.value = this.storiesArray[i].description;  // edit the story
         this.title.value = this.storiesArray[i].title;
+
+        document.getElementById('editor').scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+
+        break;
       }
     }
+  
   }
 
 
@@ -742,7 +752,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
           text: 'אשר',
           handler: () => {
             for (let i = 0; i < this.storiesArray.length; i++) {
-              if (story.id === this.storiesArray[i].id) {
+              if (this.strcmp(story.id, i) === 0) {
                 this.storiesArray[i].approved = true;
                 this.firestore.confirmStory(this.storiesArray[i].id, true);
               }
@@ -781,6 +791,39 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     }
     return 0;
   }
+
+  //search for the story. Has to get the full name of the story to find it
+  searchStory() {
+    let line = -1;
+    for (let i = 0; i < this.storiesArray.length; i++) {
+      if (this.storiesArray[i].title === this.story_search) {
+        line = i; // line in the table
+        document.getElementById(this.storiesArray[line].id).scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+
+        document.getElementById(this.storiesArray[line].id).style.background = "#ffd78e";
+
+        // after marking the needed line' paint the background back to it's normal color
+        let background;
+        if (line % 2 === 0) {
+          background = 'white';
+        } else {
+          background = '#f2f2f2';
+        }
+
+        setTimeout(() => {
+          document.getElementById(this.storiesArray[line].id).style.background = background;
+        }, 3000);
+        break;
+      }
+    }
+    if (line === -1) {
+      alert('האירוע שחיפשת לא נמצא');
+    }
+  }
+
   /*********************************************************************************************************************************/
 
   /*******************************************Gallery Management*******************************************************************/
@@ -849,10 +892,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   /*************************************************************************************************************************************/
   /************************************************Events Management********************************************************************/
 
-  // manageEvents() {
-
-  // }
-
   addEventDetails() {
     document.getElementById('events-input').hidden = false;
     this.event_title.value = null;
@@ -908,6 +947,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     alert.present();
   }
 
+  //search for the story. Has to get the full name of the story to find it
   searchEvent() {
     let line = -1;
     for (let i = 0; i < this.eventsArray.length; i++) {

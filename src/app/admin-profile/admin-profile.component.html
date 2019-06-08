@@ -93,8 +93,14 @@
 
 
         <ion-card text-center id="Manage-Client-Stories" [hidden]="true">
-          <h3 text-center>רשימת סיפורים</h3>
+          <h3 text-center>רשימת עדויות</h3>
           <!-- check if need to have an option of adding a story here -->
+          <ion-searchbar class="search" type="text" [(ngModel)]="story_search" placeholder="כותרת העדות לחיפוש">
+              <ion-button (click)="searchStory()">
+                <ion-icon name="search"></ion-icon> חיפוש עדות
+              </ion-button>
+            </ion-searchbar>
+
           <ion-card>
             <div id="scrollbar1" class="my-custom-scrollbar">
               <table id="tables" text-center>
@@ -108,16 +114,16 @@
                 </thead>
 
                 <tbody>
-                  <tr *ngFor='let story of storiesArray'>
+                  <tr *ngFor='let story of storiesArray' [attr.id]="story.id">
                     <td *ngIf='story'>{{story.title}}</td>
                     <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
                     <td *ngIf='story && story.approved'> אושר</td>
                     <td *ngIf='story && !story.approved'> לא אושר</td>
                     <td>
-                      <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר
+                      <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)"> <ion-icon name="checkmark-circle-outline"></ion-icon> אשר
                       </ion-button>
-                      <ion-button (click)="editStory(story)">עריכה</ion-button>
-                      <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
+                      <ion-button (click)="editStory(story)"> <ion-icon name="create"></ion-icon> עריכה</ion-button>
+                      <ion-button color="danger" (click)="deleteStory(story)"><ion-icon name="trash"></ion-icon> מחק</ion-button>
                     </td>
                   </tr>
                 </tbody>
@@ -127,7 +133,7 @@
 
           <ion-card id='editor' [hidden]="true">
             <ion-card-header>
-              <h4 text-right>כותרת הסיפור:</h4>
+              <h4 text-right>כותרת העדות:</h4>
             </ion-card-header>
             <ion-card-content>
               <ion-input type="text" #title style="border: 1px solid rgb(194, 173, 173);" text-right
@@ -135,7 +141,7 @@
             </ion-card-content>
 
             <ion-card-header>
-              <h4 text-right>תוכן הסיפור:</h4>
+              <h4 text-right>תוכן העדות:</h4>
             </ion-card-header>
             <ion-card-content>
               <!-- Text editor for the stories -->
@@ -302,10 +308,6 @@
               <ion-icon name="search"></ion-icon> חיפוש אירוע
             </ion-button>
           </ion-searchbar>
-          <!-- <ion-col size = "6" text-right><ion-input  type="text" placeholder="שם האירוע" #eventSearch [(value)]="event_search" ></ion-input></ion-col> -->
-          <!-- <ion-button  (click) = "searchEvent()" > <ion-icon name="search"></ion-icon> חיפוש אירוע</ion-button> -->
-
-
 
           <h3 text-center>רשימת אירועים</h3>
           <ion-card>
