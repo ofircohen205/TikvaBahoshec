@@ -381,30 +381,33 @@
 
             <h3 text-center>רשימת אירועים</h3>
             <ion-card>
-              <table id="tables" text-center>
-                <thead>
-                  <tr>
-                    <th text-center>שם האירוע</th>
-                    <th text-center>תאריך האירוע</th>
-                    <th text-center>עריכת האירוע</th>
-                  </tr>
-                </thead>
 
-                <tbody>
-                  <tr *ngFor='let event of eventsArray' [attr.id]="event.id">
-                    <td *ngIf='event'>{{ event.title }}</td>
-                    <td *ngIf='event'>{{ event.date | date: "dd/MM/yyyy" }}</td>
-                    <td>
-                      <ion-button (click)="editEvent(event)">
-                        <ion-icon name="create"></ion-icon> עריכה
-                      </ion-button>
-                      <ion-button color="danger" (click)="deleteEvent(event)">
-                        <ion-icon name="trash"></ion-icon> מחק
-                      </ion-button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div id="scrollbar1" class="my-custom-scrollbar">
+                <table id="tables" text-center>
+                  <thead>
+                    <tr>
+                      <th text-center>שם האירוע</th>
+                      <th text-center>תאריך האירוע</th>
+                      <th text-center>עריכת האירוע</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr *ngFor='let event of eventsArray' [attr.id]="event.id">
+                      <td *ngIf='event'>{{ event.title }}</td>
+                      <td *ngIf='event'>{{ event.date | date: "dd/MM/yyyy" }}</td>
+                      <td>
+                        <ion-button (click)="editEvent(event)">
+                          <ion-icon name="create"></ion-icon> עריכה
+                        </ion-button>
+                        <ion-button color="danger" (click)="deleteEvent(event)">
+                          <ion-icon name="trash"></ion-icon> מחק
+                        </ion-button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
             </ion-card>
 
