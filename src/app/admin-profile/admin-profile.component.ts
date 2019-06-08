@@ -18,6 +18,7 @@ import { getName } from 'ionicons/dist/types/icon/utils';
 import * as firebase from 'firebase';
 import { text, element } from '@angular/core/src/render3';
 import { Title } from '@angular/platform-browser';
+import { StoryComponent } from '../story/story.component';
 
 
 
@@ -79,6 +80,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   association_info: string;
 
   @ViewChild('title') title;
+  story_search = '';
+  private curr_story_edit_id: string;
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
   public value =
@@ -703,13 +706,21 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   // edit the story. replace the old content of the story with the new content
   editStory(story) {
     document.getElementById('editor').hidden = false;
-    document.getElementById('story-editor').nodeValue = story.id;
+    this.curr_story_edit_id = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id) {
+      if (this.strcmp(story.id, i) === 0) {
         this.value = this.storiesArray[i].description;  // edit the story
         this.title.value = this.storiesArray[i].title;
+
+        document.getElementById('editor').scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+
+        break;
       }
     }
+  
   }
 
 
@@ -744,7 +755,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
           text: 'אשר',
           handler: () => {
             for (let i = 0; i < this.storiesArray.length; i++) {
-              if (story.id === this.storiesArray[i].id) {
+              if (this.strcmp(story.id, i) === 0) {
                 this.storiesArray[i].approved = true;
                 this.firestore.confirmStory(this.storiesArray[i].id, true);
               }
@@ -756,8 +767,13 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   }
 
   // after the story was edited, we save the changes in it
+<<<<<<< HEAD
   async acceptStoryChange() {
     const storyId = document.getElementById('story-editor').nodeValue;
+=======
+  acceptStoryChange() {
+    const storyId = this.curr_story_edit_id;
+>>>>>>> ff712f52b6ea95e08be8ba40c8538c9066c147c9
     let areEquals: number;
     for (let i = 0; i < this.storiesArray.length; i++) {
       areEquals = this.strcmp(storyId, i);
@@ -766,6 +782,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         this.firestore.editStory(this.storiesArray[i].id, this.value);
         this.storiesArray[i].title = this.title.value;
         this.firestore.editStoryTitle(this.storiesArray[i].id, this.title.value);
+        this.curr_story_edit_id = null;
         break;
       }
     }
@@ -786,6 +803,39 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     }
     return 0;
   }
+
+  //search for the story. Has to get the full name of the story to find it
+  searchStory() {
+    let line = -1;
+    for (let i = 0; i < this.storiesArray.length; i++) {
+      if (this.storiesArray[i].title === this.story_search) {
+        line = i; // line in the table
+        document.getElementById(this.storiesArray[line].id).scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+
+        document.getElementById(this.storiesArray[line].id).style.background = "#ffd78e";
+
+        // after marking the needed line' paint the background back to it's normal color
+        let background;
+        if (line % 2 === 0) {
+          background = 'white';
+        } else {
+          background = '#f2f2f2';
+        }
+
+        setTimeout(() => {
+          document.getElementById(this.storiesArray[line].id).style.background = background;
+        }, 3000);
+        break;
+      }
+    }
+    if (line === -1) {
+      alert('האירוע שחיפשת לא נמצא');
+    }
+  }
+
   /*********************************************************************************************************************************/
 
   /*******************************************Gallery Management*******************************************************************/
@@ -854,10 +904,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   /*************************************************************************************************************************************/
   /************************************************Events Management********************************************************************/
 
-  // manageEvents() {
-
-  // }
-
   addEventDetails() {
     document.getElementById('events-input').hidden = false;
     this.event_title.value = null;
@@ -921,7 +967,12 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     alert.present();
   }
 
+<<<<<<< HEAD
   async searchEvent() {
+=======
+  //search for the story. Has to get the full name of the story to find it
+  searchEvent() {
+>>>>>>> ff712f52b6ea95e08be8ba40c8538c9066c147c9
     let line = -1;
     for (let i = 0; i < this.eventsArray.length; i++) {
       if (this.eventsArray[i].title === this.event_search) {
@@ -931,7 +982,11 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
           block: 'center'
         });
 
+<<<<<<< HEAD
         document.getElementById(this.eventsArray[line].id).style.background = '#ffd78e';
+=======
+        document.getElementById(this.eventsArray[line].id).style.background = "#ffd78e";
+>>>>>>> ff712f52b6ea95e08be8ba40c8538c9066c147c9
 
         // after marking the needed line' paint the background back to it's normal color
         let background;
