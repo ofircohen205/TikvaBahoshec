@@ -1,15 +1,26 @@
 <ion-header>
-    <ion-toolbar color="primary">
+    <ion-toolbar color="dark" >
         <ion-thumbnail slot="start">
-            <img style="display:inline-block;" src="../assets/logo/association_logo.jpg" />
+            <!-- <img style="display:inline-block;" src="../assets/logo/association_logo.jpg" /> -->
         </ion-thumbnail>
-        <a href='/home' style="color: white; text-decoration: none;">
-            <ion-title id='title-header' text-right>תקווה בחושך</ion-title>
-        </a>
+        <!-- <a href='/home' style="color: white; text-decoration: none;"> -->
+            <div>
+            <ion-icon   name="call" style="margin-top: 45px; float: right ; margin-right: -40px ; color: #4CAF50"  ></ion-icon>
+            <h6 style="margin-top: 45px; float: right ; margin-right: -20px; color: #4CAF50"  >טלפון: 0541231231</h6>
+            <ion-label  id='title-header' style="margin-top:-20px; float: right ; margin-right: 300px;  font-size:62px; ">תקווה בחושך</ion-label>
+            <a href='https://www.facebook.com/tikvabachoshech/' style="color: white; text-decoration: none;">
+            <ion-icon style="margin-top:30px; float: left ; padding-left: 10px; font-size:40px; color: #4CAF50;" name="logo-facebook"></ion-icon>
+            </a>
+            <ion-icon style="margin-top:30px; float: left ; padding-left: 10px ; font-size:40px; color: #4CAF50;" name="mail"></ion-icon>
+            <a href='https://youtu.be/zRm3S8bqtOo' style="color: white; text-decoration: none;">
+            <ion-icon style="margin-top:30px; float: left ; padding-left: 10px; font-size:40px; color: #4CAF50;"  name="logo-youtube"></ion-icon>
+            </a>
+        </div>
+        <!-- </a> -->
     </ion-toolbar>
 
     <ion-toolbar>
-        <ion-segment color="dark">
+        <ion-segment color = "favorite">
             <ion-segment-button value="home" checked (click)=(onclick($event))>
                 אודות
             </ion-segment-button>

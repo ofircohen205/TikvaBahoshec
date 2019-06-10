@@ -1,10 +1,20 @@
 <ion-grid fixed>
     <ion-row>
         <ion-col>
-            <ion-card text-center class='toChat'>
-                <h1>?איך אנחנו יכולים לעזור</h1>
+            <ion-card text-center class='toChat' style="background-image:url('../assets/partOfPages/HeartPic2.png'); background-position:center; background-size:cover,100%; background-repeat: no-repeat; ">
+                <h1>איך אנחנו יכולים לעזור?</h1>
                 <p>חשוב לנו לשמוע אותך</p>
-                <ion-button (click)='userDetails()'>צ'אט עם נציג אונליין</ion-button>
+                <ion-button color = 'favorite' (click)='userDetails()'>צ'אט עם נציג אונליין</ion-button>
+            </ion-card>
+
+            <ion-card>
+                <img style="display:inline-block; margin-top: -50px ;position: relative;" src="../assets/partOfPages/donatePic.png" />
+                <ion-button  style = "margin-left: 485px; margin-top: -270px; " color = 'favorite' (click) ="moveToJgive()">לתרומה לחץ כאן</ion-button>
+            </ion-card>
+
+            <ion-card text-center class='aboutQube'>
+                    <ion-card-content id='association-info'></ion-card-content>
+
             </ion-card>
         </ion-col>
     </ion-row>
@@ -14,13 +24,13 @@
                 <ion-card-content id='association-info'></ion-card-content>
             </ion-card>
         </ion-col>
-        <ion-col size='auto'>
-            <ion-card text-right>
-                <ion-card-content>
-                    <app-donate></app-donate>
-                </ion-card-content>
-            </ion-card>
-        </ion-col>
+        <!-- <ion-col size='auto'> -->
+            <!-- <ion-card text-right> -->
+                <!-- <ion-card-content> -->
+                    <!-- <app-donate></app-donate> -->
+                <!-- </ion-card-content> -->
+            <!-- </ion-card> -->
+        <!-- </ion-col> -->
     </ion-row>
     <ion-row>
         <ion-col size='12'>
