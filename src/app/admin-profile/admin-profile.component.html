@@ -107,10 +107,10 @@
             <!-- check if need to have an option of adding a story here -->
             <h3 text-center>רשימת עדויות</h3>
             <ion-searchbar class="search" type="text" [(ngModel)]="story_search" placeholder="כותרת העדות לחיפוש">
-              <ion-button (click)="searchStory()">
-                <ion-icon name="search"></ion-icon> חיפוש עדות
-              </ion-button>
             </ion-searchbar>
+            <ion-button (click)="searchStory()">
+              <ion-icon name="search"></ion-icon> חיפוש עדות
+            </ion-button>
           </ion-card-header>
 
           <ion-card-content>
@@ -233,7 +233,7 @@
 
             <ion-grid fixed>
 
-              <ion-card>
+              <ion-card style="height: 90px;">
 
                 <ion-row>
 
@@ -241,8 +241,6 @@
                     <ion-col>
                       <ion-row>
                         <ion-label style="text-align: right;width: 100%;">שם לקוח</ion-label>
-                      </ion-row>
-                      <ion-row>
                         <ion-input id="historyClientName" placeholder="הכנס שם לקוח" style="margin-left: 20%">
                         </ion-input>
                       </ion-row>
@@ -253,8 +251,6 @@
                     <ion-col>
                       <ion-row>
                         <ion-label style="text-align: right;width: 100%;">בחירת נציגים</ion-label>
-                      </ion-row>
-                      <ion-row>
                         <ion-select id='historySupportSelect' placeholder="בחר נציגים" multiple="true"
                           style="margin-left:20%">
                         </ion-select>
@@ -266,8 +262,6 @@
                     <ion-col>
                       <ion-row>
                         <ion-label style="text-align: right;width: 100%;">סטטוס שיחה</ion-label>
-                      </ion-row>
-                      <ion-row>
                         <ion-select id="historyStatusSelect" multiple="true" placeholder="בחר סטטוס"
                           style="margin-left:20%;">
                           <ion-select-option>בטיפול</ion-select-option>
@@ -281,8 +275,6 @@
                     <ion-col>
                       <ion-row>
                         <ion-label style="text-align: right;width: 100%;">החל מ</ion-label>
-                      </ion-row>
-                      <ion-row>
                         <ion-input type="date" id="historyFromDate2" (change)='adminHistoryLimitMinDate()' text-right>
                         </ion-input>
                       </ion-row>
@@ -310,7 +302,7 @@
                 <ion-col fixed=true style="align-self: center">
                   <ion-item lines="none">
                     <ion-button id="historySearchButton" style=" display: inline-block;"
-                      style="height: 60px;width: 80px;margin-right: 80%" (click)="createHistoryTable()">חיפוש
+                      style="height: 40px; width: 80px;margin-right: 80%" (click)="createHistoryTable()">חיפוש
                     </ion-button>
                   </ion-item>
                 </ion-col>
@@ -318,7 +310,7 @@
                 <ion-col fixed=true style="align-self: center">
                   <ion-item lines="none">
                     <ion-button id="historyResetButton" style=" display: inline-block;"
-                      style="height: 60px;width: 80px;" (click)="resetHistoryTableFileds()">ניקוי שדות</ion-button>
+                      style="height: 40px; width: 80px;" (click)="resetHistoryTableFileds()">ניקוי שדות</ion-button>
                   </ion-item>
                 </ion-col>
 
@@ -365,16 +357,14 @@
 
           <ion-card-header>
             <h2 text-center>עריכת אירועים</h2>
+            <ion-searchbar class="search" type="text" [(ngModel)]="event_search" placeholder="שם האירוע לחיפוש">
+            </ion-searchbar>
+            <ion-button (click)="searchEvent()">
+              <ion-icon name="search"></ion-icon> חיפוש אירוע
+            </ion-button>
             <ion-button color="success" (click)="addEventDetails()">
               <ion-icon name="add-circle-outline"></ion-icon> הוספת אירוע
             </ion-button>
-            <br />
-
-            <ion-searchbar class="search" type="text" [(ngModel)]="event_search" placeholder="שם האירוע לחיפוש">
-              <ion-button (click)="searchEvent()">
-                <ion-icon name="search"></ion-icon> חיפוש אירוע
-              </ion-button>
-            </ion-searchbar>
           </ion-card-header>
 
           <ion-card-content>

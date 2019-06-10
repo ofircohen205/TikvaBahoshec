@@ -128,6 +128,7 @@ export class SupportRepProfileComponent implements OnInit {
       const td6 = document.createElement('td');
       td6.appendChild(button);
       td6.id = 'supRepTable1button_' + index;
+      td6.style.textAlign = 'center';
       button.innerHTML = 'שיחה מחכה לנציג';
       button.color = 'success';
       if(!this.supportRepInShift){
@@ -220,6 +221,7 @@ export class SupportRepProfileComponent implements OnInit {
       const button1 = document.createElement('ion-button');
       const td6 = document.createElement('td');
       td6.appendChild(button1);
+      td6.style.textAlign = 'center';
       td6.id = 'supRepTable2button1_' + index;
       button1.innerHTML = 'כנס לשיחה';
       button1.color = 'success';
@@ -231,6 +233,7 @@ export class SupportRepProfileComponent implements OnInit {
       const button2 = document.createElement('ion-button');
       const td7 = document.createElement('td');
       td7.appendChild(button2);
+      td7.style.textAlign = 'center';
       td7.id = 'supRepTable2button2_' + index;
       button2.innerHTML = 'מילוי טופס לקוח';
       button2.color = 'success';
@@ -243,6 +246,7 @@ export class SupportRepProfileComponent implements OnInit {
       const td8 = document.createElement('td');
       td8.appendChild(button3);
       td8.id = 'supRepTable2button3_' + index;
+      td8.style.textAlign = 'center';
       button3.innerHTML = 'סגור שיחה';
       button3.color = 'success';
       td8.style.color = 'white';
