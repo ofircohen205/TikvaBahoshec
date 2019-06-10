@@ -1,7 +1,25 @@
 const functions = require('firebase-functions');
 const emailjs = require('emailjs/email');
 const pdfdocument = require('pdfkit');
+const admin = require('firebase-admin');
+admin.initializeApp();
 
+
+exports.deleteUser = functions.firestore
+    .document('SupportReps/{SupportRepID}')
+    .onDelete((snap, context) => {
+      return admin.auth().deleteUser(snap.data().SupportRepID)
+          .then(() => console.log('Deleted user with ID:' + snap.data().SupportRepID))
+          .catch((error) => console.error('There was an error while deleting user:', error));
+    });
+
+exports.deleteClient = functions.firestore
+    .document('Clients/{ClientID}')
+    .onDelete((snap, context) => {
+        return admin.auth().deleteUser(snap.data().ClientID)
+          .then(() => console.log('Deleted client with ID:' + snap.data().ClientID))
+          .catch((error) => console.error('There was an error while deleting client:', error));
+    })
 // var nameOfClient
 
 // exports.getName =  functions.database.ref('/nameOfClient/{namekey}').onWrite(( change,context) =>{
@@ -9,8 +27,6 @@ const pdfdocument = require('pdfkit');
 //     console.log(nameOfClient)
 //     return change.after.val().name;
 //    })
-
-
 
 
 // exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onWrite(event => {

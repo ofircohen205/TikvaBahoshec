@@ -1,358 +1,454 @@
 <ion-content>
   <ion-grid fixed>
     <ion-row>
+
       <ion-col size='12' text-center>
+
         <ion-button id="ShowSupportRep" (click)="onClick($event)">הצג נציגים</ion-button>
         <ion-button id="ViewHistoryClients" (click)="onClick($event)">היסטורית לקוחות</ion-button>
         <ion-button id="EditEvents" (click)="onClick($event)">עריכת אירועים</ion-button>
         <ion-button id="EditAssociationInfo" (click)="onClick($event)">עריכת אודות</ion-button>
         <ion-button id="ManageGallery" (click)="onClick($event)">עריכת הגלריה</ion-button>
         <ion-button id="ManageClientStories" (click)="onClick($event)">עריכת עדויות</ion-button>
-      </ion-col>
-      <ion-col size='12'>
 
+      </ion-col>
+
+      <ion-col>
 
         <ion-card id="Manage-SupportReps" text-center [hidden]="false">
 
-          <ion-toolbar>
-            <ion-searchbar class="search" type="text" [(ngModel)]="filterText" placeholder="חפש נציג"></ion-searchbar>
-          </ion-toolbar>
+          <ion-card-header>
 
+            <ion-toolbar style="padding-top: 25px;">
+              <ion-button (click)="addSupport()">הוסף נציג</ion-button>
+              <ion-searchbar class="search" type="text" [(ngModel)]="filterText" placeholder="חפש נציג"></ion-searchbar>
+            </ion-toolbar>
 
-          <ion-button (click)="addSupport()">הוסף נציג</ion-button>
-          <table id="tables" text-right>
-            <thead>
-              <tr>
-                <th text-center>שם נציג</th>
-                <th text-center>אימייל</th>
-                <th text-center>טלפון</th>
-                <th text-center>כתובת</th>
-                <th text-center>תעודת זהות</th>
-                <th text-center>מין</th>
-                <th text-center>במשמרת</th>
-                <th text-center>מחיקת נציג</th>
-                <th text-center>עריכת נציג</th>
-                <th text-center>שיחות נציג</th>
+          </ion-card-header>
 
-              </tr>
+          <ion-card-content>
 
-            </thead>
-
-            <tbody text-right>
-              <tr *ngFor="let supportRep of list | filter:filterText">
-            
-                <td>{{supportRep.name}}</td>
-                <td>{{supportRep.email}}</td>
-                <td>{{supportRep.phone}}</td>
-                <td>{{supportRep.address}}</td>
-                <td>{{supportRep.id}}</td>
-                <td>{{supportRep.gender}}</td>
-                <td *ngIf='supportRep.inShift'>במשמרת</td>
-                <td *ngIf='!supportRep.inShift'>לא במשמרת</td>
-                <td>
-                  <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
-                </td>
-                <td>
-                  <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
-                </td>
-                <td>
-                  <ion-button (click)="showHistory(supportRep)">הצג שיחות</ion-button>
-                </td>
-              </tr>
-            </tbody>
-
-          </table>
-          <hr>
-          <hr>
-          <ion-card id="chat-list" hidden="true">
             <table id="tables" text-right>
               <thead>
                 <tr>
                   <th text-center>שם נציג</th>
-                  <th text-center>שם לקוח</th>
-                  <th text-center>תאריך</th>
-                  <th text-center></th>
+                  <th text-center>אימייל</th>
+                  <th text-center>טלפון</th>
+                  <th text-center>כתובת</th>
+                  <th text-center>תעודת זהות</th>
+                  <th text-center>מין</th>
+                  <th text-center>במשמרת</th>
+                  <th text-center>מחיקת נציג</th>
+                  <th text-center>עריכת נציג</th>
+                  <th text-center>שיחות נציג</th>
                 </tr>
-
               </thead>
-              <tbody>
-                <tr *ngFor="let hist of supportRepHistory">
-                  <td>{{hist.SupportRepName}}</td>
-                  <td>{{hist.ClientName}}</td> 
-                  <td>{{hist.timestamp | date: "dd/MM/yyyy"}}</td>
+              <tbody text-right>
+                <tr *ngFor="let supportRep of list | filter:filterText">
+                  <td>{{supportRep.name}}</td>
+                  <td>{{supportRep.email}}</td>
+                  <td>{{supportRep.phone}}</td>
+                  <td>{{supportRep.address}}</td>
+                  <td>{{supportRep.id}}</td>
+                  <td>{{supportRep.gender}}</td>
+                  <td *ngIf='supportRep.inShift'>במשמרת</td>
+                  <td *ngIf='!supportRep.inShift'>לא במשמרת</td>
                   <td>
-                  <ion-button [routerLink]="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button>
+                    <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
+                  </td>
+                  <td>
+                    <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
+                  </td>
+                  <td>
+                    <ion-button (click)="showHistory(supportRep)">הצג שיחות</ion-button>
                   </td>
                 </tr>
               </tbody>
-
             </table>
 
-          </ion-card>
+            <hr>
+            <hr>
+
+            <ion-card id="chat-list" hidden="true">
+
+              <ion-card-content>
+                <table id="tables" text-right>
+                  <thead>
+                    <tr>
+                      <th text-center>שם נציג</th>
+                      <th text-center>שם לקוח</th>
+                      <th text-center>תאריך</th>
+                      <th text-center></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let hist of supportRepHistory">
+                      <td>{{hist.SupportRepName}}</td>
+                      <td>{{hist.ClientName}}</td>
+                      <td>{{hist.timestamp | date: "dd/MM/yyyy"}}</td>
+                      <td>
+                        <ion-button [routerLink]="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ion-card-content>
+
+            </ion-card>
+
+          </ion-card-content>
+
         </ion-card>
 
 
         <ion-card text-center id="Manage-Client-Stories" [hidden]="true">
-          <h3 text-center>רשימת סיפורים</h3>
-          <!-- check if need to have an option of adding a story here -->
-          <ion-card>
-            <table id="tables" text-center>
-              <thead>
-                <tr>
-                  <th text-center>כותרת</th>
-                  <th text-center>תאריך העלאה</th>
-                  <th text-center>אושר/לא אושר</th>
-                  <th text-center>עריכת עדות</th>
-                </tr>
-              </thead>
 
-              <tbody>
-                <tr *ngFor='let story of storiesArray'>
-                  <td *ngIf='story'>{{story.title}}</td>
-                  <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
-                  <td *ngIf='story && story.approved'> אושר</td>
-                  <td *ngIf='story && !story.approved'> לא אושר</td>
-                  <td>
-                    <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">אשר
-                    </ion-button>
-                    <ion-button (click)="editStory(story)">עריכה</ion-button>
-                    <ion-button color="danger" (click)="deleteStory(story)">מחק</ion-button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </ion-card>
+          <ion-card-header>
+            <!-- check if need to have an option of adding a story here -->
+            <h3 text-center>רשימת עדויות</h3>
+            <ion-searchbar class="search" type="text" [(ngModel)]="story_search" placeholder="כותרת העדות לחיפוש">
+              <ion-button (click)="searchStory()">
+                <ion-icon name="search"></ion-icon> חיפוש עדות
+              </ion-button>
+            </ion-searchbar>
+          </ion-card-header>
 
-          <ion-card id='editor' [hidden]="true">
-            <ion-card-header>
-              <h4 text-right>כותרת הסיפור:</h4>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-input type="text" #title style="border: 1px solid rgb(194, 173, 173);" text-right
-                [(value)]='titleValue'></ion-input>
-            </ion-card-content>
+          <ion-card-content>
 
-            <ion-card-header>
-              <h4 text-right>תוכן הסיפור:</h4>
-            </ion-card-header>
-            <ion-card-content>
-              <!-- Text editor for the stories -->
-              <ejs-richtexteditor text-right id='story-editor' [(value)]='value' [toolbarSettings]='tools'
-                [quickToolbarSettings]='quickTools'></ejs-richtexteditor>
-            </ion-card-content>
-            <ion-button id='save-edit' (click)="acceptStoryChange()">שמור עריכה</ion-button>
-          </ion-card>
+            <ion-card>
+              <div id="scrollbar1" class="my-custom-scrollbar">
+                <table id="tables" text-center>
+                  <thead>
+                    <tr>
+                      <th text-center>כותרת</th>
+                      <th text-center>תאריך העלאה</th>
+                      <th text-center>אושר/לא אושר</th>
+                      <th text-center>עריכת עדות</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr *ngFor='let story of storiesArray' [attr.id]='story.id'>
+                      <td *ngIf='story'>{{story.title}}</td>
+                      <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
+                      <td *ngIf='story && story.approved'> אושר</td>
+                      <td *ngIf='story && !story.approved'> לא אושר</td>
+                      <td>
+                        <ion-button *ngIf='story && !story.approved' color="success" (click)="confirmStory(story)">
+                          <ion-icon name="checkmark-circle-outline"></ion-icon> אשר
+                        </ion-button>
+                        <ion-button (click)="editStory(story)">
+                          <ion-icon name="create"></ion-icon> עריכה
+                        </ion-button>
+                        <ion-button color="danger" (click)="deleteStory(story)">
+                          <ion-icon name="trash"></ion-icon> מחק
+                        </ion-button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ion-card>
+
+            <ion-card id='editor' [hidden]="true">
+
+              <ion-card-header>
+                <h4 text-right>כותרת העדות:</h4>
+              </ion-card-header>
+
+              <ion-card-content>
+                <ion-input type="text" #title style="border: 1px solid rgb(194, 173, 173);" text-right
+                  [(value)]='titleValue'></ion-input>
+              </ion-card-content>
+
+              <ion-card-header>
+                <h4 text-right>תוכן העדות:</h4>
+              </ion-card-header>
+              <ion-card-content>
+                <!-- Text editor for the stories -->
+                <ejs-richtexteditor text-right id='story-editor' [(value)]='value' [toolbarSettings]='tools'
+                  [quickToolbarSettings]='quickTools'></ejs-richtexteditor>
+              </ion-card-content>
+
+              <ion-button id='save-edit' (click)="acceptStoryChange()">שמור עריכה</ion-button>
+
+            </ion-card>
+
+          </ion-card-content>
+
         </ion-card>
 
 
         <ion-card text-center id="Manage-Gallery" [hidden]="true">
 
-          <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
-          <input type="file" (change)="addFile($event)">
-          <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
-          <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
+          <ion-card-header>
 
-          <hr>
-          <hr>
+            <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
+            <input type="file" (change)="addFile($event)" class='uploadImage' id='imageFile' />
+            <label for='imageFile'>בחר תמונה</label>
+            <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
+            <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
 
-          <ion-grid fixed>
-            <ion-row>
-              <ion-col *ngFor='let img of imageUrls' size='auto'>
-                <img src={{img}} style='height: 200px; width: 200px; margin-right: 3%'>
-                <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+          </ion-card-header>
+
+          <ion-card-content>
+
+            <hr>
+            <hr>
+
+            <ion-grid fixed>
+              <ion-row>
+                <ion-col *ngFor='let img of imageUrls' size='auto'>
+                  <img src={{img}} style='height: 200px; width: 200px; margin-right: 3%'>
+                  <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ion-card-content>
 
         </ion-card>
 
 
         <ion-card text-center id="Edit-Association-Info" [hidden]="true">
-          <h2 text-center>עריכת אודות העמותה</h2>
-          <ejs-richtexteditor text-right id='info-editor' [(value)]='association_info' [toolbarSettings]='tools'
-            [quickToolbarSettings]='quickTools'>
-          </ejs-richtexteditor>
 
-          <ion-button (click)="saveInfoEdit()">שמור עריכה</ion-button>
+          <ion-card-content>
+            <h2 text-center>עריכת אודות העמותה</h2>
+            <ejs-richtexteditor text-right id='info-editor' [(value)]='association_info' [toolbarSettings]='tools'
+              [quickToolbarSettings]='quickTools'>
+            </ejs-richtexteditor>
+
+            <ion-button (click)="saveInfoEdit()">שמור עריכה</ion-button>
+          </ion-card-content>
+
         </ion-card>
 
         <ion-card text-center id="View-History-Clients" [hidden]="true">
-          <p text-center> היסטורית שיחות </p>
-          <ion-grid>
-            <ion-card>
+
+          <ion-card-header text-center>
+            <h3>היסטורית שיחות</h3>
+          </ion-card-header>
+
+          <ion-card-content>
+
+            <ion-grid fixed>
+
+              <ion-card>
+
+                <ion-row>
+
+                  <ion-col fixed=true style="border: 1px solid">
+                    <ion-col>
+                      <ion-row>
+                        <ion-label style="text-align: right;width: 100%;">שם לקוח</ion-label>
+                      </ion-row>
+                      <ion-row>
+                        <ion-input id="historyClientName" placeholder="הכנס שם לקוח" style="margin-left: 20%">
+                        </ion-input>
+                      </ion-row>
+                    </ion-col>
+                  </ion-col>
+
+                  <ion-col fixed=true style="border: 1px solid">
+                    <ion-col>
+                      <ion-row>
+                        <ion-label style="text-align: right;width: 100%;">בחירת נציגים</ion-label>
+                      </ion-row>
+                      <ion-row>
+                        <ion-select id='historySupportSelect' placeholder="בחר נציגים" multiple="true"
+                          style="margin-left:20%">
+                        </ion-select>
+                      </ion-row>
+                    </ion-col>
+                  </ion-col>
+
+                  <ion-col fixed=true style="border: 1px solid">
+                    <ion-col>
+                      <ion-row>
+                        <ion-label style="text-align: right;width: 100%;">סטטוס שיחה</ion-label>
+                      </ion-row>
+                      <ion-row>
+                        <ion-select id="historyStatusSelect" multiple="true" placeholder="בחר סטטוס"
+                          style="margin-left:20%;">
+                          <ion-select-option>בטיפול</ion-select-option>
+                          <ion-select-option>לא בטיפול</ion-select-option>
+                        </ion-select>
+                      </ion-row>
+                    </ion-col>
+                  </ion-col>
+
+                  <ion-col fixed=true style="border: 1px solid">
+                    <ion-col>
+                      <ion-row>
+                        <ion-label style="text-align: right;width: 100%;">החל מ</ion-label>
+                      </ion-row>
+                      <ion-row>
+                        <ion-input type="date" id="historyFromDate2" (change)='adminHistoryLimitMinDate()' text-right>
+                        </ion-input>
+                      </ion-row>
+                    </ion-col>
+                  </ion-col>
+
+                  <ion-col fixed=true style="border: 1px solid">
+                    <ion-col>
+                      <ion-row>
+                        <ion-label style="text-align: right;width: 100%;">עד</ion-label>
+                      </ion-row>
+                      <ion-row>
+                        <ion-input type="date" id="historyToDate1" (change)='adminHistoryLimitMaxDate()' text-right>
+                        </ion-input>
+                      </ion-row>
+                    </ion-col>
+                  </ion-col>
+
+                </ion-row>
+
+              </ion-card>
+
               <ion-row>
-                <ion-col fixed=true style="border: 1px solid">
-                  <ion-col>
-                    <ion-row>
-                      <ion-label style="text-align: right;width: 100%;">שם לקוח</ion-label>
-                    </ion-row>
-                    <ion-row>
-                      <ion-input id="historyClientName" placeholder="הכנס שם לקוח" style="margin-left: 20%"></ion-input>
-                    </ion-row>
-                  </ion-col>
+
+                <ion-col fixed=true style="align-self: center">
+                  <ion-item lines="none">
+                    <ion-button id="historySearchButton" style=" display: inline-block;"
+                      style="height: 60px;width: 80px;margin-right: 80%" (click)="createHistoryTable()">חיפוש
+                    </ion-button>
+                  </ion-item>
                 </ion-col>
-                <ion-col fixed=true style="border: 1px solid">
-                  <ion-col>
-                    <ion-row>
-                      <ion-label style="text-align: right;width: 100%;">בחירת נציגים</ion-label>
-                    </ion-row>
-                    <ion-row>
-                      <ion-select id='historySupportSelect' placeholder="בחר נציגים" multiple="true"
-                        style="margin-left:20%">
-                      </ion-select>
-                    </ion-row>
-                  </ion-col>
+
+                <ion-col fixed=true style="align-self: center">
+                  <ion-item lines="none">
+                    <ion-button id="historyResetButton" style=" display: inline-block;"
+                      style="height: 60px;width: 80px;" (click)="resetHistoryTableFileds()">ניקוי שדות</ion-button>
+                  </ion-item>
                 </ion-col>
-                <ion-col fixed=true style="border: 1px solid">
-                  <ion-col>
-                    <ion-row>
-                      <ion-label style="text-align: right;width: 100%;">סטטוס שיחה</ion-label>
-                    </ion-row>
-                    <ion-row>
-                      <ion-select id="historyStatusSelect" multiple="true" placeholder="בחר סטטוס"
-                        style="margin-left:20%;">
-                        <ion-select-option>בטיפול</ion-select-option>
-                        <ion-select-option>לא בטיפול</ion-select-option>
-                      </ion-select>
-                    </ion-row>
-                  </ion-col>
-                </ion-col>
-                <ion-col fixed=true style="border: 1px solid">
-                  <ion-col>
-                    <ion-row>
-                      <ion-label style="text-align: right;width: 100%;">החל מ</ion-label>
-                    </ion-row>
-                    <ion-row>
-                      <ion-input type="date" id="historyFromDate2" (change)='adminHistoryLimitMinDate()' text-right>
-                      </ion-input>
-                    </ion-row>
-                  </ion-col>
-                </ion-col>
-                <ion-col fixed=true style="border: 1px solid">
-                  <ion-col>
-                    <ion-row>
-                      <ion-label style="text-align: right;width: 100%;">עד</ion-label>
-                    </ion-row>
-                    <ion-row>
-                      <ion-input type="date" id="historyToDate1" (change)='adminHistoryLimitMaxDate()' text-right>
-                      </ion-input>
-                    </ion-row>
-                  </ion-col>
-                </ion-col>
+
               </ion-row>
-            </ion-card>
-            <ion-row>
-              <ion-col fixed=true style="align-self: center">
-                <ion-item lines="none">
-                  <ion-button id="historySearchButton" style=" display: inline-block;"
-                    style="height: 60px;width: 80px;margin-right: 80%" (click)="createHistoryTable()">חיפוש
-                  </ion-button>
-                </ion-item>
-              </ion-col>
-              <ion-col fixed=true style="align-self: center">
-                <ion-item lines="none">
-                  <ion-button id="historyResetButton" style=" display: inline-block;" style="height: 60px;width: 80px;"
-                    (click)="resetHistoryTableFileds()">ניקוי שדות</ion-button>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-          <div id="scrollbar1" class="my-custom-scrollbar">
-            <table id="adminHistorytable1" text-right class="table table-bordered table-striped mb-0">
-              <thead>
-                <tr>
-                  <th text-center>מספר</th>
-                  <th text-center id='adminHistoryClientColTable' class="p"
-                    (click)="sortByClient(this.sortArrowStatusTable,3,'adminHistoryClientColTable',this.chatRoomList,'historyTable')">
-                    &#8661; שם הלקוח</th>
-                  <th text-center id='adminHistoryDateColTable' class="p"
-                    (click)="sortByDate(this.sortArrowStatusTable,2,'adminHistoryDateColTable',this.chatRoomList,'historyTable')">
-                    &#8661;שעת פתיחת חדר </th>
-                  <th text-center id='adminHistorySupportColTable' class="p"
-                    (click)="sortBySupportRep(this.sortArrowStatusTable,1,'adminHistorySupportColTable',this.chatRoomList,'historyTable')">
-                    &#8661; שם הנציג השיחה</th>
-                  <th text-center id='adminHistoryStatusColTable' class="p"
-                    (click)="sortByOccupiedState(this.sortArrowStatusTable,0,'adminHistoryStatusColTable',this.chatRoomList,'historyTable')">
-                    &#8661; סטטוס</th>
-                  <th text-center></th>
-                  <th text-center></th>
-                  <th text-center></th>
-                </tr>
-              </thead>
 
-              <tbody text-right id="historyBodyTable">
-              </tbody>
+            </ion-grid>
 
-            </table>
-          </div>
+            <div id="scrollbar1" class="my-custom-scrollbar">
+
+              <table id="adminHistorytable1" text-right class="table table-bordered table-striped mb-0">
+                <thead>
+                  <tr>
+                    <th text-center>מספר</th>
+                    <th text-center id='adminHistoryClientColTable' class="p"
+                      (click)="sortByClient(this.sortArrowStatusTable,3,'adminHistoryClientColTable',this.chatRoomList,'historyTable')">
+                      &#8661; שם הלקוח</th>
+                    <th text-center id='adminHistoryDateColTable' class="p"
+                      (click)="sortByDate(this.sortArrowStatusTable,2,'adminHistoryDateColTable',this.chatRoomList,'historyTable')">
+                      &#8661;שעת פתיחת חדר </th>
+                    <th text-center id='adminHistorySupportColTable' class="p"
+                      (click)="sortBySupportRep(this.sortArrowStatusTable,1,'adminHistorySupportColTable',this.chatRoomList,'historyTable')">
+                      &#8661; שם הנציג השיחה</th>
+                    <th text-center id='adminHistoryStatusColTable' class="p"
+                      (click)="sortByOccupiedState(this.sortArrowStatusTable,0,'adminHistoryStatusColTable',this.chatRoomList,'historyTable')">
+                      &#8661; סטטוס</th>
+                    <th text-center></th>
+                    <th text-center></th>
+                    <th text-center></th>
+                  </tr>
+                </thead>
+
+                <tbody text-right id="historyBodyTable">
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </ion-card-content>
 
         </ion-card>
 
         <ion-card text-center id="Edit-Events" [hidden]="true">
-          <h2 text-center>עריכת אירועים</h2>
-          <ion-button color="success" (click)="addEventDetails()">הוספת אירוע</ion-button>
-          <br/>
-          <ion-button (click) = "searchEvent()"> חיפוש אירוע</ion-button>
-          <ion-input type="text" #eventSearch [(value)]="event_search" placeholder="שם האירוע"></ion-input>
 
-          <h3 text-center>רשימת אירועים</h3>
-          <ion-card>
-            <table id="tables" text-center>
-              <thead>
-                <tr>
-                  <th text-center>שם האירוע</th>
-                  <th text-center>תאריך האירוע</th> 
-                  <th text-center>עריכת האירוע</th>
-                </tr>
-              </thead>
+          <ion-card-header>
+            <h2 text-center>עריכת אירועים</h2>
+            <ion-button color="success" (click)="addEventDetails()">
+              <ion-icon name="add-circle-outline"></ion-icon> הוספת אירוע
+            </ion-button>
+            <br />
 
-              <tbody>
-                <tr *ngFor='let event of eventsArray' [attr.id]="event.id">
-                  <td *ngIf='event'>{{ event.title }}</td>
-                  <td *ngIf='event'>{{ event.date | date: "dd/MM/yyyy" }}</td>
-                  <td>
-                    <ion-button (click)="editEvent(event)">עריכה</ion-button>  
-                    <ion-button color="danger" (click)="deleteEvent(event)">מחק</ion-button>
-                  </td>
-                </tr>
+            <ion-searchbar class="search" type="text" [(ngModel)]="event_search" placeholder="שם האירוע לחיפוש">
+              <ion-button (click)="searchEvent()">
+                <ion-icon name="search"></ion-icon> חיפוש אירוע
+              </ion-button>
+            </ion-searchbar>
+          </ion-card-header>
 
-              </tbody>
-            </table>
+          <ion-card-content>
 
-          </ion-card>
-          <ion-card id='events-input' [hidden]="true">
-            <ion-card-header>
-              <h4 text-right>שם האירוע:</h4>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-input type="text" #eventitle style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
-                [(value)]='event_title' placeholder="שם האירוע"></ion-input>
-            </ion-card-content>
+            <h3 text-center>רשימת אירועים</h3>
+            <ion-card>
 
-            <ion-card-header>
-              <h4 text-right>תאריך האירוע:</h4>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-input type="date" #eventDate style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
-                [(value)]='event_date'></ion-input>
-            </ion-card-content>
+              <div id="scrollbar1" class="my-custom-scrollbar">
+                <table id="tables" text-center>
+                  <thead>
+                    <tr>
+                      <th text-center>שם האירוע</th>
+                      <th text-center>תאריך האירוע</th>
+                      <th text-center>עריכת האירוע</th>
+                    </tr>
+                  </thead>
 
-            <ion-card-header text-right>
-              <h4>תיאור האירוע:</h4>
-            </ion-card-header>
-            <ion-card-content>
-              <ejs-richtexteditor text-right placeholder="תיאור האירוע" id='event-editor' [(value)]='event_content'
-                [toolbarSettings]='tools' [quickToolbarSettings]='quickTools'>
-              </ejs-richtexteditor>
-            </ion-card-content>
+                  <tbody>
+                    <tr *ngFor='let event of eventsArray' [attr.id]="event.id">
+                      <td *ngIf='event'>{{ event.title }}</td>
+                      <td *ngIf='event'>{{ event.date | date: "dd/MM/yyyy" }}</td>
+                      <td>
+                        <ion-button (click)="editEvent(event)">
+                          <ion-icon name="create"></ion-icon> עריכה
+                        </ion-button>
+                        <ion-button color="danger" (click)="deleteEvent(event)">
+                          <ion-icon name="trash"></ion-icon> מחק
+                        </ion-button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-            <ion-button id='save-event-edit' (click)="saveEvent()">שמור</ion-button>
-          </ion-card>
+            </ion-card>
+
+            <ion-card id='events-input' [hidden]="true">
+
+              <ion-card-header>
+                <h4 text-right>שם האירוע:</h4>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-input type="text" #eventitle style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
+                  [(value)]='event_title' placeholder="שם האירוע"></ion-input>
+              </ion-card-content>
+
+              <ion-card-header>
+                <h4 text-right>תאריך האירוע:</h4>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-input type="date" #eventDate style="border: 1px solid rgb(194, 173, 173); padding: 2px;" text-right
+                  [(value)]='event_date'></ion-input>
+              </ion-card-content>
+
+              <ion-card-header text-right>
+                <h4>תיאור האירוע:</h4>
+              </ion-card-header>
+              <ion-card-content>
+                <ejs-richtexteditor text-right placeholder="תיאור האירוע" id='event-editor' [(value)]='event_content'
+                  [toolbarSettings]='tools' [quickToolbarSettings]='quickTools'>
+                </ejs-richtexteditor>
+              </ion-card-content>
+
+              <ion-button id='save-event-edit' (click)="saveEvent()">שמור</ion-button>
+            </ion-card>
+          </ion-card-content>
+
         </ion-card>
 
       </ion-col>
+
     </ion-row>
+
   </ion-grid>
-  
+
   <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir</ion-footer>
 </ion-content>

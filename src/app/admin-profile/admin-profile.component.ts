@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ApplicationRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ApplicationRef, OnDestroy } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -12,13 +12,13 @@ import { Observable } from 'rxjs';
 import { finalize, findIndex, timestamp } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 import { createElement } from '@syncfusion/ej2-base';
-import { SupportRepsService } from '../global/admin/support-reps.service';
 import { Location } from '@angular/common';
 import { ValueAccessor } from '@ionic/angular/dist/directives/control-value-accessors/value-accessor';
 import { getName } from 'ionicons/dist/types/icon/utils';
 import * as firebase from 'firebase';
 import { text, element } from '@angular/core/src/render3';
 import { Title } from '@angular/platform-browser';
+import { StoryComponent } from '../story/story.component';
 
 
 
@@ -31,7 +31,7 @@ import { Title } from '@angular/platform-browser';
 })
 
 
-export class AdminProfileComponent implements OnInit {
+export class AdminProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private alertController: AlertController,
@@ -41,10 +41,19 @@ export class AdminProfileComponent implements OnInit {
     private location: Location,
     private afs: AngularFireStorage,
     private global: GlobalService,
-    private appRef: ApplicationRef,
-    private supportRepService: SupportRepsService
+    private appRef: ApplicationRef
   ) { }
 
+  // Subscribe variables
+  support_rep_list_subscribe;
+  all_chat_room_subscribe;
+  image_array_subscribe;
+  association_subscribe;
+  events_subscribe;
+  stories_subscribe;
+
+
+  // Variables
   chatRoomHistory: any[] = [];
   imageUrls: string[] = [];
   list: any[] = [];
@@ -62,7 +71,8 @@ export class AdminProfileComponent implements OnInit {
 
   @ViewChild('eventitle') event_title;
   @ViewChild('eventDate') event_date;
-  @ViewChild('eventSearch') event_search = null;
+  // @ViewChild('eventSearch') event_search;
+  event_search = '';
   event_content: string = null;
   is_new_event_flag: boolean;
   eventsArray: any[] = [];
@@ -70,6 +80,8 @@ export class AdminProfileComponent implements OnInit {
   association_info: string;
 
   @ViewChild('title') title;
+  story_search = '';
+  private curr_story_edit_id: string;
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
   public value =
@@ -92,26 +104,26 @@ export class AdminProfileComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.firestore.getSupportRepNameList().subscribe(result => {
+    this.support_rep_list_subscribe = this.firestore.getSupportRepNameList().subscribe(result => {
       this.supportRepList = result;
       this.initSupportSelectList();
     });
-    this.firestore.getAllChatRoom().subscribe(result1 => {
+    this.all_chat_room_subscribe = this.firestore.getAllChatRoom().subscribe(result1 => {
       this.chatRoomList = result1;
       this.createHistoryTable();
     });
-    this.firestore.getImageArray().subscribe(res => {
+    this.image_array_subscribe = this.firestore.getImageArray().subscribe(res => {
       this.imageUrls = res.images;
     });
 
-    this.firestore.getAssociationInfo().subscribe(result => {
+    this.association_subscribe = this.firestore.getAssociationInfo().subscribe(result => {
       this.association_info = result.info;
     });
 
-    this.firestore.getEvents().subscribe(result => {
+    this.events_subscribe = this.firestore.getEvents().subscribe(result => {
       this.eventsArray = result;
-      // this.manageEvents();
     });
+    // this.event_search.value = null;
 
     this.manageStories();
     this.manageSupportReps();
@@ -142,12 +154,13 @@ export class AdminProfileComponent implements OnInit {
     this.removeChildren(body, 'historyBodyTable');
     var dateFrom;
     var dateTo;
+
     if (fromDate !== '') {
       dateFrom = new Date(fromDate).toLocaleDateString();
-    }
-    else {
+    } else {
       dateFrom = '';
     }
+
     if (toDate !== '') {
       dateTo = new Date(toDate).toLocaleDateString();
     } else {
@@ -183,13 +196,13 @@ export class AdminProfileComponent implements OnInit {
           (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
           (chatRoom['ClientName'].search(clientName) != -1 || clientName === '')) {
 
-            var td1 = document.createElement('td');
-            td1.style.border = ' 1px solid #ddd';
-            td1.style.padding = '8px';
-            td1.style.borderCollapse = 'collapse';
-            td1.textContent = index.toString();
+          var td1 = document.createElement('td');
+          td1.style.border = ' 1px solid #ddd';
+          td1.style.padding = '8px';
+          td1.style.borderCollapse = 'collapse';
+          td1.textContent = index.toString();
 
-            var td2 = document.createElement('td');
+          var td2 = document.createElement('td');
           td2.style.border = ' 1px solid #ddd';
           td2.style.padding = '8px';
           td2.style.borderCollapse = 'collapse';
@@ -270,16 +283,18 @@ export class AdminProfileComponent implements OnInit {
         }
       }
     }
-        var tbodyChildrens = body.childNodes;
-        console.log(tbodyChildrens[0].childNodes[5]);
-        for (let i = 0; i < body.childNodes.length; i++) {
-          tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
-          tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
-          var trChildren = tbodyChildrens[i].childNodes;
-          trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 1], i));
-          trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
-          trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
-        }
+    var tbodyChildrens = body.childNodes;
+    for (let i = 0; i < body.childNodes.length; i++) {
+      tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
+      tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
+      var trChildren = tbodyChildrens[i].childNodes;
+// tslint:disable-next-line: max-line-length
+      trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 1], i));
+// tslint:disable-next-line: max-line-length
+      trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
+// tslint:disable-next-line: max-line-length
+      trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
+    }
   }
 
   async removeChildren(tbody, tbodyId) {
@@ -296,13 +311,13 @@ export class AdminProfileComponent implements OnInit {
       list.sort((a, b) => (a.timestamp >= b.timestamp) ? 1 : -1)
       dateStatus[index] = false;
       nameBtn.innerHTML = '&#8657;שעת פתיחת חדר';
-    }
-    else {
+    } else {
       list.sort((a, b) => (a.timestamp <= b.timestamp) ? 1 : -1);
       dateStatus[index] = true;
       nameBtn.innerHTML = '&#8659;שעת פתיחת חדר';
 
     }
+
     if (table === 'historyTable') {
       this.createHistoryTable();
     }
@@ -315,12 +330,12 @@ export class AdminProfileComponent implements OnInit {
       list.sort((a, b) => (a.ClientName >= b.ClientName) ? 1 : -1);
       nameStatus[index] = false;
       nameBtn.innerHTML = '&#8657; שם הלקוח'
-    }
-    else {
+    } else {
       list.sort((a, b) => (a.ClientName <= b.ClientName) ? 1 : -1)
       nameStatus[index] = true;
       nameBtn.innerHTML = '&#8659; שם הלקוח'
     }
+
     if (table === 'historyTable') {
       this.createHistoryTable();
     }
@@ -333,12 +348,12 @@ export class AdminProfileComponent implements OnInit {
       list.sort((a, b) => (a.SupportRepName >= b.SupportRepName) ? 1 : -1)
       nameStatus[index] = false
       nameBtn.innerHTML = '&#8657; שם הנציג בשיחה'
-    }
-    else {
+    } else {
       list.sort((a, b) => (a.SupportRepName <= b.SupportRepName) ? 1 : -1)
       nameStatus[index] = true;
       nameBtn.innerHTML = '&#8659; שם הנציג בשיחה'
     }
+
     if (table === 'historyTable') {
       this.createHistoryTable();
     }
@@ -352,12 +367,12 @@ export class AdminProfileComponent implements OnInit {
       list.sort((a, b) => a.open - b.open)
       stateStatus[index] = false;
       stateBtn.innerHTML = '&#8657; מצב החדר'
-    }
-    else {
+    } else {
       list.sort((a, b) => b.open - a.open)
       stateStatus[index] = true;
       stateBtn.innerHTML = '&#8659; מצב החדר';
     }
+
     if (table === 'historyTable') {
       this.createHistoryTable();
     }
@@ -371,12 +386,12 @@ export class AdminProfileComponent implements OnInit {
       list.sort((a, b) => a.occupied - b.occupied)
       stateStatus[index] = false;
       stateBtn.innerHTML = '&#8657; מצב החדר'
-    }
-    else {
+    } else {
       list.sort((a, b) => b.occupied - a.occupied)
       stateStatus[index] = true;
       stateBtn.innerHTML = '&#8659; מצב החדר';
     }
+
     if (table === 'historyTable') {
       this.createHistoryTable();
     }
@@ -418,9 +433,8 @@ export class AdminProfileComponent implements OnInit {
       // window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
     if (e['id'] === 'adminHistoryTablebutton1_' + (index + 1)) {
-      console.log('hi');
-// tslint:disable-next-line: max-line-length
-      // window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
+      // tslint:disable-next-line: max-line-length
+      window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
     }
   }
 
@@ -430,7 +444,7 @@ export class AdminProfileComponent implements OnInit {
         this.txtMsg += "From:" + msg.from + " Time:" + new Date(msg.timestamp)
         this.txtMsg += "\n<" + msg.content + ">\n\n"
       })
-      console.log("startDownload")
+      console.log('startDownload')
       var link = document.createElement('a');
       link.download = 'Chat:' + roomId + '.txt';
       var blob = new Blob([this.txtMsg], { type: 'text/plain' });
@@ -662,10 +676,7 @@ export class AdminProfileComponent implements OnInit {
 
   /*******************************************Stories Management*******************************************************************/
   manageStories() {
-    // this.firestore.getStories().subscribe(r =>{
-    //   console.log(r);
-    // })
-    this.firestore.getStoriesId().subscribe(results => {
+    this.stories_subscribe = this.firestore.getStoriesId().subscribe(results => {
       results.forEach(result => {
         const id = result.payload.doc.id;
         const data = result.payload.doc.data();
@@ -695,13 +706,21 @@ export class AdminProfileComponent implements OnInit {
   // edit the story. replace the old content of the story with the new content
   editStory(story) {
     document.getElementById('editor').hidden = false;
-    document.getElementById('story-editor').nodeValue = story.id;
+    this.curr_story_edit_id = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id) {
+      if (this.strcmp(story.id, i) === 0) {
         this.value = this.storiesArray[i].description;  // edit the story
         this.title.value = this.storiesArray[i].title;
+
+        document.getElementById('editor').scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+
+        break;
       }
     }
+  
   }
 
 
@@ -736,7 +755,7 @@ export class AdminProfileComponent implements OnInit {
           text: 'אשר',
           handler: () => {
             for (let i = 0; i < this.storiesArray.length; i++) {
-              if (story.id === this.storiesArray[i].id) {
+              if (this.strcmp(story.id, i) === 0) {
                 this.storiesArray[i].approved = true;
                 this.firestore.confirmStory(this.storiesArray[i].id, true);
               }
@@ -748,8 +767,8 @@ export class AdminProfileComponent implements OnInit {
   }
 
   // after the story was edited, we save the changes in it
-  acceptStoryChange() {
-    const storyId = document.getElementById('story-editor').nodeValue;
+  async acceptStoryChange() {
+    const storyId = this.curr_story_edit_id;
     let areEquals: number;
     for (let i = 0; i < this.storiesArray.length; i++) {
       areEquals = this.strcmp(storyId, i);
@@ -758,10 +777,15 @@ export class AdminProfileComponent implements OnInit {
         this.firestore.editStory(this.storiesArray[i].id, this.value);
         this.storiesArray[i].title = this.title.value;
         this.firestore.editStoryTitle(this.storiesArray[i].id, this.title.value);
+        this.curr_story_edit_id = null;
         break;
       }
     }
-    alert('יש ללחוץ "אשר" עבור העדות הרצויה, במידה והעדות עדיין לא אושרה');
+    const alert = await this.alertController.create({
+      message: 'יש ללחוץ "אשר" עבור העדות הרצויה, במידה והעדות עדיין לא אושרה',
+      buttons: ['המשך']
+    });
+    alert.present();
     document.getElementById('editor').hidden = true;
   }
 
@@ -774,6 +798,43 @@ export class AdminProfileComponent implements OnInit {
     }
     return 0;
   }
+
+  // search for the story. Has to get the full name of the story to find it
+  async searchStory() {
+    let line = -1;
+    for (let i = 0; i < this.storiesArray.length; i++) {
+      if (this.storiesArray[i].title === this.story_search) {
+        line = i; // line in the table
+        document.getElementById(this.storiesArray[line].id).scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+
+        document.getElementById(this.storiesArray[line].id).style.background = "#ffd78e";
+
+        // after marking the needed line' paint the background back to it's normal color
+        let background;
+        if (line % 2 === 0) {
+          background = 'white';
+        } else {
+          background = '#f2f2f2';
+        }
+
+        setTimeout(() => {
+          document.getElementById(this.storiesArray[line].id).style.background = background;
+        }, 3000);
+        break;
+      }
+    }
+    if (line === -1) {
+      const alert = await this.alertController.create({
+        message: 'האירוע שחיפשת לא נמצא',
+        buttons: ['המשך']
+      });
+      alert.present();
+    }
+  }
+
   /*********************************************************************************************************************************/
 
   /*******************************************Gallery Management*******************************************************************/
@@ -793,7 +854,7 @@ export class AdminProfileComponent implements OnInit {
 
   uploadFile() {
     const fileName = this.file.name;
-// tslint:disable-next-line: max-line-length
+    // tslint:disable-next-line: max-line-length
     if (!(fileName.includes('.jpg') || fileName.includes('.jpeg') || fileName.includes('.png') || fileName.includes('.JPG') || fileName.includes('.JPEG') || fileName.includes('.PNG'))) {
       this.global.invalidImage();
       return;
@@ -842,25 +903,37 @@ export class AdminProfileComponent implements OnInit {
   /*************************************************************************************************************************************/
   /************************************************Events Management********************************************************************/
 
-  // manageEvents() {
-
-  // }
-
   addEventDetails() {
     document.getElementById('events-input').hidden = false;
+    this.event_title.value = null;
+    this.event_date.value = null;
+    this.event_content = null;
     this.is_new_event_flag = true;
+    document.getElementById('events-input').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
   }
-  saveEvent() {
+
+
+  async saveEvent() {
     if (this.is_new_event_flag === true) {
       this.firestore.createEvent(this.event_title.value, this.event_date.value, this.event_content);
-      alert('האירוע נוסף בהצלחה!');
+      const alert = await this.alertController.create({
+        message: 'האירוע נוסף בהצלחה',
+        buttons: ['המשך']
+      });
+      alert.present();
     } else {  // this.is_new_event_flag === false
       this.firestore.editEvent(this.event_to_change.id, this.event_title.value, this.event_date.value, this.event_content);
-      alert('האירוע שונה בהצלחה!');
+      const alert = await this.alertController.create({
+        message: 'האירוע שונה בהצלחה',
+        buttons: ['המשך']
+      });
+      alert.present();
     }
   }
 
-  // need to do the delete button and search button
 
   editEvent(event) {
     document.getElementById('events-input').hidden = false;
@@ -869,6 +942,10 @@ export class AdminProfileComponent implements OnInit {
     this.event_content = event.description;
     this.is_new_event_flag = false;
     this.event_to_change = event;
+    document.getElementById('events-input').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
   }
 
 
@@ -889,17 +966,17 @@ export class AdminProfileComponent implements OnInit {
     alert.present();
   }
 
-  searchEvent() {
+  async searchEvent() {
     let line = -1;
     for (let i = 0; i < this.eventsArray.length; i++) {
-      if (this.eventsArray[i].title === this.event_search.value) {
+      if (this.eventsArray[i].title === this.event_search) {
         line = i; // line in the table
-        let element = document.getElementById(this.eventsArray[line].id);
-        element.scrollIntoView({
+        document.getElementById(this.eventsArray[line].id).scrollIntoView({
           behavior: 'smooth',
           block: 'center'
         });
-        document.getElementById(this.eventsArray[line].id).style.background = "#ffd78e";
+
+        document.getElementById(this.eventsArray[line].id).style.background = '#ffd78e';
 
         // after marking the needed line' paint the background back to it's normal color
         let background;
@@ -910,14 +987,28 @@ export class AdminProfileComponent implements OnInit {
         }
 
         setTimeout(() => {
-          document.getElementById(this.eventsArray[line].id).style.background = background; }, 3000);
-       break;
+          document.getElementById(this.eventsArray[line].id).style.background = background;
+        }, 3000);
+        break;
       }
     }
     if (line === -1) {
-      alert('האירוע שחיפשת לא נמצא');
+      const alert = await this.alertController.create({
+        message: 'האירוע שחיפשת לא נמצא',
+        buttons: ['המשך']
+      });
+      alert.present();
     }
   }
 
 
-} //end of AdminProfileComponent
+  ngOnDestroy() {
+    this.events_subscribe.unsubscribe();
+    this.support_rep_list_subscribe.unsubscribe();
+    this.all_chat_room_subscribe.unsubscribe();
+    this.image_array_subscribe.unsubscribe();
+    this.association_subscribe.unsubscribe();
+    this.stories_subscribe.unsubscribe();
+  }
+
+} // end of AdminProfileComponent

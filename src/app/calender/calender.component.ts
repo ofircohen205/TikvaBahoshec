@@ -35,7 +35,7 @@ export class CalenderComponent implements OnInit {
 
     this.showCalendar(this.currentMonth, this.currentYear);
 
-  }//end of ngOnInit
+  } // end of ngOnInit
 
 
   showCalendar(month, year) {
@@ -99,7 +99,7 @@ export class CalenderComponent implements OnInit {
         if (i === 0 && j < firstDay) {
           cell = document.createElement('td');
           cellText = document.createTextNode('');
-          data = document.createElement('div'); //div for the titles in the calendar
+          data = document.createElement('div'); // div for the titles in the calendar
           cell.appendChild(cellText);
           cell.appendChild(data);
           row.appendChild(cell);
@@ -108,7 +108,7 @@ export class CalenderComponent implements OnInit {
         } else {
           cell = document.createElement('td')
           cellText = document.createTextNode(date.toString());
-          data = document.createElement('div'); //div for the titles in the calendar
+          data = document.createElement('div'); // div for the titles in the calendar
           if (date.toString().length === 1)
             full_date = "0" + date.toString() + "-";
           else
@@ -124,8 +124,8 @@ export class CalenderComponent implements OnInit {
           if (date === this.today.getDate() && year === this.today.getFullYear() && month === this.today.getMonth()) {
             cell.classList.add('bg-info');
           } // color today's date
-          cell.appendChild(cellText); //the day in the month
-          cell.appendChild(data);  //the events in the day
+          cell.appendChild(cellText); // the day in the month
+          cell.appendChild(data);  // the events in the day
           row.appendChild(cell);
           date++;
         }
@@ -134,7 +134,7 @@ export class CalenderComponent implements OnInit {
     }
 
     if (this.first_show_flag === true) {
-      setTimeout(() => { this.addEventsToCalendar() }, 2000); //can find a better way here (catch the click on event's tab at the home page)
+      setTimeout(() => { this.addEventsToCalendar() }, 2000); // can find a better way here (catch the click on event's tab at the home page)
       this.first_show_flag = false;
     }
     else
