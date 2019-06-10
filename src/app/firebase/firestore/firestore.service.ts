@@ -194,8 +194,9 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION, ref => ref.where('inShift', '==', true)).valueChanges();
   }
 
-  public updateSupportRepDetails(SupportRepID, name, email, phone): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, name, email, phone });
+  public updateSupportRepDetails(SupportRepID, name, email, phone, id, address, gender): void {
+// tslint:disable-next-line: max-line-length
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, name, email, phone, id, address, gender });
   }
 
   public updateSupportRepEmail(SupportRepID, email): void {
