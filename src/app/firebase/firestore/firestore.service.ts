@@ -156,19 +156,25 @@ export class FirestoreService {
   /************************************/
   /* SUPPORT REP COLLECTION FUNCTIONS */
   /************************************/
-  public createSupportRep(uid, name, email, phone, id, address, gender): void {
+  public createSupportRep(uid, first_name, last_name, id, address, age, email, cellphone, phone, gender): void {
     this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(uid).set({
       SupportRepID: uid,
-      email,
-      name,
-      phone,
+      first_name,
+      last_name,
       id,
       address,
+      age,
+      email,
+      cellphone,
+      phone,
       gender,
       inShift: false,
     });
   }
 
+  public getSupportRepDetails(clientId): Observable<any> {
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(clientId).valueChanges();
+  }
 
   public getSupportRepName(supportRepId): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
@@ -186,9 +192,9 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION, ref => ref.where('inShift', '==', true)).valueChanges();
   }
 
-  public updateSupportRepDetails(SupportRepID, name, email, phone, id, address, gender): void {
+  public updateSupportRepDetails(SupportRepID, first_name, last_name, id, address, age, email, cellphone, phone, gender): void {
 // tslint:disable-next-line: max-line-length
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, name, email, phone, id, address, gender });
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, first_name, last_name, id, address, age, email, cellphone, phone, gender});
   }
 
   public updateSupportRepEmail(SupportRepID, email): void {
@@ -295,6 +301,14 @@ export class FirestoreService {
 
   public checkIfAdmin(supportRepId): Observable<any> {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public getAdmins() {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public addToAdminList(admins) {
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ admins });
   }
 
   public getImageArray(): Observable<any> {

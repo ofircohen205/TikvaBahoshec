@@ -9,7 +9,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 // tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Observable } from 'rxjs';
-import { finalize, findIndex, timestamp } from 'rxjs/operators';
+import { finalize, findIndex, timestamp, filter } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 import { createElement } from '@syncfusion/ej2-base';
 import { Location } from '@angular/common';
@@ -62,6 +62,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
   supportRepList: any[] = [];
+  adminsList: any[] = [];
   chatRoomList: any[] = [];
   clientList: any[] = [];
   txtMsg = '';
@@ -71,8 +72,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   @ViewChild('eventitle') event_title;
   @ViewChild('eventDate') event_date;
-  // @ViewChild('eventSearch') event_search;
-  event_search = '';
+  event_filter = '';
   event_content: string = null;
   is_new_event_flag: boolean;
   eventsArray: any[] = [];
@@ -80,6 +80,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   association_info: string;
 
   @ViewChild('title') title;
+  story_filter='';
   story_search = '';
   private curr_story_edit_id: string;
   // variables for the text editor
@@ -123,7 +124,12 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.events_subscribe = this.firestore.getEvents().subscribe(result => {
       this.eventsArray = result;
     });
-    // this.event_search.value = null;
+
+    this.firestore.getAdmins().subscribe(result => {
+      result['admins'].forEach(item => {
+        this.adminsList.push(item);
+      });
+    });
 
     this.manageStories();
     this.manageSupportReps();
@@ -492,109 +498,13 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  async addSupport() {
-    const alert = await this.alertController.create({
-      header: 'הוספת נציג חדש',
-      cssClass: 'add-support',
-      inputs: [
-        {
-          name: 'username',
-          placeholder: 'שם הנציג'
-        },
-        {
-          name: 'id',
-          placeholder: 'תעודת זהות'
-        },
-        {
-          name: 'address',
-          placeholder: 'כתובת'
-        },
-        {
-          name: 'phone',
-          placeholder: 'מספר פלאפון'
-        },
-        {
-          name: 'gender',
-          placeholder: 'מין'
-        },
-        {
-          name: 'email',
-          placeholder: 'אימייל'
-        },
-        {
-          name: 'password',
-          placeholder: 'סיסמא'
-        }
-      ],
-      buttons: [{
-        text: 'חזור'
-      },
-      {
-        text: 'הוסף',
-        handler: data => {
-          this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
-            this.firestore.createSupportRep(res.user.uid, data.username, data.email, data.phone, data.id, data.address, data.gender);
-          }).catch(error => {
-            alert.dismiss(); // here dismiss this alert
-            const errAlert = this.alertController.create({
-              header: 'added failed',
-              message: error,
-              buttons: ['OK']
-            }).then(res => res.present());
-          });
-        }
-      }]
-    });
-    alert.present();
+  addSupport() {
+    window.open('/support-rep/', '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
   }
 
-  async editSupport(x) {
-    const alert = await this.alertController.create({
-      header: 'עריכת נציג',
-      inputs: [
-        {
-          name: 'username',
-          placeholder: 'שם הנציג'
-        },
-        {
-          name: 'id',
-          placeholder: 'תעודת זהות'
-        },
-        {
-          name: 'address',
-          placeholder: 'כתובת'
-        },
-        {
-          name: 'phone',
-          placeholder: 'מספר פלאפון'
-        },
-        {
-          name: 'gender',
-          placeholder: 'מין'
-        },
-        {
-          name: 'email',
-          placeholder: 'אימייל'
-        },
-        {
-          name: 'password',
-          placeholder: 'סיסמא'
-        }
-      ],
-      buttons: [{
-        text: 'חזור'
-      },
-      {
-        text: 'שמור שינויים',
-        handler: data => {
-          this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone, data.id, data.address, data.gender);
-          this.list[this.list.indexOf(x)].username = data.username;
-          this.list[this.list.indexOf(x)].email = data.email;
-          this.list[this.list.indexOf(x)].phone = data.phone;
-        }
-      }]
-    });
-    alert.present();
+  editSupport(x) {
+    window.open('/support-rep/' + x['SupportRepID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
+
   }
 
   async deleteSupport(x) {
@@ -800,40 +710,40 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   }
 
   // search for the story. Has to get the full name of the story to find it
-  async searchStory() {
-    let line = -1;
-    for (let i = 0; i < this.storiesArray.length; i++) {
-      if (this.storiesArray[i].title === this.story_search) {
-        line = i; // line in the table
-        document.getElementById(this.storiesArray[line].id).scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
+  // async searchStory() {
+  //   let line = -1;
+  //   for (let i = 0; i < this.storiesArray.length; i++) {
+  //     if (this.storiesArray[i].title === this.story_search) {
+  //       line = i; // line in the table
+  //       document.getElementById(this.storiesArray[line].id).scrollIntoView({
+  //         behavior: 'smooth',
+  //         block: 'center'
+  //       });
 
-        document.getElementById(this.storiesArray[line].id).style.background = "#ffd78e";
+  //       document.getElementById(this.storiesArray[line].id).style.background = "#ffd78e";
 
-        // after marking the needed line' paint the background back to it's normal color
-        let background;
-        if (line % 2 === 0) {
-          background = 'white';
-        } else {
-          background = '#f2f2f2';
-        }
+  //       // after marking the needed line' paint the background back to it's normal color
+  //       let background;
+  //       if (line % 2 === 0) {
+  //         background = 'white';
+  //       } else {
+  //         background = '#f2f2f2';
+  //       }
 
-        setTimeout(() => {
-          document.getElementById(this.storiesArray[line].id).style.background = background;
-        }, 3000);
-        break;
-      }
-    }
-    if (line === -1) {
-      const alert = await this.alertController.create({
-        message: 'האירוע שחיפשת לא נמצא',
-        buttons: ['המשך']
-      });
-      alert.present();
-    }
-  }
+  //       setTimeout(() => {
+  //         document.getElementById(this.storiesArray[line].id).style.background = background;
+  //       }, 3000);
+  //       break;
+  //     }
+  //   }
+  //   if (line === -1) {
+  //     const alert = await this.alertController.create({
+  //       message: 'האירוע שחיפשת לא נמצא',
+  //       buttons: ['המשך']
+  //     });
+  //     alert.present();
+  //   }
+  // }
 
   /*********************************************************************************************************************************/
 
@@ -966,40 +876,40 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     alert.present();
   }
 
-  async searchEvent() {
-    let line = -1;
-    for (let i = 0; i < this.eventsArray.length; i++) {
-      if (this.eventsArray[i].title === this.event_search) {
-        line = i; // line in the table
-        document.getElementById(this.eventsArray[line].id).scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
+  // async searchEvent() {
+  //   let line = -1;
+  //   for (let i = 0; i < this.eventsArray.length; i++) {
+  //     if (this.eventsArray[i].title === this.event_search) {
+  //       line = i; // line in the table
+  //       document.getElementById(this.eventsArray[line].id).scrollIntoView({
+  //         behavior: 'smooth',
+  //         block: 'center'
+  //       });
 
-        document.getElementById(this.eventsArray[line].id).style.background = '#ffd78e';
+  //       document.getElementById(this.eventsArray[line].id).style.background = '#ffd78e';
 
-        // after marking the needed line' paint the background back to it's normal color
-        let background;
-        if (line % 2 === 0) {
-          background = 'white';
-        } else {
-          background = '#f2f2f2';
-        }
+  //       // after marking the needed line' paint the background back to it's normal color
+  //       let background;
+  //       if (line % 2 === 0) {
+  //         background = 'white';
+  //       } else {
+  //         background = '#f2f2f2';
+  //       }
 
-        setTimeout(() => {
-          document.getElementById(this.eventsArray[line].id).style.background = background;
-        }, 3000);
-        break;
-      }
-    }
-    if (line === -1) {
-      const alert = await this.alertController.create({
-        message: 'האירוע שחיפשת לא נמצא',
-        buttons: ['המשך']
-      });
-      alert.present();
-    }
-  }
+  //       setTimeout(() => {
+  //         document.getElementById(this.eventsArray[line].id).style.background = background;
+  //       }, 3000);
+  //       break;
+  //     }
+  //   }
+  //   if (line === -1) {
+  //     const alert = await this.alertController.create({
+  //       message: 'האירוע שחיפשת לא נמצא',
+  //       buttons: ['המשך']
+  //     });
+  //     alert.present();
+  //   }
+  // }
 
 
   ngOnDestroy() {

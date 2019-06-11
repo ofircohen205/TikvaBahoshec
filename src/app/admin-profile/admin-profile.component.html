@@ -45,9 +45,9 @@
               </thead>
               <tbody text-right>
                 <tr *ngFor="let supportRep of list | filter:filterText">
-                  <td>{{supportRep.name}}</td>
+                  <td>{{supportRep.first_name}} {{supportRep.last_name}}</td>
                   <td>{{supportRep.email}}</td>
-                  <td>{{supportRep.phone}}</td>
+                  <td>{{supportRep.cellphone}}</td>
                   <td>{{supportRep.address}}</td>
                   <td>{{supportRep.id}}</td>
                   <td>{{supportRep.gender}}</td>
@@ -106,11 +106,14 @@
           <ion-card-header>
             <!-- check if need to have an option of adding a story here -->
             <h3 text-center>רשימת עדויות</h3>
-            <ion-searchbar class="search" type="text" [(ngModel)]="story_search" placeholder="כותרת העדות לחיפוש">
-            </ion-searchbar>
-            <ion-button (click)="searchStory()">
-              <ion-icon name="search"></ion-icon> חיפוש עדות
-            </ion-button>
+            <!-- <ion-searchbar class="search" type="text" [(ngModel)]="story_search" placeholder="כותרת העדות לחיפוש">
+              <ion-button (click)="searchStory()">
+                <ion-icon name="search"></ion-icon> חיפוש עדות
+              </ion-button>
+            </ion-searchbar> -->
+            <br/>
+            <ion-searchbar class="search" type="text" [(ngModel)]= "story_filter" placeholder="כותרת העדות לחיפוש"></ion-searchbar>
+
           </ion-card-header>
 
           <ion-card-content>
@@ -128,7 +131,7 @@
                   </thead>
 
                   <tbody>
-                    <tr *ngFor='let story of storiesArray' [attr.id]='story.id'>
+                    <tr *ngFor='let story of storiesArray | filter:story_filter' [attr.id]='story.id'>
                       <td *ngIf='story'>{{story.title}}</td>
                       <td *ngIf='story'>{{story.stringDate | date: "dd/MM/yyyy"}}</td>
                       <td *ngIf='story && story.approved'> אושר</td>
@@ -356,20 +359,25 @@
         <ion-card text-center id="Edit-Events" [hidden]="true">
 
           <ion-card-header>
-            <h2 text-center>עריכת אירועים</h2>
-            <ion-searchbar class="search" type="text" [(ngModel)]="event_search" placeholder="שם האירוע לחיפוש">
-            </ion-searchbar>
-            <ion-button (click)="searchEvent()">
-              <ion-icon name="search"></ion-icon> חיפוש אירוע
-            </ion-button>
             <ion-button color="success" (click)="addEventDetails()">
               <ion-icon name="add-circle-outline"></ion-icon> הוספת אירוע
             </ion-button>
+            <br />
+
+            <!-- <ion-searchbar class="search" type="text" [(ngModel)]="event_search" placeholder="שם האירוע לחיפוש">
+              <ion-button (click)="searchEvent()">
+                <ion-icon name="search"></ion-icon> חיפוש אירוע
+              </ion-button> 
+            </ion-searchbar> -->
+
+            <ion-searchbar class="search" type="text" [(ngModel)]="event_filter" placeholder="שם האירוע לחיפוש"></ion-searchbar>
+
+            <h3 text-center>רשימת אירועים</h3>
           </ion-card-header>
 
           <ion-card-content>
 
-            <h3 text-center>רשימת אירועים</h3>
+            
             <ion-card>
 
               <div id="scrollbar1" class="my-custom-scrollbar">
@@ -383,7 +391,7 @@
                   </thead>
 
                   <tbody>
-                    <tr *ngFor='let event of eventsArray' [attr.id]="event.id">
+                    <tr *ngFor='let event of eventsArray | filter:event_filter' [attr.id]="event.id">
                       <td *ngIf='event'>{{ event.title }}</td>
                       <td *ngIf='event'>{{ event.date | date: "dd/MM/yyyy" }}</td>
                       <td>
@@ -440,5 +448,5 @@
 
   </ion-grid>
 
-  <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir</ion-footer>
+  <ion-footer text-center> Created by Ariel, Tom, Saar, Avraham, Ofir &copy;</ion-footer>
 </ion-content>

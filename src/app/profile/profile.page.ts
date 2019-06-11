@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { GlobalService } from '../global/global.service';
@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage implements OnInit, OnDestroy {
   adminLoginAuth = false;
   admins: any[] = [];
 
@@ -58,8 +58,6 @@ export class ProfilePage implements OnInit {
     this.global.updatePassword();
   }
 
-
-  
   onclick(e): void {
     const tar = e.target.value;
     const adminElement = document.getElementById('admin');
@@ -77,7 +75,7 @@ export class ProfilePage implements OnInit {
     }
   }
   async inShift() {
-    var readyButton = document.getElementById('inShiftButton');
+    const readyButton = document.getElementById('inShiftButton');
     if (readyButton.getAttribute('color') === 'danger') {
       if (confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')) {
         readyButton.setAttribute('color', 'success');
@@ -91,6 +89,10 @@ export class ProfilePage implements OnInit {
         this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, false);
         }
     }
+  }
+
+  ngOnDestroy() {
+    this.logout();
   }
 
 }

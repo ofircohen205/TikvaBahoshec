@@ -32,7 +32,7 @@ const routes: Routes = [
     ProfilePage,
     AdminProfileComponent,
     SupportRepProfileComponent,
-    FilterPipe
+    FilterPipe,
   ]
 })
 export class ProfilePageModule {}

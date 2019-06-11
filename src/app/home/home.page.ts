@@ -36,6 +36,7 @@ export class HomePage implements OnInit {
         mainElement.hidden = true;
         this.location.go('/story');
         titleElement.textContent = 'תקווה בחושך - סיפורים';
+        titleElement.style.marginRight='200px'
       }
     } else if (tar === 'home') {
       if (mainElement.hidden === true) {
@@ -44,6 +45,7 @@ export class HomePage implements OnInit {
         mainElement.hidden = false;
         this.location.go('/home');
         titleElement.textContent = 'תקווה בחושך';
+        titleElement.style.marginRight='300px'
       }
     } else if (tar === 'calender') {
         storyElement.hidden = true;
@@ -51,6 +53,7 @@ export class HomePage implements OnInit {
         mainElement.hidden = true;
         this.location.go('/calender');
         titleElement.textContent = 'תקווה בחושך - אירועים';
+        titleElement.style.marginRight='200px'
     }
   }
 

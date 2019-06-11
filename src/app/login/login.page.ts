@@ -36,7 +36,6 @@ export class LoginPage {
 
     const email = this.emailField.value;
     const password = this.passField.value;
-    // ! check if email and password aren't 'undefined'
 
     this.userAuth.auth.signInWithEmailAndPassword(email, password)
     .then(result => {
