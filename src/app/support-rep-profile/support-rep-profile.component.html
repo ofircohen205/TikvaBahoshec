@@ -67,17 +67,11 @@
         <ion-card text-center id="View History Chat">
           <p text-center> היסטוריית שיחות </p>
           <ion-toolbar>
-
-            <ion-button id="reset" (click)="clearFields()">נקה שדות</ion-button>
-            <ion-button (click)=searchChat()>חיפוש</ion-button>
-
-            <input type="text" style="margin:10px" id="Cname" placeholder="שם הלקוח" text-right>
-
-            <input type="date" id="Cdate2" style="margin:10px" text-right>החל מ
-
             <input type="date" id="Cdate1" style="margin:10px" (change)="wakeUpDate()" text-right>עד
-
-
+            <input type="date" id="Cdate2" style="margin:10px" text-right>החל מ
+            <input type="text" style="margin:10px" id="Cname" placeholder="שם הלקוח" text-right>
+            <ion-button (click)=searchChat()>חיפוש</ion-button>
+            <ion-button id="reset" (click)="clearFields()">נקה שדות</ion-button>
           </ion-toolbar>
           <p text-center> :מיין לפי </p>
           <!-- <ion-button size="small" color="success" id="nameBtn" (click)="sortByName(this.nameStatus)"> שם  </ion-button> -->
@@ -132,5 +126,5 @@
   </ion-grid>
 
   <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir</ion-footer>
-  
+
 </ion-content>
