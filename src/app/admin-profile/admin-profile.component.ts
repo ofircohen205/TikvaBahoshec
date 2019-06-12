@@ -62,7 +62,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
   supportRepList: any[] = [];
-  adminsList: any[] = [];
   chatRoomList: any[] = [];
   clientList: any[] = [];
   txtMsg = '';
@@ -123,12 +122,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
     this.events_subscribe = this.firestore.getEvents().subscribe(result => {
       this.eventsArray = result;
-    });
-
-    this.firestore.getAdmins().subscribe(result => {
-      result['admins'].forEach(item => {
-        this.adminsList.push(item);
-      });
     });
 
     this.manageStories();

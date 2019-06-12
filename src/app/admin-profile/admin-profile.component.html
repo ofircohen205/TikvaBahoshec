@@ -186,7 +186,7 @@
 
           <ion-card-header>
 
-            <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
+            <!-- <a [href]="downloadURL | async">{{ downloadURL | async }}</a> -->
             <input type="file" (change)="addFile($event)" class='uploadImage' id='imageFile' />
             <label for='imageFile'>בחר תמונה</label>
             <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>

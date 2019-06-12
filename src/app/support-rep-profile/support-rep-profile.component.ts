@@ -290,11 +290,13 @@ export class SupportRepProfileComponent implements OnInit {
   onclickTable1(e, list, index) {
     if (e.childNodes[e.childNodes.length - 2].textContent === 'לא בטיפול' && this.supportRepInShift) {
       this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result => {
-      this.firestore.updateChatRooms(list[index]['ChatRoomId'], result['name'], this.userAuth.auth.currentUser.uid);
-      window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
-    });
+// tslint:disable-next-line: max-line-length
+      this.firestore.updateChatRooms(list[index]['ChatRoomId'], result['first_name'] + result['last_name'], this.userAuth.auth.currentUser.uid);
+      this.router.navigateByUrl('/chat/' + list[index]['ChatRoomId']);
+      // window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+      });
+    }
   }
-   }
 
   onclickTable2(e, list, index) {
     if (e['id'] === 'supRepTable2button3_' + (index + 1)) {

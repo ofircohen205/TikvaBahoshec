@@ -23,7 +23,9 @@ export class SupportRepPage implements OnInit {
   @ViewChild('male') male;
   @ViewChild('female') female;
   @ViewChild('other') other;
+  @ViewChild('admin') admin
   supportRepId = '';
+  adminsList = [];
 
   constructor(
     private firestore: FirestoreService,
@@ -32,6 +34,12 @@ export class SupportRepPage implements OnInit {
     private userAuth: AngularFireAuth) { }
 
   ngOnInit() {
+    this.firestore.getAdmins().subscribe(result => {
+      result['admins'].forEach(item => {
+        this.adminsList.push(item);
+      });
+    });
+
     this.activatedRoute.params.subscribe(params => {
       if (params['id']) {
         this.supportRepId = params['id'];
@@ -51,6 +59,10 @@ export class SupportRepPage implements OnInit {
             this.female.checked = true;
           } else if (res.gender === 'אחר') {
             this.other.checked = true;
+          }
+
+          if (this.adminsList.includes(this.supportRepId)) {
+            this.admin.checked = true;
           }
         });
       }
@@ -83,6 +95,17 @@ export class SupportRepPage implements OnInit {
 // tslint:disable-next-line: max-line-length
       this.firestore.updateSupportRepDetails(this.supportRepId, this.first_name.value, this.last_name.value, this.id.value, this.address.value, this.age.value, this.email.value, this.cellphone.value, this.phone_num.value, 'אחר');
     }
+  }
+
+  updateAdminList() {
+    if (this.admin.checked) {
+      this.adminsList.splice(this.adminsList.indexOf(this.supportRepId), 1);
+      console.log('checked');
+    } else {
+      this.adminsList.push(this.supportRepId);
+      console.log('unchecked');
+    }
+    this.firestore.addToAdminList(this.adminsList);
   }
 
 }
