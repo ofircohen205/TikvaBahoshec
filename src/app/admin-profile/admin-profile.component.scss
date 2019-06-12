@@ -29,6 +29,12 @@
   text-align: left;
   background-color: #49C2FE;
   color: white;
+
+  position: sticky;
+top: 0;
+left: 0;
+right: 0;
+z-index: 9999;
 }
 
 .my-custom-scrollbar {
@@ -106,4 +112,25 @@
 
 tr.active {
   background-color: yellow;
+}
+
+.uploadImage {
+  padding-left: 10px;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.uploadImage + label {
+  padding: 4px 20px;
+  height: 3.15em;
+  border-style: solid;
+  border-radius: 8px;
+  display: inline-block;
+  background-color: #3880ff;
+  color: white;
+  cursor: pointer;
 }

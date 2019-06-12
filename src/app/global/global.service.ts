@@ -40,17 +40,18 @@ export class GlobalService {
             data.name = 'אנונימי' + this.anonymousNumber;
             this.firestore.updateAnonNumber(this.anonymousNumber + 1);
           }
-          this.firestore.createClient(data.name).then(result1 => {
-            this.firestore.createChatRoom(data.name, result1.id).then(result2 => {
-              this.currentChatRoomId = result2.id;
-              this.firestore.updateChatRoomId(result2.id);
-              this.firestore.updateOccuipedByClientField(result2.id, true);
-              this.router.navigateByUrl('/chat/' + result2.id);
-            }).catch((error) => console.log(error));
-          });
+          this.userAuth.auth.signInAnonymously().then(result => {
+            this.firestore.createClient(data.name, result.user.uid).then(result1 => {
+              this.firestore.createChatRoom(data.name, result.user.uid).then(result2 => {
+                this.currentChatRoomId = result2.id;
+                this.firestore.updateChatRoomId(result2.id);
+                this.router.navigateByUrl('/chat/' + result2.id);
+              }).catch((error) => console.log(error));
+            });
+          }).catch(error => console.log(error));
 
           this.afiredb.database.ref('/sendmail').remove();
-          let connectList =[];
+          let connectList = [];
           this.firestore.getInShiftSupportRep().subscribe(result => {
             connectList = result;
             connectList.forEach(x => {

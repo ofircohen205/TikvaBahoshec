@@ -134,6 +134,7 @@ export class SupportRepProfileComponent implements OnInit {
       const td6 = document.createElement('td');
       td6.appendChild(button);
       td6.id = 'supRepTable1button_' + index;
+      td6.style.textAlign = 'center';
       button.innerHTML = 'שיחה מחכה לנציג';
       button.color = 'success';
       if(!this.supportRepInShift){
@@ -232,6 +233,7 @@ export class SupportRepProfileComponent implements OnInit {
       const button1 = document.createElement('ion-button');
       const td6 = document.createElement('td');
       td6.appendChild(button1);
+      td6.style.textAlign = 'center';
       td6.id = 'supRepTable2button1_' + index;
       button1.innerHTML = 'כנס לשיחה';
       button1.color = 'success';
@@ -243,6 +245,7 @@ export class SupportRepProfileComponent implements OnInit {
       const button2 = document.createElement('ion-button');
       const td7 = document.createElement('td');
       td7.appendChild(button2);
+      td7.style.textAlign = 'center';
       td7.id = 'supRepTable2button2_' + index;
       button2.innerHTML = 'מילוי טופס לקוח';
       button2.color = 'success';
@@ -255,6 +258,7 @@ export class SupportRepProfileComponent implements OnInit {
       const td8 = document.createElement('td');
       td8.appendChild(button3);
       td8.id = 'supRepTable2button3_' + index;
+      td8.style.textAlign = 'center';
       button3.innerHTML = 'סגור שיחה';
       button3.color = 'success';
       td8.style.color = 'white';
@@ -298,11 +302,14 @@ export class SupportRepProfileComponent implements OnInit {
   onclickTable1(e, list, index) {
     if (e.childNodes[e.childNodes.length - 2].textContent === 'לא בטיפול' && this.supportRepInShift) {
       this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result => {
-      this.firestore.updateChatRooms(list[index]['ChatRoomId'], result['name'], this.userAuth.auth.currentUser.uid);
-      window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
-    });
+// tslint:disable-next-line: max-line-length
+      this.firestore.updateChatRooms(list[index]['ChatRoomId'], result['first_name'] + result['last_name'], this.userAuth.auth.currentUser.uid);
+      //this.router.navigateByUrl('/chat/' + list[index]['ChatRoomId']);
+      var id = this.userAuth.auth.currentUser.uid
+       window.open('/chat/' + list[index]['ChatRoomId'] + '?supportRepId=' + this.userAuth.auth.currentUser.uid, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+      });
+    }
   }
-   }
 
   onclickTable2(e, list, index) {
     if (e['id'] === 'supRepTable2button3_' + (index + 1)) {
@@ -314,7 +321,7 @@ export class SupportRepProfileComponent implements OnInit {
       this.openClient(list[index]['ClientID']);
     }
     if (e['id'] === 'supRepTable2button1_' + (index + 1)) {
-      window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+      window.open('/chat/' + list[index]['ChatRoomId'] + '?supportRepId=' + this.userAuth.auth.currentUser.uid, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
    }
 
@@ -477,7 +484,7 @@ sortByOpenRoomState(stateStatus, index, id, list, table) {
   }
 
   openRoom(roomId) {
-    window.open('/chat/' + roomId, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+    window.open('/chat/' + roomId + '?supportRepId=' + this.userAuth.auth.currentUser.uid, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
   }
 
   openClient(clientId){

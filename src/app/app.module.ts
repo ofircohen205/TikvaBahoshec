@@ -28,10 +28,6 @@ import { AngularFireDatabase } from '@angular/fire/database';
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
-    
-    
-
-
   ],
   providers: [
     StatusBar,

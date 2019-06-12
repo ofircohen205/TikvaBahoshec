@@ -20,7 +20,6 @@ export class AuthGuard implements CanActivate {
         if (user) {
           resolve(true);
         } else {
-          alert('עלייך להתחבר תחילה');
           this.router.navigateByUrl('/login');
           resolve(false);
         }

@@ -4,16 +4,37 @@ ion-card {
 
 .toChat {
     color: white;
-    background-color: #111111;
+    background-color: #222428;
     padding-top: 2%;
     padding-bottom: 2%;
+    background-image: url('../../assets/partOfPages/HeartPic2.png');
+    background-position: center;
+    background-size: cover, 100%;
+    background-repeat: no-repeat;
+
 }
 
-.about{
+.donate {
+    background-image: url('../../assets/partOfPages/donatePic.png');
+    background-position: center;
+    background-size: contain, 100%;
+    background-repeat: no-repeat;
+    height: 175px;
+}
+
+.about {
     font-size: 14px
 }
 
 .about h1 {
     color: black;
     font-weight: bold;
+}
+
+.aboutQube {
+    margin-top: -25px;
+    color: white;
+    background-color: #222428;
+    padding-top: 2%;
+    padding-bottom: 2%;
 }

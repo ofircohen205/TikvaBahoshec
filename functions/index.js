@@ -12,6 +12,14 @@ exports.deleteUser = functions.firestore
           .then(() => console.log('Deleted user with ID:' + snap.data().SupportRepID))
           .catch((error) => console.error('There was an error while deleting user:', error));
     });
+
+exports.deleteClient = functions.firestore
+    .document('Clients/{ClientID}')
+    .onDelete((snap, context) => {
+        return admin.auth().deleteUser(snap.data().ClientID)
+          .then(() => console.log('Deleted client with ID:' + snap.data().ClientID))
+          .catch((error) => console.error('There was an error while deleting client:', error));
+    })
 // var nameOfClient
 
 // exports.getName =  functions.database.ref('/nameOfClient/{namekey}').onWrite(( change,context) =>{
@@ -19,8 +27,6 @@ exports.deleteUser = functions.firestore
 //     console.log(nameOfClient)
 //     return change.after.val().name;
 //    })
-
-
 
 
 // exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onWrite(event => {

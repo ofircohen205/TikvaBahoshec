@@ -23,19 +23,24 @@ export class LockedRoomGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): boolean | Observable<boolean> | Promise<boolean> {
-    // return new Promise((resolve, reject) => {
-    //   this.firestore.getOccupiedByClientField(this.global.currentChatRoomId).subscribe(result => {
-    //     if (!result['occupiedByClient']) {
-    //       resolve(true);
-    //     } else {
-    //       alert('אנא פתח שיחה חדשה');
-    //       this.router.navigateByUrl('/');
-    //       resolve(false);
-    //     }
-    //   });
-    // });
-    return true;
+    return new Promise((resolve, reject) => {
+      var url = new URL(window.location.href);
+      var parameter = url.searchParams.get("supportRepId");
+      // console.log(parameter);
+      // console.log(this.userAuth.auth.currentUser);
+      if (this.userAuth.auth.currentUser === null && parameter === null  ) {
+        this.router.navigateByUrl('/');
+        resolve(false);  
+      }
+        else if (parameter !== null) {
+        resolve(true);
+      } else if (this.userAuth.auth.currentUser !== null && this.userAuth.auth.currentUser.email !== null) {
+        resolve(true);
+      } else if (this.userAuth.auth.currentUser !== null && this.userAuth.auth.currentUser.isAnonymous) {
+        resolve(true);
+      }
+      
+    });
   }
-
 
 }

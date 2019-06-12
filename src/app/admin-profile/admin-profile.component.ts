@@ -9,7 +9,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 // tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Observable } from 'rxjs';
-import { finalize, findIndex, timestamp } from 'rxjs/operators';
+import { finalize, findIndex, timestamp, filter } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 import { createElement } from '@syncfusion/ej2-base';
 import { Location } from '@angular/common';
@@ -18,6 +18,7 @@ import { getName } from 'ionicons/dist/types/icon/utils';
 import * as firebase from 'firebase';
 import { text, element } from '@angular/core/src/render3';
 import { Title } from '@angular/platform-browser';
+import { StoryComponent } from '../story/story.component';
 
 
 
@@ -49,6 +50,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   image_array_subscribe;
   association_subscribe;
   events_subscribe;
+  stories_subscribe;
 
 
   // Variables
@@ -69,7 +71,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   @ViewChild('eventitle') event_title;
   @ViewChild('eventDate') event_date;
-  @ViewChild('eventSearch') event_search = null;
+  event_filter = '';
   event_content: string = null;
   is_new_event_flag: boolean;
   eventsArray: any[] = [];
@@ -77,6 +79,9 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   association_info: string;
 
   @ViewChild('title') title;
+  story_filter='';
+  story_search = '';
+  private curr_story_edit_id: string;
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
   public value =
@@ -117,7 +122,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
     this.events_subscribe = this.firestore.getEvents().subscribe(result => {
       this.eventsArray = result;
-      // this.manageEvents();
     });
 
     this.manageStories();
@@ -149,12 +153,13 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.removeChildren(body, 'historyBodyTable');
     var dateFrom;
     var dateTo;
+
     if (fromDate !== '') {
       dateFrom = new Date(fromDate).toLocaleDateString();
-    }
-    else {
+    } else {
       dateFrom = '';
     }
+
     if (toDate !== '') {
       dateTo = new Date(toDate).toLocaleDateString();
     } else {
@@ -190,13 +195,13 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
           (compareStatus || statusSelect.length === 0) && (compareSupport || supportRepSelect.length === 0) &&
           (chatRoom['ClientName'].search(clientName) != -1 || clientName === '')) {
 
-            var td1 = document.createElement('td');
-            td1.style.border = ' 1px solid #ddd';
-            td1.style.padding = '8px';
-            td1.style.borderCollapse = 'collapse';
-            td1.textContent = index.toString();
+          var td1 = document.createElement('td');
+          td1.style.border = ' 1px solid #ddd';
+          td1.style.padding = '8px';
+          td1.style.borderCollapse = 'collapse';
+          td1.textContent = index.toString();
 
-            var td2 = document.createElement('td');
+          var td2 = document.createElement('td');
           td2.style.border = ' 1px solid #ddd';
           td2.style.padding = '8px';
           td2.style.borderCollapse = 'collapse';
@@ -277,15 +282,18 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         }
       }
     }
-        var tbodyChildrens = body.childNodes;
-        for (let i = 0; i < body.childNodes.length; i++) {
-          tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
-          tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
-          var trChildren = tbodyChildrens[i].childNodes;
-          trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 1], i));
-          trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
-          trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
-        }
+    var tbodyChildrens = body.childNodes;
+    for (let i = 0; i < body.childNodes.length; i++) {
+      tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
+      tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
+      var trChildren = tbodyChildrens[i].childNodes;
+// tslint:disable-next-line: max-line-length
+      trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 1], i));
+// tslint:disable-next-line: max-line-length
+      trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
+// tslint:disable-next-line: max-line-length
+      trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
+    }
   }
 
   async removeChildren(tbody, tbodyId) {
@@ -302,13 +310,13 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       list.sort((a, b) => (a.timestamp >= b.timestamp) ? 1 : -1)
       dateStatus[index] = false;
       nameBtn.innerHTML = '&#8657;שעת פתיחת חדר';
-    }
-    else {
+    } else {
       list.sort((a, b) => (a.timestamp <= b.timestamp) ? 1 : -1);
       dateStatus[index] = true;
       nameBtn.innerHTML = '&#8659;שעת פתיחת חדר';
 
     }
+
     if (table === 'historyTable') {
       this.createHistoryTable();
     }
@@ -321,12 +329,12 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       list.sort((a, b) => (a.ClientName >= b.ClientName) ? 1 : -1);
       nameStatus[index] = false;
       nameBtn.innerHTML = '&#8657; שם הלקוח'
-    }
-    else {
+    } else {
       list.sort((a, b) => (a.ClientName <= b.ClientName) ? 1 : -1)
       nameStatus[index] = true;
       nameBtn.innerHTML = '&#8659; שם הלקוח'
     }
+
     if (table === 'historyTable') {
       this.createHistoryTable();
     }
@@ -339,12 +347,12 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       list.sort((a, b) => (a.SupportRepName >= b.SupportRepName) ? 1 : -1)
       nameStatus[index] = false
       nameBtn.innerHTML = '&#8657; שם הנציג בשיחה'
-    }
-    else {
+    } else {
       list.sort((a, b) => (a.SupportRepName <= b.SupportRepName) ? 1 : -1)
       nameStatus[index] = true;
       nameBtn.innerHTML = '&#8659; שם הנציג בשיחה'
     }
+
     if (table === 'historyTable') {
       this.createHistoryTable();
     }
@@ -358,12 +366,12 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       list.sort((a, b) => a.open - b.open)
       stateStatus[index] = false;
       stateBtn.innerHTML = '&#8657; מצב החדר'
-    }
-    else {
+    } else {
       list.sort((a, b) => b.open - a.open)
       stateStatus[index] = true;
       stateBtn.innerHTML = '&#8659; מצב החדר';
     }
+
     if (table === 'historyTable') {
       this.createHistoryTable();
     }
@@ -377,12 +385,12 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       list.sort((a, b) => a.occupied - b.occupied)
       stateStatus[index] = false;
       stateBtn.innerHTML = '&#8657; מצב החדר'
-    }
-    else {
+    } else {
       list.sort((a, b) => b.occupied - a.occupied)
       stateStatus[index] = true;
       stateBtn.innerHTML = '&#8659; מצב החדר';
     }
+
     if (table === 'historyTable') {
       this.createHistoryTable();
     }
@@ -424,9 +432,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       // window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
     if (e['id'] === 'adminHistoryTablebutton1_' + (index + 1)) {
-      console.log('hi');
-// tslint:disable-next-line: max-line-length
-      // window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
+      // tslint:disable-next-line: max-line-length
+      window.open('/client-profile/' + this.chatRoomList[index]['ClientID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
     }
   }
 
@@ -436,7 +443,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         this.txtMsg += "From:" + msg.from + " Time:" + new Date(msg.timestamp)
         this.txtMsg += "\n<" + msg.content + ">\n\n"
       })
-      console.log("startDownload")
+      console.log('startDownload')
       var link = document.createElement('a');
       link.download = 'Chat:' + roomId + '.txt';
       var blob = new Blob([this.txtMsg], { type: 'text/plain' });
@@ -484,109 +491,13 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  async addSupport() {
-    const alert = await this.alertController.create({
-      header: 'הוספת נציג חדש',
-      cssClass: 'add-support',
-      inputs: [
-        {
-          name: 'username',
-          placeholder: 'שם הנציג'
-        },
-        {
-          name: 'id',
-          placeholder: 'תעודת זהות'
-        },
-        {
-          name: 'address',
-          placeholder: 'כתובת'
-        },
-        {
-          name: 'phone',
-          placeholder: 'מספר פלאפון'
-        },
-        {
-          name: 'gender',
-          placeholder: 'מין'
-        },
-        {
-          name: 'email',
-          placeholder: 'אימייל'
-        },
-        {
-          name: 'password',
-          placeholder: 'סיסמא'
-        }
-      ],
-      buttons: [{
-        text: 'חזור'
-      },
-      {
-        text: 'הוסף',
-        handler: data => {
-          this.userAuth.auth.createUserWithEmailAndPassword(data.email, data.password).then(res => {
-            this.firestore.createSupportRep(res.user.uid, data.username, data.email, data.phone, data.id, data.address, data.gender);
-          }).catch(error => {
-            alert.dismiss(); // here dismiss this alert
-            const errAlert = this.alertController.create({
-              header: 'added failed',
-              message: error,
-              buttons: ['OK']
-            }).then(res => res.present());
-          });
-        }
-      }]
-    });
-    alert.present();
+  addSupport() {
+    window.open('/support-rep/', '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
   }
 
-  async editSupport(x) {
-    const alert = await this.alertController.create({
-      header: 'עריכת נציג',
-      inputs: [
-        {
-          name: 'username',
-          placeholder: 'שם הנציג'
-        },
-        {
-          name: 'id',
-          placeholder: 'תעודת זהות'
-        },
-        {
-          name: 'address',
-          placeholder: 'כתובת'
-        },
-        {
-          name: 'phone',
-          placeholder: 'מספר פלאפון'
-        },
-        {
-          name: 'gender',
-          placeholder: 'מין'
-        },
-        {
-          name: 'email',
-          placeholder: 'אימייל'
-        },
-        {
-          name: 'password',
-          placeholder: 'סיסמא'
-        }
-      ],
-      buttons: [{
-        text: 'חזור'
-      },
-      {
-        text: 'שמור שינויים',
-        handler: data => {
-          this.firestore.updateSupportRepDetails(x.id, data.username, data.email, data.phone, data.id, data.address, data.gender);
-          this.list[this.list.indexOf(x)].username = data.username;
-          this.list[this.list.indexOf(x)].email = data.email;
-          this.list[this.list.indexOf(x)].phone = data.phone;
-        }
-      }]
-    });
-    alert.present();
+  editSupport(x) {
+    window.open('/support-rep/' + x['SupportRepID'], '_blank', 'location=yes,height=700,width=1000,scrollbars=yes,status=yes');
+
   }
 
   async deleteSupport(x) {
@@ -668,10 +579,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   /*******************************************Stories Management*******************************************************************/
   manageStories() {
-    // this.firestore.getStories().subscribe(r =>{
-    //   console.log(r);
-    // })
-    this.firestore.getStoriesId().subscribe(results => {
+    this.stories_subscribe = this.firestore.getStoriesId().subscribe(results => {
       results.forEach(result => {
         const id = result.payload.doc.id;
         const data = result.payload.doc.data();
@@ -701,13 +609,21 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   // edit the story. replace the old content of the story with the new content
   editStory(story) {
     document.getElementById('editor').hidden = false;
-    document.getElementById('story-editor').nodeValue = story.id;
+    this.curr_story_edit_id = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
-      if (story.id === this.storiesArray[i].id) {
+      if (this.strcmp(story.id, i) === 0) {
         this.value = this.storiesArray[i].description;  // edit the story
         this.title.value = this.storiesArray[i].title;
+
+        document.getElementById('editor').scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+
+        break;
       }
     }
+  
   }
 
 
@@ -742,7 +658,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
           text: 'אשר',
           handler: () => {
             for (let i = 0; i < this.storiesArray.length; i++) {
-              if (story.id === this.storiesArray[i].id) {
+              if (this.strcmp(story.id, i) === 0) {
                 this.storiesArray[i].approved = true;
                 this.firestore.confirmStory(this.storiesArray[i].id, true);
               }
@@ -754,8 +670,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   }
 
   // after the story was edited, we save the changes in it
-  acceptStoryChange() {
-    const storyId = document.getElementById('story-editor').nodeValue;
+  async acceptStoryChange() {
+    const storyId = this.curr_story_edit_id;
     let areEquals: number;
     for (let i = 0; i < this.storiesArray.length; i++) {
       areEquals = this.strcmp(storyId, i);
@@ -764,10 +680,15 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         this.firestore.editStory(this.storiesArray[i].id, this.value);
         this.storiesArray[i].title = this.title.value;
         this.firestore.editStoryTitle(this.storiesArray[i].id, this.title.value);
+        this.curr_story_edit_id = null;
         break;
       }
     }
-    alert('יש ללחוץ "אשר" עבור העדות הרצויה, במידה והעדות עדיין לא אושרה');
+    const alert = await this.alertController.create({
+      message: 'יש ללחוץ "אשר" עבור העדות הרצויה, במידה והעדות עדיין לא אושרה',
+      buttons: ['המשך']
+    });
+    alert.present();
     document.getElementById('editor').hidden = true;
   }
 
@@ -780,6 +701,43 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     }
     return 0;
   }
+
+  // search for the story. Has to get the full name of the story to find it
+  // async searchStory() {
+  //   let line = -1;
+  //   for (let i = 0; i < this.storiesArray.length; i++) {
+  //     if (this.storiesArray[i].title === this.story_search) {
+  //       line = i; // line in the table
+  //       document.getElementById(this.storiesArray[line].id).scrollIntoView({
+  //         behavior: 'smooth',
+  //         block: 'center'
+  //       });
+
+  //       document.getElementById(this.storiesArray[line].id).style.background = "#ffd78e";
+
+  //       // after marking the needed line' paint the background back to it's normal color
+  //       let background;
+  //       if (line % 2 === 0) {
+  //         background = 'white';
+  //       } else {
+  //         background = '#f2f2f2';
+  //       }
+
+  //       setTimeout(() => {
+  //         document.getElementById(this.storiesArray[line].id).style.background = background;
+  //       }, 3000);
+  //       break;
+  //     }
+  //   }
+  //   if (line === -1) {
+  //     const alert = await this.alertController.create({
+  //       message: 'האירוע שחיפשת לא נמצא',
+  //       buttons: ['המשך']
+  //     });
+  //     alert.present();
+  //   }
+  // }
+
   /*********************************************************************************************************************************/
 
   /*******************************************Gallery Management*******************************************************************/
@@ -799,7 +757,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   uploadFile() {
     const fileName = this.file.name;
-// tslint:disable-next-line: max-line-length
+    // tslint:disable-next-line: max-line-length
     if (!(fileName.includes('.jpg') || fileName.includes('.jpeg') || fileName.includes('.png') || fileName.includes('.JPG') || fileName.includes('.JPEG') || fileName.includes('.PNG'))) {
       this.global.invalidImage();
       return;
@@ -848,25 +806,37 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   /*************************************************************************************************************************************/
   /************************************************Events Management********************************************************************/
 
-  // manageEvents() {
-
-  // }
-
   addEventDetails() {
     document.getElementById('events-input').hidden = false;
+    this.event_title.value = null;
+    this.event_date.value = null;
+    this.event_content = null;
     this.is_new_event_flag = true;
+    document.getElementById('events-input').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
   }
-  saveEvent() {
+
+
+  async saveEvent() {
     if (this.is_new_event_flag === true) {
       this.firestore.createEvent(this.event_title.value, this.event_date.value, this.event_content);
-      alert('האירוע נוסף בהצלחה!');
+      const alert = await this.alertController.create({
+        message: 'האירוע נוסף בהצלחה',
+        buttons: ['המשך']
+      });
+      alert.present();
     } else {  // this.is_new_event_flag === false
       this.firestore.editEvent(this.event_to_change.id, this.event_title.value, this.event_date.value, this.event_content);
-      alert('האירוע שונה בהצלחה!');
+      const alert = await this.alertController.create({
+        message: 'האירוע שונה בהצלחה',
+        buttons: ['המשך']
+      });
+      alert.present();
     }
   }
 
-  // need to do the delete button and search button
 
   editEvent(event) {
     document.getElementById('events-input').hidden = false;
@@ -875,6 +845,10 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.event_content = event.description;
     this.is_new_event_flag = false;
     this.event_to_change = event;
+    document.getElementById('events-input').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
   }
 
 
@@ -895,35 +869,40 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     alert.present();
   }
 
-  searchEvent() {
-    let line = -1;
-    for (let i = 0; i < this.eventsArray.length; i++) {
-      if (this.eventsArray[i].title === this.event_search.value) {
-        line = i; // line in the table
-        let element = document.getElementById(this.eventsArray[line].id);
-        element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-        document.getElementById(this.eventsArray[line].id).style.background = "#ffd78e";
+  // async searchEvent() {
+  //   let line = -1;
+  //   for (let i = 0; i < this.eventsArray.length; i++) {
+  //     if (this.eventsArray[i].title === this.event_search) {
+  //       line = i; // line in the table
+  //       document.getElementById(this.eventsArray[line].id).scrollIntoView({
+  //         behavior: 'smooth',
+  //         block: 'center'
+  //       });
 
-        // after marking the needed line' paint the background back to it's normal color
-        let background;
-        if (line % 2 === 0) {
-          background = 'white';
-        } else {
-          background = '#f2f2f2';
-        }
+  //       document.getElementById(this.eventsArray[line].id).style.background = '#ffd78e';
 
-        setTimeout(() => {
-          document.getElementById(this.eventsArray[line].id).style.background = background; }, 3000);
-       break;
-      }
-    }
-    if (line === -1) {
-      alert('האירוע שחיפשת לא נמצא');
-    }
-  }
+  //       // after marking the needed line' paint the background back to it's normal color
+  //       let background;
+  //       if (line % 2 === 0) {
+  //         background = 'white';
+  //       } else {
+  //         background = '#f2f2f2';
+  //       }
+
+  //       setTimeout(() => {
+  //         document.getElementById(this.eventsArray[line].id).style.background = background;
+  //       }, 3000);
+  //       break;
+  //     }
+  //   }
+  //   if (line === -1) {
+  //     const alert = await this.alertController.create({
+  //       message: 'האירוע שחיפשת לא נמצא',
+  //       buttons: ['המשך']
+  //     });
+  //     alert.present();
+  //   }
+  // }
 
 
   ngOnDestroy() {
@@ -932,6 +911,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.all_chat_room_subscribe.unsubscribe();
     this.image_array_subscribe.unsubscribe();
     this.association_subscribe.unsubscribe();
+    this.stories_subscribe.unsubscribe();
   }
 
 } // end of AdminProfileComponent

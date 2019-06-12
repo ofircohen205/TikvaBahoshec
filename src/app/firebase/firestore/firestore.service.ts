@@ -29,7 +29,6 @@ export class FirestoreService {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
       open: true,
       occupied: false,
-      occupiedByClient: false,
       SupportRepID: null,
       SupportRepName: null,
       ClientID: id,
@@ -64,17 +63,6 @@ export class FirestoreService {
       open : openStatus
     };
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
-  }
-
-  public updateOccuipedByClientField(chatRoomId, occupiedStatus): void {
-    const chatRoomData = {
-      occupiedByClient: occupiedStatus
-    };
-    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
-  }
-
-  public getOccupiedByClientField(chatRoomId) {
-    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).valueChanges();
   }
 
   public getSupportRepOpenChatRooms(supportRepId): Observable<any> {
@@ -112,8 +100,8 @@ export class FirestoreService {
   /*******************************/
   /* CLIENT COLLECTION FUNCTIONS */
   /*******************************/
-  public createClient(first_name): Promise<any> {
-    return this.firestore.collection(this.CLIENT_COLLECTION).add({
+  public createClient(first_name, clientId): Promise<any> {
+    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).set({
       first_name,
       last_name: null,
       address: null,
@@ -124,7 +112,7 @@ export class FirestoreService {
       gender: null,
       brief: null,
       comments: null,
-      ClientID: null
+      ClientID: clientId
     });
   }
 
@@ -160,23 +148,33 @@ export class FirestoreService {
     this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ ClientID: chatId });
   }
 
+  public removeClient(clientId) {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).delete();
+  }
+
 
   /************************************/
   /* SUPPORT REP COLLECTION FUNCTIONS */
   /************************************/
-  public createSupportRep(uid, name, email, phone, id, address, gender): void {
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).add({
+  public createSupportRep(uid, first_name, last_name, id, address, age, email, cellphone, phone, gender): void {
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(uid).set({
       SupportRepID: uid,
-      email,
-      name,
-      phone,
+      first_name,
+      last_name,
       id,
       address,
+      age,
+      email,
+      cellphone,
+      phone,
       gender,
       inShift: false,
     });
   }
 
+  public getSupportRepDetails(clientId): Observable<any> {
+    return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(clientId).valueChanges();
+  }
 
   public getSupportRepName(supportRepId): Observable<any> {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(supportRepId).valueChanges();
@@ -194,9 +192,9 @@ export class FirestoreService {
     return this.firestore.collection(this.SUPPORT_REP_COLLECTION, ref => ref.where('inShift', '==', true)).valueChanges();
   }
 
-  public updateSupportRepDetails(SupportRepID, name, email, phone, id, address, gender): void {
+  public updateSupportRepDetails(SupportRepID, first_name, last_name, id, address, age, email, cellphone, phone, gender): void {
 // tslint:disable-next-line: max-line-length
-    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, name, email, phone, id, address, gender });
+    this.firestore.collection(this.SUPPORT_REP_COLLECTION).doc(SupportRepID).update({ SupportRepID, first_name, last_name, id, address, age, email, cellphone, phone, gender});
   }
 
   public updateSupportRepEmail(SupportRepID, email): void {
@@ -303,6 +301,14 @@ export class FirestoreService {
 
   public checkIfAdmin(supportRepId): Observable<any> {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public getAdmins() {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public addToAdminList(admins) {
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').set({ admins });
   }
 
   public getImageArray(): Observable<any> {

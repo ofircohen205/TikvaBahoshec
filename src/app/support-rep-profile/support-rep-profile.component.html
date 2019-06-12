@@ -3,7 +3,7 @@
     <ion-row>
       <ion-col size='12'>
         <ion-card>
-          <p text-center> כל השיחות הפתוחות </p>
+          <p text-center>כל השיחות הפתוחות</p>
           <div id="scrollbar1" class="my-custom-scrollbar">
             <table id="supReptable1" text-right class="table table-bordered table-striped mb-0">
               <thead>
@@ -35,7 +35,7 @@
 
 
         <ion-card>
-          <p text-center> כל השיחות הפתוחות שלי </p>
+          <p text-center>כל השיחות הפתוחות שלי</p>
           <div id="scrollbar2" class="my-custom-scrollbar">
             <table id="supReptable2" text-right>
               <thead>
@@ -65,15 +65,23 @@
 
 
         <ion-card text-center id="View History Chat">
-          <p text-center> היסטוריית שיחות </p>
+          <p text-center>היסטורית שיחות</p>
           <ion-toolbar>
-            <input type="date" id="Cdate1" style="margin:10px" (change)="wakeUpDate()" text-right>עד
-            <input type="date" id="Cdate2" style="margin:10px" text-right>החל מ
+
             <input type="text" style="margin:10px" id="Cname" placeholder="שם הלקוח" text-right>
-            <ion-button (click)=searchChat()>חיפוש</ion-button>
-            <ion-button id="reset" (click)="clearFields()">נקה שדות</ion-button>
+
+            <label for='Cdate2'>החל מ</label>
+            <input type="date" id="Cdate2" style="margin:10px" text-right>
+
+            <label for='Cdate1'>עד</label>
+            <input type="date" id="Cdate1" style="margin:10px" (change)="wakeUpDate()" text-right>
+
           </ion-toolbar>
-          <p text-center> :מיין לפי </p>
+          
+          <ion-button id="reset" (click)="clearFields()">נקה שדות</ion-button>
+          <ion-button (click)=searchChat()>חיפוש</ion-button>
+
+          <p text-center> מיין לפי: </p>
           <!-- <ion-button size="small" color="success" id="nameBtn" (click)="sortByName(this.nameStatus)"> שם  </ion-button> -->
 
           <!-- <ion-button size="small" color="success"  (click)="sortByDate(this.dateStatus)" >תאריך</ion-button> -->
@@ -104,15 +112,15 @@
                   <td>{{i.timestamp | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
                   <td>{{!i.ClientName? 'לא הוכנס שם': i.ClientName}}</td>
                   <td>{{i.open? 'פתוח':'סגור'}}</td>
-                  <td>
+                  <td text-center>
                     <ion-button (click)="openRoom(i.ChatRoomId)" color="success" disabled={{!i.open}}>כנס לחדר
                     </ion-button>
                   </td>
-                  <td>
+                  <td text-center>
                     <ion-button id="openClientPage" (click)="openClient(i.ClientID)" color="success">כנס לטופס לקוח
                     </ion-button>
                   </td>
-                  <td>
+                  <td text-center>
                     <ion-button id="download" (click)="downloadChatMsg(i.ChatRoomId)" color="success">הורד שיחה
                     </ion-button>
                   </td>
@@ -125,6 +133,6 @@
     </ion-row>
   </ion-grid>
 
-  <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir</ion-footer>
-
+  <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir &copy;</ion-footer>
+  
 </ion-content>
