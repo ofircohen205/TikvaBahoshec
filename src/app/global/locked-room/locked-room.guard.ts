@@ -24,14 +24,22 @@ export class LockedRoomGuard implements CanActivate {
     state: RouterStateSnapshot,
   ): boolean | Observable<boolean> | Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (this.userAuth.auth.currentUser === null) {
+      var url = new URL(window.location.href);
+      var parameter = url.searchParams.get("supportRepId");
+      // console.log(parameter);
+      // console.log(this.userAuth.auth.currentUser);
+      if (this.userAuth.auth.currentUser === null && parameter === null  ) {
         this.router.navigateByUrl('/');
-        resolve(false);
-      } else if (this.userAuth.auth.currentUser.email !== null) {
+        resolve(false);  
+      }
+        else if (parameter !== null) {
         resolve(true);
-      } else if (this.userAuth.auth.currentUser.isAnonymous) {
+      } else if (this.userAuth.auth.currentUser !== null && this.userAuth.auth.currentUser.email !== null) {
+        resolve(true);
+      } else if (this.userAuth.auth.currentUser !== null && this.userAuth.auth.currentUser.isAnonymous) {
         resolve(true);
       }
+      
     });
   }
 

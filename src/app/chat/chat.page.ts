@@ -35,7 +35,11 @@ export class ChatPage implements OnInit, OnDestroy {
     private firestore: FirestoreService,
     private activatedRoute: ActivatedRoute,
     private router: Router) {
-      if (this.userAuth.auth.currentUser.isAnonymous) {
+      var url = new URL(window.location.href);
+      var parameter = url.searchParams.get("supportRepId");
+      if(parameter !== null){
+        this.client_support_flag = true;
+      } else if (this.userAuth.auth.currentUser.isAnonymous) {
         this.client_support_flag = true;
       } else {
         this.client_support_flag = false;
