@@ -308,7 +308,7 @@ export class FirestoreService {
   }
 
   public addToAdminList(admins) {
-    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').set({ admins });
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ admins });
   }
 
   public getImageArray(): Observable<any> {

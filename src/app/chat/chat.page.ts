@@ -39,10 +39,8 @@ export class ChatPage implements OnInit, OnDestroy {
       const parameter = url.searchParams.get('supportRepId');
       if (parameter === null) {
         this.client_support_flag = true;
-        console.log('hi');
       } else if (parameter !== null) {
         this.client_support_flag = false;
-        console.log('hi2');
       } else if (this.userAuth.auth.currentUser.isAnonymous) {
         this.client_support_flag = true;
       } else {

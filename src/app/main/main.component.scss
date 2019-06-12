@@ -5,8 +5,6 @@ ion-card {
 .toChat {
     color: white;
     background-color: #222428;
-    padding-top: 2%;
-    padding-bottom: 2%;
     background-image: url('../../assets/partOfPages/HeartPic2.png');
     background-position: center;
     background-size: cover, 100%;
@@ -37,4 +35,10 @@ ion-card {
     background-color: #222428;
     padding-top: 2%;
     padding-bottom: 2%;
+}
+
+.icons {
+    height: 100px;
+    width: 100px;
+    margin-right: 30%;
 }
