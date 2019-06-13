@@ -113,7 +113,11 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       this.createHistoryTable();
     });
     this.image_array_subscribe = this.firestore.getImageArray().subscribe(res => {
-      this.imageUrls = res.images;
+      if (res.images) {
+        this.imageUrls = res.images;
+      } else {
+        this.imageUrls = [];
+      }
     });
 
     this.association_subscribe = this.firestore.getAssociationInfo().subscribe(result => {

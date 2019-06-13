@@ -34,6 +34,7 @@ export class FirestoreService {
       ClientID: id,
       ClientName: username,
       ChatRoomId: null,
+      written: false,
       timestamp: new Date().getTime()
     });
   }
@@ -65,6 +66,10 @@ export class FirestoreService {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatRoomId).update(chatRoomData);
   }
 
+  public updateIsWritten(chatId, written): void {
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ written });
+  }
+
   public getSupportRepOpenChatRooms(supportRepId): Observable<any> {
 // tslint:disable-next-line: max-line-length
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true).where('SupportRepID', '==', supportRepId)).valueChanges();
@@ -94,6 +99,11 @@ export class FirestoreService {
 
   public updateChatSupportRepId(chatId, SupportRepID): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ SupportRepID });
+  }
+
+  public destroyEmptyChatRooms(timestamp) {
+// tslint:disable-next-line: max-line-length
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('written', '==', false).where('timestamp', '<=', timestamp)).valueChanges();
   }
 
 
@@ -308,7 +318,7 @@ export class FirestoreService {
   }
 
   public addToAdminList(admins) {
-    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').set({ admins });
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ admins });
   }
 
   public getImageArray(): Observable<any> {

@@ -5,6 +5,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { first } from 'rxjs/operators';
 
 
 @Component({
@@ -19,16 +20,20 @@ export class SupportRepProfileComponent implements OnInit {
   supportRepOpenChatList: any = [];
   rooms: any[] = [];
   myChats: any [];
-  sortArrowStatusTable1: boolean[] = [true, true, true, true] ;
-  sortArrowStatusTable2: boolean[] = [true, true] ;
-  sortArrowStatusTable3: boolean[] = [true, true, true] ;
+  sortArrowStatusTable1: boolean[] = [false, false, false, false] ;
+  sortArrowStatusTable2: boolean[] = [false, false] ;
+  sortArrowStatusTable3: boolean[] = [false, false, false] ;
   dateStatus = true;
   nameStatus = true;
   stateStatus = true;
   myChatsCopy = [];
   txtMsg = '';
+  firstIntrance = false;
   supportRepInShift  ;
-
+  get_Support_Rep_Name_subscribe;
+  get_Open_Chat_Rooms_subscribe;
+  get_Support_Rep_Open_Chat_Rooms_subscribe;
+  get_Own_Chats_subscribe;
 
   constructor(
     private alertController: AlertController,
@@ -40,20 +45,20 @@ export class SupportRepProfileComponent implements OnInit {
 
 
   ngOnInit() {
-    this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result1 => {
+    this.get_Support_Rep_Name_subscribe = this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result1 => {
       this.supportRepInShift = result1['inShift'];
-    this.firestore.getOpenChatRooms().subscribe(result2 => {
+    this.get_Open_Chat_Rooms_subscribe = this.firestore.getOpenChatRooms().subscribe(result2 => {
         this.openChatList = result2;
         this.createTable1(document.getElementById('supRepTBody1'), this.openChatList);
 
     });
   });
-    this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result => {
+    this. get_Support_Rep_Open_Chat_Rooms_subscribe = this.firestore.getSupportRepOpenChatRooms(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.supportRepOpenChatList = result;
       this.createTable2(document.getElementById('supRepTBody2'), this.supportRepOpenChatList);
     });
 
-    this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
+    this.get_Own_Chats_subscribe = this.firestore.getOwnChats(this.userAuth.auth.currentUser.uid).subscribe(result => {
       this.myChats = result;
       this.myChatsCopy = result;
       const scroll = document.getElementById('scrollbar3');
@@ -70,7 +75,8 @@ export class SupportRepProfileComponent implements OnInit {
     this.global.scrollToElement(e);
   }
 
-  async  createTable1(tbody, list: any[]) {
+  async  createTable1(tbody, list: any[]) 
+  {
     var tbodyChildrens = tbody.childNodes;
     const scrollbar1 = document.getElementById('scrollbar1');
     if (list.length >= 4) {
@@ -162,6 +168,12 @@ export class SupportRepProfileComponent implements OnInit {
       tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
       const trChildren = tbodyChildrens[i].childNodes;
       trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickTable1(tbodyChildrens[i], list, i));
+    }
+    
+    if(!this.firstIntrance){
+      this.firstIntrance = true;
+      this.sortByDate(this.sortArrowStatusTable1,2,'supportRepDateColTable1',this.openChatList,'table1');
+    
     }
   }
 
@@ -292,8 +304,9 @@ export class SupportRepProfileComponent implements OnInit {
       this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result => {
 // tslint:disable-next-line: max-line-length
       this.firestore.updateChatRooms(list[index]['ChatRoomId'], result['first_name'] + result['last_name'], this.userAuth.auth.currentUser.uid);
-      this.router.navigateByUrl('/chat/' + list[index]['ChatRoomId']);
-      // window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+      const id = this.userAuth.auth.currentUser.uid
+// tslint:disable-next-line: max-line-length
+       window.open('/chat/' + list[index]['ChatRoomId'] + '?supportRepId=' + this.userAuth.auth.currentUser.uid, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
       });
     }
   }
@@ -308,7 +321,7 @@ export class SupportRepProfileComponent implements OnInit {
       this.openClient(list[index]['ClientID']);
     }
     if (e['id'] === 'supRepTable2button1_' + (index + 1)) {
-      window.open('/chat/' + list[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+      window.open('/chat/' + list[index]['ChatRoomId'] + '?supportRepId=' + this.userAuth.auth.currentUser.uid, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
    }
 
@@ -321,13 +334,10 @@ export class SupportRepProfileComponent implements OnInit {
   }
 
   sortByDate(dateStatus, index, id, list, table) {
-    console.log(id);
     const nameBtn = (<HTMLButtonElement>document.getElementById(id));
     if (dateStatus[index] === true) {
       list.sort((a, b) => (a.timestamp >= b.timestamp) ? 1 : -1);
       dateStatus[index] = false;
-      console.log(this.sortArrowStatusTable1[2]);
-      console.log(dateStatus);
       nameBtn.innerHTML = '&#8657;שעת פתיחת חדר';
     } else {
       list.sort((a, b) => (a.timestamp <= b.timestamp) ? 1 : -1);
@@ -384,8 +394,7 @@ sortByClient(nameStatus, index, id, list, table) {
 
 sortByOpenRoomState(stateStatus, index, id, list, table) {
   const stateBtn = (<HTMLButtonElement>document.getElementById(id));
-  console.log(list);
-    if (stateStatus[index] === true) {
+      if (stateStatus[index] === true) {
       list.sort((a, b) => a.open - b.open);
       stateStatus[index] = false;
       stateBtn.innerHTML = '&#8657; מצב החדר';
@@ -405,7 +414,6 @@ sortByOpenRoomState(stateStatus, index, id, list, table) {
 
   sortByOccupiedState(stateStatus, index, id, list, table) {
     const stateBtn = (<HTMLButtonElement>document.getElementById(id));
-    console.log(list);
     if (stateStatus[index] === true) {
       list.sort((a, b) => a.occupied - b.occupied);
       stateStatus[index] = false;
@@ -476,7 +484,7 @@ sortByOpenRoomState(stateStatus, index, id, list, table) {
   }
 
   openRoom(roomId) {
-    window.open('/chat/' + roomId, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+    window.open('/chat/' + roomId + '?supportRepId=' + this.userAuth.auth.currentUser.uid, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
   }
 
   openClient(clientId){
@@ -498,5 +506,10 @@ sortByOpenRoomState(stateStatus, index, id, list, table) {
     });
   }
 
-
+  ngOnDestroy() {
+    this.get_Support_Rep_Name_subscribe.unsubscribe();
+    this.get_Open_Chat_Rooms_subscribe.unsubscribe();
+    this.get_Support_Rep_Open_Chat_Rooms_subscribe.unsubscribe();
+    this.get_Open_Chat_Rooms_subscribe.unsubscribe();
+  }
 }
