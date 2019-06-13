@@ -28,7 +28,7 @@ export class ChatPage implements OnInit, OnDestroy {
   supportRepName = '';
 
   client_support_flag: boolean;
-  num_of_entries = 0;
+  is_written = false;
 
   constructor(
     private userAuth: AngularFireAuth,
@@ -56,9 +56,7 @@ export class ChatPage implements OnInit, OnDestroy {
       this.clientName = result['ClientName'];
       this.supportRepId = result['SupportRepID'];
       this.supportRepName = result['SupportRepName'];
-      if (result['numOfEntries'] === 2) {
-        this.router.navigateByUrl('/');
-      }
+      this.is_written = result['written'];
     });
 
     this.chat_message_subscribe = this.firestore.getChatMessages(this.chatId).subscribe(result => {
@@ -74,8 +72,13 @@ export class ChatPage implements OnInit, OnDestroy {
         this.scrollToBottom();
       } else {
         this.messages.push(result[result.length - 1]);
+        if (this.messages.length === 1) {
+          this.firestore.updateIsWritten(this.chatId, true);
+        }
       }
     });
+
+    window.onbeforeunload = () => this.ngOnDestroy();
   }
 
   sendMessage(type) {
