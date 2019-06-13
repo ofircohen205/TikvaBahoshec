@@ -52,39 +52,4 @@ export class GalleryComponent implements OnInit {
     this.firestore.getImageArray().subscribe(result => this.imageUrls = result['images']);
   }
 
-  deleteFile(img) {
-    const storageRef = this.afs.storage.refFromURL(img);
-    storageRef.delete().then(() => {
-      this.imageUrls.splice(this.imageUrls.indexOf(img), 1);
-      this.firestore.updateImageArray(this.imageUrls);
-      }
-    );
-  }
-
-  addFile(event) {
-    this.file = event.target.files[0];
-  }
-
-  uploadFile() {
-    const fileName = this.file.name;
-    const filePath = 'assets/images/' + fileName;
-    const task = this.afs.upload(filePath, this.file);
-
-    // observe percentage changes
-    this.uploadPercent = task.percentageChanges();
-    // get notified when the download URL is available
-    task.snapshotChanges().pipe( finalize(() => {
-      this.getFile(filePath);
-    })).subscribe();
-
-  }
-
-  getFile(filePath) {
-    const storageRef = this.afs.ref(filePath);
-    storageRef.getDownloadURL().subscribe(res => {
-      this.imageUrls.push(res);
-      this.firestore.updateImageArray(this.imageUrls);
-    });
-  }
-
 }

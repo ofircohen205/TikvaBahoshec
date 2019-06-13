@@ -2,17 +2,19 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { LoadingController, AlertController } from '@ionic/angular';
+import { FirestoreService } from '../firebase/firestore/firestore.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
 
   @ViewChild('email') emailField;
   @ViewChild('password') passField;
   loadingRef = null;
+  chatRoom = [];
 
   constructor(
     // firebase.auth() in Firebase documentation is userAuth
@@ -20,7 +22,14 @@ export class LoginPage {
     private loadingController: LoadingController,
     private router: Router,
     private alertController: AlertController,
+    private firestore: FirestoreService
   ) { }
+
+  ngOnInit() {
+    const today = new Date().getTime();
+    const yesterdayDate = today - 1000 * 60 * 60 * 24;
+    this.firestore.destroyEmptyChatRooms(yesterdayDate);
+  }
 
   onKeyUp(data) {
     const ENTER_KEY_CODE = 13;

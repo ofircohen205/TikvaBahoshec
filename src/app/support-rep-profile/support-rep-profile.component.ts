@@ -304,8 +304,8 @@ export class SupportRepProfileComponent implements OnInit {
       this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result => {
 // tslint:disable-next-line: max-line-length
       this.firestore.updateChatRooms(list[index]['ChatRoomId'], result['first_name'] + result['last_name'], this.userAuth.auth.currentUser.uid);
-      //this.router.navigateByUrl('/chat/' + list[index]['ChatRoomId']);
-      var id = this.userAuth.auth.currentUser.uid
+      const id = this.userAuth.auth.currentUser.uid
+// tslint:disable-next-line: max-line-length
        window.open('/chat/' + list[index]['ChatRoomId'] + '?supportRepId=' + this.userAuth.auth.currentUser.uid, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
       });
     }
