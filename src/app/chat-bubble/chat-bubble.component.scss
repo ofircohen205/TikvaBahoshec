@@ -1,0 +1,27 @@
+.received {
+    background: #fff;
+    border-radius: 0px 5px 5px 5px;
+    float: left;
+  }
+  
+
+  
+.received:after {
+    border-width: 0px 10px 10px 0;
+    border-color: transparent #fff transparent transparent;
+    top: 0;
+    left: -10px;
+  }
+
+.sent {
+    background: blue;
+    border-radius: 5px 0px 5px 5px;
+    float: right;
+  }
+  .sent:after {
+    border-width: 0px 0 10px 10px;
+    border-color: transparent transparent transparent #e1ffc7;
+    top: 0;
+    right: -10px;
+  }
+  

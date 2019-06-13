@@ -30,7 +30,7 @@ exports.deleteClient = functions.firestore
 
 
 // exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onWrite(event => {
-    exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onWrite(( change,context) =>{
+    exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onCreate(( change,context) =>{
     var nameOfClient = functions.database.ref().val
     var doc = new pdfdocument();
     // var email = change.after.val().emailid;

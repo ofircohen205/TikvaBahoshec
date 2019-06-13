@@ -110,6 +110,14 @@ export class ChatPage implements OnInit, OnDestroy {
     }
   }
 
+  beforeSendMessage() {
+    if (this.client_support_flag) {
+      this.sendMessage('username');
+    } else {
+      this.sendMessage('SupportRepID');
+    }
+  }
+
   ngOnDestroy() {
     this.firestore.removeClient(this.clientId);
     this.params_subscribe.unsubscribe();

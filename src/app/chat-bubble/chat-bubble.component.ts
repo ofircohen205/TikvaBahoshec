@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-chat-bubble',
@@ -14,15 +15,34 @@ export class ChatBubbleComponent implements OnInit {
   messageTime;
   flag;
 
-  constructor(private firestore: FirestoreService) { }
+  constructor(private firestore: FirestoreService,private userAuth: AngularFireAuth) { }
 
   ngOnInit() {
     this.messageTime = new Date(this.data['timestamp']).toLocaleTimeString();
-    if (this.clientName === this.data.from) {
-      this.flag = true;
-    } else {
-      this.flag = false;
+    var url = new URL(window.location.href);
+    var parameter = url.searchParams.get("supportRepId");
+    console.log(parameter);
+    console.log(this.userAuth.auth.currentUser);
+    console.log(this.data.from);
+    console.log(this.clientName);
+
+    if(this.userAuth.auth.currentUser !== null || parameter !== null){
+      if (this.clientName === this.data.from) {
+        this.flag = false;
+      } else {
+        this.flag = true;
+      }
+      console.log(this.flag);
     }
+    else{
+      if (this.clientName === this.data.from) {
+        this.flag = true;
+      } else {
+        this.flag = false;
+      }
+      console.log(this.flag);
+    }
+    
   }
 
 }

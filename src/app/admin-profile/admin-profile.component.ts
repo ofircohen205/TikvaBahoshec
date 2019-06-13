@@ -134,8 +134,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.supportRepList.forEach(supportRep => {
       if (supportRep !== undefined) {
         var selection = document.createElement('ion-select-option');
-        selection.value = supportRep['name'];
-        selection.textContent = supportRep['name'];
+        selection.value = supportRep['first_name'] + ' ' + supportRep['last_name'] ;
+        selection.textContent = supportRep['first_name'] + ' ' + supportRep['last_name'] ;
         selectElement.appendChild(selection);
       }
     });
