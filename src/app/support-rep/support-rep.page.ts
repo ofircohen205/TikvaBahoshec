@@ -3,6 +3,7 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
 import { ActivatedRoute } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-support-rep',
@@ -31,7 +32,8 @@ export class SupportRepPage implements OnInit {
     private firestore: FirestoreService,
     private global: GlobalService,
     private activatedRoute: ActivatedRoute,
-    private userAuth: AngularFireAuth) { }
+    private userAuth: AngularFireAuth,
+    private alertController: AlertController) { }
 
   ngOnInit() {
     this.firestore.getAdmins().subscribe(result => {
@@ -69,7 +71,21 @@ export class SupportRepPage implements OnInit {
     });
   }
 
-  createSupportRep() {
+  async createSupportRep() {
+
+// tslint:disable-next-line: max-line-length
+    if (this.first_name.value === '' || this.last_name.value === '' || this.id.value === '' || this.address.value === '' || this.age.value === '' || this.cellphone.value === '' || this.phone_num.value === '' || this.email.value === '' || this.password.value === '') {
+      const errorMsg = await this.alertController.create({
+        header: 'שגיאה',
+        message: 'אחד מהשדות לא מולאו. יש לוודא כי כל השדות מולאו',
+        buttons: [{
+          text: 'המשך',
+        }]
+      });
+
+      return errorMsg.present();
+    }
+
     this.userAuth.auth.createUserWithEmailAndPassword(this.email.value, this.password.value).then(result => {
       if (this.male.checked) {
 // tslint:disable-next-line: max-line-length
@@ -82,9 +98,34 @@ export class SupportRepPage implements OnInit {
         this.firestore.createSupportRep(result.user.uid, this.first_name.value, this.last_name.value, this.id.value, this.address.value, this.age.value, this.email.value, this.cellphone.value, this.phone_num.value, 'אחר');
       }
     });
+
+    const alert = await this.alertController.create({
+      header: 'נציג הוקם בהצלחה',
+      message: 'נציג זה הוקם בהצלחה. אנא לחץ המשך ליציאה',
+      buttons: [{
+        text: 'המשך',
+        handler: () => window.close()
+      }]
+    });
+
+    alert.present();
   }
 
-  updateSupportRep() {
+  async updateSupportRep() {
+
+    // tslint:disable-next-line: max-line-length
+    if (this.first_name.value === '' || this.last_name.value === '' || this.id.value === '' || this.address.value === '' || this.age.value === '' || this.cellphone.value === '' || this.phone_num.value === '' || this.email.value === '' || this.password.value === '') {
+      const errorMsg = await this.alertController.create({
+        header: 'שגיאה',
+        message: 'אחד מהשדות לא מולאו. יש לוודא כי כל השדות מולאו',
+        buttons: [{
+          text: 'המשך',
+        }]
+      });
+
+      return errorMsg.present();
+    }
+
     if (this.male.checked) {
 // tslint:disable-next-line: max-line-length
       this.firestore.updateSupportRepDetails(this.supportRepId, this.first_name.value, this.last_name.value, this.id.value, this.address.value, this.age.value, this.email.value, this.cellphone.value, this.phone_num.value, 'זכר');
@@ -95,17 +136,32 @@ export class SupportRepPage implements OnInit {
 // tslint:disable-next-line: max-line-length
       this.firestore.updateSupportRepDetails(this.supportRepId, this.first_name.value, this.last_name.value, this.id.value, this.address.value, this.age.value, this.email.value, this.cellphone.value, this.phone_num.value, 'אחר');
     }
+
+    const alert = await this.alertController.create({
+      header: 'נציג עודכן בהצלחה',
+      message: 'נציג זה עודכן בהצלחה. אנא לחץ המשך ליציאה',
+      buttons: [{
+        text: 'המשך',
+        handler: () => window.close()
+      }]
+    });
+
+    alert.present();
   }
 
   updateAdminList() {
+
     if (this.admin.checked) {
+      const index = this.adminsList.indexOf(this.supportRepId);
       this.adminsList.splice(this.adminsList.indexOf(this.supportRepId), 1);
-      console.log('checked');
     } else {
-      this.adminsList.push(this.supportRepId);
-      console.log('unchecked');
+      const isAdminAlready = this.adminsList.includes(this.supportRepId);
+      if (!isAdminAlready) {
+        this.adminsList.push(this.supportRepId);
+      }
     }
-    this.firestore.addToAdminList(this.adminsList);
+    console.log(this.adminsList);
+    // this.firestore.updateAdminList(this.adminsList);
   }
 
 }

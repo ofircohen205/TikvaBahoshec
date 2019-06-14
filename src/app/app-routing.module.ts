@@ -11,8 +11,8 @@ const routes: Routes = [
   { path: 'client-profile/:id', loadChildren: './client-profile/client-profile.module#ClientProfilePageModule', canActivate: [AuthGuard] },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule', canActivate: [AuthGuard] },
-  { path: 'support-rep', loadChildren: './support-rep/support-rep.module#SupportRepPageModule' },
-  { path: 'support-rep/:id', loadChildren: './support-rep/support-rep.module#SupportRepPageModule' },
+  { path: 'support-rep', loadChildren: './support-rep/support-rep.module#SupportRepPageModule', canActivate: [AuthGuard] },
+  { path: 'support-rep/:id', loadChildren: './support-rep/support-rep.module#SupportRepPageModule', canActivate: [AuthGuard] },
   { path: '404', loadChildren: './not-found/not-found.module#NotFoundPageModule' },
   { path: '**', redirectTo: '404' }
 

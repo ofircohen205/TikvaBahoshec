@@ -130,7 +130,7 @@ export class GlobalService {
   async invalidImage() {
     const alert = await this.alertController.create({
       header: 'קובץ אינו תקין',
-      message: 'סוג הקובץ שהעלית איננו תמונה. אנא העלה סוג קובץ אחר',
+      message: 'סוג הקובץ שהעלית איננו תמונה. אנא העלה קובץ מסוג JPG, JPEG, PNG',
       buttons: [{
         text: 'אישור'
       }]
