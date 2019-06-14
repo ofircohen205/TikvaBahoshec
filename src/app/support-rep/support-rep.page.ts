@@ -24,7 +24,7 @@ export class SupportRepPage implements OnInit {
   @ViewChild('male') male;
   @ViewChild('female') female;
   @ViewChild('other') other;
-  @ViewChild('admin') admin
+  @ViewChild('admin') admin;
   supportRepId = '';
   adminsList = [];
 
@@ -160,8 +160,7 @@ export class SupportRepPage implements OnInit {
         this.adminsList.push(this.supportRepId);
       }
     }
-    console.log(this.adminsList);
-    // this.firestore.updateAdminList(this.adminsList);
+    this.firestore.updateAdminList(this.adminsList);
   }
 
 }
