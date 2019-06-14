@@ -1,19 +1,16 @@
 <ion-content fixed #mainContent>
 
   <ion-grid fixed>
-    <!-- <ion-row *ngFor='let story of stories'> -->
+    <ion-item>
+      <ion-button id='scroll-to-editor-btn' (click)="writeYourStory()">אני רוצה לשתף את הסיפור האישי שלי
+      </ion-button>
+    </ion-item>
     <ion-row>
       <ion-col>
         <div id='upload-stories'></div>
-        <!-- <ion-card *ngIf='story.approved'>
-          <ion-card-header>
-            <ion-card-title text-right>{{ story.title }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content id = 'desc' text-right >{{story.description}}</ion-card-content>
-        </ion-card> -->
       </ion-col>
     </ion-row>
-
+    <br /><br /><br />
     <ion-row>
       <ion-col>
         <ion-card id='tell-your-story' [hidden]="false">
@@ -21,16 +18,11 @@
             <ion-card-title text-right>ספר את הסיפור שלך</ion-card-title>
           </ion-card-header>
           <ion-card-content text-right>
-            <!-- <ion-item> -->
             <ion-input type="text" #title placeholder='נושא הסיפור שלי' text-right></ion-input>
-            <!-- </ion-item> -->
             <br />
-            <!-- <ion-item> -->
-            <!-- <ion-input type="text" #description placeholder='תיאור' text-right></ion-input> -->
-            <ejs-richtexteditor text-right placeholder='ספר/י על המקרה שלך. ניתן ללחוץ על החצים האלכסוניים מימין להגדלת/הקטנת תצוגת הכתיבה
-              ' id='defaultRTE' [(value)]='value' [toolbarSettings]='tools' [quickToolbarSettings]='quickTools'>
+            <ejs-richtexteditor text-right placeholder='ספר/י על המקרה שלך.' id='defaultRTE' [(value)]='value'
+              [toolbarSettings]='tools' [quickToolbarSettings]='quickTools'>
             </ejs-richtexteditor>
-            <!-- </ion-item> -->
             <br />
             <ion-button (click)='sendStory()'>שלח</ion-button>
           </ion-card-content>
@@ -38,6 +30,6 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  
+
   <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir &copy;</ion-footer>
 </ion-content>

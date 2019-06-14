@@ -77,9 +77,10 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   eventsArray: any[] = [];
   event_to_change: any;
   association_info: string;
+  template_value: string;
 
   @ViewChild('title') title;
-  story_filter='';
+  story_filter = '';
   story_search = '';
   private curr_story_edit_id: string;
   // variables for the text editor
@@ -291,11 +292,11 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       tbodyChildrens[i].addEventListener('mouseover', () => this.onmouseover(tbodyChildrens[i]));
       tbodyChildrens[i].addEventListener('mouseout', () => this.onmouseout(tbodyChildrens[i]));
       var trChildren = tbodyChildrens[i].childNodes;
-// tslint:disable-next-line: max-line-length
+      // tslint:disable-next-line: max-line-length
       trChildren[trChildren.length - 1].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 1], i));
-// tslint:disable-next-line: max-line-length
+      // tslint:disable-next-line: max-line-length
       trChildren[trChildren.length - 2].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 2], i));
-// tslint:disable-next-line: max-line-length
+      // tslint:disable-next-line: max-line-length
       trChildren[trChildren.length - 3].addEventListener('click', () => this.onclickAdminHistoryTable(tbodyChildrens[i].childNodes[trChildren.length - 3], i));
     }
   }
@@ -613,6 +614,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   // edit the story. replace the old content of the story with the new content
   editStory(story) {
     document.getElementById('editor').hidden = false;
+    document.getElementById('template-editor').hidden = true;
     this.curr_story_edit_id = story.id;
     for (let i = 0; i < this.storiesArray.length; i++) {
       if (this.strcmp(story.id, i) === 0) {
@@ -627,9 +629,26 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         break;
       }
     }
-  
   }
 
+  editTemplate() {
+    document.getElementById('template-editor').hidden = false;
+    document.getElementById('editor').hidden = true;
+    this.firestore.getStoryTemplate().subscribe(result => {
+      this.template_value = result.storyTemplate;
+    });
+  
+    document.getElementById('template-editor').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+  }
+
+  acceptTemplateChange() {
+    document.getElementById('template-editor').hidden = true;
+    this.firestore.updateStoryTemplate(this.template_value);
+    alert('שינוי הטמפלייט בוצע בהצלחה!');
+  }
 
   // delete the story from firebase and from the array of stories
   async deleteStory(story) {
@@ -706,41 +725,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     return 0;
   }
 
-  // search for the story. Has to get the full name of the story to find it
-  // async searchStory() {
-  //   let line = -1;
-  //   for (let i = 0; i < this.storiesArray.length; i++) {
-  //     if (this.storiesArray[i].title === this.story_search) {
-  //       line = i; // line in the table
-  //       document.getElementById(this.storiesArray[line].id).scrollIntoView({
-  //         behavior: 'smooth',
-  //         block: 'center'
-  //       });
-
-  //       document.getElementById(this.storiesArray[line].id).style.background = "#ffd78e";
-
-  //       // after marking the needed line' paint the background back to it's normal color
-  //       let background;
-  //       if (line % 2 === 0) {
-  //         background = 'white';
-  //       } else {
-  //         background = '#f2f2f2';
-  //       }
-
-  //       setTimeout(() => {
-  //         document.getElementById(this.storiesArray[line].id).style.background = background;
-  //       }, 3000);
-  //       break;
-  //     }
-  //   }
-  //   if (line === -1) {
-  //     const alert = await this.alertController.create({
-  //       message: 'האירוע שחיפשת לא נמצא',
-  //       buttons: ['המשך']
-  //     });
-  //     alert.present();
-  //   }
-  // }
 
   /*********************************************************************************************************************************/
 
