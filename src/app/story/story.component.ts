@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 
 // tslint:disable-next-line: max-line-length
@@ -12,20 +12,21 @@ import { stringify } from 'querystring';
 
   providers: [ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService],
 })
-export class StoryComponent implements OnInit {
+export class StoryComponent implements OnInit, OnDestroy {
   alertController: any;
 
   constructor(private firestore: FirestoreService) { }
 
   @ViewChild('title') title;
-  // @ViewChild('description') description;
   stories = [];
   storiesArray = [];
+  stories_subscribe;
+  template_subscribe;
+  template_flag: boolean = false;
 
   // variables for the text editor
-  public value: string; // =
-  // `<br/>
-  // כתוב על המקרה שלך כאן`;
+  public value: string;
+
 
   public tools: object = {
     items: ['Undo', 'Redo', '|',
@@ -43,7 +44,7 @@ export class StoryComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.firestore.getStories().subscribe(result => {
+    this.stories_subscribe = this.firestore.getStories().subscribe(result => {
       result.sort((s1, s2) => {
         if (s1['timestamp'] > s2['timestamp']) {
           return 1;
@@ -59,16 +60,12 @@ export class StoryComponent implements OnInit {
 
       this.showStories();
     });
-
   }
 
   sendStory() {
-    console.log(this.value);
     this.firestore.createStory(this.title.value, this.value);
     alert('תודה רבה ששיתפת אותנו במקרה האישי שלך! במידה והעדות תאושר ניתן יהיה לראותה באתר תוך מספר ימים');
     document.getElementById('tell-your-story').hidden = true;
-
-
   }
 
   showStories() {
@@ -76,15 +73,36 @@ export class StoryComponent implements OnInit {
     this.stories.forEach(story => {
       if (story.approved) {
         html += '<ion-card><ion-card-header><ion-card-title text-right>' +
-                story.title +
-                '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right >' +
-                story.description + '</ion-card-content></ion-card>';
+          story.title +
+          '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right >' +
+          story.description + '</ion-card-content></ion-card>';
       }
     });
-    // console.log(html);
-    // console.log(document.getElementById('upload-stories'));
     document.getElementById('upload-stories').innerHTML = html;
-
   }
 
+
+  writeYourStory() {
+    document.getElementById('defaultRTE').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    let storyTemplate = window.open( '', '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+    this.firestore.getStoryTemplate().subscribe(result => {
+      storyTemplate.document.body.innerHTML =  result.storyTemplate;
+      storyTemplate.document.body.setAttribute("style", "text-align: right;");
+      storyTemplate.document.body.setAttribute("lang","he");
+      storyTemplate.document.body.setAttribute("dir","rtl");
+    });
+
+    //also need to check in admin profile why when change the template it goes to the support rep tab
+  }
+
+
+  ngOnDestroy() {
+    this.stories_subscribe.unsubscribe();
+    if (this.template_flag)
+      this.template_subscribe.unsubscribe();
+  }
 }
