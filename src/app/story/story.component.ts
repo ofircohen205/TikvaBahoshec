@@ -92,9 +92,10 @@ export class StoryComponent implements OnInit, OnDestroy {
     this.firestore.getStoryTemplate().subscribe(result => {
       storyTemplate.document.body.innerHTML =  result.storyTemplate;
       storyTemplate.document.body.setAttribute("style", "text-align: right;");
+      storyTemplate.document.body.setAttribute("lang","he");
+      storyTemplate.document.body.setAttribute("dir","rtl");
     });
 
-    //need to inject the template content from the firebase to the html of the new window
     //also need to check in admin profile why when change the template it goes to the support rep tab
   }
 
