@@ -644,10 +644,15 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  acceptTemplateChange() {
+  async acceptTemplateChange() {
     document.getElementById('template-editor').hidden = true;
     this.firestore.updateStoryTemplate(this.template_value);
-    alert('שינוי הטמפלייט בוצע בהצלחה!');
+
+    const alert = await this.alertController.create({
+      message: 'שינוי הטמפלייט בוצע בהצלחה!',
+      buttons: ['המשך']
+    });
+    alert.present();
   }
 
   // delete the story from firebase and from the array of stories
