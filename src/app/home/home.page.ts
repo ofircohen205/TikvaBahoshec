@@ -28,32 +28,29 @@ export class HomePage implements OnInit {
     const storyElement = document.getElementById('story');
     const mainElement = document.getElementById('main');
     const calenderElement = document.getElementById('calender');
-    const titleElement = document.getElementById('title-header');
+    const imageElement = document.getElementById('image_header');
     if (tar === 'story') {
       if (storyElement.hidden === true) {
         storyElement.hidden = false;
         calenderElement.hidden = true;
         mainElement.hidden = true;
+        imageElement.src = '../../assets/logo/Stories.png';
         this.location.go('/story');
-        titleElement.textContent = 'תקווה בחושך - סיפורים';
-        titleElement.style.marginRight='200px'
       }
     } else if (tar === 'home') {
       if (mainElement.hidden === true) {
         storyElement.hidden = true;
         calenderElement.hidden = true;
         mainElement.hidden = false;
+        imageElement.src = '../../assets/logo/Header.png';
         this.location.go('/home');
-        titleElement.textContent = 'תקווה בחושך';
-        titleElement.style.marginRight='300px'
       }
     } else if (tar === 'calender') {
         storyElement.hidden = true;
         calenderElement.hidden = false;
         mainElement.hidden = true;
+        imageElement.src = '../../assets/logo/Events.png';
         this.location.go('/calender');
-        titleElement.textContent = 'תקווה בחושך - אירועים';
-        titleElement.style.marginRight='200px'
     }
   }
 

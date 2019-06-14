@@ -106,16 +106,12 @@
         <ion-card text-center id="Manage-Client-Stories" [hidden]="true">
 
           <ion-card-header>
-            <!-- check if need to have an option of adding a story here -->
             <h3 text-center>רשימת עדויות</h3>
-            <!-- <ion-searchbar class="search" type="text" [(ngModel)]="story_search" placeholder="כותרת העדות לחיפוש">
-              <ion-button (click)="searchStory()">
-                <ion-icon name="search"></ion-icon> חיפוש עדות
-              </ion-button>
-            </ion-searchbar> -->
-            <br/>
-            <ion-searchbar class="search" type="text" [(ngModel)]= "story_filter" placeholder="כותרת העדות לחיפוש"></ion-searchbar>
-
+            <br />
+            <ion-button (click)="editTemplate()">עריכת תבנית טופס כתיבת עדות</ion-button>
+            <br />
+            <ion-searchbar class="search" type="text" [(ngModel)]="story_filter" placeholder="כותרת העדות לחיפוש">
+            </ion-searchbar>
           </ion-card-header>
 
           <ion-card-content>
@@ -177,6 +173,16 @@
 
               <ion-button id='save-edit' (click)="acceptStoryChange()">שמור עריכה</ion-button>
 
+            </ion-card>
+
+
+            <ion-card id='template-editor' [hidden]="true">
+              <ion-card-content>
+                <ejs-richtexteditor text-right id='story-template-editor' [(value)]='template_value'
+                  [toolbarSettings]='tools' [quickToolbarSettings]='quickTools'></ejs-richtexteditor>
+
+                <ion-button id='save-edit' (click)="acceptTemplateChange()">שמור עריכה</ion-button>
+              </ion-card-content>
             </ion-card>
 
           </ion-card-content>
@@ -372,14 +378,15 @@
               </ion-button> 
             </ion-searchbar> -->
 
-            <ion-searchbar class="search" type="text" [(ngModel)]="event_filter" placeholder="שם האירוע לחיפוש"></ion-searchbar>
+            <ion-searchbar class="search" type="text" [(ngModel)]="event_filter" placeholder="שם האירוע לחיפוש">
+            </ion-searchbar>
 
             <h3 text-center>רשימת אירועים</h3>
           </ion-card-header>
 
           <ion-card-content>
 
-            
+
             <ion-card>
 
               <div id="scrollbar1" class="my-custom-scrollbar">

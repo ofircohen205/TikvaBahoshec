@@ -38,7 +38,12 @@ ion-card {
 }
 
 .icons {
-    height: 100px;
-    width: 100px;
-    margin-right: 30%;
+    height: 70%;
+    width: 50%;
+    margin-right: 18%;
+    margin-top: 10%;
+}
+
+.icons:hover {
+    cursor: pointer;
 }

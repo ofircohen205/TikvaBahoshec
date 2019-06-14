@@ -317,7 +317,7 @@ export class FirestoreService {
     return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
   }
 
-  public addToAdminList(admins) {
+  public updateAdminList(admins) {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ admins });
   }
 
@@ -337,4 +337,11 @@ export class FirestoreService {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ info });
   }
 
+  public getStoryTemplate(): Observable<any> {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+  }
+
+  public updateStoryTemplate(storyTemplate): void {
+    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ storyTemplate });
+  }
 }
