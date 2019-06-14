@@ -62,7 +62,20 @@ export class StoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  sendStory() {
+  async sendStory() {
+
+    if (this.title.value === '') {
+      const errorMsg = await this.alertController.create({
+        header: 'שגיאה',
+        message: 'אחד מהשדות לא מולאו. יש לוודא כי כל השדות מולאו',
+        buttons: [{
+          text: 'המשך',
+        }]
+      });
+
+      return errorMsg.present();
+    }
+
     this.firestore.createStory(this.title.value, this.value);
     alert('תודה רבה ששיתפת אותנו במקרה האישי שלך! במידה והעדות תאושר ניתן יהיה לראותה באתר תוך מספר ימים');
     document.getElementById('tell-your-story').hidden = true;

@@ -27,6 +27,7 @@ export class SupportRepPage implements OnInit {
   @ViewChild('admin') admin;
   supportRepId = '';
   adminsList = [];
+  numOfChanges = 0;
 
   constructor(
     private firestore: FirestoreService,
@@ -151,16 +152,23 @@ export class SupportRepPage implements OnInit {
 
   updateAdminList() {
 
+    if (this.numOfChanges === 1) {
+      return;
+    }
+
     if (this.admin.checked) {
       const index = this.adminsList.indexOf(this.supportRepId);
       this.adminsList.splice(this.adminsList.indexOf(this.supportRepId), 1);
+      this.firestore.updateAdminList(this.adminsList);
     } else {
       const isAdminAlready = this.adminsList.includes(this.supportRepId);
       if (!isAdminAlready) {
         this.adminsList.push(this.supportRepId);
+        this.firestore.updateAdminList(this.adminsList);
       }
     }
-    this.firestore.updateAdminList(this.adminsList);
+    this.numOfChanges++;
+
   }
 
 }

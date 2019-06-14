@@ -80,7 +80,7 @@ export class ProfilePage implements OnInit, OnDestroy {
       if (confirm('האם את/ה בטוח/ה רוצה להיכנס למשמרת')) {
         readyButton.setAttribute('color', 'success');
         readyButton.textContent = 'במשמרת';
-        this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, true);   
+        this.firestore.updateSupportRepInShift(this.userAuth.auth.currentUser.uid, true);
       }
     } else {
       if (confirm('האם את/ה בטוח/ה רוצה לצאת ממשמרת')) {
