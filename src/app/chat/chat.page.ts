@@ -67,15 +67,11 @@ export class ChatPage implements OnInit, OnDestroy {
           return -1;
         }
       });
-      if (this.messages.length <= 0) {
         this.messages = result;
         this.scrollToBottom();
-      } else {
-        this.messages.push(result[result.length - 1]);
         if (this.messages.length === 1) {
           this.firestore.updateIsWritten(this.chatId, true);
         }
-      }
     });
 
     window.onbeforeunload = () => this.ngOnDestroy();

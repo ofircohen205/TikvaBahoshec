@@ -1,6 +1,6 @@
 <div *ngIf='flag; then sent else received'></div>
 <ng-template #received >
-  <ion-card class="received" >
+  <ion-card class="received" style="margin-right: 50%" >
     <ion-card-header>
       <ion-card-title text-right>{{data.content}}</ion-card-title>
     </ion-card-header>
@@ -10,7 +10,7 @@
   </ion-card>
 </ng-template>
 <ng-template #sent >
-  <ion-card class="sent" >
+  <ion-card class="sent" style="margin-left: 50%" >
     <ion-card-header>
       <ion-card-title text-right>{{data.content}}</ion-card-title>
     </ion-card-header>

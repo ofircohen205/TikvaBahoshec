@@ -113,11 +113,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       this.createHistoryTable();
     });
     this.image_array_subscribe = this.firestore.getImageArray().subscribe(res => {
-      if (res.images) {
-        this.imageUrls = res.images;
-      } else {
-        this.imageUrls = [];
-      }
+      this.imageUrls = res.images;
     });
 
     this.association_subscribe = this.firestore.getAssociationInfo().subscribe(result => {
@@ -757,7 +753,22 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   addFile(event) {
     this.file = event.target.files[0];
+    const fileName = this.file.name;
+// tslint:disable-next-line: max-line-length
+    if (!(fileName.includes('.jpg') || fileName.includes('.jpeg') || fileName.includes('.png') || fileName.includes('.JPG') || fileName.includes('.JPEG') || fileName.includes('.PNG'))) {
+      this.global.invalidImage();
+      return;
   }
+  const filePath = 'assets/images/' + fileName;
+    const task = this.afs.upload(filePath, this.file);
+
+    // observe percentage changes
+    this.uploadPercent = task.percentageChanges();
+    // get notified when the download URL is available
+    task.snapshotChanges().pipe(finalize(() => {
+      this.getFile(filePath);
+    })).subscribe();
+}
 
   uploadFile() {
     const fileName = this.file.name;

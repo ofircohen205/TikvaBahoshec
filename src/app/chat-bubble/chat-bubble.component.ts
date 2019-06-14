@@ -22,17 +22,17 @@ export class ChatBubbleComponent implements OnInit {
     var url = new URL(window.location.href);
     var parameter = url.searchParams.get("supportRepId");
     console.log(parameter);
-    console.log(this.userAuth.auth.currentUser);
+    console.log(this.userAuth.auth.currentUser.email);
     console.log(this.data.from);
     console.log(this.clientName);
 
-    if(this.userAuth.auth.currentUser !== null || parameter !== null){
+    if(this.userAuth.auth.currentUser.email !== null || parameter !== null){
       if (this.clientName === this.data.from) {
         this.flag = false;
       } else {
         this.flag = true;
       }
-      console.log(this.flag);
+      console.log("kaka1");
     }
     else{
       if (this.clientName === this.data.from) {
@@ -40,9 +40,8 @@ export class ChatBubbleComponent implements OnInit {
       } else {
         this.flag = false;
       }
-      console.log(this.flag);
+      console.log("kaka2");
     }
-    
   }
 
 }

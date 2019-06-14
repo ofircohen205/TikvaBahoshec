@@ -43,11 +43,11 @@ export class FirestoreService {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).valueChanges();
   }
   public getAllChatRoom(): Observable<any> {
-    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).valueChanges();
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('written', '==', true)).valueChanges();
   }
 
   public getOpenChatRooms(): Observable<any> {
-    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true)).valueChanges();
+    return this.firestore.collection(this.CHAT_ROOMS_COLLECTION, ref => ref.where('open', '==', true).where('written', '==', true)).valueChanges();
   }
 
   public updateChatRooms(chatRoomId, supportRepName, supportRepId): void {

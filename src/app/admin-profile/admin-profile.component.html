@@ -54,10 +54,12 @@
                   <td *ngIf='supportRep.inShift'>במשמרת</td>
                   <td *ngIf='!supportRep.inShift'>לא במשמרת</td>
                   <td>
-                    <ion-button color="danger" (click)="deleteSupport(supportRep)">מחק</ion-button>
+                    <ion-button color="danger" (click)="deleteSupport(supportRep)">
+                        <ion-icon name="trash"></ion-icon>מחק</ion-button>
                   </td>
                   <td>
-                    <ion-button (click)="editSupport(supportRep)">ערוך</ion-button>
+                    <ion-button (click)="editSupport(supportRep)">
+                        <ion-icon name="create"></ion-icon>ערוך</ion-button>
                   </td>
                   <td>
                     <ion-button (click)="showHistory(supportRep)">הצג שיחות</ion-button>
@@ -187,7 +189,7 @@
           <ion-card-header>
 
             <!-- <a [href]="downloadURL | async">{{ downloadURL | async }}</a> -->
-            <input type="file" (change)="addFile($event)" class='uploadImage' id='imageFile' />
+            <input type="file"  (change)="addFile($event)" class='uploadImage' id='imageFile' />
             <label for='imageFile'>בחר תמונה</label>
             <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
             <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
