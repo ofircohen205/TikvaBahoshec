@@ -34,7 +34,7 @@ export class HomePage implements OnInit {
         storyElement.hidden = false;
         calenderElement.hidden = true;
         mainElement.hidden = true; 
-        imageElement.src = '../../assets/logo/Stories.png';
+        imageElement['src'] = '../../assets/logo/Stories.png';
         this.location.go('/story');
       }
     } else if (tar === 'home') {
@@ -49,7 +49,7 @@ export class HomePage implements OnInit {
         storyElement.hidden = true;
         calenderElement.hidden = false;
         mainElement.hidden = true;
-        imageElement.src = '../../assets/logo/Events.png';
+        imageElement['src'] = '../../assets/logo/Events.png';
         this.location.go('/calender');
     }
   }
