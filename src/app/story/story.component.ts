@@ -79,16 +79,17 @@ export class StoryComponent implements OnInit, OnDestroy {
     this.firestore.createStory(this.title.value, this.value);
     alert('תודה רבה ששיתפת אותנו במקרה האישי שלך! במידה והעדות תאושר ניתן יהיה לראותה באתר תוך מספר ימים');
     document.getElementById('tell-your-story').hidden = true;
+    document.getElementById('scroll-to-editor-btn').hidden = true;
   }
 
   showStories() {
     let html = '<span></span>';
     this.stories.forEach(story => {
       if (story.approved) {
-        html += '<ion-card><ion-card-header><ion-card-title text-right>' +
+        html += '<ion-card style="background-color: rgb(135, 86, 86);"><ion-card-header><ion-card-title text-right style="color: white;text-decoration: underline;">' +
           story.title +
-          '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right >' +
-          story.description + '</ion-card-content></ion-card>';
+          '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right style="color: white";>' +
+          story.description + '</ion-card-content></ion-card><br/>';
       }
     });
     document.getElementById('upload-stories').innerHTML = html;
