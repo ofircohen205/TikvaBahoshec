@@ -86,9 +86,9 @@ export class CalenderComponent implements OnInit {
         month_in_hebrew = "דצמבר";
     }
     document.getElementById('monthAndYear').innerHTML = month_in_hebrew + " " + year;
- 
+
     // creating all cells
-    let date = 1;
+    let date = 1, color_flag = true;;
     for (let i = 0; i < 6; i++) {
       // creates a table row
       const row = document.createElement('tr');
@@ -98,6 +98,13 @@ export class CalenderComponent implements OnInit {
       for (let j = 0; j < 7; j++) {
         if (i === 0 && j < firstDay) {
           cell = document.createElement('td');
+          cell.setAttribute("style", "border-style: solid;");
+          if (color_flag) {
+            cell.setAttribute("style", "background-color: #f2f6fc;border-style: solid;");
+            color_flag = false;
+          }
+          else
+            color_flag = true;
           cellText = document.createTextNode('');
           data = document.createElement('div'); // div for the titles in the calendar
           cell.appendChild(cellText);
@@ -106,7 +113,14 @@ export class CalenderComponent implements OnInit {
         } else if (date > this.daysInMonth(month, year)) {
           break;
         } else {
-          cell = document.createElement('td')
+          cell = document.createElement('td');
+          cell.setAttribute("style", "border-style: solid;");
+          if (color_flag) {
+            cell.setAttribute("style", "background-color: #f2f6fc;border-style: solid;");
+            color_flag = false;
+          }
+          else
+            color_flag = true;
           cellText = document.createTextNode(date.toString());
           data = document.createElement('div'); // div for the titles in the calendar
           if (date.toString().length === 1)
@@ -122,7 +136,8 @@ export class CalenderComponent implements OnInit {
           data.setAttribute('id', full_date);
 
           if (date === this.today.getDate() && year === this.today.getFullYear() && month === this.today.getMonth()) {
-            cell.classList.add('bg-info');
+            //cell.classList.add('bg-info');
+            cell.setAttribute("style","background-color: #719bd6;")
           } // color today's date
           cell.appendChild(cellText); // the day in the month
           cell.appendChild(data);  // the events in the day
@@ -156,11 +171,10 @@ export class CalenderComponent implements OnInit {
       month = event.date.substring(5, 7);
       year = event.date.substring(0, 4);
       date = day + "-" + month + "-" + year;
-      if (this.currentYear === Number(year) && this.currentMonth + 1 === Number(month))
-      {
+      if (this.currentYear === Number(year) && this.currentMonth + 1 === Number(month)) {
         document.getElementById(date).innerHTML = event.title; //inject the title of the event to the calendar
         //show the description about the events of the month
-        document.getElementById('event-description').innerHTML += "שם האירוע: " + event.title + "<br/> תאריך האירוע: "+ date + "<br/> תיאור האירוע: " + event.description + "<br/>---------------<br/>";
+        document.getElementById('event-description').innerHTML +="<ion-card style='--background:#d2deef;padding:2%;font-size:120%;'>שם האירוע: " + event.title + "&emsp;&emsp; תאריך האירוע: " + date + "<br/> תיאור האירוע: " + event.description + "</ion-card><br/>";
       }
     });
   }

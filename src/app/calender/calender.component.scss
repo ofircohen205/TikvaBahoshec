@@ -1,10 +1,16 @@
+ion-content{
+  --ion-background-color:#efeded;
+}
+
 ion-card{
     display: fixed;
-    //flex-direction: column;
-    height: 100%;
     width: 80%;
     margin-right: 10%;
   }
+
+#calendar-card {
+  height: 100%;
+}
 
 table{
   width: 100%;
@@ -19,4 +25,8 @@ th {
 span {
   content: "\2190";
   font-size: 30px;
+}
+
+#button {
+  --background-focused: rgb(100, 165, 209);
 }

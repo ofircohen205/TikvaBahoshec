@@ -1,53 +1,50 @@
-<!-- <ion-card text-center>   //need to put the admin's calendar "src" if we decide to use google calendar
-    <iframe src="https://calendar.google.com/calendar/embed?height=400&amp;wkst=1&amp;bgcolor=%234285F4&amp;ctz=Asia%2FJerusalem&amp;src=c2Fhcnc5M0BnbWFpbC5jb20&amp;src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;src=cm1xbnJoaGJucWJlNW9oYjk3c2ZuZHBsZWNsZjh2MXZAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&amp;src=ZW4uamV3aXNoI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%237986CB&amp;color=%2333B679&amp;color=%237CB342&amp;color=%230B8043&amp;showTitle=0&amp;showNav=1&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=1" style="border:solid 1px #777" width="800" height="300" frameborder="0" scrolling="no"></iframe>
-</ion-card> -->
+<ion-content fixed>
+
+    <ion-card id="calendar-card"text-center fixed>
+
+        <h3 class="card-header" id="monthAndYear"></h3>
+        <table id="calendar">
+            <!-- table id ="calendar" class="table table-bordered table-responsive-md" id="monthAndYear"> -->
+            <thead>
+                <tr>
+                    <th>ראשון</th>
+                    <th>שני</th>
+                    <th>שלישי</th>
+                    <th>רביעי</th>
+                    <th>חמישי</th>
+                    <th>שישי</th>
+                    <th>שבת</th>
+                </tr>
+            </thead>
+
+            <tbody id="calendar-body">
+
+            </tbody>
+        </table>
+        <ion-row>
+            <ion-col>
+                <ion-button class="button" id="previous" expand="block" fill="outline" shape="round" (click)="previous()">&#8594;הקודם</ion-button>
+            </ion-col>
+            <ion-col>
+                <ion-button class="button" id="next" expand="block" fill="outline" shape="round" (click)="next()">הבא&#8592;</ion-button>
+            </ion-col>
+        </ion-row>
 
 
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-    integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-
-<!-- <div class="container col-sm-4 col-md-8 col-lg-8 mt-5"> -->
-<ion-card text-center fixed>
-
-    <h3 class="card-header" id="monthAndYear"></h3>
-    <table class="table table-bordered table-responsive-md" id="calendar">
-        <thead>
-            <tr>
-                <th>ראשון</th>
-                <th>שני</th>
-                <th>שלישי</th>
-                <th>רביעי</th>
-                <th>חמישי</th>
-                <th>שישי</th>
-                <th>שבת</th>
-            </tr>
-        </thead>
-
-        <tbody id="calendar-body">
-
-        </tbody>
-    </table>
-
-    <div class="d-flex justify-content-center">
-
-        <button class="btn btn-outline-primary col-lg-4 col-md-6 col-sm-6" id="previous"
+        <!-- <button class="btn btn-outline-primary col-lg-4 col-md-6 col-sm-6" id="previous"
             (click)="previous()"><span>&#8594;</span></button>
 
         <button class="btn btn-outline-primary col-lg-4 col-md-6 col-sm-6" id="next"
-            (click)="next()"><span>&#8592;</span> </button>
-    </div>
-</ion-card>
-
-<ion-card id='event-description' text-right style="padding: 20px;">
-    <!-- <div id = 'event-description' text-right></div> -->
-</ion-card>
-
-
+            (click)="next()"><span>&#8592;</span> </button> -->
+        <br />
+    </ion-card>
+    <ion-card id='event-description' text-right style="padding: 20px;">
+    </ion-card>
+</ion-content>
 
 <!-- Optional JavaScript for bootstrap -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
@@ -55,6 +52,6 @@
 </script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
     integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
-</script>
+</script> -->
 
 <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir &copy;</ion-footer>
