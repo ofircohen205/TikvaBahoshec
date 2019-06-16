@@ -3,21 +3,18 @@
     <img src='../../assets/logo/Chat.png' height='200px' width='100%' />
 
 </ion-header>
+<ion-content #mainContent class="messages" >
 
-<ion-content #mainContent>
-
-    <ion-grid>
+    <ion-grid >
         <ion-row *ngFor='let msg of messages'>
-            <ion-col>
+            <ion-col >
                 <app-chat-bubble [data]='msg' bind-clientName='clientName' bind-supportRepName='supportRepName'></app-chat-bubble>
-            </ion-col>
+          </ion-col>
         </ion-row>
     </ion-grid>
-
 </ion-content>
 
-
-<ion-footer>
+<ion-footer style="background: gray">
 
     <ion-toolbar>
         <h6 slot='start'>הודעה:</h6>

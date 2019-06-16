@@ -1,21 +1,19 @@
 <div *ngIf='flag; then sent else received'></div>
 <ng-template #received >
-  <ion-card class="received" style="margin-right: 50%" >
-    <ion-card-header>
-      <ion-card-title text-right>{{data.content}}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content text-right>
-      {{ data.from }}, {{ messageTime }}
-    </ion-card-content>
-  </ion-card>
+  <div class="message received"  >
+      {{data.content}}
+    <span class="metadata">
+        <span class="time"> {{ data.from }}&ensp;</span> 
+        <span class="time">{{ messageTime }}</span>
+    </span>
+  </div>
 </ng-template>
 <ng-template #sent >
-  <ion-card class="sent" style="margin-left: 50%" >
-    <ion-card-header>
-      <ion-card-title text-right>{{data.content}}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content text-right style="text-decoration-style: solid">
-      {{ data.from }} {{ messageTime }}
-    </ion-card-content>
-  </ion-card>
+  <div class="message sent">
+    {{data.content}}
+    <span class="metadata">
+        <span class="time">{{ data.from }}&ensp;</span> 
+      <span class="time">{{ messageTime }}</span>
+    </span>
+  </div>
 </ng-template>
