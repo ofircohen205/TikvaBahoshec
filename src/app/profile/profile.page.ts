@@ -91,8 +91,4 @@ export class ProfilePage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    this.logout();
-  }
-
 }

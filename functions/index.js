@@ -8,18 +8,11 @@ admin.initializeApp();
 exports.deleteUser = functions.firestore
     .document('SupportReps/{SupportRepID}')
     .onDelete((snap, context) => {
-      return admin.auth().deleteUser(snap.data().SupportRepID)
-          .then(() => console.log('Deleted user with ID:' + snap.data().SupportRepID))
-          .catch((error) => console.error('There was an error while deleting user:', error));
+        return admin.auth().deleteUser(snap.data().SupportRepID)
+            .then(() => console.log('Deleted user with ID:' + snap.data().SupportRepID))
+            .catch((error) => console.error('There was an error while deleting user:', error));
     });
 
-exports.deleteClient = functions.firestore
-    .document('Clients/{ClientID}')
-    .onDelete((snap, context) => {
-        return admin.auth().deleteUser(snap.data().ClientID)
-          .then(() => console.log('Deleted client with ID:' + snap.data().ClientID))
-          .catch((error) => console.error('There was an error while deleting client:', error));
-    })
 // var nameOfClient
 
 // exports.getName =  functions.database.ref('/nameOfClient/{namekey}').onWrite(( change,context) =>{
@@ -30,12 +23,12 @@ exports.deleteClient = functions.firestore
 
 
 // exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onWrite(event => {
-    exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onCreate(( change,context) =>{
+exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onCreate((change, context) => {
     var nameOfClient = functions.database.ref().val
     var doc = new pdfdocument();
     // var email = change.after.val().emailid;
 
-    
+
 
     var server = emailjs.server.connect({
         user: 'tikva.bahoshec@gmail.com',
@@ -43,17 +36,17 @@ exports.deleteClient = functions.firestore
         host: 'smtp.gmail.com',
         ssl: true
     });
-    
+
     server.send({
-        text: "A new chat room has been created by the client: " + change.after.val().ClientName + "\nPlease enter to the site as soon as you can" ,
-        
+        text: "A new chat room has been created by the client: " + change.after.val().ClientName + "\nPlease enter to the site as soon as you can",
+
         from: 'myself@thisvideo.com',
         to: change.after.val().emailid,
-        subject: 'Tikva.bahoshec: new chat room has been created by:\n' +  change.after.val().ClientName  ,
-        
+        subject: 'Tikva.bahoshec: new chat room has been created by:\n' + change.after.val().ClientName,
+
     }, (err, message) => {
-        if (err) 
-            console.log(err)    
+        if (err)
+            console.log(err)
     })
 
 })

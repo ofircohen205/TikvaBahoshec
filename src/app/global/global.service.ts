@@ -13,7 +13,6 @@ import { AngularFireDatabase } from '@angular/fire/database';
 export class GlobalService {
 
   anonymousNumber = 0;
-  currentChatRoomId = '';
 
   constructor(
     private alertController: AlertController,
@@ -41,10 +40,11 @@ export class GlobalService {
             this.firestore.updateAnonNumber(this.anonymousNumber + 1);
           }
           this.userAuth.auth.signInAnonymously().then(result => {
-            this.firestore.createClient(data.name, result.user.uid).then(result1 => {
-              this.firestore.createChatRoom(data.name, result.user.uid).then(result2 => {
-                this.currentChatRoomId = result2.id;
+            this.firestore.createClient(data.name).then(result1 => {
+              this.firestore.createChatRoom(data.name).then(result2 => {
                 this.firestore.updateChatRoomId(result2.id);
+                this.firestore.updateChatRoomClientId(result2.id, result1.id);
+                this.firestore.updateClientID(result1.id);
                 this.router.navigateByUrl('/chat/' + result2.id);
               }).catch((error) => console.log(error));
             });
