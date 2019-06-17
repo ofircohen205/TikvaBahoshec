@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { GlobalService } from '../global/global.service';
 import { ActivatedRoute } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-client-profile',
@@ -27,7 +28,8 @@ export class ClientProfilePage implements OnInit {
   constructor(
     private firestore: FirestoreService,
     private global: GlobalService,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private alertController: AlertController) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -53,7 +55,21 @@ export class ClientProfilePage implements OnInit {
     });
   }
 
-  updateClientProfile() {
+  async updateClientProfile() {
+
+// tslint:disable-next-line: max-line-length
+    if (this.first_name.value === '' || this.last_name.value === '' || this.address.value === '' || this.age.value === '' || this.cellphone.value === '' || this.phone_num.value === '' || this.email.value === '') {
+      const errorMsg = await this.alertController.create({
+        header: 'שגיאה',
+        message: 'אחד מהשדות לא מולאו. יש לוודא כי כל השדות מולאו',
+        buttons: [{
+          text: 'המשך',
+        }]
+      });
+
+      return errorMsg.present();
+    }
+
     if (this.male.checked) {
 // tslint:disable-next-line: max-line-length
       this.firestore.updateClientDetails(this.clientId, this.first_name.value, this.last_name.value, this.address.value, this.age.value, this.cellphone.value, this.phone_num.value, this.email.value, 'male', this.brief.value, this.comments.value);
@@ -64,6 +80,18 @@ export class ClientProfilePage implements OnInit {
 // tslint:disable-next-line: max-line-length
       this.firestore.updateClientDetails(this.clientId, this.first_name.value, this.last_name.value, this.address.value, this.age.value, this.cellphone.value , this.phone_num.value, this.email.value, 'other', this.brief.value, this.comments.value);
     }
+
+    const alert = await this.alertController.create({
+      header: 'לקוח עודכן בהצלחה',
+      message: 'לקוח זה עודכן בהצלחה. אנא לחץ המשך ליציאה',
+      buttons: [{
+        text: 'המשך',
+        handler: () => window.close()
+      }]
+    });
+
+    alert.present();
+
   }
 
 }
