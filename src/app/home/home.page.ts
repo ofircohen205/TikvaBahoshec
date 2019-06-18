@@ -42,7 +42,7 @@ export class HomePage implements OnInit {
         storyElement.hidden = true;
         calenderElement.hidden = true;
         mainElement.hidden = false;
-        imageElement['src'] = '../../assets/logo/SmallerHeader.png';
+        imageElement['src'] = '../../assets/logo/Header.png';
         this.location.go('/home');
       }
     } else if (tar === 'calender') {
