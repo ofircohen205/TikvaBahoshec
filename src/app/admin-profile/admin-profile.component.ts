@@ -490,6 +490,10 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.firestore.getAllChatRoom().subscribe(res => {
       this.supportRepHistory = res.filter(ele => ele.SupportRepID === x.SupportRepID);
     });
+    document.getElementById('histTable').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
   }
 
   addSupport() {

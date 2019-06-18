@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "chatapp-fb7fa"
+    "default": "chatapp-fb7fa",
+    "staging": "tikvab-101"
   }
 }
