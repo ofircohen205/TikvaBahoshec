@@ -44,6 +44,18 @@ export class MainComponent implements OnInit, OnDestroy {
     window.open('https://www.facebook.com/tikvabachoshech/');
   }
 
+  async showAssociationEmail() {
+    const alert = await this.alertController.create({
+      header: 'רוצים לדבר איתנו בעזרת דואר אלקטרוני?',
+      message: 'ניתן ליצור איתנו קשר דרך הדואר האלקטרוני tikva.bahoshec@gmail.com',
+      buttons: [{
+        text: 'המשך'
+      }]
+    });
+
+    alert.present();
+  }
+
 
   ngOnDestroy() { 
     this.association_info_subscribe.unsubscribe();

@@ -18,6 +18,7 @@ ion-card {
     background-size: contain, 100%;
     background-repeat: no-repeat;
     height: 175px;
+    margin-bottom: 5%;
 }
 
 .about {
@@ -46,4 +47,8 @@ ion-card {
 
 .icons:hover {
     cursor: pointer;
+}
+
+ion-content{
+    --ion-background-color:#efeded;
 }

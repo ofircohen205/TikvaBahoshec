@@ -33,7 +33,7 @@ export class HomePage implements OnInit {
       if (storyElement.hidden === true) {
         storyElement.hidden = false;
         calenderElement.hidden = true;
-        mainElement.hidden = true; 
+        mainElement.hidden = true;
         imageElement['src'] = '../../assets/logo/Stories.png';
         this.location.go('/story');
       }
@@ -42,7 +42,7 @@ export class HomePage implements OnInit {
         storyElement.hidden = true;
         calenderElement.hidden = true;
         mainElement.hidden = false;
-        imageElement['src'] = '../../assets/logo/Header.png';
+        imageElement['src'] = '../../assets/logo/SmallerHeader.png';
         this.location.go('/home');
       }
     } else if (tar === 'calender') {

@@ -1,15 +1,16 @@
 <ion-header>
-
-    <img src='../../assets/logo/Chat.png' height='200px' width='100%' />
-
+    <a href='/'>
+        <img src='../../assets/logo/Chat.png' />
+    </a>
 </ion-header>
-<ion-content #mainContent class="messages" >
+<ion-content #mainContent class="messages">
 
-    <ion-grid >
+    <ion-grid>
         <ion-row *ngFor='let msg of messages'>
-            <ion-col >
-                <app-chat-bubble [data]='msg' bind-clientName='clientName' bind-supportRepName='supportRepName'></app-chat-bubble>
-          </ion-col>
+            <ion-col>
+                <app-chat-bubble [data]='msg' bind-clientName='clientName' bind-supportRepName='supportRepName'>
+                </app-chat-bubble>
+            </ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>
