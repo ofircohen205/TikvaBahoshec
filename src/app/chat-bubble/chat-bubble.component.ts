@@ -19,28 +19,21 @@ export class ChatBubbleComponent implements OnInit {
 
   ngOnInit() {
     this.messageTime = new Date(this.data['timestamp']).toLocaleTimeString();
-    var url = new URL(window.location.href);
-    var parameter = url.searchParams.get("supportRepId");
-    console.log(parameter);
-    console.log(this.userAuth.auth.currentUser.email);
-    console.log(this.data.from);
-    console.log(this.clientName);
+    const url = new URL(window.location.href);
+    const parameter = url.searchParams.get('supportRepId');
 
-    if(this.userAuth.auth.currentUser.email !== null || parameter !== null){
+    if (this.userAuth.auth.currentUser.email !== null || parameter !== null) {
       if (this.clientName === this.data.from) {
         this.flag = false;
       } else {
         this.flag = true;
       }
-      console.log("kaka1");
-    }
-    else{
+    } else {
       if (this.clientName === this.data.from) {
         this.flag = true;
       } else {
         this.flag = false;
       }
-      console.log("kaka2");
     }
   }
 

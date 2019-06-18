@@ -25,13 +25,13 @@ export class FirestoreService {
   /*****************************/
   /* CHAT COLLECTION FUNCTIONS */
   /*****************************/
-  public createChatRoom(username, id): Promise<any> {
+  public createChatRoom(username): Promise<any> {
     return this.firestore.collection(this.CHAT_ROOMS_COLLECTION).add({
       open: true,
       occupied: false,
       SupportRepID: null,
       SupportRepName: null,
-      ClientID: id,
+      ClientID: null,
       ClientName: username,
       ChatRoomId: null,
       written: false,
@@ -97,6 +97,10 @@ export class FirestoreService {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ChatRoomId: chatId });
   }
 
+  public updateChatRoomClientId(chatId, ClientID) {
+    this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ ClientID });
+  }
+
   public updateChatSupportRepId(chatId, SupportRepID): void {
     this.firestore.collection(this.CHAT_ROOMS_COLLECTION).doc(chatId).update({ SupportRepID });
   }
@@ -110,8 +114,8 @@ export class FirestoreService {
   /*******************************/
   /* CLIENT COLLECTION FUNCTIONS */
   /*******************************/
-  public createClient(first_name, clientId): Promise<any> {
-    return this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).set({
+  public createClient(first_name): Promise<any> {
+    return this.firestore.collection(this.CLIENT_COLLECTION).add({
       first_name,
       last_name: null,
       address: null,
@@ -122,7 +126,7 @@ export class FirestoreService {
       gender: null,
       brief: null,
       comments: null,
-      ClientID: clientId
+      ClientID: null
     });
   }
 
@@ -154,12 +158,8 @@ export class FirestoreService {
     this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ first_name });
   }
 
-  public updateClientID(chatId): void {
-    this.firestore.collection(this.CLIENT_COLLECTION).doc(chatId).update({ ClientID: chatId });
-  }
-
-  public removeClient(clientId) {
-    this.firestore.collection(this.CLIENT_COLLECTION).doc(clientId).delete();
+  public updateClientID(ClientID): void {
+    this.firestore.collection(this.CLIENT_COLLECTION).doc(ClientID).update({ ClientID });
   }
 
 
