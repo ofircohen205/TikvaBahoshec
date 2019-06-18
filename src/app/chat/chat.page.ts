@@ -19,6 +19,8 @@ export class ChatPage implements OnInit, OnDestroy {
   chat_message_subscribe;
 
   messages = [];
+  newMessages = [];
+  firstTimeInChat = false;
   chatId = '';
 
   clientId = '';
@@ -51,6 +53,7 @@ export class ChatPage implements OnInit, OnDestroy {
 
 // tslint:disable-next-line: use-life-cycle-interface
   ngOnInit(): void {
+    
     this.chat_room_subscribe = this.firestore.getChatRoom(this.chatId).subscribe(result => {
       this.clientId = result['ClientID'];
       this.clientName = result['ClientName'];
@@ -60,6 +63,7 @@ export class ChatPage implements OnInit, OnDestroy {
     });
 
     this.chat_message_subscribe = this.firestore.getChatMessages(this.chatId).subscribe(result => {
+      this.newMessages = [];
       result.sort((m1, m2) => {
         if (m1['timestamp'] > m2['timestamp']) {
           return 1;
@@ -67,7 +71,11 @@ export class ChatPage implements OnInit, OnDestroy {
           return -1;
         }
       });
-        this.messages = result;
+       this.getNewMassages(result);
+       var chat = document.getElementById('chatLogoImage');
+       if(this.messages.length >= 8){
+         chat.style.height = 'auto';
+       }
         this.scrollToBottom();
         if (this.messages.length === 1) {
           this.firestore.updateIsWritten(this.chatId, true);
@@ -75,6 +83,42 @@ export class ChatPage implements OnInit, OnDestroy {
     });
 
     window.onbeforeunload = () => this.ngOnDestroy();
+  }
+
+  getNewMassages(result){
+    for(let i = 0; i < result.length; i++)
+    {
+      var inMessage = false;
+      if(this.messages.length === 0){
+        this.newMessages.push(result[i]);
+        this.messages.push(result[i]);
+       }else {
+        for(let j =0 ; j<this.messages.length;j++)
+        {
+          if(this.compareChatMessages(result[i],this.messages[j])){
+           inMessage = true;
+            break;
+        }
+      }
+      if(!inMessage){
+         this.newMessages.push(result[i]);
+         this.messages.push(result[i]);
+      }
+
+    }
+    }
+  }
+
+  compareChatMessages(element1,element2){
+    if(element1.id === element2.id  
+      && element1.timestamp === element2.timestamp 
+      && element1.content === element2.content
+      && element1.from === element2.from){
+        return true;
+      }
+      else{
+        return false;
+      }
   }
 
   sendMessage(type) {
@@ -87,7 +131,7 @@ export class ChatPage implements OnInit, OnDestroy {
       this.firestore.addChatMessage(this.chatId, this.supportRepId, this.supportRepName, this.messageField.value, new Date().getTime());
     }
     this.messageField.value = '';
-    this.scrollToBottom();
+    // this.scrollToBottom();
   }
 
   isMessageInvalid(): boolean {

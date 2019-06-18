@@ -4,6 +4,7 @@ import { FirestoreService } from '../firebase/firestore/firestore.service';
 // tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { stringify } from 'querystring';
+import { IonCard } from '@ionic/angular';
 
 @Component({
   selector: 'app-story',
@@ -86,7 +87,7 @@ export class StoryComponent implements OnInit, OnDestroy {
     let html = '<span></span>';
     this.stories.forEach(story => {
       if (story.approved) {
-        html += '<ion-card style="background-color: rgb(135, 86, 86);"><ion-card-header><ion-card-title text-right style="color: white;text-decoration: underline;">' +
+        html += '<ion-card style="background-color: #af1305;width:60%"><ion-card-header><ion-card-title text-right style="color: white;text-decoration: underline;">' +
           story.title +
           '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right style="color: white";>' +
           story.description + '</ion-card-content></ion-card><br/>';
