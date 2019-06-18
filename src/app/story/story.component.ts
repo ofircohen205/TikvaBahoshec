@@ -5,11 +5,7 @@ import { AlertController } from '@ionic/angular';
 // tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { stringify } from 'querystring';
-<<<<<<< HEAD
-import { IonCard } from '@ionic/angular';
-=======
 import { createElement } from '@syncfusion/ej2-base';
->>>>>>> d60b344ff32cdc34a2f4686ab0e168a391171639
 
 @Component({
   selector: 'app-story',
@@ -101,12 +97,6 @@ export class StoryComponent implements OnInit, OnDestroy {
     let card, title, description, story_cards;
     this.stories.forEach(story => {
       if (story.approved) {
-<<<<<<< HEAD
-        html += '<ion-card style="background-color: #af1305;width:60%"><ion-card-header><ion-card-title text-right style="color: white;text-decoration: underline;">' +
-          story.title +
-          '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right style="color: white";>' +
-          story.description + '</ion-card-content></ion-card><br/>';
-=======
         card = createElement("ion-card");
         //card.setAttribute("style", "background-color: rgb(135,86,86);")
         title = createElement("ion-card-header");
@@ -125,7 +115,6 @@ export class StoryComponent implements OnInit, OnDestroy {
         //   story.title +
         //   '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right style="color: white";>' +
         //   story.description + '</ion-card-content></ion-card><br/>';
->>>>>>> d60b344ff32cdc34a2f4686ab0e168a391171639
       }
     });
     
