@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit, OnDestroy {
+export class ProfilePage implements OnInit {
   adminLoginAuth = false;
   admins: any[] = [];
 
