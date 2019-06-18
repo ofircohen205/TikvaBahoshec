@@ -5,13 +5,13 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyBBGU_2UQuN3p_PfTlbBNOjFZz4iSAlCIg",
-  authDomain: "chatapp-fb7fa.firebaseapp.com",
-  databaseURL: "https://chatapp-fb7fa.firebaseio.com",
-  projectId: "chatapp-fb7fa",
-  storageBucket: "chatapp-fb7fa.appspot.com",
-  messagingSenderId: "157002596336",
-  appId: "1:157002596336:web:4faa80d2d20176e6"
+    apiKey: "AIzaSyB5Y8Bss_JSS4PwnCXcEQVjWw5e5_1mrW4",
+    authDomain: "tikvab-101.firebaseapp.com",
+    databaseURL: "https://tikvab-101.firebaseio.com",
+    projectId: "tikvab-101",
+    storageBucket: "tikvab-101.appspot.com",
+    messagingSenderId: "685792634044",
+    appId: "1:685792634044:web:397e38af2ae4fa38"
   }
 };
 

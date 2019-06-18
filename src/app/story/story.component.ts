@@ -1,10 +1,15 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
+import { AlertController } from '@ionic/angular';
 
 // tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { stringify } from 'querystring';
+<<<<<<< HEAD
 import { IonCard } from '@ionic/angular';
+=======
+import { createElement } from '@syncfusion/ej2-base';
+>>>>>>> d60b344ff32cdc34a2f4686ab0e168a391171639
 
 @Component({
   selector: 'app-story',
@@ -14,9 +19,10 @@ import { IonCard } from '@ionic/angular';
   providers: [ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService],
 })
 export class StoryComponent implements OnInit, OnDestroy {
-  alertController: any;
 
-  constructor(private firestore: FirestoreService) { }
+  constructor(
+    private alertController: AlertController,
+    private firestore: FirestoreService) { }
 
   @ViewChild('title') title;
   stories = [];
@@ -64,8 +70,7 @@ export class StoryComponent implements OnInit, OnDestroy {
   }
 
   async sendStory() {
-
-    if (this.title.value === '') {
+    if (this.title.value === '' || this.value === '') {
       const errorMsg = await this.alertController.create({
         header: 'שגיאה',
         message: 'אחד מהשדות לא מולאו. יש לוודא כי כל השדות מולאו',
@@ -74,26 +79,57 @@ export class StoryComponent implements OnInit, OnDestroy {
         }]
       });
 
-      return errorMsg.present();
+      errorMsg.present();
+      return;
     }
 
     this.firestore.createStory(this.title.value, this.value);
-    alert('תודה רבה ששיתפת אותנו במקרה האישי שלך! במידה והעדות תאושר ניתן יהיה לראותה באתר תוך מספר ימים');
+    const msg = await this.alertController.create({
+      header: 'הסיפור נשלח בהצלחה',
+      message: 'תודה רבה ששיתפת אותנו במקרה האישי שלך! במידה והעדות תאושר ניתן יהיה לראותה באתר תוך מספר ימים',
+      buttons: [{
+        text: 'המשך',
+      }]
+    });
+    msg.present();
     document.getElementById('tell-your-story').hidden = true;
     document.getElementById('scroll-to-editor-btn').hidden = true;
   }
 
   showStories() {
     let html = '<span></span>';
+    let card, title, description, story_cards;
     this.stories.forEach(story => {
       if (story.approved) {
+<<<<<<< HEAD
         html += '<ion-card style="background-color: #af1305;width:60%"><ion-card-header><ion-card-title text-right style="color: white;text-decoration: underline;">' +
           story.title +
           '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right style="color: white";>' +
           story.description + '</ion-card-content></ion-card><br/>';
+=======
+        card = createElement("ion-card");
+        //card.setAttribute("style", "background-color: rgb(135,86,86);")
+        title = createElement("ion-card-header");
+        
+        title.innerHTML = story.title;
+        description = createElement("ion-card-content");
+      
+        description.innerHTML = story.description;
+        
+        card.appendChild(title);
+        title.appendChild(description);
+        document.getElementById('upload-stories').appendChild(card);
+        //story_cards += card;
+
+        // html += '<ion-card style="background-color: rgb(135, 86, 86);"><ion-card-header><ion-card-title text-right style="color: white;text-decoration: underline;">' +
+        //   story.title +
+        //   '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right style="color: white";>' +
+        //   story.description + '</ion-card-content></ion-card><br/>';
+>>>>>>> d60b344ff32cdc34a2f4686ab0e168a391171639
       }
     });
-    document.getElementById('upload-stories').innerHTML = html;
+    
+    //document.getElementById('upload-stories').innerHTML = html;
   }
 
 

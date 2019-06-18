@@ -91,4 +91,6 @@ export class ProfilePage implements OnInit {
     }
   }
 
+  ngOnDestroy(){}
+
 }
