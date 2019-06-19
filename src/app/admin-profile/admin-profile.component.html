@@ -198,8 +198,14 @@
             <input type="file"  (change)="addFile($event)" class='uploadImage' id='imageFile' />
             <label for='imageFile'>בחר תמונה</label>
             <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
-            <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
-
+            <hr>
+            <ion-card [(ngModel)]= "file">
+                <ion-text *ngIf = "file">{{file.name}}</ion-text>
+                <ion-text *ngIf = "!file"> לא נבחרה תמונה </ion-text>
+                <hr>
+                <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
+            </ion-card>
+            
           </ion-card-header>
 
           <ion-card-content>
