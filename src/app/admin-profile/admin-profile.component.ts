@@ -124,8 +124,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
     this.image_array_subscribe = this.firestore.getImageArray().subscribe(res => {
       this.imageUrls = res.images;
-      console.log(this.imageUrls);
-
+      this.file = null;
 
     });
 
@@ -739,15 +738,30 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   /*********************************************************************************************************************************/
 
   /*******************************************Gallery Management*******************************************************************/
-
-  deleteFile(img) {
+  async deleteImage(img){
+    const alert = await this.alertController.create({
+      message: `האם את/ה בטוח/ה שברצונך למחוק את התמונה?`,
+      buttons: [
+        { text: 'חזור' },
+        {
+          text: 'אשר',
+          handler: () => {
+            this.deleteFile(img);
+          }
+        }]
+    });
+    alert.present();
+    
+  }
+   deleteFile(img) {
     const storageRef = this.afs.storage.refFromURL(img);
     storageRef.delete().then(async () => {
       this.imageUrls.splice(this.imageUrls.indexOf(img), 1);
       this.firestore.updateImageArray(this.imageUrls);
-  
     }
-    ).catch(err => console.log(err));
+    ).catch( err => {
+      
+    });
   }
 
  

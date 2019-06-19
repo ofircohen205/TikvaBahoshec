@@ -199,7 +199,10 @@
             <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
             <hr>
             <ion-card [(ngModel)]= "file">
-                <ion-text *ngIf = "file">{{file.name}}</ion-text>
+                  <ion-icon  *ngIf = "file" name="backspace" (click)="file = null"></ion-icon>
+                  <ion-text  *ngIf = "file" >    {{file.name}}   </ion-text>
+                  
+
                 <ion-text *ngIf = "!file"> לא נבחרה תמונה </ion-text>
                 <hr>
                 <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
@@ -215,7 +218,7 @@
               <ion-row>
                 <ion-col *ngFor='let img of imageUrls' size='auto'>
                   <img src={{img}} style='height: 200px; width: 200px; margin-right: 3%'>
-                  <ion-button (click)="deleteFile(img)">מחק תמונה</ion-button>
+                  <ion-button (click)="deleteImage(img)">מחק תמונה</ion-button>
                 </ion-col>
               </ion-row>
             </ion-grid>
