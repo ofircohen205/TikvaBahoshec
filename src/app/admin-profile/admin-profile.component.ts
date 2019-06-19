@@ -58,7 +58,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   imageUrls: string[] = [];
   list: any[] = [];
   storiesArray: any = [];
-  file: File;
+  file: File = null;
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
   supportRepList: any[] = [];
@@ -122,15 +122,17 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       this.eventsArray = result;
     });
 
-
     this.image_array_subscribe = this.firestore.getImageArray().subscribe(res => {
       this.imageUrls = res.images;
       console.log(this.imageUrls);
+
+
     });
 
     this.manageStories();
     this.manageSupportReps();
   }
+
 
 
   initSupportSelectList() {
@@ -748,6 +750,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     ).catch(err => console.log(err));
   }
 
+ 
   async addFile(event) {
     this.file = event.target.files[0];
 
@@ -786,7 +789,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     }
     const filePath = 'assets/images/' + fileName;
     const task = this.afs.upload(filePath, this.file);
-
     // observe percentage changes
     this.uploadPercent = task.percentageChanges();
     // get notified when the download URL is available
