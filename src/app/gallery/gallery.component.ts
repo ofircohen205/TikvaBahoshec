@@ -21,7 +21,7 @@ export class GalleryComponent implements OnInit {
   private firestore: FirestoreService) { }
 
   imageUrls: (string)[] = [];
-  height = '800px';
+  height = '500px';
   minHeight: string;
   arrowSize = '30px';
   showArrows = true;
@@ -30,7 +30,7 @@ export class GalleryComponent implements OnInit {
   autoPlayInterval = 5555;
   stopAutoPlayOnSlide = true;
   debug = false;
-  backgroundSize = 'cover';
+  backgroundSize = 'contain';
   backgroundPosition = 'center center';
   backgroundRepeat = 'no-repeat';
   showDots = true;
