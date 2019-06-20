@@ -58,7 +58,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   imageUrls: string[] = [];
   list: any[] = [];
   storiesArray: any = [];
-  file: File;
+  file: File = null;
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
   supportRepList: any[] = [];
@@ -113,9 +113,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       this.chatRoomList = result1;
       this.createHistoryTable();
     });
-    this.image_array_subscribe = this.firestore.getImageArray().subscribe(res => {
-      this.imageUrls = res.images;
-    });
 
     this.association_subscribe = this.firestore.getAssociationInfo().subscribe(result => {
       this.association_info = result.info;
@@ -125,9 +122,16 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       this.eventsArray = result;
     });
 
+    this.image_array_subscribe = this.firestore.getImageArray().subscribe(res => {
+      this.imageUrls = res.images;
+      this.file = null;
+
+    });
+
     this.manageStories();
     this.manageSupportReps();
   }
+
 
 
   initSupportSelectList() {
@@ -734,37 +738,64 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   /*********************************************************************************************************************************/
 
   /*******************************************Gallery Management*******************************************************************/
-
-  deleteFile(img) {
+  async deleteImage(img){
+    const alert = await this.alertController.create({
+      message: `האם את/ה בטוח/ה שברצונך למחוק את התמונה?`,
+      buttons: [
+        { text: 'חזור' },
+        {
+          text: 'אשר',
+          handler: () => {
+            this.deleteFile(img);
+          }
+        }]
+    });
+    alert.present();
+    
+  }
+   deleteFile(img) {
     const storageRef = this.afs.storage.refFromURL(img);
-    storageRef.delete().then(() => {
+    storageRef.delete().then(async () => {
       this.imageUrls.splice(this.imageUrls.indexOf(img), 1);
       this.firestore.updateImageArray(this.imageUrls);
     }
-    );
+    ).catch( err => {
+      
+    });
   }
 
-  addFile(event) {
+ 
+  async addFile(event) {
     this.file = event.target.files[0];
+
     const fileName = this.file.name;
 // tslint:disable-next-line: max-line-length
     if (!(fileName.includes('.jpg') || fileName.includes('.jpeg') || fileName.includes('.png') || fileName.includes('.JPG') || fileName.includes('.JPEG') || fileName.includes('.PNG'))) {
       this.global.invalidImage();
       return;
   }
-  const filePath = 'assets/images/' + fileName;
-    const task = this.afs.upload(filePath, this.file);
+  // const filePath = 'assets/images/' + fileName;
+  //   const task = this.afs.upload(filePath, this.file);
 
-    // observe percentage changes
-    this.uploadPercent = task.percentageChanges();
-    // get notified when the download URL is available
-    task.snapshotChanges().pipe(finalize(() => {
-      this.getFile(filePath);
-    })).subscribe();
+  //   // observe percentage changes
+  //   this.uploadPercent = task.percentageChanges();
+  //   // get notified when the download URL is available
+  //   task.snapshotChanges().pipe(finalize(() => {
+  //     this.getFile(filePath);
+  //   })).subscribe();
 }
 
-  uploadFile() {
+  async uploadFile() {
+    if(!this.file){
+      const alert = await this.alertController.create({
+        message: 'לא נבחרה תמונה',
+        buttons: ['המשך',]
+      });
+      alert.present();
+      return;
+    }
     const fileName = this.file.name;
+
     // tslint:disable-next-line: max-line-length
     if (!(fileName.includes('.jpg') || fileName.includes('.jpeg') || fileName.includes('.png') || fileName.includes('.JPG') || fileName.includes('.JPEG') || fileName.includes('.PNG'))) {
       this.global.invalidImage();
@@ -772,23 +803,27 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     }
     const filePath = 'assets/images/' + fileName;
     const task = this.afs.upload(filePath, this.file);
-
     // observe percentage changes
     this.uploadPercent = task.percentageChanges();
     // get notified when the download URL is available
-    task.snapshotChanges().pipe(finalize(() => {
-      this.getFile(filePath);
+    task.snapshotChanges().pipe(finalize(async () => {
+      const storageRef = this.afs.ref(filePath);
+      storageRef.getDownloadURL().subscribe(res => {
+        this.imageUrls.push(res);
+        this.firestore.updateImageArray(this.imageUrls);
+      });
     })).subscribe();
 
   }
 
-  getFile(filePath) {
-    const storageRef = this.afs.ref(filePath);
-    storageRef.getDownloadURL().subscribe(res => {
-      this.imageUrls.push(res);
-      this.firestore.updateImageArray(this.imageUrls);
-    });
-  }
+  // getFile(filePath) {
+    // const storageRef = this.afs.ref(filePath);
+    // storageRef.getDownloadURL().subscribe(res => {
+      // this.imageUrls.push(res);
+      // this.firestore.updateImageArray(this.imageUrls);
+      
+    // });
+  // }
 
 
   /*************************************************************************************************************************************/

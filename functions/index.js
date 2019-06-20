@@ -31,8 +31,8 @@ exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onWrite((cha
 
 
     var server = emailjs.server.connect({
-        user: 'tikva.bahoshec@gmail.com',
-        password: 'tikvab173',
+        user: '*****EMAIL*****',
+        password: '****PASSWORD*****',
         host: 'smtp.gmail.com',
         ssl: true
     });

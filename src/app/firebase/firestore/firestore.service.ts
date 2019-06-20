@@ -322,11 +322,11 @@ export class FirestoreService {
   }
 
   public getImageArray(): Observable<any> {
-    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('images').valueChanges();
   }
 
   public updateImageArray(images): void {
-    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ images });
+    this.firestore.collection(this.METADATA_COLLECTION).doc('images').update({ images });
   }
 
   public getAssociationInfo(): Observable<any> {
