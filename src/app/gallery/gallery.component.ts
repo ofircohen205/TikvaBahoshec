@@ -21,7 +21,7 @@ export class GalleryComponent implements OnInit {
   private firestore: FirestoreService) { }
 
   imageUrls: (string)[] = [];
-  height = '400px';
+  height = '800px';
   minHeight: string;
   arrowSize = '30px';
   showArrows = true;
