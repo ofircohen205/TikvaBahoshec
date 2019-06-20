@@ -9,7 +9,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 export class ChatBubbleComponent implements OnInit {
 
- @Input()  data;
+  @Input()  data;
   @Input() clientName;
   @Input() supportRepName;
   messageTime;

@@ -14,6 +14,7 @@ import { NgImageSliderModule } from 'ng-image-slider';
 import {SlideshowModule} from 'ng-simple-slideshow';
 
 import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor';
+import { StoryBubbleComponent } from '../story-bubble/story-bubble.component';
 
 
 
@@ -47,7 +48,8 @@ import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor'
     CalenderComponent,
     GalleryComponent,
     DonateComponent,
-    MainComponent
+    MainComponent,
+    StoryBubbleComponent
   ]
 })
 export class HomePageModule {}

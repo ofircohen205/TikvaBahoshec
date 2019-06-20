@@ -6,12 +6,14 @@
         הסיפור האישי שלי
       </ion-button>
     </ion-item>
-    <ion-row>
-      <ion-col>
-        <div id='upload-stories'>
-        </div>
-      </ion-col>
-    </ion-row>
+    <ion-grid style="opacity: 1">
+      <ion-row *ngFor='let story of stories' style="opacity: 1">
+          <ion-col>
+              <app-story-bubble [data]='story' *ngIf='story.approved'>
+              </app-story-bubble>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
     <br /><br /><br />
     <ion-row>
       <ion-col>

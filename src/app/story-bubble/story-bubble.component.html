@@ -1,3 +1,24 @@
-<p>
-  story-bubble works!
-</p>
+<ion-grid class = 'storyGrid'>
+  <ion-row>
+    <ion-col >
+        <div class ='mark'>
+            <ion-card-content>
+              {{stringDate}}
+              </ion-card-content>
+        </div>
+    </ion-col>
+    <ion-col size = '10'>
+      <div class="story">
+        <ion-card class='storyHeader'>
+          <ion-card-header color=white>
+            {{data.title}}
+          </ion-card-header>
+        </ion-card>
+        <ion-card class='storyContent'>
+          <ion-card-content [innerHTML]="data.description">
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>

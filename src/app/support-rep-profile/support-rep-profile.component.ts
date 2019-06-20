@@ -302,7 +302,8 @@ export class SupportRepProfileComponent implements OnInit {
   onclickTable1(e, list, index) {
     if (e.childNodes[e.childNodes.length - 2].textContent === 'לא בטיפול' && this.supportRepInShift) {
       this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result => {
-// tslint:disable-next-line: max-line-length
+        console.log(e)
+;// tslint:disable-next-line: max-line-length
       this.firestore.updateChatRooms(list[index]['ChatRoomId'], result['first_name'] + ' ' + result['last_name'], this.userAuth.auth.currentUser.uid);
       const id = this.userAuth.auth.currentUser.uid
 // tslint:disable-next-line: max-line-length

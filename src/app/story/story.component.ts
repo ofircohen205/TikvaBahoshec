@@ -1,17 +1,16 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { AlertController } from '@ionic/angular';
-
 // tslint:disable-next-line: max-line-length
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { stringify } from 'querystring';
 import { createElement } from '@syncfusion/ej2-base';
+import { StoryBubbleComponent } from '../story-bubble/story-bubble.component';
 
 @Component({
   selector: 'app-story',
   templateUrl: './story.component.html',
   styleUrls: ['./story.component.scss'],
-
   providers: [ToolbarService, LinkService, ImageService, HtmlEditorService, TableService, QuickToolbarService],
 })
 export class StoryComponent implements OnInit, OnDestroy {
@@ -55,13 +54,8 @@ export class StoryComponent implements OnInit, OnDestroy {
           return -1;
         }
       });
-      if (this.stories.length <= 0) {
         this.stories = result;
-      } else {
-        this.stories.push(result[result.length - 1]);
-      }
-
-      this.showStories();
+      console.log(this.stories);
     });
   }
 
@@ -91,37 +85,6 @@ export class StoryComponent implements OnInit, OnDestroy {
     document.getElementById('tell-your-story').hidden = true;
     document.getElementById('scroll-to-editor-btn').hidden = true;
   }
-
-  showStories() {
-    let html = '<span></span>';
-    let card, title, description, story_cards;
-    this.stories.forEach(story => {
-      if (story.approved) {
-        card = createElement("ion-card");
-        card.style.width = '60%';
-        
-        //card.setAttribute("style", "background-color: rgb(135,86,86);")
-        title = createElement("ion-card-header");
-        
-        title.innerHTML = story.title;
-        description = createElement("ion-card-content");
-      
-        description.innerHTML = story.description;
-        title.appendChild(description);
-        card.appendChild(title);
-        document.getElementById('upload-stories').appendChild(card);
-        //story_cards += card;
-
-        // html += '<ion-card style="background-color: rgb(135, 86, 86);"><ion-card-header><ion-card-title text-right style="color: white;text-decoration: underline;">' +
-        //   story.title +
-        //   '</ion-card-title></ion-card-header><ion-card-content id = \'desc\' text-right style="color: white";>' +
-        //   story.description + '</ion-card-content></ion-card><br/>';
-      }
-    });
-    
-    //document.getElementById('upload-stories').innerHTML = html;
-  }
-
 
   writeYourStory() {
     document.getElementById('defaultRTE').scrollIntoView({
