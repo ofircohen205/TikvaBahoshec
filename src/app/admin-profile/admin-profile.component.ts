@@ -751,8 +751,9 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         }]
     });
     alert.present();
-    
+
   }
+  
    deleteFile(img) {
     const storageRef = this.afs.storage.refFromURL(img);
     storageRef.delete().then(async () => {
@@ -760,11 +761,11 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       this.firestore.updateImageArray(this.imageUrls);
     }
     ).catch( err => {
-      
+
     });
   }
 
- 
+
   async addFile(event) {
     this.file = event.target.files[0];
 
@@ -786,10 +787,10 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 }
 
   async uploadFile() {
-    if(!this.file){
+    if (!this.file) {
       const alert = await this.alertController.create({
         message: 'לא נבחרה תמונה',
-        buttons: ['המשך',]
+        buttons: ['המשך']
       });
       alert.present();
       return;

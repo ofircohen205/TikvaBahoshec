@@ -168,7 +168,6 @@ export class ChatPage implements OnInit, OnDestroy {
     this.chat_room_subscribe.unsubscribe();
     this.chat_message_subscribe.unsubscribe();
     if (this.userAuth.auth.currentUser.isAnonymous) {
-      this.userAuth.auth.signOut();
       this.userAuth.auth.currentUser.delete();
     }
   }
