@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
 import { headersToString } from 'selenium-webdriver/http';
 
@@ -8,35 +8,33 @@ import { headersToString } from 'selenium-webdriver/http';
   styleUrls: ['./calender.component.scss'],
 
 })
-export class CalenderComponent implements OnInit {
+export class CalenderComponent implements OnInit, OnDestroy {
 
   private today: Date;
   private currentMonth: any;
   private currentYear: any;
   private selectYear: any;
   private selectMonth: any;
-  //private showCalendar: Function;
   private months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   private monthAndYear = document.getElementById('monthAndYear');
   eventsArray: any[] = [];
   private first_show_flag = true;
-  private flag = false;
+  events_subscribe;
 
   constructor(
     private firestore: FirestoreService
   ) { }
 
   ngOnInit() {
-    this.firestore.getEvents().subscribe(result => {
+    this.events_subscribe = this.firestore.getEvents().subscribe(result => {
       this.eventsArray = result;
     });
-    this.flag = true;
 
     this.today = new Date();
     this.currentMonth = this.today.getMonth();
     this.currentYear = this.today.getFullYear();
 
-   
+
 
     this.showCalendar(this.currentMonth, this.currentYear);
 
@@ -140,11 +138,11 @@ export class CalenderComponent implements OnInit {
           full_date += year;
           data.setAttribute('id', full_date);
           data.setAttribute('class', 'divContent');
-          
+
 
           if (date === this.today.getDate() && year === this.today.getFullYear() && month === this.today.getMonth()) {
-            cell.setAttribute("style","background-color: #d15e5e;") // color today's date
-          } 
+            cell.setAttribute("style", "background-color: #d15e5e;") // color today's date
+          }
           cell.appendChild(cellText); // the day in the month
           cell.appendChild(data);  // the events in the day
           row.appendChild(cell);
@@ -154,11 +152,8 @@ export class CalenderComponent implements OnInit {
       tbl.appendChild(row); // appending each row into calendar body.
     }
 
-    // if (this.flag === true)
-    //   this.addEventsToCalendar();
-    // console.log(this.eventsArray);
     if (this.first_show_flag === true) {
-      setTimeout(() => { this.addEventsToCalendar() }, 2000); // can find a better way here (catch the click on event's tab at the home page)
+      setTimeout(() => { this.addEventsToCalendar() }, 2300); // can find a better way here (catch the click on event's tab at the home page)
       this.first_show_flag = false;
     }
     else
@@ -173,7 +168,7 @@ export class CalenderComponent implements OnInit {
 
   //show the events in the calendar
   addEventsToCalendar() {
-    let day, month, year, date, card, card_header, card_content, span_date, span_title, content_title, content_content ;
+    let day, month, year, date, card, card_header, card_content, span_date, span_title, content_title, content_content;
     document.getElementById('event-description').innerHTML = "";
     this.eventsArray.forEach(event => {
       day = event.date.substring(8, 10);
@@ -182,7 +177,7 @@ export class CalenderComponent implements OnInit {
       date = day + "-" + month + "-" + year;
       if (this.currentYear === Number(year) && this.currentMonth + 1 === Number(month)) {
         document.getElementById(date).innerHTML = event.title; //inject the title of the event to the calendar
-       
+
         /*show the description about the events of the month*/
         card = document.createElement('ion-card');
         card.setAttribute('style', '--background:#e0d5d5;padding:2%;font-size:120%;color:rgb(20, 20, 20);margin:1% 15% 5% 15%;')
@@ -195,7 +190,7 @@ export class CalenderComponent implements OnInit {
         span_title.innerHTML = "שם האירוע: " + event.title;
         card_header.appendChild(span_title);
         card_header.appendChild(span_date);
-     
+
         card_content = document.createElement('ion-card-content');
         content_title = document.createElement('ion-card-header');
         content_title.setAttribute('style', 'text-decoration:underline;color:rgb(20, 20, 20);');
@@ -224,6 +219,11 @@ export class CalenderComponent implements OnInit {
     this.showCalendar(this.currentMonth, this.currentYear);
   }
 
-}
+
+  ngOnDestroy() {
+    this.events_subscribe.unsubscribe();
+  }
+
+} //end of CalenderComponent
 
 
