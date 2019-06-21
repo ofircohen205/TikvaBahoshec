@@ -1,18 +1,17 @@
 <ion-content fixed>
-
-    <ion-card id="calendar-card"text-center fixed>
+    <ion-card id="calendar-card" text-center fixed>
 
         <h3 class="card-header" id="monthAndYear"></h3>
         <table id="calendar">
             <thead>
                 <tr>
-                    <th class = 'table-header'>ראשון</th>
-                    <th class = 'table-header'>שני</th>
-                    <th class = 'table-header'>שלישי</th>
-                    <th class = 'table-header'>רביעי</th>
-                    <th class = 'table-header'>חמישי</th>
-                    <th class = 'table-header'>שישי</th>
-                    <th class = 'table-header'>שבת</th>
+                    <th class='table-header'>ראשון</th>
+                    <th class='table-header'>שני</th>
+                    <th class='table-header'>שלישי</th>
+                    <th class='table-header'>רביעי</th>
+                    <th class='table-header'>חמישי</th>
+                    <th class='table-header'>שישי</th>
+                    <th class='table-header'>שבת</th>
                 </tr>
             </thead>
 
@@ -22,10 +21,12 @@
         </table>
         <ion-row>
             <ion-col>
-                <ion-button class="button" id="previous" expand="block" fill="outline" shape="round" (click)="previous()">&#8594;הקודם</ion-button>
+                <ion-button class="button" id="previous" color="dark" expand="block" fill="outline" shape="round"
+                    (click)="previous()">&#8594;הקודם</ion-button>
             </ion-col>
             <ion-col>
-                <ion-button class="button" id="next" expand="block" fill="outline" shape="round" (click)="next()">הבא&#8592;</ion-button>
+                <ion-button class="button" id="next" color="dark" expand="block" fill="outline" shape="round"
+                    (click)="next()">הבא&#8592;</ion-button>
             </ion-col>
         </ion-row>
 
@@ -33,6 +34,7 @@
     </ion-card>
     <ion-card id='event-description' text-right style="padding: 20px;">
     </ion-card>
-</ion-content>
 
-<ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir &copy;</ion-footer>
+
+    <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir &copy;</ion-footer>
+</ion-content>

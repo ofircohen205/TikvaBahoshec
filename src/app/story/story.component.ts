@@ -55,7 +55,6 @@ export class StoryComponent implements OnInit, OnDestroy {
         }
       });
         this.stories = result;
-      console.log(this.stories);
     });
   }
 

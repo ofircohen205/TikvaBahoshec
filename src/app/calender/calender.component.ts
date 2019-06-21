@@ -20,19 +20,23 @@ export class CalenderComponent implements OnInit {
   private monthAndYear = document.getElementById('monthAndYear');
   eventsArray: any[] = [];
   private first_show_flag = true;
+  private flag = false;
 
   constructor(
     private firestore: FirestoreService
   ) { }
 
   ngOnInit() {
+    this.firestore.getEvents().subscribe(result => {
+      this.eventsArray = result;
+    });
+    this.flag = true;
+
     this.today = new Date();
     this.currentMonth = this.today.getMonth();
     this.currentYear = this.today.getFullYear();
 
-    this.firestore.getEvents().subscribe(result => {
-      this.eventsArray = result;
-    });
+   
 
     this.showCalendar(this.currentMonth, this.currentYear);
 
@@ -99,9 +103,9 @@ export class CalenderComponent implements OnInit {
       for (let j = 0; j < 7; j++) {
         if (i === 0 && j < firstDay) {
           cell = document.createElement('td');
-          cell.setAttribute("style", "border-style: solid;");
+          cell.setAttribute("style", "border-style: solid; background-color:#f9f9f9;");
           if (color_flag) {
-            cell.setAttribute("style", "background-color: #f2f6fc;border-style: solid;");
+            cell.setAttribute("style", "background-color:#e0d5d5;border-style: solid;");
             color_flag = false;
           }
           else
@@ -115,9 +119,9 @@ export class CalenderComponent implements OnInit {
           break;
         } else {
           cell = document.createElement('td');
-          cell.setAttribute("style", "border-style: solid;");
+          cell.setAttribute("style", "border-style: solid; background-color:#f9f9f9;");
           if (color_flag) {
-            cell.setAttribute("style", "background-color: #f2f6fc;border-style: solid;");
+            cell.setAttribute("style", "background-color:#e0d5d5;border-style: solid;");
             color_flag = false;
           }
           else
@@ -139,7 +143,7 @@ export class CalenderComponent implements OnInit {
           
 
           if (date === this.today.getDate() && year === this.today.getFullYear() && month === this.today.getMonth()) {
-            cell.setAttribute("style","background-color: #719bd6;") // color today's date
+            cell.setAttribute("style","background-color: #d15e5e;") // color today's date
           } 
           cell.appendChild(cellText); // the day in the month
           cell.appendChild(data);  // the events in the day
@@ -150,6 +154,9 @@ export class CalenderComponent implements OnInit {
       tbl.appendChild(row); // appending each row into calendar body.
     }
 
+    // if (this.flag === true)
+    //   this.addEventsToCalendar();
+    // console.log(this.eventsArray);
     if (this.first_show_flag === true) {
       setTimeout(() => { this.addEventsToCalendar() }, 2000); // can find a better way here (catch the click on event's tab at the home page)
       this.first_show_flag = false;
@@ -166,7 +173,7 @@ export class CalenderComponent implements OnInit {
 
   //show the events in the calendar
   addEventsToCalendar() {
-    let day, month, year, date, card, card_header, card_content ;
+    let day, month, year, date, card, card_header, card_content, span_date, span_title, content_title, content_content ;
     document.getElementById('event-description').innerHTML = "";
     this.eventsArray.forEach(event => {
       day = event.date.substring(8, 10);
@@ -175,20 +182,31 @@ export class CalenderComponent implements OnInit {
       date = day + "-" + month + "-" + year;
       if (this.currentYear === Number(year) && this.currentMonth + 1 === Number(month)) {
         document.getElementById(date).innerHTML = event.title; //inject the title of the event to the calendar
-        //show the description about the events of the month
-
+       
+        /*show the description about the events of the month*/
         card = document.createElement('ion-card');
-        card.setAttribute('style', '--background:#d2deef;padding:2%;font-size:120%;')
-        card_header = document.createElement('ion-card-header');
-        card_header.innerHTML = "שם האירוע: " + event.title + "&emsp;&emsp; תאריך האירוע: " + date;
+        card.setAttribute('style', '--background:#e0d5d5;padding:2%;font-size:120%;color:rgb(20, 20, 20);margin:1% 15% 5% 15%;')
+        card_header = document.createElement('ion-card-header').appendChild(document.createElement('ion-header'));
+        span_date = document.createElement('span');
+        span_date.setAttribute('style', 'float:left;')
+        span_date.innerHTML = "תאריך האירוע: " + date;
+        span_title = document.createElement('span');
+        span_title.setAttribute('style', 'text-align:right;');
+        span_title.innerHTML = "שם האירוע: " + event.title;
+        card_header.appendChild(span_title);
+        card_header.appendChild(span_date);
+     
         card_content = document.createElement('ion-card-content');
-        card_content.innerHTML = "תיאור האירוע: " + event.description;
-        console.log(card_content);
+        content_title = document.createElement('ion-card-header');
+        content_title.setAttribute('style', 'text-decoration:underline;color:rgb(20, 20, 20);');
+        content_title.innerHTML = "תיאור האירוע: ";
+        content_content = document.createElement('ion-card-content');
+        content_content.innerHTML = event.description;
+        card_content.appendChild(content_title);
+        card_content.appendChild(content_content);
         card.appendChild(card_header);
         card.appendChild(card_content);
-        //card.innerHTML = "שם האירוע: " + event.title + "&emsp;&emsp; תאריך האירוע: " + date + "<br/> תיאור האירוע: " + event.description;
         document.getElementById('event-description').appendChild(card);
-       // document.getElementById('event-description').innerHTML +="<ion-card style='--background:#d2deef;padding:2%;font-size:120%;'>שם האירוע: " + event.title + "&emsp;&emsp; תאריך האירוע: " + date + "<br/> תיאור האירוע: " + event.description + "</ion-card><br/>";
       }
     });
   }
