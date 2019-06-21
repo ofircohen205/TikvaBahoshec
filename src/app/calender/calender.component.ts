@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
+import { headersToString } from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-calender',
@@ -134,11 +135,12 @@ export class CalenderComponent implements OnInit {
 
           full_date += year;
           data.setAttribute('id', full_date);
+          data.setAttribute('class', 'divContent');
+          
 
           if (date === this.today.getDate() && year === this.today.getFullYear() && month === this.today.getMonth()) {
-            //cell.classList.add('bg-info');
-            cell.setAttribute("style","background-color: #719bd6;")
-          } // color today's date
+            cell.setAttribute("style","background-color: #719bd6;") // color today's date
+          } 
           cell.appendChild(cellText); // the day in the month
           cell.appendChild(data);  // the events in the day
           row.appendChild(cell);
@@ -164,7 +166,7 @@ export class CalenderComponent implements OnInit {
 
   //show the events in the calendar
   addEventsToCalendar() {
-    let day, month, year, date;
+    let day, month, year, date, card, card_header, card_content ;
     document.getElementById('event-description').innerHTML = "";
     this.eventsArray.forEach(event => {
       day = event.date.substring(8, 10);
@@ -174,7 +176,19 @@ export class CalenderComponent implements OnInit {
       if (this.currentYear === Number(year) && this.currentMonth + 1 === Number(month)) {
         document.getElementById(date).innerHTML = event.title; //inject the title of the event to the calendar
         //show the description about the events of the month
-        document.getElementById('event-description').innerHTML +="<ion-card style='--background:#d2deef;padding:2%;font-size:120%;'>שם האירוע: " + event.title + "&emsp;&emsp; תאריך האירוע: " + date + "<br/> תיאור האירוע: " + event.description + "</ion-card><br/>";
+
+        card = document.createElement('ion-card');
+        card.setAttribute('style', '--background:#d2deef;padding:2%;font-size:120%;')
+        card_header = document.createElement('ion-card-header');
+        card_header.innerHTML = "שם האירוע: " + event.title + "&emsp;&emsp; תאריך האירוע: " + date;
+        card_content = document.createElement('ion-card-content');
+        card_content.innerHTML = "תיאור האירוע: " + event.description;
+        console.log(card_content);
+        card.appendChild(card_header);
+        card.appendChild(card_content);
+        //card.innerHTML = "שם האירוע: " + event.title + "&emsp;&emsp; תאריך האירוע: " + date + "<br/> תיאור האירוע: " + event.description;
+        document.getElementById('event-description').appendChild(card);
+       // document.getElementById('event-description').innerHTML +="<ion-card style='--background:#d2deef;padding:2%;font-size:120%;'>שם האירוע: " + event.title + "&emsp;&emsp; תאריך האירוע: " + date + "<br/> תיאור האירוע: " + event.description + "</ion-card><br/>";
       }
     });
   }
