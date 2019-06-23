@@ -653,7 +653,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.firestore.updateStoryTemplate(this.template_value);
 
     const alert = await this.alertController.create({
-      message: 'שינוי הטמפלייט בוצע בהצלחה!',
+      message: 'שינוי תבנית כתיבת הסיפור בוצע בהצלחה!',
       buttons: ['המשך']
     });
     alert.present();
