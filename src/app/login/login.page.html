@@ -8,36 +8,37 @@
 
 <ion-content>
 
-  <ion-grid fixed>
-    <ion-row>
-      <ion-title text-center>כניסת נציגים</ion-title>
-    </ion-row>
-    <ion-row>
-      <ion-col size='8' offset='2'>
-        <ion-item>
-          <ion-label position="floating">אימייל</ion-label>
-          <ion-input #email (keyup)='onKeyUp($event)'></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
+  <div id='loginLogoImage'>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-title text-center>כניסת נציגים</ion-title>
+      </ion-row>
+      <ion-row style="margin-top: 18%;">
+        <ion-col size='8' offset='2'>
+          <ion-item>
+            <ion-label position="floating">אימייל</ion-label>
+            <ion-input #email (keyup)='onKeyUp($event)'></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
 
-    <ion-row>
-      <ion-col size='8' offset='2'>
-        <ion-item>
-          <ion-label position="floating">סיסמה</ion-label>
-          <ion-input type='password' (keyup)='onKeyUp($event)' #password></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
+      <ion-row>
+        <ion-col size='8' offset='2'>
+          <ion-item>
+            <ion-label position="floating">סיסמה</ion-label>
+            <ion-input type='password' (keyup)='onKeyUp($event)' #password></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
 
-    <ion-row>
-      <ion-col text-center>
-        <ion-button (click)='login()'>התחבר</ion-button>
-        <ion-button (click)='forgotPassword()'>שכחתי סיסמה</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+      <ion-row>
+        <ion-col text-center>
+          <ion-button (click)='login()'>התחבר</ion-button>
+          <ion-button (click)='forgotPassword()'>שכחתי סיסמה</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-  <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir &copy;</ion-footer>
-
+    <ion-footer text-center>Created by Ariel, Tom, Saar, Avraham, Ofir &copy;</ion-footer>
+  </div>
 </ion-content>
