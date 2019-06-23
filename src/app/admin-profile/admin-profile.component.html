@@ -20,8 +20,11 @@
           <ion-card-header>
 
             <ion-toolbar style="padding-top: 25px;">
-              <ion-button (click)="addSupport()">הוסף נציג</ion-button>
-              <ion-searchbar class="search" type="text" [(ngModel)]="filterText" placeholder="חפש נציג"></ion-searchbar>
+              <ion-button color="success" (click)="addSupport()">
+                <ion-icon name="add-circle-outline"></ion-icon> הוספת נציג
+              </ion-button>
+              <br />
+              <ion-searchbar class="search" type="text" [(ngModel)]="filterText" placeholder="חיפוש נציג"></ion-searchbar>
             </ion-toolbar>
 
           </ion-card-header>
@@ -55,11 +58,13 @@
                   <td *ngIf='!supportRep.inShift'>לא במשמרת</td>
                   <td>
                     <ion-button color="danger" (click)="deleteSupport(supportRep)">
-                        <ion-icon name="trash"></ion-icon>מחק</ion-button>
+                      <ion-icon name="trash"></ion-icon>מחק
+                    </ion-button>
                   </td>
                   <td>
                     <ion-button (click)="editSupport(supportRep)">
-                        <ion-icon name="create"></ion-icon>ערוך</ion-button>
+                      <ion-icon name="create"></ion-icon>ערוך
+                    </ion-button>
                   </td>
                   <td>
                     <ion-button (click)="showHistory(supportRep)">הצג שיחות</ion-button>
@@ -108,7 +113,9 @@
           <ion-card-header>
             <h3 text-center>רשימת עדויות</h3>
             <br />
-            <ion-button (click)="editTemplate()">עריכת תבנית טופס כתיבת עדות</ion-button>
+            <ion-button (click)="editTemplate()">
+              <ion-icon name="create"></ion-icon> עריכת תבנית טופס כתיבת עדות
+            </ion-button>
             <br />
             <ion-searchbar class="search" type="text" [(ngModel)]="story_filter" placeholder="כותרת העדות לחיפוש">
             </ion-searchbar>
@@ -194,20 +201,23 @@
           <ion-card-header>
 
             <!-- <a [href]="downloadURL | async">{{ downloadURL | async }}</a> -->
-            <input type="file"  (change)="addFile($event)" class='uploadImage' id='imageFile' />
-            <label for='imageFile'>בחר תמונה</label>
-            <ion-button (click)="uploadFile()">הוסף תמונה</ion-button>
+            <input type="file" (change)="addFile($event)" class='uploadImage' id='imageFile' />
+            <label for='imageFile'>בחירת תמונה</label>
+            &ensp;
+            <ion-button color="success" (click)="uploadFile()">
+              <ion-icon name="add-circle-outline"></ion-icon> הוספת תמונה
+            </ion-button>
             <hr>
-            <ion-card [(ngModel)]= "file">
-                  <ion-icon  *ngIf = "file" name="backspace" (click)="file = null"></ion-icon>
-                  <ion-text  *ngIf = "file" >    {{file.name}}   </ion-text>
-                  
+            <ion-card [(ngModel)]="file">
+              <ion-icon *ngIf="file" name="backspace" (click)="file = null"></ion-icon>
+              <ion-text *ngIf="file"> {{file.name}} </ion-text>
 
-                <ion-text *ngIf = "!file"> לא נבחרה תמונה </ion-text>
-                <hr>
-                <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
+
+              <ion-text *ngIf="!file"> לא נבחרה תמונה </ion-text>
+              <hr>
+              <ion-progress-bar value="{{ uploadPercent | async }}" buffer="100"></ion-progress-bar>
             </ion-card>
-            
+
           </ion-card-header>
 
           <ion-card-content>
@@ -217,8 +227,10 @@
             <ion-grid fixed>
               <ion-row>
                 <ion-col *ngFor='let img of imageUrls' size='auto'>
-                  <img src={{img}} style='height: 200px; width: 200px; margin-right: 3%'>
-                  <ion-button (click)="deleteImage(img)">מחק תמונה</ion-button>
+                  <img src={{img}} style='height: 200px; width: 200px; margin-right: 3%; padding: 15% 10% 2% 10%;'>
+                  <ion-button color="danger" (click)="deleteImage(img)">
+                    <ion-icon name="trash"></ion-icon> מחק תמונה
+                  </ion-button>
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -320,7 +332,8 @@
                 <ion-col fixed=true style="align-self: center">
                   <ion-item lines="none">
                     <ion-button id="historySearchButton" style=" display: inline-block;"
-                      style="height: 40px; width: 80px;margin-right: 80%" (click)="createHistoryTable()">חיפוש
+                      style="height: 40px; width: 80px;margin-right: 80%" (click)="createHistoryTable()">
+                      <ion-icon name="search"></ion-icon> חיפוש
                     </ion-button>
                   </ion-item>
                 </ion-col>
@@ -379,12 +392,6 @@
             </ion-button>
             <br />
 
-            <!-- <ion-searchbar class="search" type="text" [(ngModel)]="event_search" placeholder="שם האירוע לחיפוש">
-              <ion-button (click)="searchEvent()">
-                <ion-icon name="search"></ion-icon> חיפוש אירוע
-              </ion-button> 
-            </ion-searchbar> -->
-
             <ion-searchbar class="search" type="text" [(ngModel)]="event_filter" placeholder="שם האירוע לחיפוש">
             </ion-searchbar>
 
@@ -394,7 +401,7 @@
           <ion-card-content>
 
 
-           <ion-card>
+            <ion-card>
 
               <div id="scrollbar1" class="my-custom-scrollbar">
                 <table id="tables" text-center>
