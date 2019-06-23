@@ -51,7 +51,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   association_subscribe;
   events_subscribe;
   stories_subscribe;
-
+  template_subscribe;
 
   // Variables
   chatRoomHistory: any[] = [];
@@ -78,6 +78,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   event_to_change: any;
   association_info: string;
   template_value: string;
+  template_flag: boolean = false;
 
   @ViewChild('title') title;
   story_filter = '';
@@ -125,7 +126,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.image_array_subscribe = this.firestore.getImageArray().subscribe(res => {
       this.imageUrls = res.images;
       this.file = null;
-
     });
 
     this.manageStories();
@@ -484,7 +484,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         } else {
           this.list.slice(this.list.indexOf(id), 1);
         }
-        // console.log(result);
       });
     });
   }
@@ -547,7 +546,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       viewHistoryClients.hidden = true;
       editEvents.hidden = true;
       document.getElementById('chat-list').hidden = true;
-      // this.manageSupportReps();
     } else if (targetId === 'EditEvents') {
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
@@ -562,7 +560,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
       editAssociationInfo.hidden = true;
       viewHistoryClients.hidden = false;
       editEvents.hidden = true;
-    } else if (targetId === 'EditAssociationInfo') {
+    } else if (targetId === 'EditAssociationInfo') {     
       manageSupportReps.hidden = true;
       manageClientStories.hidden = true;
       manageGallery.hidden = true;
@@ -638,8 +636,9 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   editTemplate() {
     document.getElementById('template-editor').hidden = false;
     document.getElementById('editor').hidden = true;
-    this.firestore.getStoryTemplate().subscribe(result => {
+    this.template_subscribe = this.firestore.getStoryTemplate().subscribe(result => {
       this.template_value = result.storyTemplate;
+      this.template_flag = true;
     });
   
     document.getElementById('template-editor').scrollIntoView({
@@ -956,6 +955,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     this.image_array_subscribe.unsubscribe();
     this.association_subscribe.unsubscribe();
     this.stories_subscribe.unsubscribe();
+    if (this.template_flag)
+      this.template_subscribe.unsubscribe();
   }
 
 } // end of AdminProfileComponent

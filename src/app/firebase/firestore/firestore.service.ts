@@ -330,18 +330,18 @@ export class FirestoreService {
   }
 
   public getAssociationInfo(): Observable<any> {
-    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('info').valueChanges();
   }
 
   public updateAssociationInfo(info): void {
-    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ info });
+    this.firestore.collection(this.METADATA_COLLECTION).doc('info').update({ info });
   }
 
   public getStoryTemplate(): Observable<any> {
-    return this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').valueChanges();
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('storyTemplate').valueChanges();
   }
 
   public updateStoryTemplate(storyTemplate): void {
-    this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ storyTemplate });
+    this.firestore.collection(this.METADATA_COLLECTION).doc('storyTemplate').update({ storyTemplate });
   }
 }
