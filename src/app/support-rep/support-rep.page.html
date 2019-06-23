@@ -16,38 +16,40 @@
           </ion-card-header>
           <ion-card-content>
             <ion-grid fixed>
-
+              <ion-row>* שדות חובה</ion-row>
               <ion-row>
                 <ion-col class="class-margin">
-                  <ion-label>שם פרטי</ion-label>
+                  <ion-label>שם פרטי*</ion-label>
                   <ion-item text-right>
                     <ion-input placeholder="שם פרטי" #first_name></ion-input>
                   </ion-item>
                 </ion-col>
 
                 <ion-col class="class-margin">
-                  <ion-label>שם משפחה</ion-label>
+                  <ion-label>שם משפחה*</ion-label>
                   <ion-item text-right>
                     <ion-input placeholder="שם משפחה" #last_name></ion-input>
                   </ion-item>
                 </ion-col>
 
                 <ion-col class="class-margin">
-                  <ion-label>תעודת זהות</ion-label>
+                  <ion-label>תעודת זהות*</ion-label>
                   <ion-item text-right>
                     <ion-input placeholder="תעודת זהות" #id></ion-input>
                   </ion-item>
                 </ion-col>
+              </ion-row>
 
+              <ion-row>
                 <ion-col class="class-margin">
-                  <ion-label>כתובת</ion-label>
+                  <ion-label>כתובת*</ion-label>
                   <ion-item text-right>
                     <ion-input placeholder="כתובת" #address></ion-input>
                   </ion-item>
                 </ion-col>
 
                 <ion-col class="class-margin">
-                  <ion-label>גיל</ion-label>
+                  <ion-label>גיל*</ion-label>
                   <ion-item text-right>
                     <ion-input placeholder="גיל" #age></ion-input>
                   </ion-item>
@@ -56,35 +58,21 @@
 
               <ion-row>
                 <ion-col class="class-margin">
-                  <ion-label>פלאפון</ion-label>
+                  <ion-label>פלאפון*</ion-label>
                   <ion-item text-right>
                     <ion-input placeholder="פלאפון" #cellphone></ion-input>
                   </ion-item>
                 </ion-col>
 
                 <ion-col class="class-margin">
-                  <ion-label>טלפון בית</ion-label>
+                  <ion-label>טלפון בית*</ion-label>
                   <ion-item text-right>
                     <ion-input placeholder="טלפון בית" #phone_num></ion-input>
                   </ion-item>
                 </ion-col>
 
                 <ion-col class="class-margin">
-                  <ion-label>כתובת מייל</ion-label>
-                  <ion-item text-right>
-                    <ion-input placeholder="כתובת מייל" #email></ion-input>
-                  </ion-item>
-                </ion-col>
-
-                <ion-col class="class-margin">
-                  <ion-label>סיסמה</ion-label>
-                  <ion-item text-right>
-                    <ion-input placeholder="סיסמה" #password type='password'></ion-input>
-                  </ion-item>
-                </ion-col>
-
-                <ion-col class="class-margin">
-                  <ion-label>מין</ion-label>
+                  <ion-label>מין*</ion-label>
                   <ion-radio-group>
                     <ion-row style="margin-top: 2%">
                       <ion-col>
@@ -103,11 +91,29 @@
                   </ion-radio-group>
                 </ion-col>
               </ion-row>
+
+              <ion-row>
+                <ion-col class="class-margin">
+                  <ion-label>כתובת מייל*</ion-label>
+                  <ion-item text-right>
+                    <ion-input placeholder="כתובת מייל" #email></ion-input>
+                  </ion-item>
+                </ion-col>
+
+                <ion-col class="class-margin">
+                  <ion-label>סיסמה*</ion-label>
+                  <ion-item text-right>
+                    <ion-input placeholder="סיסמה" #password type='password'></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+
               <ion-row>
                 <ion-col>
                   <ion-button (click)='createSupportRep()'>צור נציג</ion-button>
                   <ion-button (click)='updateSupportRep()' style='margin-right: 2%;'>עדכן נציג</ion-button>
-                  <ion-checkbox #admin style="margin-right: 2%;" (click)='updateAdminList()' checked='false'></ion-checkbox>
+                  <ion-checkbox #admin style="margin-right: 2%;" (click)='updateAdminList()' checked='false'>
+                  </ion-checkbox>
                   <ion-label style="margin-right: 1%;">מנהל</ion-label>
                 </ion-col>
               </ion-row>

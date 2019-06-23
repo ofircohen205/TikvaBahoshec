@@ -52,7 +52,7 @@ export class SupportRepPage implements OnInit {
           this.age.value = res.age;
           this.address.value = res.address;
           this.email.value = res.email;
-          this.phone_num.value = res.phone_num;
+          this.phone_num.value = res.phone;
           this.cellphone.value = res.cellphone;
           this.id.value = res.id;
           this.password.value = res.password;
