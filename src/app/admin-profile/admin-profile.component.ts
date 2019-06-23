@@ -537,7 +537,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     const viewHistoryClients = document.getElementById('View-History-Clients');
     const editEvents = document.getElementById('Edit-Events');
 
-    // const calenderElement = document.getElementById('calender');
     if (targetId === 'ShowSupportRep') {
       manageSupportReps.hidden = false;
       manageClientStories.hidden = true;

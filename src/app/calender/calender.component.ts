@@ -1,24 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FirestoreService } from '../firebase/firestore/firestore.service';
-import { headersToString } from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-calender',
   templateUrl: './calender.component.html',
   styleUrls: ['./calender.component.scss'],
-
 })
 export class CalenderComponent implements OnInit, OnDestroy {
 
   private today: Date;
   private currentMonth: any;
   private currentYear: any;
-  private selectYear: any;
-  private selectMonth: any;
   private months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  private monthAndYear = document.getElementById('monthAndYear');
+  //private monthAndYear = document.getElementById('monthAndYear');
   eventsArray: any[] = [];
-  private first_show_flag = true;
+  private first_show_flag: boolean = true;
   events_subscribe;
 
   constructor(
@@ -139,7 +135,6 @@ export class CalenderComponent implements OnInit, OnDestroy {
           data.setAttribute('id', full_date);
           data.setAttribute('class', 'divContent');
 
-
           if (date === this.today.getDate() && year === this.today.getFullYear() && month === this.today.getMonth()) {
             cell.setAttribute("style", "background-color: #d15e5e;") // color today's date
           }
@@ -153,7 +148,7 @@ export class CalenderComponent implements OnInit, OnDestroy {
     }
 
     if (this.first_show_flag === true) {
-      setTimeout(() => { this.addEventsToCalendar() }, 2300); // can find a better way here (catch the click on event's tab at the home page)
+      setTimeout(() => { this.addEventsToCalendar() }, 2500);
       this.first_show_flag = false;
     }
     else
@@ -168,7 +163,7 @@ export class CalenderComponent implements OnInit, OnDestroy {
 
   //show the events in the calendar
   addEventsToCalendar() {
-    let day, month, year, date, card, card_header, card_content, span_date, span_title, content_title, content_content;
+    let day, month, year, date, card, card_header, card_content, span_date, span_title, content_title, content_content, cardArr:any[]=[];
     document.getElementById('event-description').innerHTML = "";
     this.eventsArray.forEach(event => {
       day = event.date.substring(8, 10);
@@ -177,33 +172,42 @@ export class CalenderComponent implements OnInit, OnDestroy {
       date = day + "-" + month + "-" + year;
       if (this.currentYear === Number(year) && this.currentMonth + 1 === Number(month)) {
         document.getElementById(date).innerHTML = event.title; //inject the title of the event to the calendar
+      
+      /*show the description about the events of the month*/
+      card = document.createElement('ion-card');
+      card.setAttribute('style', '--background:#e0d5d5;padding:2%;font-size:120%;color:rgb(20, 20, 20);margin:1% 15% 5% 15%;')
+      card_header = document.createElement('ion-card-header').appendChild(document.createElement('ion-header'));
+      span_date = document.createElement('span');
+      span_date.setAttribute('style', 'float:left;')
+      span_date.innerHTML = "תאריך האירוע: " + date;
+      span_title = document.createElement('span');
+      span_title.setAttribute('style', 'text-align:right;');
+      span_title.innerHTML = "שם האירוע: " + event.title;
+      card_header.appendChild(span_title);
+      card_header.appendChild(span_date);
 
-        /*show the description about the events of the month*/
-        card = document.createElement('ion-card');
-        card.setAttribute('style', '--background:#e0d5d5;padding:2%;font-size:120%;color:rgb(20, 20, 20);margin:1% 15% 5% 15%;')
-        card_header = document.createElement('ion-card-header').appendChild(document.createElement('ion-header'));
-        span_date = document.createElement('span');
-        span_date.setAttribute('style', 'float:left;')
-        span_date.innerHTML = "תאריך האירוע: " + date;
-        span_title = document.createElement('span');
-        span_title.setAttribute('style', 'text-align:right;');
-        span_title.innerHTML = "שם האירוע: " + event.title;
-        card_header.appendChild(span_title);
-        card_header.appendChild(span_date);
-
-        card_content = document.createElement('ion-card-content');
-        content_title = document.createElement('ion-card-header');
-        content_title.setAttribute('style', 'text-decoration:underline;color:rgb(20, 20, 20);');
-        content_title.innerHTML = "תיאור האירוע: ";
-        content_content = document.createElement('ion-card-content');
-        content_content.innerHTML = event.description;
-        card_content.appendChild(content_title);
-        card_content.appendChild(content_content);
-        card.appendChild(card_header);
-        card.appendChild(card_content);
-        document.getElementById('event-description').appendChild(card);
+      card_content = document.createElement('ion-card-content');
+      content_title = document.createElement('ion-card-header');
+      content_title.setAttribute('style', 'text-decoration:underline;color:rgb(20, 20, 20);');
+      content_title.innerHTML = "תיאור האירוע: ";
+      content_content = document.createElement('ion-card-content');
+      content_content.innerHTML = event.description;
+      card_content.appendChild(content_title);
+      card_content.appendChild(content_content);
+      card.appendChild(card_header);
+      card.appendChild(card_content);
+      
+      cardArr[Number(day)] = card;
+      //document.getElementById('event-description').appendChild(card);
       }
     });
+
+    for (let i = 0; i < cardArr.length; i++) {
+      if (cardArr[i] === undefined || cardArr[i] === null)
+      continue;
+      else
+      document.getElementById('event-description').appendChild(cardArr[i]);
+    }
   }
 
 
