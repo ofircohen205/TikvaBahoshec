@@ -84,6 +84,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   story_filter = '';
   story_search = '';
   private curr_story_edit_id: string;
+  titleValue;
   // variables for the text editor
   // tslint:disable-next-line: member-ordering
   public value =
