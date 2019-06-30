@@ -6,7 +6,7 @@
         הסיפור האישי שלי
       </ion-button>
     </ion-item>
-    <ion-grid style="opacity: 1">
+    <ion-grid style="opacity: 1" fixed>
       <ion-row *ngFor='let story of stories' style="opacity: 1">
           <ion-col>
               <app-story-bubble [data]='story' *ngIf='story.approved'>

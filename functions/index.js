@@ -13,6 +13,15 @@ exports.deleteUser = functions.firestore
             .catch((error) => console.error('There was an error while deleting user:', error));
     });
 
+
+exports.deleteAnonUser = functions.firestore
+    .document('Metadata/anonymous/AnonymousList/{anonymousID}')
+    .onDelete((snap, context) => {
+        return admin.auth().deleteUser(snap.data().anonymousID)
+            .then(() => console.log('Deleted user with ID:' + snap.data().anonymousID))
+            .catch((error) => console.error('There was an error while deleting user:', error));
+    });
+
 // var nameOfClient
 
 // exports.getName =  functions.database.ref('/nameOfClient/{namekey}').onWrite(( change,context) =>{
@@ -31,8 +40,8 @@ exports.sendmailfn = functions.database.ref('/sendmail/{emailkey}').onWrite((cha
 
 
     var server = emailjs.server.connect({
-        user: '**YOUR EMAIL**',
-        password: '** YOUR PASSWORD**',
+        user: 'EMAIL',
+        password: 'PASSWORD',
         host: 'smtp.gmail.com',
         ssl: true
     });

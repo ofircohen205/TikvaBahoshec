@@ -26,6 +26,10 @@ export class LoginPage implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    while (this.firestore === undefined || this.firestore === null) {};
+
+
     const today = new Date().getTime();
     const yesterdayDate = today - 1000 * 60 * 60 * 24;
     this.firestore.destroyEmptyChatRooms(yesterdayDate);

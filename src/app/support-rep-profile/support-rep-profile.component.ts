@@ -116,7 +116,6 @@ export class SupportRepProfileComponent implements OnInit {
       if (v.SupportRepName !== '' && v.SupportRepName != null) {
         td4.textContent = v.SupportRepName;
       } else {
-       // console.log('kaka2');
         td4.textContent = '';
       }
 
@@ -302,7 +301,6 @@ export class SupportRepProfileComponent implements OnInit {
   onclickTable1(e, list, index) {
     if (e.childNodes[e.childNodes.length - 2].textContent === 'לא בטיפול' && this.supportRepInShift) {
       this.firestore.getSupportRepName(this.userAuth.auth.currentUser.uid).subscribe(result => {
-        console.log(e)
 ;// tslint:disable-next-line: max-line-length
       this.firestore.updateChatRooms(list[index]['ChatRoomId'], result['first_name'] + ' ' + result['last_name'], this.userAuth.auth.currentUser.uid);
       const id = this.userAuth.auth.currentUser.uid
@@ -498,7 +496,6 @@ sortByOpenRoomState(stateStatus, index, id, list, table) {
         this.txtMsg += 'From:' + msg.from + ' Time:' + new Date(msg.timestamp);
         this.txtMsg += '\n<' + msg.content + '>\n\n';
       });
-      console.log('startDownload');
       const link = document.createElement('a');
       link.download = 'Chat:' + roomId + '.txt';
       const blob = new Blob([this.txtMsg], {type: 'text/plain'});

@@ -136,7 +136,7 @@ export class CalenderComponent implements OnInit, OnDestroy {
           data.setAttribute('class', 'divContent');
 
           if (date === this.today.getDate() && year === this.today.getFullYear() && month === this.today.getMonth()) {
-            cell.setAttribute("style", "background-color: #d15e5e;") // color today's date
+            cell.setAttribute("style", "background-color: #d15e5e;   border-style: solid; border-color: rgb(20, 20, 20);") // color today's date
           }
           cell.appendChild(cellText); // the day in the month
           cell.appendChild(data);  // the events in the day

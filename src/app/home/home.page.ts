@@ -10,13 +10,22 @@ import { Location } from '@angular/common';
 })
 export class HomePage implements OnInit {
 
+  anonList = [];
+
+
   constructor(
     private firestore: FirestoreService,
     private global: GlobalService,
     private location: Location
   ) {  }
 
-  ngOnInit() { }
+  ngOnInit() {
+    while (this.firestore === undefined || this.firestore === null) {}
+
+    this.firestore.getAnonList().subscribe(result => {
+      result.forEach(elem => this.firestore.deleteAnonList(elem['anonymousID']));
+    });
+   }
 
   userDetails() {
     this.global.userDetails();

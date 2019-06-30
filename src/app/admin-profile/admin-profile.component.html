@@ -94,7 +94,7 @@
                       <td>{{hist.ClientName}}</td>
                       <td>{{hist.timestamp | date: "dd/MM/yyyy"}}</td>
                       <td>
-                        <ion-button [routerLink]="['/chat', hist.ChatRoomId]">הצג שיחה</ion-button>
+                        <ion-button (click)="openSupportRepHistoryChats(hist.SupportRepID, hist.ChatRoomId)">הצג שיחה</ion-button>
                       </td>
                     </tr>
                   </tbody>

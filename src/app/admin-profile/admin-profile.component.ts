@@ -429,13 +429,11 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
 
   onclickAdminHistoryTable(e, index) {
     if (e['id'] === 'adminHistoryTablebutton3_' + (index + 1)) {
-      console.log('hi');
-      // this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
+      this.downloadChatMsg(this.chatRoomList[index]['ChatRoomId']);
     }
     if (e['id'] === 'adminHistoryTablebutton2_' + (index + 1)) {
-      console.log('hi');
       // tslint:disable-next-line: max-line-length
-      // window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+      window.open('/chat/' + this.chatRoomList[index]['ChatRoomId'] + '?supportRepId=' + this.chatRoomList[index]['SupportRepID'] , '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
     }
     if (e['id'] === 'adminHistoryTablebutton1_' + (index + 1)) {
       // tslint:disable-next-line: max-line-length
@@ -524,6 +522,12 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
         }]
     });
     alert.present();
+  }
+
+
+  openSupportRepHistoryChats(supportRepID, ChatRoomID) {
+    window.open('/chat/' + ChatRoomID + '?supportRepId=' + supportRepID , '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+
   }
 
 

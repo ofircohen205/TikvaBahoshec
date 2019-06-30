@@ -18,6 +18,7 @@ export class FirestoreService {
   readonly MESSAGES_COLLECTION = 'Messages';
   readonly STORIES_COLLECTION = 'Stories';
   readonly SUPPORT_REP_COLLECTION = 'SupportReps';
+  readonly ANONYMOUS_LIST = 'Anonymous_List';
 
   // ! CRUD ON EACH COLLECTION - CREATE READ(GET) UPDATE DELETE
 
@@ -307,6 +308,19 @@ export class FirestoreService {
 
   public updateAnonNumber(nextAnonymous): void {
     this.firestore.collection(this.METADATA_COLLECTION).doc('metadata').update({ nextAnonymous });
+  }
+
+  public getAnonList(): Observable<any> {
+    return this.firestore.collection(this.METADATA_COLLECTION).doc('anonymous').collection(this.ANONYMOUS_LIST).valueChanges();
+  }
+
+  public addAnonList(anonymousID): void {
+// tslint:disable-next-line: max-line-length
+    this.firestore.collection(this.METADATA_COLLECTION).doc('anonymous').collection(this.ANONYMOUS_LIST).doc(anonymousID).set({ anonymousID });
+  }
+
+  public deleteAnonList(anonymousID): void {
+    this.firestore.collection(this.METADATA_COLLECTION).doc('anonymous').collection(this.ANONYMOUS_LIST).doc(anonymousID).delete();
   }
 
   public checkIfAdmin(supportRepId): Observable<any> {

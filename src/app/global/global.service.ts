@@ -12,6 +12,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 })
 export class GlobalService {
 
+  databaseRef;
   anonymousNumber = 0;
 
   constructor(
@@ -21,6 +22,7 @@ export class GlobalService {
     private router: Router,
     private firestore: FirestoreService) {
     this.firestore.getAnonNumber().subscribe(result => this.anonymousNumber = result['nextAnonymous']);
+    this.databaseRef = afiredb.database;
   }
 
 
@@ -40,6 +42,7 @@ export class GlobalService {
             this.firestore.updateAnonNumber(this.anonymousNumber + 1);
           }
           this.userAuth.auth.signInAnonymously().then(result => {
+            this.firestore.addAnonList(result.user.uid);
             this.firestore.createClient(data.name).then(result1 => {
               this.firestore.createChatRoom(data.name).then(result2 => {
                 this.firestore.updateChatRoomId(result2.id);
@@ -50,12 +53,14 @@ export class GlobalService {
             });
           }).catch(error => console.log(error));
 
-          this.afiredb.database.ref('/sendmail').remove();
+          while (this.databaseRef === null || this.databaseRef === undefined) {};
+
+          this.databaseRef.ref('/sendmail').remove();
           let connectList = [];
           this.firestore.getInShiftSupportRep().subscribe(result => {
             connectList = result;
             connectList.forEach(x => {
-              this.afiredb.database.ref('/sendmail').push({
+              this.databaseRef.ref('/sendmail').push({
                 emailid: x['email'],
                 ClientName: data.name
               });

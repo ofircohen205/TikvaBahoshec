@@ -26,10 +26,13 @@ export class MainComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     // Get the Association info from firebase and inject it to the main's HTML
+    while (this.firestore === undefined || this.firestore === null) {};
+
     this.association_info_subscribe = this.firestore.getAssociationInfo().subscribe(results => {
       this.association_info = results.info;
       document.getElementById('association-info').innerHTML = this.association_info;
     });
+
   }
 
   userDetails() {
@@ -45,19 +48,11 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   async showAssociationEmail() {
-    const alert = await this.alertController.create({
-      header: 'רוצים לדבר איתנו בעזרת דואר אלקטרוני?',
-      message: 'ניתן ליצור איתנו קשר דרך הדואר האלקטרוני tikva.bahoshec@gmail.com',
-      buttons: [{
-        text: 'המשך'
-      }]
-    });
-
-    alert.present();
+    window.open("https://mail.google.com/mail/?view=cm&fs=1&to=tikva.bahoshec@gmail.com&tf=1")
   }
 
 
-  ngOnDestroy() { 
+  ngOnDestroy() {
     this.association_info_subscribe.unsubscribe();
   }
 }
